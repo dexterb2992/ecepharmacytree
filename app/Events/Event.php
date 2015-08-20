@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace ECEPharmacyTree\Events;
 
 abstract class Event
 {

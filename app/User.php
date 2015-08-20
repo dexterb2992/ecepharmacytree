@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace ECEPharmacyTree;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -32,4 +32,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    public function branch(){
+        return $this->belongsTo('ECEPharmacyTree\Branch');
+    }
+
+    /**
+     * Get the payments done by patients associated or assisted by specific user
+     *
+     */
+    public function payments(){
+        return $this->hasMany('ECEPharmacyTree\Payment');
+    }
 }

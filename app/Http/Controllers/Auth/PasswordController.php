@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace ECEPharmacyTree\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use ECEPharmacyTree\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class PasswordController extends Controller

@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => App\User::class,
+        'model'  => ECEPharmacyTree\User::class,
         'key'    => '',
         'secret' => '',
     ],

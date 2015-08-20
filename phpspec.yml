@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
+        namespace: ECEPharmacyTree
+        psr4_prefix: ECEPharmacyTree
         src_path: app

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace ECEPharmacyTree\Jobs;
 
 use Illuminate\Bus\Queueable;
 
