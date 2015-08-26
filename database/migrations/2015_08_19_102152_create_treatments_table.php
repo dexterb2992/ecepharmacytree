@@ -18,7 +18,7 @@ class CreateTreatmentsTable extends Migration
             $table->foreign('patient_record_id')->references('id')->on('patient_records');
             $table->string('medicine_name');
             $table->longText('generic_name');
-            $table->string('quanitity');
+            $table->string('quantity');
             $table->longText('prescription');
             $table->timestamps();
             $table->softDeletes();

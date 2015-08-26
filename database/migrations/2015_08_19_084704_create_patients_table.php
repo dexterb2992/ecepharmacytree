@@ -24,7 +24,7 @@ class CreatePatientsTable extends Migration
             $table->string('tel_no')->nullable();
             $table->longText('photo')->nullable();
             $table->string('occupation')->nullable();
-            $table->date('birthdate');
+            $table->string('birthdate');
             $table->string('sex', 6);
             $table->string('civil_status', 20);
             $table->string('height', 10);
