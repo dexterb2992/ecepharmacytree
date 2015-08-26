@@ -17,8 +17,10 @@ class CreateClinicDoctorPivotTable extends Migration
             $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
             $table->integer('doctor_id')->unsigned()->index();
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
-            $table->text('clinic_sched');
+            $table->longText('clinic_sched');
             $table->integer('is_active')->default('1');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

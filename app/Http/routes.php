@@ -21,4 +21,12 @@ Route::get("try", function(){
 	return view("404");
 });
 
+/**
+ * Routes for Branches
+ */
+Route::get('branches', ['as' => 'branches', 'uses' => 'BranchController@index']);
+Route::get('branches/create', ['as' => 'create_branch', 'uses' => 'BranchController@create']);
+Route::post('branches/edit', ['as' => 'edit_branch', 'uses' => 'BranchController@edit']);
+
+
 // Route::get('/members', );

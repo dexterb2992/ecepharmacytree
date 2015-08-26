@@ -21,28 +21,30 @@ class CreatePatientsTable extends Migration
             $table->string('password');
             $table->string('email_address')->unique();
             $table->string('mobile_no');
-            $table->string('tel_no');
-            $table->text('photo');
-            $table->string('occupation');
+            $table->string('tel_no')->nullable();
+            $table->longText('photo')->nullable();
+            $table->string('occupation')->nullable();
             $table->date('birthdate');
             $table->string('sex', 6);
             $table->string('civil_status', 20);
             $table->string('height', 10);
             $table->string('weight', 10);
-            $table->integer('unit_floor_room_no');
-            $table->string('building');
-            $table->integer('lot_no');
-            $table->integer('block_no');
-            $table->integer('phase_no');
-            $table->integer('address_house_no');
-            $table->string('address_street');
+            $table->integer('unit_floor_room_no')->nullable();
+            $table->string('building')->nullable();
+            $table->integer('lot_no')->nullable();
+            $table->integer('block_no')->nullable();
+            $table->integer('phase_no')->nullable();
+            $table->integer('address_house_no')->nullable();
+            $table->string('address_street')->nullable();
             $table->string('address_barangay');
             $table->string('address_city_municipality');
             $table->string('address_province');
             $table->string('address_region');
             $table->string('address_zip');
             $table->string('referral_id');
+            $table->string('referred_by')->nullable(); // referral_id of the user who referred this new user
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

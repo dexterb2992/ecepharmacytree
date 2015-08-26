@@ -18,6 +18,7 @@ class CreateProductSubcategoriesTable extends Migration
             $table->integer('category_id')->unsigned();
             $table->foreign('category_id')->references('id')->on('product_categories');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -20,6 +20,7 @@ class CreateFreeProductsTable extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             $table->integer('quantity_free');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

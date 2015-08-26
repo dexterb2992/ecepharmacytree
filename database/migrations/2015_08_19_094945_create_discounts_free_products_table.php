@@ -22,6 +22,7 @@ class CreateDiscountsFreeProductsTable extends Migration
             $table->integer('quantity_required');
             $table->double('less');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

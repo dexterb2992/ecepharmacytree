@@ -22,7 +22,10 @@
         ],
         "psr-4": {
             "ECEPharmacyTree\\": "app/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "classmap": [

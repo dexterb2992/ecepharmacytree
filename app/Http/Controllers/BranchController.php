@@ -3,6 +3,9 @@
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Illuminate\Http\Request;
+use ECEPharmacyTree\Branch;
+use Input;
+use Redirect;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -14,9 +17,10 @@ class BranchController extends Controller
      *
      * @return Response
      */
-    public function index()
-    {
+    public function index(){
         //
+        $branches = Branch::all();
+        return view('admin.branches')->withBranches($branches);
     }
 
     /**
@@ -24,9 +28,25 @@ class BranchController extends Controller
      *
      * @return Response
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $input = Input::all();
+        $branch = new Branch;
+        $branch->name = $input["name"];
+        $branch->unit_floor_room_no = $input["unit_floor_room_no"];
+        $branch->building = $input["building"];
+        $branch->lot_no = $input["lot_no"];
+        $branch->block_no = $input["block_no"];
+        $branch->phase_no = $input["phase_no"];
+        $branch->address_street = $input["address_street"];
+        $branch->address_barangay = $input["address_barangay"];
+        $branch->address_city_municipality = $input["address_city_municipality"];
+        $branch->address_province = $input["address_province"];
+        $branch->address_region = $input["address_region"];
+        $branch->address_zip = $input["address_zip"];
+        if( $branch->save() ) 
+            return Redirect::to('branches');
+        
+        return false;
     }
 
     /**
@@ -35,8 +55,7 @@ class BranchController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         //
     }
 
@@ -57,9 +76,15 @@ class BranchController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit($id, $address)
     {
         //
+        $branch = Branch::find($id);
+        $branch->address = $address;
+        if( $branch->save() ){
+            return json_encode( array("status" => "success") );
+        }
+        return json_encode( array("status" => "error", "error" => "Please try again later.") );
     }
 
     /**

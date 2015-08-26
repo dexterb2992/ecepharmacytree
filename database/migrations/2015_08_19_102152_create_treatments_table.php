@@ -17,10 +17,11 @@ class CreateTreatmentsTable extends Migration
             $table->integer('patient_record_id')->unsigned();
             $table->foreign('patient_record_id')->references('id')->on('patient_records');
             $table->string('medicine_name');
-            $table->text('generic_name');
+            $table->longText('generic_name');
             $table->string('quanitity');
-            $table->text('prescription');
+            $table->longText('prescription');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

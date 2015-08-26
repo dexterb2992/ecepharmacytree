@@ -1,7 +1,7 @@
 <!-- jQuery 2.1.4 -->
 {!! HTML::script('plugins/jQuery/jQuery-2.1.4.min.js') !!}
 <!-- jQuery UI 1.11.4 -->
-{!! HTML::script('https://code.jquery.com/ui/1.11.4/jquery-ui.min.js') !!}
+{!! HTML::script('plugins/jQueryUI/jquery-ui.min.js') !!}
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script type="text/javascript">
   $.widget.bridge('uibutton', $.ui.button);
@@ -10,7 +10,7 @@
 {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
 <!-- Morris.js charts -->
 {!! HTML::script('plugins/raphael/raphael-min.js') !!}
-{!! HTML::script('plugins/morris/morris.min.js') !!}
+<!-- HTML::script('plugins/morris/morris.min.js') -->
 <!-- Sparkline -->
 {!! HTML::script('plugins/sparkline/jquery.sparkline.min.js') !!}
 <!-- jvectormap -->
@@ -19,7 +19,7 @@
 <!-- jQuery Knob Chart -->
 {!! HTML::script('plugins/knob/jquery.knob.js') !!}
 <!-- daterangepicker -->
-{!! HTML::script('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js') !!}
+{!! HTML::script('plugins/moment/moment.min.js') !!}
 {!! HTML::script('plugins/daterangepicker/daterangepicker.js') !!}
 <!-- datepicker -->
 {!! HTML::script('plugins/datepicker/bootstrap-datepicker.js') !!}
@@ -31,7 +31,13 @@
 {!! HTML::script('plugins/fastclick/fastclick.min.js') !!}
 <!-- AdminLTE App -->
 {!! HTML::script('dist/js/app.min.js') !!}
+<!-- DATA TABES SCRIPT -->
+{!! HTML::script('plugins/datatables/jquery.dataTables.min.js') !!}
+<!-- DataTables -->
+ {!! HTML::script('plugins/datatables/dataTables.bootstrap.min.js') !!}
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 {!! HTML::script('dist/js/pages/dashboard.js') !!}
 <!-- AdminLTE for demo purposes -->
 {!! HTML::script('dist/js/demo.js') !!}
+<!-- PharmacyTree js -->
+{!! HTML::script('dist/ece.js') !!}

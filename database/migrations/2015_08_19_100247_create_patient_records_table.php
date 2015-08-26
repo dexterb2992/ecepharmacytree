@@ -19,11 +19,12 @@ class CreatePatientRecordsTable extends Migration
             $table->integer('doctor_id')->unsigned();
             $table->foreign('doctor_id')->references('id')->on('doctors');
             $table->string('doctor_name');
-            $table->text('complaints');
-            $table->text('findings');
+            $table->longText('complaints');
+            $table->longText('findings');
             $table->string('record_date');
-            $table->text('note');
+            $table->longText('note')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

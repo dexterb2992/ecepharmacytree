@@ -38,25 +38,25 @@
             </li>
 
             <li class="treeview">
-              <a href="/affiliates">
+              <a href="/orders">
                 <i class="fa fa-shopping-cart"></i> <span>Orders</span>
               </a>
             </li>
 
             <li class="treeview">
-              <a href="/affiliates">
+              <a href="/payments">
                 <i class="fa fa-usd"></i> <span>Payments</span>
               </a>
             </li>
 
             <li class="treeview">
-              <a href="/affiliates">
+              <a href="/manage-delivery">
                 <i class="fa fa-truck"></i> <span>Manage Delivery</span>
               </a>
             </li>
 
             <li class="treeview">
-              <a href="/affiliates">
+              <a href="/branches">
                 <i class="fa fa-building"></i> <span>Branches</span>
               </a>
             </li>

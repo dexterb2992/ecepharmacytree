@@ -17,15 +17,16 @@ class CreateProductsTable extends Migration
             $table->integer('subcategory_id')->unsigned();
             $table->foreign('subcategory_id')->references('id')->on('product_subcategories');
             $table->string('name');
-            $table->text('generic_name');
-            $table->text('description');
+            $table->longText('generic_name');
+            $table->longText('description');
             $table->integer('prescription_required');
             $table->double('price');
             $table->string('unit');
             $table->string('packing');
             $table->integer('qty_per_packing');
-            $table->text('sku');
+            $table->longText('sku');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

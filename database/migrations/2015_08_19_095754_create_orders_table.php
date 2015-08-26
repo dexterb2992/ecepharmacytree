@@ -18,14 +18,15 @@ class CreateOrdersTable extends Migration
             $table->foreign('patient_id')->references('id')->on('patients');
             $table->date('delivery_sched');
             $table->string('address_house_no')->nullable();
-            $table->string('address_street')->nullable();
-            $table->string('address_barangay')->nullable();
-            $table->string('address_city_municipality')->nullable();
-            $table->string('address_province')->nullable();
-            $table->string('address_region')->nullable();
-            $table->string('address_zip')->nullable();
-            $table->string('status')->nullable();
+            $table->string('address_street');
+            $table->string('address_barangay');
+            $table->string('address_city_municipality');
+            $table->string('address_province');
+            $table->string('address_region');
+            $table->string('address_zip');
+            $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

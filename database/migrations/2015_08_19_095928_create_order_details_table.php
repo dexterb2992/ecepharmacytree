@@ -21,6 +21,7 @@ class CreateOrderDetailsTable extends Migration
             $table->double('quantity');
             $table->string('type')->default('delivery'); // pickup or delivery
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

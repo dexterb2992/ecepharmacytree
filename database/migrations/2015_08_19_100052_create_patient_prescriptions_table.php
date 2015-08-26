@@ -16,9 +16,10 @@ class CreatePatientPrescriptionsTable extends Migration
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
             $table->foreign('patient_id')->references('id')->on('patients');
-            $table->text('filename');
+            $table->longText('filename');
             $table->integer('is_approved')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

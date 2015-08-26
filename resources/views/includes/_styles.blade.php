@@ -19,5 +19,9 @@
 {!! HTML::style('plugins/datepicker/datepicker3.css') !!}
 <!-- Daterange picker -->
 {!! HTML::style('plugins/daterangepicker/daterangepicker-bs3.css') !!}
+<!-- DataTable -->
+{!! HTML::style('plugins/datatables/dataTables.bootstrap.css') !!}
 <!-- bootstrap wysihtml5 - text editor -->
 {!! HTML::style('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') !!}
+<!-- PharmacyTree custom css -->
+{!! HTML::style('dist/ece.css') !!}

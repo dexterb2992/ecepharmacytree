@@ -19,6 +19,7 @@ class CreateBillingsTable extends Migration
             $table->double('gross_total');
             $table->double('total');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

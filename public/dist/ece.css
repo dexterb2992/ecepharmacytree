@@ -1,0 +1,12 @@
+.action-icon {
+	margin-left: 8px;
+	cursor: pointer;
+}
+
+.remove-branch:hover{
+	color: #dd4b39;
+}
+
+.deactivate-branch:hover{
+    color: #f39c12;		
+}

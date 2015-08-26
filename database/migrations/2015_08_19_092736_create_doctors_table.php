@@ -20,10 +20,11 @@ class CreateDoctorsTable extends Migration
             $table->integer('prc_no');
             $table->integer('sub_specialty_id')->unsigned();
             $table->foreign('sub_specialty_id')->references('id')->on('sub_specialties');
-            $table->text('photo');
-            $table->text('affiliation');
-            $table->string('email');
+            $table->longText('photo')->nullable();
+            $table->longText('affiliation')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

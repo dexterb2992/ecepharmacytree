@@ -18,6 +18,7 @@ class CreateInventoriesTable extends Migration
             $table->integer('quantity');
             $table->date('expiration_date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

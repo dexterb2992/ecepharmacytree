@@ -17,6 +17,7 @@ class CreateReferralSettingsTable extends Migration
             $table->integer('points');
             $table->integer('level_limit');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
