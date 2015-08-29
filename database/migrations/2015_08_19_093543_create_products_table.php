@@ -24,7 +24,7 @@ class CreateProductsTable extends Migration
             $table->string('unit');
             $table->string('packing');
             $table->integer('qty_per_packing');
-            $table->longText('sku');
+            $table->string('sku');
             $table->timestamps();
             $table->softDeletes();
         });

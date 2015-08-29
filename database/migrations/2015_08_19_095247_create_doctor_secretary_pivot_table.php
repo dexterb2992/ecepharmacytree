@@ -18,8 +18,6 @@ class CreateDoctorSecretaryPivotTable extends Migration
             $table->integer('secretary_id')->unsigned()->index();
             $table->foreign('secretary_id')->references('id')->on('secretaries')->onDelete('cascade');
             $table->integer('is_active')->default('1');
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 
