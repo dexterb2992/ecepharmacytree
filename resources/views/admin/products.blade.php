@@ -5,54 +5,52 @@
     <div class="col-xs-12">
         <div class="box box-success">
             <div class="box-header">
-                <h3 class="box-title">Branches</h3><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-branch" data-target="#form_edit_branch" data-action="create" data-title="category"><i class="fa-plus fa"></i> Add New</button>
+                <h3 class="box-title">products</h3><br/>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-product" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable">
+                    name
+                    generic_name
+                    description
+                    prescription_required
+                    price
+                    unit
+                    packing
+                    qty_per_packing
                     <thead>
                         <tr>
                         <th>Name</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th>Date Added</th>
+                        <th>Generic Name</th>
+                        <th>Description</th>
+                        <th>Unit</th>
+                        <th>Packing</th>
+                        <th>Qty per packing</th>
+                        <th>Sub Category</th>
+                        <th>Category</th>
                         <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($branches as $branch)
-                            <?php 
-                                $address = $branch->unit_floor_room_no." ".
-                                $branch->building." ".$branch->lot_no." ".$branch->block_no." ".
-                                $branch->phase_no." ".
-                                $branch->address_street." <br>".
-                                $branch->address_barangay.", ".
-                                $branch->address_city_municipality.", ".
-                                $branch->address_province." <br>".
-                                $branch->address_region.", ".
-                                $branch->address_zip." ";
-                            ?>
-                            <tr data-id="{{ $branch->id }}" class="{{ $branch->status == 1? '' : 'warning' }}">
+                        @foreach($products as $product)
+                            <tr data-id="{{ $product->id }}" class="{{ $product->status == 1? '' : 'warning' }}">
                                 <td>
-                                    <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-branch" data-title="branch info" data-target="#form_edit_branch" data-id="{{ $branch->id }}" title="Edit">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <span>{{ $branch->name }}</span>
+                                    {!! $product->prescription_required == 1 ? <span class="label label-danger">&#8478;</span> : '' !!}
+                                    <span>{{ $product->name }}</span>
                                 </td>
-                                <td>
-                                    <span>{{ $address }}</span>
-                                </td>
-                                <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
-                                <td>{{ $branch->created_at }}</td>
+                                <td>{{ $product->generic_name }}</td>
+                                <td>{{ $product->description }}</td>
+                                <td>{{ $product->unit }}</td>
+                                <td>{{ $product->packing }}</td>
+                                <td>{{ $product->qty_per_packing }}</td>
+                                <td>{{ $product->subcategory->name }}</td>
+                                <td>{{ $product->subcategory->category->name }}</td>
                                 <td>
                                     <div class="tools">
-                                        
-                                        @if($branch->status == 1)
-                                            <span class="action-icon deactivate-branch" data-title="category" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}"><i class="fa fa-warning"></i> Deactivate</span> 
-                                        @else
-                                            <span class="action-icon reactivate-branch" data-title="category" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}"><i class="fa fa-check-square-o"></i> Reactivate</span>
-                                        @endif
-                                        <span class="action-icon remove-branch" data-action="remove" data-title="category" data-urlmain="/branches/" data-id="{{ $branch->id }}"><i class="fa fa-trash-o"></i> Remove</span>
+                                        <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" data-id="{{ $product->id }}" title="Edit">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <span class="action-icon remove-product" data-action="remove" data-title="product" data-urlmain="/products/" data-id="{{ $product->id }}"><i class="fa fa-trash-o"></i> Remove</span>
                                     </div>
                                 </td>
                             </tr>
@@ -62,22 +60,22 @@
             </div><!-- /.box-body -->
         </div><!-- /.box -->
 
-        <!-- Modal for Create/Edit Branch -->
-        <div class="modal" id="modal-add-edit-branch">
+        <!-- Modal for Create/Edit product -->
+        <div class="modal" id="modal-add-edit-product">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- form start -->
-                    <form role="form" id="form_edit_branch" data-mode="create" method="post" action="/branches/create" data-urlmain="/branches/">
+                    <form role="form" id="form_edit_product" data-mode="create" method="post" action="/products/create" data-urlmain="/products/">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Add new branch</h4>
+                            <h4 class="modal-title">Add new product</h4>
                         </div>
                         <div class="modal-body">
 
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="form-group">
-                                <label for="name">Branch Name <i>*</i></label>
-                                <input type="text" class="form-control" id="name" placeholder="Branch name" name="name" required>
+                                <label for="name">product Name <i>*</i></label>
+                                <input type="text" class="form-control" id="name" placeholder="product name" name="name" required>
                             </div>
                             <div class="row">
                                 <div class="col-xs-4">
@@ -92,7 +90,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="unit_floor_room_no" id="unit_floor_room_no" placeholder="Unit/Room No.">
+                                    {!! Form::select('subcategory_id', $categories_subcategories, "null", ["class" => "form-control"]) !!}
                                 </div>
                                 <div class="col-xs-4">
                                     <input type="text" class="form-control" name="building" id="building" placeholder="Building">

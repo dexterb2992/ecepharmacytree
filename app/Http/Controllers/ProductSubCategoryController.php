@@ -3,11 +3,15 @@
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
+use Redirect;
+use Input;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
+use ECEPharmacyTree\ProductSubcategory;
+use ECEPharmacyTree\ProductCategory;
 
-class InventoryController extends Controller
+class ProductSubCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,9 +39,14 @@ class InventoryController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        $subcategory = new ProductSubcategory;
+        $subcategory->name = Input::get('name');
+        $subcategory->category_id = Input::get('category_id');
+        if( $subcategory->save() )
+            return Redirect::to( route('product_categories') );
+        return false;
     }
 
     /**
@@ -48,7 +57,8 @@ class InventoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $subcategory = ProductSubcategory::find($id);
+        return $subcategory->toJson();
     }
 
     /**
@@ -57,9 +67,14 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        $subcategory = ProductSubcategory::find( Input::get('id') );
+        $subcategory->name = Input::get('name');
+        $subcategory->category_id = Input::get('category_id');
+        if( $subcategory->save() )
+            return Redirect::to( route('product_categories') );
+        return false;
     }
 
     /**
@@ -80,8 +95,11 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        if( ProductSubcategory::destroy( Input::get('id') ) )
+            return json_encode( array("status" => "success") );
+
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

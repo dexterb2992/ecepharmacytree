@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DiscountsFreeProduct extends Model
 {
     protected $table = "discounts_free_products";
+    protected $softDelete = true;
 
     public function promo(){
     	return $this->belongsTo('ECEPharmacyTree\Promo');

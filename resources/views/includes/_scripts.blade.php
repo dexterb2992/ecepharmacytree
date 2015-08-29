@@ -40,4 +40,5 @@
 <!-- AdminLTE for demo purposes -->
 {!! HTML::script('dist/js/demo.js') !!}
 <!-- PharmacyTree js -->
+{!! HTML::script('dist/fn.ece.js') !!}
 {!! HTML::script('dist/ece.js') !!}

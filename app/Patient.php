@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Patient extends Model
 {
     protected $table = "patients";
+    protected $softDelete = true;
 
     public function basket(){
     	return $this->hasMany('ECEPharmacyTree\Basket');

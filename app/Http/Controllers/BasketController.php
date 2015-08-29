@@ -2,7 +2,7 @@
 
 namespace ECEPharmacyTree\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Request;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;

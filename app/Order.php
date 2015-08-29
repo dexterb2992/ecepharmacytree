@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $table = "orders";
+    protected $softDelete = true;
 
     public function details(){
     	return $this->hasMany('ECEPharmacyTree\OrderDetail');

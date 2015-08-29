@@ -38,6 +38,12 @@
             </li>
 
             <li class="treeview">
+              <a href="/products">
+                <i class="fa-medkit fa"></i> <span>Products</span>
+              </a>
+            </li>
+
+            <li class="treeview">
               <a href="/orders">
                 <i class="fa fa-shopping-cart"></i> <span>Orders</span>
               </a>

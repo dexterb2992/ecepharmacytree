@@ -41,5 +41,6 @@
         @include('admin.partials._footer')
     </div><!-- ./wrapper -->
     @include('includes._scripts')
+    @yield('scripts')
   </body>
 </html>

@@ -1,12 +1,16 @@
-.action-icon {
+.action-icon, .delete-category, .edit-category {
 	margin-left: 8px;
 	cursor: pointer;
 }
 
-.remove-branch:hover{
+.remove-branch, .delete-category{
 	color: #dd4b39;
 }
 
-.deactivate-branch:hover{
+.deactivate-branch{
     color: #f39c12;		
+}
+
+.reactivate-branch, .edit-category {
+    color: green;
 }

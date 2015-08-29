@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Treatment extends Model
 {
     protected $table = "treatments";
+    protected $softDelete = true;
 }

@@ -3,6 +3,7 @@
 namespace ECEPharmacyTree;
 
 use Illuminate\Database\Eloquent\Model;
+use SoftDeletes;
 
 class Basket extends Model
 {

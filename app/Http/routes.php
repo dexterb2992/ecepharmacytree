@@ -11,9 +11,17 @@
 |
 */
 
+
+// Route::filter('csrf', function()
+// {
+//     if (Session::token() == "")
+//     {
+//         Session::regenerateToken();
+//     }
+//     Session::regenerateToken();
+// });
+
 Route::get('/', function () {
-	// return HTML::image(URL::asset('dist/img/user4-128x128.jpg'), "", ["class"=>"img-circle", "alt" => "User Image"]);
-	// return die(HTML::image(URL::asset('dist/img/user2-160x160.jpg')));
     return view('welcome');
 });
 
@@ -24,9 +32,26 @@ Route::get("try", function(){
 /**
  * Routes for Branches
  */
-Route::get('branches', ['as' => 'branches', 'uses' => 'BranchController@index']);
-Route::get('branches/create', ['as' => 'create_branch', 'uses' => 'BranchController@create']);
-Route::post('branches/edit', ['as' => 'edit_branch', 'uses' => 'BranchController@edit']);
+Route::get('branches', [ 'as' => 'branches', 'uses' => 'BranchController@index'] );
+Route::get('branches/{id}', [ 'as' => 'get_branch', 'uses' => 'BranchController@show'] );
+Route::post('branches/create', [ 'as' => 'create_branch', 'uses' => 'BranchController@store'] );
+Route::post('branches/edit', [ 'as' => 'edit_branch', 'uses' => 'BranchController@edit'] );
+Route::post('branches/deactivate', [ 'as' => 'deactivate_branch', 'uses' => 'BranchController@activate_deactivate' ]);
+Route::post('branches/delete', [ 'as' => 'remove_branch', 'uses' => 'BranchController@destroy' ]);
 
+
+/**
+ * Routes for Products and Product Categories & SubCategories
+ */
+Route::get('products', [ 'as' => 'products', 'uses' => 'ProductController@index' ]);
+Route::get('products/categories/{id}', [ 'as' => 'get_product_categories', 'uses' => 'ProductCategoryController@show'] );
+Route::get('products/categories', [ 'as' => 'product_categories', 'uses' => 'ProductCategoryController@index' ]);
+Route::get('products/categories/subcategories/{id}', [ 'as' => 'product_subcategories', 'uses' => 'ProductSubcategoryController@show' ]);
+Route::post('products/categories/create', [ 'as' => 'create_product_category', 'uses' => 'ProductCategoryController@store'] );
+Route::post('products/categories/edit', [ 'as' => 'edit_product_category', 'uses' => 'ProductCategoryController@edit'] );
+Route::post('products/categories/delete', [ 'as' => 'remove_product_category', 'uses' => 'ProductCategoryController@destroy' ]);
+Route::post('products/categories/subcategories/create', [ 'as' => 'create_product_subcategory', 'uses' => 'ProductSubcategoryController@store'] );
+Route::post('products/categories/subcategories/edit', [ 'as' => 'edit_product_subcategory', 'uses' => 'ProductSubcategoryController@edit'] );
+Route::post('products/categories/subcategories/delete', [ 'as' => 'remove_product_subcategory', 'uses' => 'ProductSubcategoryController@destroy' ]);
 
 // Route::get('/members', );

@@ -2,10 +2,14 @@
 
 namespace ECEPharmacyTree\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Request;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
+use Redirect;
+use ECEPharmacyTree\Product;
+use ECEPharmacyTree\ProductCategory;
+use ECEPharmacyTree\ProductSubcategory;
 
 class ProductController extends Controller
 {
@@ -16,7 +20,20 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        $categories = ProductCategory::all();
+        $subcategories = ProductSubcategory::all();
+
+        $categories_subcategories = array();
+        foreach ($categories as $category) {
+            foreach ($category->subcategories as $subcategory) {
+                $categories_subcategories[$category->name] = array($subcategory->id => $subcategory->name);
+            }
+        }
+
+        return view('admin.products')->withProducts($products)
+            ->withCategories($categories)->withSubcategories($subcategories)
+            ->withCategories_subcategories($categories_subcategories);
     }
 
     /**
