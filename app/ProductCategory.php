@@ -10,6 +10,6 @@ class ProductCategory extends Model
     protected $softDelete = true;
 
     public function subcategories(){
-    	return $this->hasMany('ECEPharmacyTree\ProductSubcategories', 'category_id');
+    	return $this->hasMany('ECEPharmacyTree\ProductSubcategory', 'category_id');
     }
 }

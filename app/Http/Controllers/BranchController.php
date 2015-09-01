@@ -29,24 +29,6 @@ class BranchController extends Controller
      * @return Response
      */
     public function create(){
-        /*$input = Input::all();
-        $branch = new Branch;
-        $branch->name = $input["name"];
-        $branch->unit_floor_room_no = $input["unit_floor_room_no"];
-        $branch->building = $input["building"];
-        $branch->lot_no = $input["lot_no"];
-        $branch->block_no = $input["block_no"];
-        $branch->phase_no = $input["phase_no"];
-        $branch->address_street = $input["address_street"];
-        $branch->address_barangay = $input["address_barangay"];
-        $branch->address_city_municipality = $input["address_city_municipality"];
-        $branch->address_province = $input["address_province"];
-        $branch->address_region = $input["address_region"];
-        $branch->address_zip = $input["address_zip"];
-        if( $branch->save() ) 
-            return Redirect::to('branches');
-        
-        return false;*/
     }
 
     /**

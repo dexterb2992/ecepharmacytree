@@ -30,16 +30,30 @@
                                 <tbody>
                                     @foreach($categories as $category)
                                         <tr>
-                                            <td>{{ $category->name }}</td>
+                                            <td>
+                                                <span>
+                                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}">   
+                                                </span>
+                                                {{ $category->name }}
+                                            </td>
                                             <td>
                                                 <div class="tools">
                                                     <span class="add-edit-btn edit-category" data-action="edit" data-modal-target="#modal-add-edit-category" data-title="category" data-id="{{ $category->id }}" data-action="edit" data-target="#form_edit_product_category"><i class="fa fa-edit"></i> Edit</span>
-                                                    <span class="action-icon category-action-icon delete-category" data-modal-target="#modal-add-edit-category" data-title="category" data-urlmain="/products/categories/" data-action="remove" data-id="{{ $category->id }}"><i class="fa fa-trash-o"></i> Remove</span>
+                                                    <span class="action-icon category-action-icon delete-category" data-modal-target="#modal-add-edit-category" data-title="category" data-urlmain="/products-categories/" data-action="remove" data-id="{{ $category->id }}"><i class="fa fa-trash-o"></i> Remove</span>
                                                 </div>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2">
+                                            <span class="form-group">
+                                                <button class="btn-danger btn" disabled><i class="fa-warning fa"></i> Remove all selected</button>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
@@ -49,7 +63,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- form start -->
-                                <form role="form" id="form_edit_product_category" data-mode="create" method="post" action="products/categories/create" data-urlmain="/products/categories/">
+                                <form role="form" id="form_edit_product_category" data-mode="create" method="post" action="products-categories/create" data-urlmain="/products-categories/">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <h4 class="modal-title">Add new product category</h4>
@@ -98,7 +112,7 @@
                                                     <span class="add-edit-btn edit-category" data-action="edit" data-title="category" data-modal-target="#modal-add-edit-subcategory" data-id="{{ $subcategory->id }}" data-action="edit" data-target="#form_edit_product_subcategory">
                                                         <i class="fa fa-edit"></i> Edit
                                                     </span>
-                                                    <span class="action-icon category-action-icon delete-category" data-title="category" data-modal-target="#modal-add-edit-subcategory" data-urlmain="/products/categories/subcategories/" data-action="remove" data-id="{{ $subcategory->id }}">
+                                                    <span class="action-icon category-action-icon delete-category" data-title="category" data-modal-target="#modal-add-edit-subcategory" data-urlmain="/products-categories/subcategories/" data-action="remove" data-id="{{ $subcategory->id }}">
                                                         <i class="fa fa-trash-o"></i> Remove
                                                     </span>
                                                 </div>
@@ -115,7 +129,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- form start -->
-                                <form role="form" id="form_edit_product_subcategory" data-mode="create" method="post" action="products/categories/subcategories/create" data-urlmain="/products/categories/subcategories/">
+                                <form role="form" id="form_edit_product_subcategory" data-mode="create" method="post" action="products-categories/subcategories/create" data-urlmain="/products-categories/subcategories/">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <h4 class="modal-title">Add new product subcategory</h4>

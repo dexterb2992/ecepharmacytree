@@ -10,14 +10,6 @@
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable">
-                    name
-                    generic_name
-                    description
-                    prescription_required
-                    price
-                    unit
-                    packing
-                    qty_per_packing
                     <thead>
                         <tr>
                         <th>Name</th>
@@ -33,9 +25,9 @@
                     </thead>
                     <tbody>
                         @foreach($products as $product)
-                            <tr data-id="{{ $product->id }}" class="{{ $product->status == 1? '' : 'warning' }}">
+                            <tr data-id="{{ $product->id }}">
                                 <td>
-                                    {!! $product->prescription_required == 1 ? <span class="label label-danger">&#8478;</span> : '' !!}
+                                    {!! $product->prescription_required == 1 ? '<span class="label label-danger">&#8478;</span>' : '' !!}
                                     <span>{{ $product->name }}</span>
                                 </td>
                                 <td>{{ $product->generic_name }}</td>
@@ -73,78 +65,58 @@
                         <div class="modal-body">
 
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            
                             <div class="form-group">
-                                <label for="name">product Name <i>*</i></label>
-                                <input type="text" class="form-control" id="name" placeholder="product name" name="name" required>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <label for="unit_floor_room_no">Unit/Room No.</label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="building">Building</label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="block_no">Block No.</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    {!! Form::select('subcategory_id', $categories_subcategories, "null", ["class" => "form-control"]) !!}
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="building" id="building" placeholder="Building">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="block_no" id="block_no" placeholder="Block No.">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <label for="lot_no">Lot No.</label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="phase_no">Phase No.</label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="address_zip">ZIP Code <i>*</i></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="lot_no" id="lot_no" placeholder="Lot No.">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="phase_no" id="phase_no" placeholder="Phase No.">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="address_zip" id="address_zip" placeholder="ZIP Code" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>
-                                <input type="text" class="form-control" id="address_street" placeholder="Street" name="address_street" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address_barangay">Barangay<i>*</i></label>
-                                <input type="text" class="form-control" id="address_barangay" placeholder="Barangay" name="address_barangay" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address_city_municipality">Municipality<i>*</i></label>
-                                <input type="text" class="form-control" id="address_city_municipality" placeholder="Municipality" name="address_city_municipality" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address_province">Province<i>*</i></label>
-                                <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address_province">Region<i>*</i></label>
-                                <select class="form-control" name="address_region">
-                                @foreach(get_ph_regions() as $region)
-                                <option value="{{ $region }}">{{ $region }}</option>
-                                @endforeach
+                                <label for="subcategory_id">Category</label>
+                                <select class="form-control" name="subcategory_id">
+                                    @foreach($categories as $category)
+                                        <optgroup label="{{ $category->name }}">
+                                            @foreach($category->subcategories as $subcategory)
+                                                <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="name">Product name <i>*</i></label>
+                                <input type="text" class="form-control" id="name" placeholder="product name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="generic_name">Generic name</label>
+                                <textarea class="form-control" name="generic_name"></textarea>      
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="prescription_required">Requires prescription?</label>
+                                <select class="form-control" name="prescription_required">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">&#x20B1;</span>
+                                    <input type="text" class="form-control" name="price">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="packing">Packing</label>
+                                <input type="text" name="packing" class="form-control" placeholder="Ex. box, bottle, strip, etc.">
+                            </div>  
+                            <div class="form-group">
+                                <label for="unit">Unit</label>
+                                <input type="text" class="form-control" name="unit" placeholder="Ex. tablet, capsule, etc.">
+                            </div>
+                            <div class="form-group">
+                                <label for="qty_per_packing">Quantity per packing</label>
+                                <input type="text" class="form-control" name="qty_per_packing" title="H">
+                            </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" name="submit">Save changes</button>

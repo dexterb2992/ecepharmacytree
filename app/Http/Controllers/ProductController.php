@@ -3,6 +3,7 @@
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
+use Input;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -24,16 +25,8 @@ class ProductController extends Controller
         $categories = ProductCategory::all();
         $subcategories = ProductSubcategory::all();
 
-        $categories_subcategories = array();
-        foreach ($categories as $category) {
-            foreach ($category->subcategories as $subcategory) {
-                $categories_subcategories[$category->name] = array($subcategory->id => $subcategory->name);
-            }
-        }
-
         return view('admin.products')->withProducts($products)
-            ->withCategories($categories)->withSubcategories($subcategories)
-            ->withCategories_subcategories($categories_subcategories);
+            ->withCategories($categories)->withSubcategories($subcategories);
     }
 
     /**
@@ -54,7 +47,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = Input::all();
+        $product = new Product;
+        $product->name = $input['name'];
+        $product->generic_name = $input['generic_name'];
+        $product->description = $input['description'];
+        $product->prescription_required = $input['prescription_required'];
+        $product->price = $input['price'];
+        $product->unit = $input['unit'];
+        $product->packing = $input['packing'];
+        $product->qty_per_packing = $input['qty_per_packing'];
+        $product->subcategory_id = $input['subcategory_id'];
+        $product->sku = generateSku();
+
+        if( $product->save() )
+            return Redirect::to( route('products') );
+        return false;
     }
 
     /**
@@ -65,7 +73,10 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::find($id);
+        if( isset( $product->id ) )
+            return $product->toJson();
+        // return Redirect::to( route('products') );
     }
 
     /**

@@ -44,14 +44,17 @@ Route::post('branches/delete', [ 'as' => 'remove_branch', 'uses' => 'BranchContr
  * Routes for Products and Product Categories & SubCategories
  */
 Route::get('products', [ 'as' => 'products', 'uses' => 'ProductController@index' ]);
-Route::get('products/categories/{id}', [ 'as' => 'get_product_categories', 'uses' => 'ProductCategoryController@show'] );
-Route::get('products/categories', [ 'as' => 'product_categories', 'uses' => 'ProductCategoryController@index' ]);
-Route::get('products/categories/subcategories/{id}', [ 'as' => 'product_subcategories', 'uses' => 'ProductSubcategoryController@show' ]);
-Route::post('products/categories/create', [ 'as' => 'create_product_category', 'uses' => 'ProductCategoryController@store'] );
-Route::post('products/categories/edit', [ 'as' => 'edit_product_category', 'uses' => 'ProductCategoryController@edit'] );
-Route::post('products/categories/delete', [ 'as' => 'remove_product_category', 'uses' => 'ProductCategoryController@destroy' ]);
-Route::post('products/categories/subcategories/create', [ 'as' => 'create_product_subcategory', 'uses' => 'ProductSubcategoryController@store'] );
-Route::post('products/categories/subcategories/edit', [ 'as' => 'edit_product_subcategory', 'uses' => 'ProductSubcategoryController@edit'] );
-Route::post('products/categories/subcategories/delete', [ 'as' => 'remove_product_subcategory', 'uses' => 'ProductSubcategoryController@destroy' ]);
+Route::get('products/{id}', [ 'as' => 'show_product', 'uses' => 'ProductController@show' ]);
+Route::get('products-categories', [ 'as' => 'product_categories', 'uses' => 'ProductCategoryController@index' ]);
+Route::get('products-categories/{id}', [ 'as' => 'get_product_categories', 'uses' => 'ProductCategoryController@show'] );
+Route::get('products-categories/subcategories/{id}', [ 'as' => 'product_subcategories', 'uses' => 'ProductSubcategoryController@show' ]);
+
+Route::post('products/create', [ 'as' => 'create_product', 'uses' => 'ProductController@store' ]);
+Route::post('products-categories/create', [ 'as' => 'create_product_category', 'uses' => 'ProductCategoryController@store'] );
+Route::post('products-categories/edit', [ 'as' => 'edit_product_category', 'uses' => 'ProductCategoryController@edit'] );
+Route::post('products-categories/delete', [ 'as' => 'remove_product_category', 'uses' => 'ProductCategoryController@destroy' ]);
+Route::post('products-categories/subcategories/create', [ 'as' => 'create_product_subcategory', 'uses' => 'ProductSubcategoryController@store'] );
+Route::post('products-categories/subcategories/edit', [ 'as' => 'edit_product_subcategory', 'uses' => 'ProductSubcategoryController@edit'] );
+Route::post('products-categories/subcategories/delete', [ 'as' => 'remove_product_subcategory', 'uses' => 'ProductSubcategoryController@destroy' ]);
 
 // Route::get('/members', );

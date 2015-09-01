@@ -38,9 +38,12 @@
             </li>
 
             <li class="treeview">
-              <a href="/products">
+              <a href="{{ route('products') }}">
                 <i class="fa-medkit fa"></i> <span>Products</span>
               </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ route('product_categories') }}"><i class="fa fa-circle-o"></i> Category</a></li>
+              </ul>
             </li>
 
             <li class="treeview">
@@ -62,7 +65,7 @@
             </li>
 
             <li class="treeview">
-              <a href="/branches">
+              <a href="{{ route('branches') }}">
                 <i class="fa fa-building"></i> <span>Branches</span>
               </a>
             </li>

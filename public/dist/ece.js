@@ -36,12 +36,25 @@ $(document).ready(function (){
                 
                 form.append('<input type="hidden" name="id" value="'+data.id+'">');
 
-                form.find("select[name='address_region']").children('option:selected').removeAttr("selected");
-                form.find("select[name='address_region']").children('option[value="'+data.address_region+'"]').attr("selected", "selected");
+                // form.find("select[name='address_region'], select[name='subcategory_id']").children('option:selected').removeAttr("selected");
+                // form.find("select[name='address_region']").children('option[value="'+data.address_region+'"]').attr("selected", "selected");
 
                 $.each(data, function (i, row){
                     form.find("input[name='"+i+"']").val(row);
+                    form.find("textarea[name='"+i+"']").val(row);
                 });
+
+                $.each(form.find('select'), function (i, row){
+                    var name = $(row).attr("name");
+                    $(row).children('option:selected').removeAttr("selected");
+                    $.each(data, function (i, row){
+                        if( i == name ){
+                            $(row).children('option[value="'+name+'"]').attr("selected", "selected");
+                        }
+                    });
+                    
+                });
+
                 $(modal).modal('show');
             });
         }else{
