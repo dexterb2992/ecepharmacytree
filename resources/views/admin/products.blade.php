@@ -27,7 +27,7 @@
                         @foreach($products as $product)
                             <tr data-id="{{ $product->id }}">
                                 <td>
-                                    {!! $product->prescription_required == 1 ? '<span class="label label-danger">&#8478;</span>' : '' !!}
+                                    {!! $product->prescription_required == 1 ? '<span class="rx" title="Requires a prescription">&#8478;</span>' : '' !!}
                                     <span>{{ $product->name }}</span>
                                 </td>
                                 <td>{{ $product->generic_name }}</td>

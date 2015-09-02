@@ -57,4 +57,13 @@ Route::post('products-categories/subcategories/create', [ 'as' => 'create_produc
 Route::post('products-categories/subcategories/edit', [ 'as' => 'edit_product_subcategory', 'uses' => 'ProductSubcategoryController@edit'] );
 Route::post('products-categories/subcategories/delete', [ 'as' => 'remove_product_subcategory', 'uses' => 'ProductSubcategoryController@destroy' ]);
 
+
+/**
+ * Routes for inventories
+ */
+
+Route::get('inventory', [ 'as' => 'inventory', 'uses' => 'InventoryController@index' ]);
+Route::post('inventory/create', [ 'as' => 'create_inventory', 'uses' => 'InventoryController@store' ]);
+Route::post('inventory/edit', [ 'as' => 'edit_inventory', 'uses' => 'InventoryController@edit' ]);
+Route::post('inventory/delete', [ 'as' => 'delete_inventory', 'uses' => 'InventoryController@destroy' ]);
 // Route::get('/members', );

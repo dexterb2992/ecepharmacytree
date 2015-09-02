@@ -6,7 +6,7 @@
         <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">Branches</h3><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-branch" data-target="#form_edit_branch" data-action="create" data-title="category"><i class="fa-plus fa"></i> Add New</button>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-branch" data-target="#form_edit_branch" data-action="create" data-title="branch"><i class="fa-plus fa"></i> Add New</button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable">
@@ -40,7 +40,7 @@
                                     <span>{{ $branch->name }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ $address }}</span>
+                                    <span>{!! $address !!}</span>
                                 </td>
                                 <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
                                 <td>{{ $branch->created_at }}</td>

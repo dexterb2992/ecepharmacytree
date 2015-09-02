@@ -145,6 +145,7 @@
                                             <label for="name">Subcategory Name <i>*</i></label>
                                             <input type="text" class="form-control" id="name" placeholder="Category name" name="name" required>
                                         </div>
+                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary" name="submit">Save</button>

@@ -41,9 +41,12 @@
               <a href="{{ route('products') }}">
                 <i class="fa-medkit fa"></i> <span>Products</span>
               </a>
-              <ul class="treeview-menu">
-                <li><a href="{{ route('product_categories') }}"><i class="fa fa-circle-o"></i> Category</a></li>
-              </ul>
+            </li>
+
+            <li class="treeview">
+              <a href="{{ route('inventory') }}">
+                <i class="fa-cubes fa"></i> <span>Inventory</span>
+              </a>
             </li>
 
             <li class="treeview">
@@ -56,6 +59,16 @@
               <a href="/payments">
                 <i class="fa fa-usd"></i> <span>Payments</span>
               </a>
+            </li>
+
+            <li class="treeview">
+              <a href="#">
+                <i class="fa-sitemap fa"></i> <span>Categories</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ route('product_categories') }}"><i class="fa fa-medkit"></i> Product Categories</a></li>
+              </ul>
             </li>
 
             <li class="treeview">

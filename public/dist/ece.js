@@ -9,6 +9,13 @@ $(document).ready(function (){
       "autoWidth": false
     });
 
+    $('.select2').select2();
+    $(".datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
+    //Datemask2 mm/dd/yyyy
+    $(".datemask2").inputmask("mm-dd-yyyy", {"placeholder": "mm-dd-yyyy"});
+    //Datemask
+    $(".datemask3").inputmask("yyyy-mm-dd", {"placeholder": "yyyy-mm-dd"});
+
     $(document).on("click", ".add-edit-btn", function (){
     	var $this = $(this), 
             target = $(this).attr("data-target");
@@ -36,20 +43,18 @@ $(document).ready(function (){
                 
                 form.append('<input type="hidden" name="id" value="'+data.id+'">');
 
-                // form.find("select[name='address_region'], select[name='subcategory_id']").children('option:selected').removeAttr("selected");
-                // form.find("select[name='address_region']").children('option[value="'+data.address_region+'"]').attr("selected", "selected");
-
                 $.each(data, function (i, row){
                     form.find("input[name='"+i+"']").val(row);
                     form.find("textarea[name='"+i+"']").val(row);
                 });
 
+                form.find('select').find('option:selected').removeAttr("selected");
                 $.each(form.find('select'), function (i, row){
                     var name = $(row).attr("name");
-                    $(row).children('option:selected').removeAttr("selected");
-                    $.each(data, function (i, row){
+                    
+                    $.each(data, function (i, col){
                         if( i == name ){
-                            $(row).children('option[value="'+name+'"]').attr("selected", "selected");
+                            $(row).find('option[value="'+col+'"]').attr("selected", "selected");
                         }
                     });
                     

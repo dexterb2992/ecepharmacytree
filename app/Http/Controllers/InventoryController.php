@@ -3,6 +3,10 @@
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
+use Intput;
+use Redirect;
+use ECEPharmacyTree\Inventory;
+use ECEPharmacyTree\Product;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -16,7 +20,10 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        //
+        $inventories = Inventory::all();
+        $products = Product::all();
+        return view('admin.inventories')->withInventories($inventories)
+            ->withProducts($products);
     }
 
     /**
@@ -35,9 +42,12 @@ class InventoryController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        $input = Input::all();
+        $inventory = new Inventory;
+        $inventory->product_sku = $input("product_sku");
+        $inventory->expiration = $input("expiration");
     }
 
     /**

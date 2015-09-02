@@ -40,5 +40,5 @@ function generateRandomString($length = 10) {
 }
 
 function generateSku(){
-	return generateRandomString(8);
+	return strtoupper(generateRandomString(8));
 }
