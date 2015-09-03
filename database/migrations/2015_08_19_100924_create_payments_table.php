@@ -15,12 +15,12 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('billing_id')->unsigned();
-            $table->foreign('billing_id')->references('id')->on('billings');
+            $table->foreign('billing_id')->references('id')->on('billings')->onDelete('cascade');
             $table->string('payment_mode');
             $table->string('txn_id')->nullable();
             $table->string('or_no')->nullable();
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

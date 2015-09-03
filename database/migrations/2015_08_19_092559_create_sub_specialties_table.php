@@ -16,7 +16,7 @@ class CreateSubSpecialtiesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('specialty_id')->unsigned();
-            $table->foreign('specialty_id')->references('id')->on('specialties');
+            $table->foreign('specialty_id')->references('id')->on('specialties')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -15,9 +15,9 @@ class CreatePatientRecordsTable extends Migration
         Schema::create('patient_records', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
-            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->integer('doctor_id')->unsigned();
-            $table->foreign('doctor_id')->references('id')->on('doctors');
+            $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
             $table->string('doctor_name');
             $table->longText('complaints');
             $table->longText('findings');

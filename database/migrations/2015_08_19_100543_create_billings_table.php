@@ -15,7 +15,7 @@ class CreateBillingsTable extends Migration
         Schema::create('billings', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned();
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->double('gross_total');
             $table->double('total');
             $table->timestamps();

@@ -25,9 +25,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get("try", function(){
-	return view("404");
-});
+// Route::get("try", function(){
+// 	return view("404");
+// });
 
 /**
  * Routes for Branches
@@ -63,6 +63,7 @@ Route::post('products-categories/subcategories/delete', [ 'as' => 'remove_produc
  */
 
 Route::get('inventory', [ 'as' => 'inventory', 'uses' => 'InventoryController@index' ]);
+Route::get('inventory/{id}', [ 'show_inventory', 'uses' => 'InventoryController@show' ]);
 Route::post('inventory/create', [ 'as' => 'create_inventory', 'uses' => 'InventoryController@store' ]);
 Route::post('inventory/edit', [ 'as' => 'edit_inventory', 'uses' => 'InventoryController@edit' ]);
 Route::post('inventory/delete', [ 'as' => 'delete_inventory', 'uses' => 'InventoryController@destroy' ]);

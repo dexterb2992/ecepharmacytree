@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
-            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->date('delivery_sched');
             $table->string('address_house_no')->nullable();
             $table->string('address_street');

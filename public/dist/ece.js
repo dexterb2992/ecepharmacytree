@@ -40,7 +40,7 @@ $(document).ready(function (){
                 dataType : 'json'
             }).done(function (data){
                 console.log(data);
-                
+
                 form.append('<input type="hidden" name="id" value="'+data.id+'">');
 
                 $.each(data, function (i, row){
@@ -60,6 +60,8 @@ $(document).ready(function (){
                     
                 });
 
+                form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing")
+
                 $(modal).modal('show');
             });
         }else{
@@ -68,6 +70,7 @@ $(document).ready(function (){
         }
 
         form.attr("data-mode", action);
+        form.attr("action", mainurl+action);
 
         form.find(".modal-title").html(title);
         
@@ -107,7 +110,7 @@ $(document).ready(function (){
             }).done(function (data){
                 console.log(data);
                 if( data.status == "success" ){
-                    $(".modal-alert").modal('hide');
+                    $(document).find(".modal-alert").modal('hide');
                     window.location = window.location;
                 }
             });
@@ -119,6 +122,7 @@ $(document).ready(function (){
     $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
         var $this = $(this);
         var redirectUrl = $this.data("redirect"), id = $this.data("id");
+        console.log("redirectUrl: "+redirectUrl+" id: "+id);
         if( redirectUrl !== "" ){
             $.ajax({
                 url : redirectUrl,
@@ -140,13 +144,13 @@ $(document).ready(function (){
         $(this).attr("action", mainurl+mode);
     });
 
-    /*$("#form_edit_product_category").submit(function (){
-        var mode = $(this).data("mode");
-        if( mode == "create" ){
-            $(this).attr("action", "/products/categories/create");
-        }else if( mode == "edit" ){
-            $(this).attr("action", "/branches/edit");
-        }
-    });*/
+    $("#inventories_product_id").change(function (){
+        var packing = $(this).children('option:selected').data("packing");
+        $(".add-on-product-packing").html( str_plural(packing) );
+    });
+
+    $("#inventory_quantity").keyup(function (){
+        
+    });
 		
 });

@@ -15,9 +15,9 @@ class CreateFreeProductsTable extends Migration
         Schema::create('free_products', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('dfp_id')->unsigned();
-            $table->foreign('dfp_id')->references('id')->on('discounts_free_products');
+            $table->foreign('dfp_id')->references('id')->on('discounts_free_products')->onDelete('cascade');
             $table->integer('product_id')->unsigned();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->integer('quantity_free');
             $table->timestamps();
             $table->softDeletes();

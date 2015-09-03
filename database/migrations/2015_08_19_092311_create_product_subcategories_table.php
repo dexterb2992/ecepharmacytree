@@ -16,7 +16,7 @@ class CreateProductSubcategoriesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('product_categories');
+            $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,3 +1,4 @@
+<?php use Carbon\Carbon; ?>
 @extends('admin.layouts.template')
 @section('content')
 
@@ -43,7 +44,7 @@
                                     <span>{!! $address !!}</span>
                                 </td>
                                 <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
-                                <td>{{ $branch->created_at }}</td>
+                                <td>{{ Carbon::parse($branch->created_at)->diffForHumans() }}</td>
                                 <td>
                                     <div class="tools">
                                         

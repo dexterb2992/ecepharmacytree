@@ -1,3 +1,4 @@
+<?php use Carbon\Carbon; ?>
 @extends('admin.layouts.template')
 @section('content')
 	<div class="row">
@@ -14,22 +15,30 @@
 								<th>SKU</th>
 								<th>Product name</th>
 								<th>Quantity</th>
-								<th>Expiration</th>
+								<th>Stock Expiration</th>
 								<th>Date Added</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tbody>
-								@foreach($inventories as $inventory)
-									<tr>
-										<td>{{ $inventory->product->sku }}</td>
-										<td>{{ $inventory->product->name }}</td>
-										<td>{{ $inventory->quantity }}</td>
-										<td>{{ $inventory->expiration }}</td>
-										<td>{{ $inventory->created_at }}</td>
-									</tr>
-								@endforeach
-							</tbody>
+							@foreach($inventories as $inventory)
+								<tr>
+									<td>
+										<span> {{ $inventory->product->sku }}</span>
+									</td>
+									<td>{{ $inventory->product->name }}</td>
+									<td>{{ $inventory->quantity }}</td>
+									<td>
+										{{ Carbon::parse($inventory->expiration_date)->diffForHumans() }}
+									</td>
+									<td>
+										<span>{{ Carbon::parse($inventory->created_at)->diffForHumans() }}</span>
+										<span class="action-icon remove-product pull-right" data-action="remove" data-title="inventory" data-urlmain="/inventory/" data-id="{{ $inventory->id }}" title="Remove"><i class="fa fa-trash-o"></i></span>
+										<a href="javascript:void(0);" class="add-edit-btn pull-right" data-action="edit" data-modal-target="#modal-add-edit-inventory" data-title="inventory" data-target="#form_edit_inventory" data-id="{{ $inventory->id }}" title="Edit">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+									</td>
+								</tr>
+							@endforeach
 						</tbody>
 					</table>
 				</div>
@@ -48,16 +57,21 @@
 	                        <div class="modal-body">
 	                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
 	                            <div class="form-group">
-	                            	<label for="product_sku">Product</label>
-	                            	<select class="form-control" name="product_sku">
+	                            	<label for="product_id">Product</label>
+	                            	<select class="form-control" name="product_id" id="inventories_product_id">
 	                            		@foreach($products as $product)
-	                            			<option value="{{ $product->sku }}">{{ $product->name }}</option>
+	                            			<option value="{{ $product->id }}" data-packing="{{ $product->packing }}">{{ $product->name }}</option>
 	                            		@endforeach
 	                            	</select>
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="quantity">Quantity</label>
-	                            	<input type="text" name="quantity" class="number form-control">
+	                            	<label for="quantity" title="Add quantity by product's packing">Quantity (<i>By Packing</i>)</label>
+	                            	<div class="input-group">
+		                            	<input type="text" id="inventory_quantity" name="quantity" data-unit="{{ head( $products->toArray() )['unit'] }}" data-qty-per-packing="{{ head( $products->toArray() )['qty_per_packing'] }}" class="number form-control" title="Add quantity by product's packing">
+		                            	<div class="input-group-addon">
+		                            		<span class="add-on-product-packing" name="packing">{{ head( $products->toArray() )["packing"] }}</span>
+		                            	</div>
+	                            	</div>
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="expiration">Expiration Date</label>
@@ -65,7 +79,7 @@
 	                            		<div class="input-group-addon">
 											<i class="fa fa-calendar"></i>
 										</div>
-										<input type="text" name="expiration" class="form-control datemask" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask />
+										<input type="text" name="expiration_date" class="form-control datemask3" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask />
 		                            </div>
 	                            </div>
 	                        <div class="modal-footer">

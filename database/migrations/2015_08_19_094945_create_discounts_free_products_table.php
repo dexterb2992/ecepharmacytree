@@ -15,9 +15,9 @@ class CreateDiscountsFreeProductsTable extends Migration
         Schema::create('discounts_free_products', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('promo_id')->unsigned();
-            $table->foreign('promo_id')->references('id')->on('promos');
+            $table->foreign('promo_id')->references('id')->on('promos')->onDelete('cascade');
             $table->integer('product_id')->unsigned();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->integer('type');
             $table->integer('quantity_required');
             $table->double('less');

@@ -15,7 +15,7 @@ class CreatePatientPrescriptionsTable extends Migration
         Schema::create('patient_prescriptions', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
-            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->longText('filename');
             $table->integer('is_approved')->default(0);
             $table->timestamps();

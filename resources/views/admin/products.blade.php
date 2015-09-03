@@ -12,15 +12,15 @@
                 <table class="table table-bordered table-hover datatable">
                     <thead>
                         <tr>
-                        <th>Name</th>
-                        <th>Generic Name</th>
-                        <th>Description</th>
-                        <th>Unit</th>
-                        <th>Packing</th>
-                        <th>Qty per packing</th>
-                        <th>Sub Category</th>
-                        <th>Category</th>
-                        <th>Action</th>
+                            <th>Name</th>
+                            <th>Generic Name</th>
+                            <th>Description</th>
+                            <th>Unit</th>
+                            <th>Packing</th>
+                            <th>Qty per packing</th>
+                            <th>Sub Category</th>
+                            <th>Category</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,7 +28,7 @@
                             <tr data-id="{{ $product->id }}">
                                 <td>
                                     {!! $product->prescription_required == 1 ? '<span class="rx" title="Requires a prescription">&#8478;</span>' : '' !!}
-                                    <span>{{ $product->name }}</span>
+                                    <span>{{ ucfirst($product->name) }}</span>
                                 </td>
                                 <td>{{ $product->generic_name }}</td>
                                 <td>{{ $product->description }}</td>
@@ -42,7 +42,7 @@
                                         <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" data-id="{{ $product->id }}" title="Edit">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <span class="action-icon remove-product" data-action="remove" data-title="product" data-urlmain="/products/" data-id="{{ $product->id }}"><i class="fa fa-trash-o"></i> Remove</span>
+                                        <span class="action-icon remove-product" data-action="remove" data-title="product" data-urlmain="/products/" data-id="{{ $product->id }}"><i class="fa fa-trash-o"></i></span>
                                     </div>
                                 </td>
                             </tr>

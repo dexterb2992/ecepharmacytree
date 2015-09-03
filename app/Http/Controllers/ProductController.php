@@ -49,12 +49,12 @@ class ProductController extends Controller
     {
         $input = Input::all();
         $product = new Product;
-        $product->name = $input['name'];
-        $product->generic_name = $input['generic_name'];
-        $product->description = $input['description'];
+        $product->name = ucfirst( $input['name'] );
+        $product->generic_name = ucfirst( $input['generic_name'] );
+        $product->description = ucfirst( $input['description'] );
         $product->prescription_required = $input['prescription_required'];
         $product->price = $input['price'];
-        $product->unit = $input['unit'];
+        $product->unit = str_singular( $input['unit'] );
         $product->packing = $input['packing'];
         $product->qty_per_packing = $input['qty_per_packing'];
         $product->subcategory_id = $input['subcategory_id'];

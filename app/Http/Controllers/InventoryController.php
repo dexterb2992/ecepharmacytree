@@ -1,5 +1,4 @@
 <?php
-
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
@@ -7,6 +6,8 @@ use Intput;
 use Redirect;
 use ECEPharmacyTree\Inventory;
 use ECEPharmacyTree\Product;
+use Input;
+use Carbon\Carbon;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -20,6 +21,7 @@ class InventoryController extends Controller
      */
     public function index()
     {
+
         $inventories = Inventory::all();
         $products = Product::all();
         return view('admin.inventories')->withInventories($inventories)
@@ -42,12 +44,28 @@ class InventoryController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
+
+        /**
+         *  Note: the quantity that will be saved will be per product unit
+         *        so, if per packing there are 12 units and the quantity
+         *        we received is 6, therefore, the quantity that will be saved 
+         *        to database is 72
+         */
         $input = Input::all();
         $inventory = new Inventory;
-        $inventory->product_sku = $input("product_sku");
-        $inventory->expiration = $input("expiration");
+        $inventory->product_id = $input["product_id"];
+
+        $product = Product::find( $inventory->product_id );
+        $quantity = $product->qty_per_packing * $input["quantity"];
+
+        $inventory->quantity = $quantity;
+        $inventory->expiration_date = $input["expiration_date"];
+        if( $inventory->save() ){
+            return Redirect::to( route('inventory') );
+        }
+        return Redirect::to( route('inventory') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
     }
 
     /**
@@ -58,7 +76,11 @@ class InventoryController extends Controller
      */
     public function show($id)
     {
-        //
+        if( Request::ajax() ){
+            $inventory = Inventory::findOrFail($id);
+            return $inventory->toJson();
+        }   
+        return false;
     }
 
     /**
@@ -67,9 +89,17 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        $input = Input::all();
+        $inventory = Inventory::findOrFail( $input["id"] );
+        $inventory->product_id = $input["product_id"];
+        $inventory->quantity = $input["quantity"];
+        $inventory->expiration_date = $input["expiration_date"];
+        if( $inventory->save() ){
+            return Redirect::to( route('inventory') );
+        }
+        return Redirect::to( route('inventory') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
     }
 
     /**
@@ -90,8 +120,14 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy()
+    {   
+
+        if( Request::ajax() ){
+
+            if( Inventory::destroy( Input::get('id') ) )  
+                return json_encode( array("status" => "success") );
+        }
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later." ) );
     }
 }

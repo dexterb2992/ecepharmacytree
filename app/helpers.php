@@ -29,8 +29,20 @@ function get_ph_regions(){
 	);
 }
 
-function generateRandomString($length = 10) {
+/**
+ * @var $is_number
+ * 			0 = alphanumeric characters
+ *			1 = numbers only
+ *			2 = letters only
+ */
+function generateRandomString($length = 10, $is_number = 0) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if( $is_number  == 1) {
+    	$characters = '0123456789';
+    }else if( $is_number == 2 ){
+    	$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    }
+
     $charactersLength = strlen($characters);
     $randomString = '';
     for ($i = 0; $i < $length; $i++) {
@@ -40,5 +52,51 @@ function generateRandomString($length = 10) {
 }
 
 function generateSku(){
-	return strtoupper(generateRandomString(8));
+	$sku = generateRandomString(4, 2).generateRandomString(4, 1);
+	return strtoupper($sku);
+}
+
+
+
+
+function get_str_plural($str){
+	$str = str_singular($str);
+
+	$lastChar = ""; $replacement = "";
+
+	$lastChar = substr($str, strlen( $str ) - 2);
+	$new_str = substr($str, 0, strlen( $str ) - 2);
+
+	if( $lastChar == "um" ) $replacement = "a";
+	if( $lastChar == "fe" ) $replacement = "ves";
+	if( $lastChar == "us" ) $replacement = "i";
+	if( $lastChar == "ch" )	return $str."es";
+
+	if( $replacement != "" ) return $new_str.$replacement;
+
+
+
+	$lastChar = substr($str, strlen($str) -1 );
+	$new_str = substr($str, 0, strlen( $str ) - 1);
+
+	if( $lastChar == "f" )	$replacement = "ves";
+
+	if( $lastChar == "y" ) $replacement = "ies";
+	
+		// return $new_str.$replacement;
+
+	if( $lastChar == "s" || $lastChar == "x" ){
+		return $str."es";
+	}else{
+		return $str."s";
+	}
+
+
+	if( $replacement == "" ){
+		$new_str = $str;
+	}
+	
+	return $new_str.$replacement;	
+	
+
 }
