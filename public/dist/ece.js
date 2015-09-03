@@ -145,12 +145,29 @@ $(document).ready(function (){
     });
 
     $("#inventories_product_id").change(function (){
-        var packing = $(this).children('option:selected').data("packing");
-        $(".add-on-product-packing").html( str_plural(packing) );
+        updateInventoryProductQty();
     });
 
     $("#inventory_quantity").keyup(function (){
-        
+        updateInventoryProductQty();
     });
+
+    function updateInventoryProductQty(){
+        var unit = "", packing = "", qtyPerPacking = 1, totalQty = 0, qty = 0;
+        var el = $("#inventory_quantity");
+        var selectedOption = $("#inventories_product_id").children('option:selected');
+       
+        qty = el.val() == "" ? 0 : el.val();
+
+        qtyPerPacking = selectedOption.data("qty-per-packing");
+
+        totalQty = qty*qtyPerPacking;
+
+        unit = str_auto_plural( selectedOption.data("unit"), totalQty );
+        packing = str_auto_plural( selectedOption.data("packing"),  qty);
+
+        $("#total_quantity_in_unit").html( totalQty+" "+unit+" ( "+qty+" "+packing+" )" );
+        $(".add-on-product-packing").html(packing);
+    }
 		
 });

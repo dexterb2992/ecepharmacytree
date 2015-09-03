@@ -43,6 +43,8 @@
     </div><!-- ./wrapper -->
     
     <script type="text/javascript">
+      /* Add your custom javascript functions here */
+      
       function str_singular(str){
         var res = '<?php echo str_singular("'+str+'");?>';
         return res;
