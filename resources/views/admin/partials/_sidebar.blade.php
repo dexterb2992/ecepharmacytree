@@ -68,6 +68,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{ route('product_categories') }}"><i class="fa fa-medkit"></i> Product Categories</a></li>
+                <li><a href="{{ route('doctor_specialties') }}"><i class="fa fa-stethoscope"></i> Doctor Specialties</a></li>
               </ul>
             </li>
 

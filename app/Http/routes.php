@@ -67,4 +67,24 @@ Route::get('inventory/{id}', [ 'show_inventory', 'uses' => 'InventoryController@
 Route::post('inventory/create', [ 'as' => 'create_inventory', 'uses' => 'InventoryController@store' ]);
 Route::post('inventory/edit', [ 'as' => 'edit_inventory', 'uses' => 'InventoryController@edit' ]);
 Route::post('inventory/delete', [ 'as' => 'delete_inventory', 'uses' => 'InventoryController@destroy' ]);
+
+
+
+/**
+ * Routes for Doctors and Doctor Specialties
+ */
+Route::get("doctor-specialties", [ 'as' => 'doctor_specialties', 'uses' => 'SpecialtyController@index' ]);
+Route::get("doctor-specialties/{id}", [ 'as' => 'show_specialties', 'uses' => 'SpecialtyController@show' ]);
+Route::get("doctor-specialties/subspecialties/{id}", [ 'as' => 'show_subspecialties', 'uses' => 'SubspecialtyController@show' ]);
+
+Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
+Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
+Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
+
+Route::post('doctor-specialties/subspecialties/create', [ 'as' => 'create_doctor_subspecialty', 'uses' => 'SubspecialtyController@store'] );
+Route::post('doctor-specialties/subspecialties/edit', [ 'as' => 'edit_doctor_subspecialty', 'uses' => 'SubspecialtyController@update'] );
+Route::post('doctor-specialties/subspecialties/delete', [ 'as' => 'remove_doctor_subspecialty', 'uses' => 'SubspecialtyController@destroy' ]);
+
+
+
 // Route::get('/members', );
