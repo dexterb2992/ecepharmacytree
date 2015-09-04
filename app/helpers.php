@@ -100,3 +100,10 @@ function get_str_plural($str){
 	
 
 }
+
+function str_auto_plural($str, $quantity){
+	if( $quantity > 1 )
+		return str_plural($str);
+
+	return str_singular($str);
+}

@@ -163,4 +163,55 @@ $("#inventory_quantity").keyup(function (){
 
 });
 
+    $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
+        var $this = $(this);
+        var redirectUrl = $this.data("redirect"), id = $this.data("id");
+        console.log("redirectUrl: "+redirectUrl+" id: "+id);
+        if( redirectUrl !== "" ){
+            $.ajax({
+                url : redirectUrl,
+                type : 'post',
+                dataType : 'json',
+                data : { id : id, _token :  $("input[name='_token']").val() }
+            }).done(function (data){
+                console.log(data);
+                if( data.status == "success" ){
+                    $(".modal-alert").modal('hide');
+                    window.location = window.location;
+                }
+            });
+        }
+    });
+
+    $("#form_edit_branch, #form_edit_product_category, #form_edit_product_subcategory").submit(function (){
+        var mode = $(this).data("mode"), mainurl = $(this).data('urlmain');
+        $(this).attr("action", mainurl+mode);
+    });
+
+    $("#inventories_product_id").change(function (){
+        updateInventoryProductQty();
+    });
+
+    $("#inventory_quantity").keyup(function (){
+        updateInventoryProductQty();
+    });
+
+    function updateInventoryProductQty(){
+        var unit = "", packing = "", qtyPerPacking = 1, totalQty = 0, qty = 0;
+        var el = $("#inventory_quantity");
+        var selectedOption = $("#inventories_product_id").children('option:selected');
+       
+        qty = el.val() == "" ? 0 : el.val();
+
+        qtyPerPacking = selectedOption.data("qty-per-packing");
+
+        totalQty = qty*qtyPerPacking;
+
+        unit = str_auto_plural( selectedOption.data("unit"), totalQty );
+        packing = str_auto_plural( selectedOption.data("packing"),  qty);
+
+        $("#total_quantity_in_unit").html( totalQty+" "+unit+" ( "+qty+" "+packing+" )" );
+        $(".add-on-product-packing").html(packing);
+    }
+		
 });
