@@ -3,11 +3,14 @@
 namespace ECEPharmacyTree;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class Patient extends Model
 {
+    use SoftDeletes;
+
     protected $table = "patients";
-    protected $softDelete = true;
+    
 
     public function basket(){
     	return $this->hasMany('ECEPharmacyTree\Basket');
