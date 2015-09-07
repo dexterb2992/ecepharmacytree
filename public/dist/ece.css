@@ -24,3 +24,11 @@
     font-size: larger;
     cursor: help;
 }
+
+.whitenbg {
+    background-color:#fff !important;
+}
+
+.marginleft_zero{
+    margin-left: 0;   
+}

@@ -49,6 +49,17 @@ Route::get('products-categories', [ 'as' => 'product_categories', 'uses' => 'Pro
 Route::get('products-categories/{id}', [ 'as' => 'get_product_categories', 'uses' => 'ProductCategoryController@show'] );
 Route::get('products-categories/subcategories/{id}', [ 'as' => 'product_subcategories', 'uses' => 'ProductSubcategoryController@show' ]);
 
+/*
+	Routes for Members/Patients
+*/
+Route::get('members', [ 'as' => 'members', 'uses' => 'PatientController@index' ]);
+Route::get('members/{id}', [ 'as' => 'get_member', 'uses' => 'PatientController@show'] );
+Route::post('members/deactivate', ['as' => 'delete_member', 'uses' => 'PatientController@destroy']);
+Route::post('members/unblock', ['as' => 'unblock_member', 'uses' => 'PatientController@unblock']);
+
+
+Route::get('samplesoftdelete', 'ReferralSettingController@destroy');
+
 Route::post('products/create', [ 'as' => 'create_product', 'uses' => 'ProductController@store' ]);
 Route::post('products-categories/create', [ 'as' => 'create_product_category', 'uses' => 'ProductCategoryController@store'] );
 Route::post('products-categories/edit', [ 'as' => 'edit_product_category', 'uses' => 'ProductCategoryController@edit'] );

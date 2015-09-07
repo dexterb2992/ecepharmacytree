@@ -2,14 +2,13 @@
 
 namespace ECEPharmacyTree\Http\Controllers;
 
-use Request;
+use Illuminate\Http\Request;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
-use ECEPharmacyTree\Patient;
-use Input;
+use ECEPharmacyTree\ReferralSetting;
 
-class PatientController extends Controller
+class ReferralSettingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,9 +17,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $members = Patient::withTrashed()->get();
-
-        return view('admin.members')->withMembers($members);
+        //
     }
 
     /**
@@ -52,9 +49,7 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-        $member = Patient::findOrFail($id);
-        if( isset( $member->id ) )
-            return $member->toJson();
+        //
     }
 
     /**
@@ -87,24 +82,7 @@ class PatientController extends Controller
      * @return Response
      */
     public function destroy()
-    {
-        $id = Input::get('id');
-        $member = Patient::findOrFail($id);
-
-        if($member->delete())
-            return json_encode( array("status" => "success") );
-         
-         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
-    }
-
-     public function unblock()
-    {
-        $id = Input::get('id');
-        $member = Patient::withTrashed()->findOrFail($id);
-
-        if($member->restore())
-            return json_encode( array("status" => "success") );
-         
-         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+    {   
+        $referral_setting = ReferralSetting::findOrFail(2)->delete();
     }
 }
