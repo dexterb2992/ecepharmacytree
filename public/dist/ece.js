@@ -13,8 +13,11 @@ $(document).ready(function (){
     $(".datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
     //Datemask2 mm/dd/yyyy
     $(".datemask2").inputmask("mm-dd-yyyy", {"placeholder": "mm-dd-yyyy"});
-    //Datemask
+    //Date format for MySQL date
     $(".datemask3").inputmask("yyyy-mm-dd", {"placeholder": "yyyy-mm-dd"});
+
+    // filter input to numeric characters only
+    allowNumericOnly( $('.number'));
 
     $(document).on("click", ".add-edit-btn", function (){
     	var $this = $(this), 
@@ -151,23 +154,5 @@ $(document).ready(function (){
     $("#inventory_quantity").keyup(function (){
         updateInventoryProductQty();
     });
-
-    function updateInventoryProductQty(){
-        var unit = "", packing = "", qtyPerPacking = 1, totalQty = 0, qty = 0;
-        var el = $("#inventory_quantity");
-        var selectedOption = $("#inventories_product_id").children('option:selected');
-       
-        qty = el.val() == "" ? 0 : el.val();
-
-        qtyPerPacking = selectedOption.data("qty-per-packing");
-
-        totalQty = qty*qtyPerPacking;
-
-        unit = str_auto_plural( selectedOption.data("unit"), totalQty );
-        packing = str_auto_plural( selectedOption.data("packing"),  qty);
-
-        $("#total_quantity_in_unit").html( totalQty+" "+unit+" ( "+qty+" "+packing+" )" );
-        $(".add-on-product-packing").html(packing);
-    }
 		
 });

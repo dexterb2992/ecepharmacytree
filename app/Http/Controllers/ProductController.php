@@ -26,7 +26,7 @@ class ProductController extends Controller
         $subcategories = ProductSubcategory::all();
 
         return view('admin.products')->withProducts($products)
-            ->withCategories($categories)->withSubcategories($subcategories);
+            ->withCategories($categories)->withSubcategories($subcategories)->withTitle('Products');
     }
 
     /**

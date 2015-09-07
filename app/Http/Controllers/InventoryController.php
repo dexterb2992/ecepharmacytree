@@ -25,7 +25,7 @@ class InventoryController extends Controller
         $inventories = Inventory::all();
         $products = Product::all();
         return view('admin.inventories')->withInventories($inventories)
-            ->withProducts($products);
+            ->withProducts($products)->withTitle('Manage Inventory');
     }
 
     /**

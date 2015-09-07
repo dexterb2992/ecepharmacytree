@@ -5,7 +5,7 @@
     <div class="col-xs-12">
         <div class="box box-success">
             <div class="box-header">
-                <h3 class="box-title">products</h3><br/>
+                <h3 class="box-title">Products</h3><br/>
                 <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-product" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
             </div><!-- /.box-header -->
             <div class="box-body">

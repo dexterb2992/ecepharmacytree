@@ -71,7 +71,7 @@
 	                            <div class="form-group">
 	                            	<label for="quantity" title="Add quantity by product's packing">Quantity (<i>By Packing</i>)</label>
 	                            	<div class="input-group">
-		                            	<input type="text" id="inventory_quantity" name="quantity" class="number form-control" title="Add quantity by product's packing">
+		                            	<input type="text" id="inventory_quantity" name="quantity" class="number form-control" title="Add quantity by product's packing" required>
 		                            	<div class="input-group-addon">
 		                            		<span class="add-on-product-packing" name="packing">{{ head( $products->toArray() )["packing"] }}</span>
 		                            	</div>
@@ -84,7 +84,7 @@
 	                            		<div class="input-group-addon">
 											<i class="fa fa-calendar"></i>
 										</div>
-										<input type="text" name="expiration_date" class="form-control datemask3" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask />
+										<input type="text" name="expiration_date" class="form-control datemask3" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required/>
 		                            </div>
 	                            </div>
 	                        <div class="modal-footer">

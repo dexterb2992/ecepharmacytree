@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-     <title>App Name - @yield('title')</title>
+     <title>App Name - <?php echo isset($title) ? $title : ''?>@yield('title') </title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
@@ -25,12 +25,12 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
               <h1>
-                Dashboard
+                {{ isset($title) ? $title : '' }}
                 <small>Control panel</small>
               </h1>
               <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i></a></li>
-                <li class="active">Dashboard</li>
+                <li class="active">{{ isset($title) ? $title : '' }}</li>
               </ol>
             </section>
             

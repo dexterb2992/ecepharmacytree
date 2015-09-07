@@ -50,13 +50,13 @@
             </li>
 
             <li class="treeview">
-              <a href="/orders">
+              <a href="#/orders">
                 <i class="fa fa-shopping-cart"></i> <span>Orders</span>
               </a>
             </li>
 
             <li class="treeview">
-              <a href="/payments">
+              <a href="#/payments">
                 <i class="fa fa-usd"></i> <span>Payments</span>
               </a>
             </li>
@@ -73,7 +73,7 @@
             </li>
 
             <li class="treeview">
-              <a href="/manage-delivery">
+              <a href="#/manage-delivery">
                 <i class="fa fa-truck"></i> <span>Manage Delivery</span>
               </a>
             </li>
