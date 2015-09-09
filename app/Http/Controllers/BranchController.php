@@ -53,7 +53,7 @@ class BranchController extends Controller
         $branch->address_region = $input["address_region"];
         $branch->address_zip = $input["address_zip"];
         if( $branch->save() ) 
-            return Redirect::to('branches');
+            return Redirect::to( route('Branches::index') );
         
         return false;
     }
@@ -78,6 +78,18 @@ class BranchController extends Controller
      */
     public function edit()
     {
+        
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return Response
+     */
+    public function update()
+    {
         $input = Input::all();
         $branch = Branch::find($input["id"]);
         $branch->name = $input["name"];
@@ -93,21 +105,9 @@ class BranchController extends Controller
         $branch->address_region = $input["address_region"];
         $branch->address_zip = $input["address_zip"];
         if( $branch->save() ) 
-            return Redirect::to('branches');
+            return Redirect::to( route('Branches::index') );
         
         return false;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**

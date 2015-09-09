@@ -25,7 +25,7 @@ class InventoryController extends Controller
         $inventories = Inventory::all();
         $products = Product::all();
         return view('admin.inventories')->withInventories($inventories)
-            ->withProducts($products);
+            ->withProducts($products)->withTitle('Manage Inventory');
     }
 
     /**
@@ -63,9 +63,9 @@ class InventoryController extends Controller
         $inventory->quantity = $quantity;
         $inventory->expiration_date = $input["expiration_date"];
         if( $inventory->save() ){
-            return Redirect::to( route('inventory') );
+            return Redirect::to( route('Inventory::index') );
         }
-        return Redirect::to( route('inventory') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
+        return Redirect::to( route('Inventory::index') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
     }
 
     /**
@@ -91,15 +91,7 @@ class InventoryController extends Controller
      */
     public function edit()
     {
-        $input = Input::all();
-        $inventory = Inventory::findOrFail( $input["id"] );
-        $inventory->product_id = $input["product_id"];
-        $inventory->quantity = $input["quantity"];
-        $inventory->expiration_date = $input["expiration_date"];
-        if( $inventory->save() ){
-            return Redirect::to( route('inventory') );
-        }
-        return Redirect::to( route('inventory') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
+       
     }
 
     /**
@@ -109,9 +101,18 @@ class InventoryController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update()
     {
-        //
+        $input = Input::all();
+        $inventory = Inventory::findOrFail( $input["id"] );
+        $inventory->product_id = $input["product_id"];
+        $inventory->quantity = $input["quantity"];
+        $inventory->expiration_date = $input["expiration_date"];
+        if( $inventory->save() ){
+            return Redirect::to( route('Inventory::index') );
+        }
+        return Redirect::to( route('Inventory::index') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
+    
     }
 
     /**

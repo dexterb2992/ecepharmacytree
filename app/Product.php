@@ -3,10 +3,11 @@
 namespace ECEPharmacyTree;
 
 use Illuminate\Database\Eloquent\Model;
-use SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class Product extends Model
 {
+	use SoftDeletes;
     protected $table = "products";
     protected $softDelete = true;
 

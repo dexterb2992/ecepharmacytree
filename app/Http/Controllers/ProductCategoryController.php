@@ -53,7 +53,7 @@ class ProductCategoryController extends Controller
         $category = new ProductCategory;
         $category->name = Input::get('name');
         if( $category->save() ){
-           return Redirect::to( route('product_categories') );
+           return Redirect::to( route('ProductCategory::index') );
         }
         return false;
     }
@@ -78,12 +78,7 @@ class ProductCategoryController extends Controller
      */
     public function edit()
     {
-        $category = ProductCategory::find( Input::get('id') );
-        $category->name = Input::get('name');
-        if( $category->save() ){
-           return Redirect::to( route('product_categories') );
-        }
-        return false;
+        
     }
 
     /**
@@ -93,9 +88,14 @@ class ProductCategoryController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update()
     {
-        //
+        $category = ProductCategory::find( Input::get('id') );
+        $category->name = Input::get('name');
+        if( $category->save() ){
+           return Redirect::to( route('ProductCategory::index') );
+        }
+        return false;
     }
 
     /**

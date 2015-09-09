@@ -91,7 +91,7 @@
                     <div class="box box-success">
                         <div class="box-header">
                             <h3 class="box-title">Doctor Specialties</h3><br/>
-                            <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-specialty" data-target="#form_edit_product_specialty" data-action="create" data-title="specialty"><i class="fa-plus fa"></i> Add New</button>
+                            <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-specialty" data-target="#form_edit_product_specialty" data-action="create" data-title="Specialty"><i class="fa-plus fa"></i> Add New</button>
                             <div class="box-tools pull-right">
                                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
                             </div>
@@ -165,7 +165,7 @@
                     <div class="box box-success">
                         <div class="box-header">
                             <h3 class="box-title">Product Subspecialties</h3><br/>
-                            <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-subspecialty" data-target="#form_edit_product_subspecialty" data-action="create" data-title="subspecialty"><i class="fa-plus fa"></i> Add New</button>
+                            <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-subspecialty" data-target="#form_edit_product_subspecialty" data-action="create" data-title="Subspecialty"><i class="fa-plus fa"></i> Add New</button>
                             <div class="box-tools pull-right">
                                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
                             </div>
@@ -173,7 +173,7 @@
                         <div class="box-body">
                             <table class="table table-bordered table-hover datatable">
                                 <thead>
-                                    <th>specialty</th>
+                                    <th>Specialty</th>
                                     <th>Name</th>
                                     <th>Action</th>
                                 </thead>
@@ -207,7 +207,7 @@
                                 <form role="form" id="form_edit_product_subspecialty" data-mode="create" method="post" action="doctor-specialties/subspecialties/create" data-urlmain="/doctor-specialties/subspecialties/">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Add new product subspecialty</h4>
+                                        <h4 class="modal-title">Add new subspecialty</h4>
                                     </div>
                                     <div class="modal-body">
 

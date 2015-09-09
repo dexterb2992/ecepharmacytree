@@ -107,3 +107,13 @@ function str_auto_plural($str, $quantity){
 
 	return str_singular($str);
 }
+
+function rn2br($str){
+	$newLineArray = array('\r\n','\n\r','\n','\r');
+	return str_replace($newLineArray,'<br/>', nl2br($str));
+}
+
+function safety_stock(){
+	$p = Product::all();
+	return $p->toJson();
+}

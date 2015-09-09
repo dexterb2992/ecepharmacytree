@@ -29,6 +29,18 @@
     background-color:#fff !important;
 }
 
-.marginleft_zero{
+.marginleft-zero{
     margin-left: 0;   
+}
+
+textarea.form-control[name='description'] {
+    min-height: 148px;
+}
+
+select.sort-by {
+    border-radius: 0 !important;
+    box-shadow: none;
+    border-color: #d2d6de;
+    padding: 5px;
+    margin-left: 10px;
 }
