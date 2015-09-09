@@ -10,7 +10,7 @@ class SubSpecialty extends Model
     protected $softDelete = true;
 
     public function doctors(){
-    	return $this->belongsToMany('ECEPharmacyTree\Doctor');
+    	return $this->hasMany('ECEPharmacyTree\Doctor');
     }
 
     public function specialty(){

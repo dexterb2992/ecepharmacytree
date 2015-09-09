@@ -88,6 +88,12 @@ Route::get("doctor-specialties", [ 'as' => 'doctor_specialties', 'uses' => 'Spec
 Route::get("doctor-specialties/{id}", [ 'as' => 'show_specialties', 'uses' => 'SpecialtyController@show' ]);
 Route::get("doctor-specialties/subspecialties/{id}", [ 'as' => 'show_subspecialties', 'uses' => 'SubspecialtyController@show' ]);
 
+Route::get("doctors", ['as' => 'doctors', 'uses' => 'DoctorController@index']);
+Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@show']);
+
+Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
+Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
+
 Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
 Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
 Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
@@ -96,6 +102,13 @@ Route::post('doctor-specialties/subspecialties/create', [ 'as' => 'create_doctor
 Route::post('doctor-specialties/subspecialties/edit', [ 'as' => 'edit_doctor_subspecialty', 'uses' => 'SubspecialtyController@update'] );
 Route::post('doctor-specialties/subspecialties/delete', [ 'as' => 'remove_doctor_subspecialty', 'uses' => 'SubspecialtyController@destroy' ]);
 
+//Routes for Clinics
+
+Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
+Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
+
+Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
+Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@edit' ]);
 
 
 // Route::get('/members', );
