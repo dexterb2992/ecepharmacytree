@@ -10,6 +10,7 @@ use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\ProductSubcategory;
 use ECEPharmacyTree\ProductCategory;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class ProductSubCategoryController extends Controller
 {
@@ -45,7 +46,7 @@ class ProductSubCategoryController extends Controller
         $subcategory->name = Input::get('name');
         $subcategory->category_id = Input::get('category_id');
         if( $subcategory->save() )
-            return Redirect::to( route('product_categories') );
+            return Redirect::to( route('Products::index') );
         return false;
     }
 
@@ -69,12 +70,7 @@ class ProductSubCategoryController extends Controller
      */
     public function edit()
     {
-        $subcategory = ProductSubcategory::find( Input::get('id') );
-        $subcategory->name = Input::get('name');
-        $subcategory->category_id = Input::get('category_id');
-        if( $subcategory->save() )
-            return Redirect::to( route('product_categories') );
-        return false;
+        
     }
 
     /**
@@ -84,9 +80,14 @@ class ProductSubCategoryController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update()
     {
-        //
+        $subcategory = ProductSubcategory::find( Input::get('id') );
+        $subcategory->name = Input::get('name');
+        $subcategory->category_id = Input::get('category_id');
+        if( $subcategory->save() )
+            return Redirect::to( route('Products::index') );
+        return false;
     }
 
     /**
@@ -97,7 +98,8 @@ class ProductSubCategoryController extends Controller
      */
     public function destroy()
     {
-        if( ProductSubcategory::destroy( Input::get('id') ) )
+        $subcategory = ProductSubcategory::withTrashed()->findOrFail(Input::get('id'));
+        if( $subcategory->delete() )
             return json_encode( array("status" => "success") );
 
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );

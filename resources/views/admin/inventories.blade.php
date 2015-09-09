@@ -25,7 +25,11 @@
 									<td>
 										<span> {{ $inventory->product->sku }}</span>
 									</td>
-									<td>{{ $inventory->product->name }}</td>
+									<td>
+										<a href="javascript:void(0);" class="show-product-info" data-id="{{ $inventory->product->id }}">
+											{{ $inventory->product->name }}
+										</a>
+									</td>
 									<td>
 										<?php $total = $inventory->quantity * $inventory->product->qty_per_packing; ?>
 										{!! $total." ".str_auto_plural($inventory->product->unit, $total)." "

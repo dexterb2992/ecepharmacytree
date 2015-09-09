@@ -54,7 +54,7 @@ class SpecialtyController extends Controller
         $specialty = new Specialty;
         $specialty->name = Input::get('name');
         if( $specialty->save() ){
-           return Redirect::to( route('doctor_specialties') );
+           return Redirect::to( route('DoctorSpecialty::index') );
         }
         return false;
     }
@@ -94,7 +94,7 @@ class SpecialtyController extends Controller
         $specialty = Specialty::find( Input::get('id') );
         $specialty->name = Input::get('name');
         if( $specialty->save() ){
-           return Redirect::to( route('doctor_specialties') );
+           return Redirect::to( route('DoctorSpecialty::index') );
         }
         return false;
     }

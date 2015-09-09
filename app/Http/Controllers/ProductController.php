@@ -22,11 +22,17 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        $categories = ProductCategory::all();
-        $subcategories = ProductSubcategory::all();
+
+        $categories = ProductCategory::orderBy('name')->get();
+        $subcategories = ProductSubcategory::orderBy('name')->get();
+        $category_names = array();
+        foreach ($categories as $category) {
+            $category_names[$category->id] = $category->name;
+        }
 
         return view('admin.products')->withProducts($products)
-            ->withCategories($categories)->withSubcategories($subcategories)->withTitle('Products');
+            ->withCategories($categories)->withSubcategories($subcategories)
+            ->withCategory_names($category_names)->withTitle('Products');
     }
 
     /**
@@ -61,7 +67,7 @@ class ProductController extends Controller
         $product->sku = generateSku();
 
         if( $product->save() )
-            return Redirect::to( route('products') );
+            return Redirect::to( route('Products::index') );
         return false;
     }
 
@@ -97,9 +103,24 @@ class ProductController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update()
     {
-        //
+        $input = Input::all();
+        $product = Product::findOrFail($input['id'] );
+        $product->name = ucfirst( $input['name'] );
+        $product->generic_name = ucfirst( $input['generic_name'] );
+        $product->description = ucfirst( $input['description'] );
+        $product->prescription_required = $input['prescription_required'];
+        $product->price = $input['price'];
+        $product->unit = str_singular( $input['unit'] );
+        $product->packing = $input['packing'];
+        $product->qty_per_packing = $input['qty_per_packing'];
+        $product->subcategory_id = $input['subcategory_id'];
+        $product->sku = generateSku();
+
+        if( $product->save() )
+            return Redirect::to( route('Products::index') );
+        return false;
     }
 
     /**
@@ -108,8 +129,12 @@ class ProductController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        $product = Product::findOrFail(Input::get("id"));
+        if( $product->delete() ){
+            return json_encode( array("status" => "success") );
+        }
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

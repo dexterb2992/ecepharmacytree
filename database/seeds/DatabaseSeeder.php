@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+// use ECEPharmacyTree\Seeder\ProductCategoryTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,8 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call(UserTableSeeder::class);
+        // $this->call('UserTableSeeder');
+        $this->call(Illuminate\Database\Seeder\ProductCategoryTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\ProductSubcategoryTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\ProductTableSeeder::class);
 
-        Model::reguard();
+        // Model::reguard();
     }
 }

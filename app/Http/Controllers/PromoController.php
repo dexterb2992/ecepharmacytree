@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
+use ECEPharmacyTree\Promo;
+use Carbon\Carbon;
+use Input;
+use Redirect;
 
 class PromoController extends Controller
 {
@@ -16,7 +20,11 @@ class PromoController extends Controller
      */
     public function index()
     {
-        //
+
+        $promos = Promo::all();
+
+        return view('admin.promo')->withPromos($promos)->withTitle('Promo and Discounts');
+        // return view('admin.promo');
     }
 
     /**
@@ -35,9 +43,21 @@ class PromoController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        $input = Input::all();
+        $promo = new Promo;
+        $promo->name = $input["name"];
+        $promo->start_date = $input["start_date"];
+        $promo->end_date = $input["end_date"];
+
+        if( $promo->save() ){
+            return Redirect::to( route('Promo::index') );
+        }
+
+        return Redirect::to( route('Promo::index') )
+            ->withFlashMessage("Sorry, we can't process your request right now. Please try again later.");
+
     }
 
     /**
@@ -69,9 +89,20 @@ class PromoController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update()
     {
-        //
+        $input = Input::all();
+        $promo = Promo::findOrFail($input['id']);
+        $promo->name = $input["name"];
+        $promo->start_date = $input["start_date"];
+        $promo->end_date = $input["end_date"];
+
+        if( $promo->save() ){
+            return Redirect::to( route('Promo::index') );
+        }
+
+        return Redirect::to( route('Promo::index') )
+            ->withFlashMessage("Sorry, we can't process your request right now. Please try again later.");
     }
 
     /**
@@ -80,8 +111,12 @@ class PromoController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        $product = Promo::findOrFail(Input::get("id"));
+        if( $product->delete() ){
+            return json_encode( array("status" => "success") );
+        }
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

@@ -3,7 +3,7 @@
 namespace ECEPharmacyTree;
 
 use Illuminate\Database\Eloquent\Model;
-use SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class Branch extends Model
 {

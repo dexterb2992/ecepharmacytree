@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-     <title>App Name - <?php echo isset($title) ? $title : ''?>@yield('title') </title>
+     <title>ECE Pharmacy Tree - <?php echo isset($title) ? $title : ''?>@yield('title') </title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
