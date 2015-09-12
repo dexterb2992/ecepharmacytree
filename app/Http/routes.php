@@ -22,7 +22,7 @@
 // });
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 Route::get("try", function (){
@@ -45,7 +45,7 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::'], function (){
 	Route::post('delete', ['as' => 'remove', 'uses' => 'BranchController@destroy']);
 });
 
-	
+
 
 Route::group(['prefix' => 'products', 'as' => 'Products::'], function (){
 	/**
@@ -76,7 +76,7 @@ Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::'], f
 
 });
 
-	
+
 
 Route::group(['prefix' => 'members', 'as' => 'Members::'], function (){
 	/**
@@ -87,11 +87,11 @@ Route::group(['prefix' => 'members', 'as' => 'Members::'], function (){
 	Route::post('deactivate', ['as' => 'delete', 'uses' => 'PatientController@destroy']);
 	Route::post('unblock', ['as' => 'unblock', 'uses' => 'PatientController@unblock']);
 });
-	
+
 
 Route::get('samplesoftdelete', 'ReferralSettingController@destroy');
 
-	
+
 Route::group(['prefix' => 'inventory', 'as' => 'Inventory::'], function (){
 	/**
 	 * Routes for inventories
@@ -103,7 +103,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'Inventory::'], function (){
 	Route::post('delete', ['as' => 'delete', 'uses' => 'InventoryController@destroy']);
 });
 
-	
+
 Route::group(['prefix' => 'doctor-specialties', 'as' => 'DoctorSpecialty::'], function (){
 	/**
 	 * Routes for Doctors and Doctor Specialties
@@ -119,8 +119,17 @@ Route::group(['prefix' => 'doctor-specialties', 'as' => 'DoctorSpecialty::'], fu
 	Route::post('subspecialties/create', ['as' => 'create_doctor_subspecialty', 'uses' => 'SubspecialtyController@store']);
 	Route::post('subspecialties/edit', ['as' => 'edit_doctor_subspecialty', 'uses' => 'SubspecialtyController@update']);
 	Route::post('subspecialties/delete', ['as' => 'remove_doctor_subspecialty', 'uses' => 'SubspecialtyController@destroy']);
-
 });
+
+Route::get("doctors", ['as' => 'doctors', 'uses' => 'DoctorController@index']);
+Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@show']);
+
+Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
+Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
+
+Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
+Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
+Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
 
 Route::group(['prefix' => 'promos', 'as' => 'Promo::'], function (){
 	/**
@@ -134,6 +143,10 @@ Route::group(['prefix' => 'promos', 'as' => 'Promo::'], function (){
 	Route::post('delete', ['as' => 'remove', 'uses' => 'PromoController@destroy']);
 });
 
-	
+//Routes for Clinics
 
-// Route::get('/members', );
+Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
+Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
+
+Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
+Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@edit' ]);

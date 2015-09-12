@@ -16,8 +16,13 @@ class CreateClinicsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('contact_no', 30);
-            $table->string('address_unit_building_no', 10)->nullable();
-            $table->string('address_street');
+            $table->integer('unit_floor_room_no')->nullable();
+            $table->string('building')->nullable();
+            $table->integer('lot_no')->nullable();
+            $table->integer('block_no')->nullable();
+            $table->integer('phase_no')->nullable();
+            $table->integer('address_house_no')->nullable();
+            $table->string('address_street')->nullable();
             $table->string('address_barangay');
             $table->string('address_city_municipality');
             $table->string('address_province');

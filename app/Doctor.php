@@ -10,6 +10,6 @@ class Doctor extends Model
     protected $softDelete = true;
 
     public function subspecialty(){
-    	return $this->hasOne('ECEPharmacyTree\SubSpecialty', 'sub_specialty_id');
+    	return $this->belongsTo('ECEPharmacyTree\SubSpecialty', 'sub_specialty_id');
     }
 }
