@@ -15,8 +15,8 @@ class CreatePromosTable extends Migration
         Schema::create('promos', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->datetime('start_date');
-            $table->datetime('end_date');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
             $table->softDeletes();
         });

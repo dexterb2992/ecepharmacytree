@@ -16,8 +16,7 @@ $(document).ready(function (){
     //Date format for MySQL date
     $(".datemask3").inputmask("yyyy-mm-dd", {"placeholder": "yyyy-mm-dd"});
 
-    // $('.daterange').daterangepicker();
-    $('.daterange').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'YYYY-MM-DD H:mm:ss A'});
+    $('.daterange').daterangepicker({format: 'YYYY-MM-DD'});
 
     // filter input to numeric characters only
     allowNumericOnly( $('.number'));
@@ -49,15 +48,28 @@ $(document).ready(function (){
 
                 form.append('<input type="hidden" name="id" value="'+data.id+'">');
 
+                var start_date = "", end_date;
+
                 $.each(data, function (i, row){
+                    console.log(row);
+                    var newRow = String(row).replace(/\r\n|\n|\r/g, '&#13;&#10;');
+
                     form.find("input[name='"+i+"']").val(row);
-                    form.find("textarea[name='"+i+"']").val(row);
+                    form.find("textarea[name='"+i+"']").val(newRow);
                     if(row == "") {
                         form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
                     } else {
                         form.find("img[name='"+i+"']").attr('src', 'db/uploads/user_'+data.id+'/'+row);
                     }
+
+                    if( i == "start_date" ) 
+                        start_date = row;
+
+                    if( i == "end_date" )
+                        end_date = row;
                 });
+
+                form.find("input#date_range").val(start_date+" - "+end_date);
 
                 form.find('select').find('option:selected').removeAttr("selected");
                 $.each(form.find('select'), function (i, row){

@@ -68,7 +68,11 @@ class PromoController extends Controller
      */
     public function show($id)
     {
-        //
+
+        $promo = Promo::find($id);
+        if( isset( $promo->id ) )
+            return $promo->toJson();
+        
     }
 
     /**

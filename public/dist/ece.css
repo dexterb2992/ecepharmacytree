@@ -44,3 +44,7 @@ select.sort-by {
     padding: 5px;
     margin-left: 10px;
 }
+
+.datatable tr td {
+    max-width: 120px;
+}

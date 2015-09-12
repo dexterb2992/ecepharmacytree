@@ -44,7 +44,11 @@
                                     <span>{!! $address !!}</span>
                                 </td>
                                 <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
-                                <td>{{ Carbon::parse($branch->created_at)->diffForHumans() }}</td>
+                                <td>
+                                    <span class="label-primary label"><i class="fa-clock-o fa"></i>
+                                        {{ Carbon::parse($branch->created_at)->diffForHumans() }}
+                                    </span>
+                                </td>
                                 <td>
                                     <div class="tools">
                                         

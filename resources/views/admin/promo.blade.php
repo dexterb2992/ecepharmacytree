@@ -7,7 +7,7 @@
         <!-- Custom Tabs -->
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab_promos" data-toggle="tab">promos</a></li>
+                <li class="active"><a href="#tab_promos" data-toggle="tab">Promo</a></li>
                 <li><a href="#tab_category" data-toggle="tab">promo Category</a></li>
                 <li><a href="#tab_subcategory" data-toggle="tab">promo Subcategory</a></li>
                 <li class="pull-right">
@@ -26,7 +26,7 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Start Date</th>
-                                        <th>End Date</th>
+                                        <th>Expiration Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -34,14 +34,25 @@
                                     @foreach($promos as $promo)
                                         <tr data-id="{{ $promo->id }}">
                                             <td>{{ ucfirst($promo->name) }}</td>
-                                            <td>{{ $promo->start_date }}</td>
-                                            <td>{{ $promo->end_date }}</td>
+                                            <td>
+                                                <span class="label-primary label"><i class="fa-clock-o fa"></i> 
+                                                    {{ Carbon\Carbon::parse($promo->start_date)->format('l jS \\of F Y') }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="label-success label"><i class="fa-clock-o fa"></i> 
+                                                    {{ Carbon\Carbon::parse($promo->end_date)->format('l jS \\of F Y') }}
+                                                </span>
+                                                    
+                                            </td>
                                             <td>
                                                 <div class="tools">
-                                                    <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-promo" data-title="promo info" data-target="#form_edit_promo" data-id="{{ $promo->id }}" title="Edit">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                    <span class="action-icon remove-promo" data-action="remove" data-title="promo" data-urlmain="/promos/" data-id="{{ $promo->id }}"><i class="fa fa-trash-o"></i></span>
+                                                    <div class="btn-group pull-right">
+                                                        <a href="javascript:void(0);" class="btn btn-default btn-sm add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-promo" data-title="promo info" data-target="#form_edit_promo" data-id="{{ $promo->id }}" title="Edit">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <span class="btn btn-default btn-sm action-icon remove-promo" data-action="remove" data-title="promo" data-urlmain="/promos/" data-id="{{ $promo->id }}"><i class="fa fa-trash-o"></i></span>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>

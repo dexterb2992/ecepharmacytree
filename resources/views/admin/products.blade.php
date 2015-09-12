@@ -1,3 +1,4 @@
+<?php use Illuminate\Support\Str; ?>
 @extends('admin.layouts.template')
 @section('content')
 
@@ -36,7 +37,6 @@
                                         <th>Description</th>
                                         <th>Price/Unit</th>
                                         <th>Packing</th>
-                                        <th>Sub Category</th>
                                         <th>Category</th>
                                         <th>Action</th>
                                     </tr>
@@ -49,19 +49,23 @@
                                                 <span>{{ ucfirst($product->name) }}</span>
                                             </td>
                                             <td>{{ $product->generic_name }}</td>
-                                            <td>{!! rn2br($product->description) !!}</td>
+                                            <td>{!! Str::limit(rn2br($product->description), 150) !!}</td>
                                             <td>&#x20B1; {{ $product->price.' /'.$product->unit }}</td>
                                             <td>
                                                 {!! $product->qty_per_packing." ".str_auto_plural($product->unit, $product->qty_per_packing)." per ".$product->packing !!}
                                             </td>
-                                            <td>{{ $product->subcategory->name }}</td>
-                                            <td>{{ $product->subcategory->category->name }}</td>
+                                            <td>
+                                                <span class="label-success label">{{ $product->subcategory->category->name }}</span>
+                                                <span class="label-primary label">{{ $product->subcategory->name }}</span>
+                                            </td>
                                             <td>
                                                 <div class="tools">
-                                                    <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" data-id="{{ $product->id }}" title="Edit">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                    <span class="action-icon remove-product" data-action="remove" data-title="product" data-urlmain="/products/" data-id="{{ $product->id }}"><i class="fa fa-trash-o"></i></span>
+                                                    <div class="btn-group pull-right">
+                                                        <a href="javascript:void(0);" class="btn btn-default btn-sm add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" data-id="{{ $product->id }}" title="Edit">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="product" data-urlmain="/products/" data-id="{{ $product->id }}"><i class="fa fa-trash-o"></i></span>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
