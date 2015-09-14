@@ -36,14 +36,25 @@
 											."( ".$inventory->quantity." ".str_auto_plural($inventory->product->packing, $inventory->quantity)." )" !!}
 									</td>
 									<td>
-										{{ Carbon::parse($inventory->expiration_date)->diffForHumans() }}
+										<span class="label label-success"><i class="fa-clock-o fa"></i> 
+											{{ Carbon::parse($inventory->expiration_date)->diffForHumans() }}
+										</span>
 									</td>
 									<td>
-										<span>{{ Carbon::parse($inventory->created_at)->diffForHumans() }}</span>
-										<span class="action-icon remove-product pull-right" data-action="remove" data-title="inventory" data-urlmain="/inventory/" data-id="{{ $inventory->id }}" title="Remove"><i class="fa fa-trash-o"></i></span>
-										<a href="javascript:void(0);" class="add-edit-btn pull-right" data-action="edit" data-modal-target="#modal-add-edit-inventory" data-title="inventory" data-target="#form_edit_inventory" data-id="{{ $inventory->id }}" title="Edit">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
+										<span class="label label-primary"><i class="fa-clock-o fa"></i> {{ Carbon::parse($inventory->created_at)->diffForHumans() }}</span>
+
+										<div class="btn-group pull-right">
+											<span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
+												 data-id="{{ $inventory->id }}" title="Remove"><i class="fa fa-trash-o"></i>
+											</span>
+											<a href="javascript:void(0);" class="btn btn-default btn-sm add-edit-btn pull-right" data-action="edit" data-modal-target="#modal-add-edit-inventory" 
+												data-title="inventory" data-target="#form_edit_inventory" data-id="{{ $inventory->id }}" title="Edit">
+	                                            <i class="fa fa-edit"></i>
+	                                        </a>
+					                    </div>
+										
+
+										
 									</td>
 								</tr>
 							@endforeach
