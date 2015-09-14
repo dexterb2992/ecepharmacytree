@@ -149,4 +149,5 @@ Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
 Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
 
 Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
-Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@edit' ]);
+Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
+Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
