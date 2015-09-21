@@ -15,4 +15,9 @@ class PatientPrescription extends Model
     public function patient(){
     	return $this->belongsTo('ECEPharmacyTree\Patient');
     }
+
+    public function basket(){
+    	return $this->hasMany('ECEPharmacyTree\Basket');
+    }
+
 }

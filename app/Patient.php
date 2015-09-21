@@ -16,7 +16,7 @@ class Patient extends Model
     	return $this->hasMany('ECEPharmacyTree\Basket');
     }
 
-    public function prescriptions(){
+    public function patient_prescriptions(){
     	return $this->hasMany('ECEPharmacyTree\PatientPrescription');
     }
 

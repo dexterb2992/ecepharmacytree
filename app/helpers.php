@@ -117,3 +117,7 @@ function safety_stock(){
 	$p = Product::all();
 	return $p->toJson();
 }
+
+function get_patient_fullname($patient){
+	return $patient->fname." ".$patient->lname;
+}
