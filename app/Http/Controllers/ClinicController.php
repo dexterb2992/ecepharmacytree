@@ -8,6 +8,8 @@ use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 
 use ECEPharmacyTree\Clinic;
+use Input;
+use Redirect;
 
 class ClinicController extends Controller
 {
@@ -19,7 +21,7 @@ class ClinicController extends Controller
     public function index()
     {
         $clinics = Clinic::all();
-              return view('admin.clinics')->withClinics($clinics);
+        return view('admin.clinics')->withClinics($clinics);
     }
 
     /**
@@ -83,6 +85,18 @@ class ClinicController extends Controller
      */
     public function edit($id)
     {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return Response
+     */
+    public function update()
+    {
         $input = Input::all();
         $clinic = Clinic::findOrFail($input['id']);
         $clinic->name = ucfirst( $input['name'] );
@@ -106,25 +120,17 @@ class ClinicController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+      $clinic = Clinic::findOrFail(Input::get("id"));
+      if( $clinic->delete() ){
+        return json_encode( array("status" => "success") );
     }
+    return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+}
 }

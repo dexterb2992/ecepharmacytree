@@ -49,3 +49,7 @@ select.sort-by {
     max-width: 120px;
     text-align: center;
 }
+
+.table-size-image{
+    height: 25px;
+}

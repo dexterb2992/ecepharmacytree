@@ -77,7 +77,7 @@ $(document).ready(function (){
                         end_date = row;
                 });
 
-                form.find("input#date_range").val(start_date+" - "+end_date);
+                form.find("input#date_range").val(start_date+" - "  +end_date);
 
                 form.find('select').find('option:selected').removeAttr("selected");
                 $.each(form.find('select'), function (i, row){
@@ -94,6 +94,12 @@ $(document).ready(function (){
                 form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing")
                 updateInventoryProductQty();
             });
+        } else if(action == "preview_image"){
+            var img_source = $(this).children('img').attr('src');
+            $('#image_holder').attr('src', img_source);               
+            console.log(img_source); 
+            $(modal).modal('show');
+            
         }else{
             title = "Add new "+dataTitle;
             
@@ -107,7 +113,6 @@ $(document).ready(function (){
         form.find(".modal-title").html(title);
         
         $(modal).modal('show');
-
     });
 
 
@@ -127,7 +132,7 @@ $(document).ready(function (){
             msg = "Are you sure you want to deactivate this "+dataTitle+"?";
             title = "Warning!";
             url = mainurl+"deactivate";
-        }else if( action == "remove" ){
+        } else if( action == "remove" ){
             url = mainurl+"deactivate";
             alertType = "danger";
             url = mainurl+"delete";
@@ -138,6 +143,16 @@ $(document).ready(function (){
             alertType = "warning";
             msg = "Are you really sure you want to unblock this "+dataTitle+"?";
             title = "Confirmation"; 
+        } else if( action == "disapprove" ){
+            alertType = "danger";
+            msg = "Are you sure you want to disapprove this "+dataTitle+"?";
+            title = "Warning!";
+            url = mainurl+"disapprove";
+        } else if( action == "approve" ){
+            alertType = "success";
+            msg = "Are you sure you want to approve this "+dataTitle+"?";
+            title = "Warning!";
+            url = mainurl+"approve";
         }
 
         if( action !== "reactivate" ){

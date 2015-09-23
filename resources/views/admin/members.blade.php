@@ -37,14 +37,14 @@
                             <td>{{ ($member->deleted_at != null ) ? 'blocked' : 'active' }}</td>
                             <td>
                                 <div class="tools">
-                                   <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $member->id }}" title="">
+                                 <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $member->id }}" title="">
                                     <i class="fa fa-eye"></i> View
                                 </a>
                                 <br/>
                                 @if($member->deleted_at != null )
-                                    <span class="action-icon marginleft-zero" data-action="unblock" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}"><i class="fa fa-thumbs-o-up"></i> Unblock </span>
+                                <span class="action-icon marginleft-zero" data-action="unblock" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}"><i class="fa fa-thumbs-o-up"></i> Unblock </span>
                                 @else
-                                    <span class="action-icon marginleft-zero" data-action="deactivate" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}"><i class="fa fa-thumbs-o-down"></i> Block </span>
+                                <span class="action-icon marginleft-zero" data-action="deactivate" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}"><i class="fa fa-thumbs-o-down"></i> Block </span>
                                 @endif
                             </div>
                         </td>

@@ -18,4 +18,8 @@ class Product extends Model
     public function inventories(){
     	return $this->hasMany('ECEPharmacyTree\Inventory');
     }
+    
+    public function basket(){
+    	return $this->hasMany('ECEPharmacyTree\Basket');
+    }
 }

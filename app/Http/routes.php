@@ -136,12 +136,15 @@ Route::group(['prefix' => 'promos', 'as' => 'Promo::'], function (){
 	Route::post('delete', ['as' => 'remove', 'uses' => 'PromoController@destroy']);
 });
 
+
+
 //Routes for Clinics
 
 Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
 Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
 
 Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
+
 Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@edit' ]);
 
 
@@ -152,3 +155,14 @@ Route::group(['prefix' => 'settings', 'as' => 'Settings::'], function (){
 	Route::get('/', ['as' => 'index', 'uses' => 'SettingsController@index']);
 	Route::post('referral/update', ['as' => 'update', 'uses' => 'SettingsController@update']);
 });
+
+Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
+Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
+
+//Routes for Prescription Approval
+Route::get('prescription-approval/', ['as' => 'prescription_approval', 'uses' => 'PrescriptionApprovalController@index']);
+
+Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-disapprove', 'uses' => 'PrescriptionApprovalController@disapprove']);
+
+Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
+

@@ -13,10 +13,16 @@ class Basket extends Model
 	 * Get products associated with the basket
      */
     public function products(){
-    	return $this->hasOne('ECEPharmacyTree\Product', 'product_id');
+    	return $this->belongsTo('ECEPharmacyTree\Product', 'product_id');
     }
 
     public function patient(){
-    	return $this->belongsTo('ECEPharmacyTree\Patient');
+    	return $this->belongsTo('ECEPharmacyTree\Patient', 'patient_id');
     }
+
+    public function patient_prescriptions(){
+        return $this->belongsTo('ECEPharmacyTree\PatientPrescription', 'prescription_id');
+    }
+
+
 }
