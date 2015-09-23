@@ -11,19 +11,12 @@
 |
 */
 
+View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 
-// Route::filter('csrf', function ()
-// {
-//     if (Session::token() == "")
-//     {
-//         Session::regenerateToken();
-//     }
-//     Session::regenerateToken();
-// });
-
-Route::get('/', function () {
-	return view('welcome');
-});
+Route::get('/', ['as' => 'dashboard', 'uses' => function () {
+	$recently_added_products = ECEPharmacyTree\Product::latest()->limit(4)->get();
+	return view('dashboard')->withRecently_added_products($recently_added_products)->withTitle("Dashboard");
+}]);
 
 Route::get("try", function (){
 	// $str = "For the relief of minor aches and pains such as headache, backache, menstrual cramps, muscular aches, minor arthritis pain, toothache, and pain associated with the common cold and flu;\r\n\r\nFor fever reduction.";
@@ -150,3 +143,12 @@ Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@sh
 
 Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
 Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@edit' ]);
+
+
+Route::group(['prefix' => 'settings', 'as' => 'Settings::'], function (){
+	/**
+	 * Routes for Admin Settings
+	 */
+	Route::get('/', ['as' => 'index', 'uses' => 'SettingsController@index']);
+	Route::post('referral/update', ['as' => 'update', 'uses' => 'SettingsController@update']);
+});

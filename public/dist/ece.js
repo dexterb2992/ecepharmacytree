@@ -51,8 +51,16 @@ $(document).ready(function (){
                 var start_date = "", end_date;
 
                 $.each(data, function (i, row){
-                    console.log(row);
-                    var newRow = String(row).replace(/\r\n|\n|\r/g, '&#13;&#10;');
+                    
+                    if( i == "description" ){
+                        var str = row+"";
+                        // var reg = /\\r\\n|\\n|\\r/g;
+                        var reg = /\\r?\\n/g;
+                        // var newRow = str.replace(reg, '&#13;&#10;');
+                        var newRow = str.replace(reg, '\n');
+                        console.log("row: "+String(row));
+                        console.log("newRow: "+newRow);
+                    }
 
                     form.find("input[name='"+i+"']").val(row);
                     form.find("textarea[name='"+i+"']").val(newRow);
@@ -84,18 +92,21 @@ $(document).ready(function (){
                 });
 
                 form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing")
-
-                $(modal).modal('show');
+                updateInventoryProductQty();
             });
         }else{
             title = "Add new "+dataTitle;
-            $(modal).modal('show');
+            
+            form.find("input").not("input[name='_token']").val("");
+            updateInventoryProductQty();
         }
 
         form.attr("data-mode", action);
         form.attr("action", mainurl+action);
 
         form.find(".modal-title").html(title);
+        
+        $(modal).modal('show');
 
     });
 
@@ -105,6 +116,9 @@ $(document).ready(function (){
 
     });
 
+    /**
+     * For alert/confirmation dialogs
+     */
     $(document).on("click", ".action-icon", function (){
         var $this = $(this), url = "", alertType = "";
         var id = $this.data("id"), action = $this.data('action'), mainurl = $this.data('urlmain'), dataTitle = $this.data('title');
@@ -173,11 +187,8 @@ $(document).ready(function (){
 
     $("#inventories_product_id").change(function (){
         var packing = $(this).children('option:selected').data("packing");
+        $("#outer_packing").html(packing);
         $(".add-on-product-packing").html( str_plural(packing) );
-    });
-
-    $("#inventory_quantity").keyup(function (){
-
     });
 
     $(document).on("click", ".btn-custom-alert[data-value='true']", function (){

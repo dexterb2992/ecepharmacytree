@@ -26,7 +26,7 @@
           <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
             <li class="active">
-              <a href="#">
+              <a href="{{ route('dashboard') }}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
               </a>
             </li>
@@ -39,13 +39,13 @@
 
             <li class="treeview">
               <a href="{{ route('Products::index') }}">
-                <i class="fa-medkit fa"></i> <span>Products</span>
+                <i class="fa-stethoscope fa"></i> <span>Products</span>
               </a>
             </li>
 
             <li class="treeview">
               <a href="{{ route('Promo::index') }}">
-                <i class="fa-gift fa"></i> <span>Promo/Discounts</span>
+                <i class="glyphicon glyphicon-tags"></i> <span>Promo/Discounts</span>
               </a>
             </li>
 
@@ -63,8 +63,14 @@
             </li>
 
             <li class="treeview">
+              <a href="#/sales">
+                <i class="fa fa-pie-chart"></i> <span>Sales</span>
+              </a>
+            </li>
+
+            <li class="treeview">
               <a href="#/payments">
-                <i class="fa fa-usd"></i> <span>Payments</span>
+                <i class="fa fa-money"></i> <span>Payments</span>
               </a>
             </li>
 
@@ -114,7 +120,7 @@
             </li>
              
              <li class="treeview">
-              <a href="#/settings">
+              <a href="{{ route('Settings::index') }}">
                 <i class="fa fa-sliders"></i> <span>Settings</span>
               </a>
             </li>

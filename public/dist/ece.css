@@ -45,6 +45,7 @@ select.sort-by {
     margin-left: 10px;
 }
 
-.datatable tr td {
+.datatable tr td, .datatable tr th {
     max-width: 120px;
+    text-align: center;
 }

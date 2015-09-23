@@ -16,7 +16,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body class="skin-blue sidebar-mini">
+  <body class="skin-blue fixed sidebar-mini">
     <div class="wrapper">
         @include('admin.partials._header');
         @include('admin.partials._sidebar');

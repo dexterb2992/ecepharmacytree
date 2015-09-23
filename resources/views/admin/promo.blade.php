@@ -8,8 +8,8 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_promos" data-toggle="tab">Promo</a></li>
-                <li><a href="#tab_category" data-toggle="tab">promo Category</a></li>
-                <li><a href="#tab_subcategory" data-toggle="tab">promo Subcategory</a></li>
+                <li><a href="#tab_category" data-toggle="tab">Discounts</a></li>
+                <li><a href="#tab_subcategory" data-toggle="tab">Products for Free</a></li>
                 <li class="pull-right">
                 </li>
             </ul>
@@ -17,7 +17,7 @@
                 <div class="tab-pane active" id="tab_promos">
                     <div class="box box-success">
                         <div class="box-header">
-                            <h3 class="box-title">promos</h3><br/>
+                            <h3 class="box-title">Promos</h3><br/>
                             <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-promo" data-target="#form_edit_promo" data-action="create" data-title="promo"><i class="fa-plus fa"></i> Add New</button>
                         </div><!-- /.box-header -->
                         <div class="box-body">
@@ -25,8 +25,7 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Start Date</th>
-                                        <th>Expiration Date</th>
+                                        <th>Duration</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -36,14 +35,9 @@
                                             <td>{{ ucfirst($promo->name) }}</td>
                                             <td>
                                                 <span class="label-primary label"><i class="fa-clock-o fa"></i> 
-                                                    {{ Carbon\Carbon::parse($promo->start_date)->format('l jS \\of F Y') }}
+                                                    {{ Carbon\Carbon::parse($promo->start_date)->format('F d, Y')." to ".
+                                                        Carbon\Carbon::parse($promo->end_date)->format('F d, Y') }}
                                                 </span>
-                                            </td>
-                                            <td>
-                                                <span class="label-success label"><i class="fa-clock-o fa"></i> 
-                                                    {{ Carbon\Carbon::parse($promo->end_date)->format('l jS \\of F Y') }}
-                                                </span>
-                                                    
                                             </td>
                                             <td>
                                                 <div class="tools">
