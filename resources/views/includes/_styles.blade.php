@@ -35,6 +35,10 @@
 <!-- DataTable -->
 {!! HTML::style('plugins/datatables/dataTables.bootstrap.css') !!}
 
+<!-- jOrgChart -->
+{!! HTML::style('plugins/jOrgChart/jquery.jOrgChart.css') !!}
+{!! HTML::style('plugins/jOrgChart/prettify.css') !!}
+
 <!-- bootstrap wysihtml5 - text editor -->
 {!! HTML::style('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') !!}
 

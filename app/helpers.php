@@ -101,10 +101,18 @@ function get_str_plural($str){
 }
 
 function str_auto_plural($str, $quantity){
-	if( $quantity > 1 )
-		return str_plural($str);
+	$pos = strpos($str, "(");
+	$suf = "";
 
-	return str_singular($str);
+	if( $pos !== false ){
+		$str = trim( substr($str, 0, $pos) );
+		$suf = trim( substr($str, $pos) );
+	}
+
+	if( $quantity > 1 )	
+		return str_plural($str)." ".$suf;
+
+	return str_singular($str)." ".$suf;
 }
 
 function rn2br($str){
@@ -118,5 +126,61 @@ function safety_stock(){
 }
 
 function get_patient_fullname($patient){
-	return $patient->fname." ".$patient->lname;
+	return ucfirst($patient->fname)." ".ucfirst($patient->lname);
+}
+
+function get_patient_referrals($patient){
+	return $count = ECEPharmacyTree\Patient::where('referred_by', '=', $patient->referral_id)->count();
+}
+
+function get_downlines($referral_id){
+
+	$users = ECEPharmacyTree\Patient::where('referred_by', '=', $referral_id)->get()->toArray(); // Primary Level
+	return $users;
+}
+
+function get_all_downlines($referral_id){
+	$settings = ECEPharmacyTree\Setting::first();
+	$patients = ECEPharmacyTree\Patient::where('referred_by', '=', $referral_id)->get()->toArray(); // Primary Level
+
+	$downlines = array();
+	$downlines = $patients;
+		
+	foreach($patients as $key => $patient){
+		
+		$child_downlines = get_all_downlines( $patient["referral_id"] );
+			
+		$downlines[$key]["downlines"] = $child_downlines;
+
+	}
+
+	return $downlines;
+
+}
+
+function extract_downlines($downlines = array()){
+	$res = "";
+	foreach($downlines as $key => $downline){
+		$res.= '<li>'.$downline["fname"]." ".$downline["lname"]."<br/>(".$downline["referral_id"].")";
+		if( count($downline['downlines']) > 0 ){
+			$new_dls = extract_downlines($downline['downlines']);
+			$res.= '<ul>'.$new_dls.'</ul>';
+		}
+
+		$res.= '</li>';
+			
+	}
+
+	return $res;
+}
+
+function get_recent_settings(){
+	$con = mysqli_connect("localhost", "root", "", "ece_pharmacy_tree");
+
+    $sql = "SELECT * FROM settings LIMIT 1";
+    $res = mysqli_query($con, $sql);
+    if( mysqli_num_rows($res) > 0 ){
+        $row = mysqli_fetch_object($res);
+    }
+    return $row;
 }

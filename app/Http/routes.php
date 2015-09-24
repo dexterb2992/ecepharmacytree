@@ -19,11 +19,8 @@ Route::get('/', ['as' => 'dashboard', 'uses' => function () {
 }]);
 
 Route::get("try", function (){
-	// $str = "For the relief of minor aches and pains such as headache, backache, menstrual cramps, muscular aches, minor arthritis pain, toothache, and pain associated with the common cold and flu;\r\n\r\nFor fever reduction.";
-	// $str = "For the relief of minor aches and pains such as headache, backache, menstrual cramps, muscular aches, minor arthritis pain, toothache, and pain associated with the common cold and flu;\r\n\r\nFor fever reduction.";
-	$str = "INDICATION:\r\n\r\nA nutritional supplement to provide essential vitamins, minerals and amino acids for general good health, to help promote physical vigor and help improve stamina during physical activity.\r\n\r\nIt contains B-complex vitamins to help optimize conversion of food into energy and Iron, a cofactor of enzymes involved in energy production. It combines the synergistic actions of Calcium, Vitamin D, Magnesium and Manganese to promote healthy bones. Potassium, coupled with Magnesium, Manganese and Calcium also help regulate musclecontraction and nerve impulses.\r\n\r\nit has the essential amino acids Methionine and Lysine which are vital in muscle tissue building.\r\n\r\nDOSAGE and ADMINISTRATION:\r\n\r\nOrally, 1 to 2 tablets daily. Or, as directed by a doctor.\r\n\r\nCONTRAINDICATION:\r\n\r\nHypersensitivity to any ingredient in the product.";
-	pre($str);
-	pre(rn2br($str));
+	$set = get_recent_settings();
+	pre($set);
 });
 
 Route::group(['prefix' => 'branches', 'as' => 'Branches::'], function (){
@@ -166,3 +163,9 @@ Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-
 
 Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
 
+Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::'], function (){
+	/**
+	 * Routes for Affiliates
+	 */
+	Route::get("/", ["as" => "index", 'uses' => 'AffiliatesController@index']);
+});

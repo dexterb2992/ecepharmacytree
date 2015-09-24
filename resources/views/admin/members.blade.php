@@ -30,7 +30,7 @@
                             <td>
                                 <span>{{ ucfirst($member->lname) }}</span>
                             </td>
-                            <td>{{ Carbon\Carbon::createFromFormat('d/m/Y', $member->birthdate)->age }}</td>
+                            <td>{{ Carbon\Carbon::createFromFormat('Y-m-d', $member->birthdate)->age }}</td>
                             <td>{{ ucfirst($member->address_street).', '.ucfirst($member->address_barangay).', '.ucfirst($member->address_city_municipality) }}</td>
                             <td>{{ $member->email_address }}</td>
                             <td>{{ $member->mobile_no }}</td>

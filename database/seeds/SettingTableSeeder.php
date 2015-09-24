@@ -14,6 +14,8 @@ class SettingTableSeeder extends Seeder
         Setting::create([
         	"points" => 1,
         	"level_limit" => 3,
+            "referral_commission" => 50, // 50%
+            "commission_variation" => 50, // 50%
         	"safety_stock" => 20,
         	"critical_stock" => 10
         ]);

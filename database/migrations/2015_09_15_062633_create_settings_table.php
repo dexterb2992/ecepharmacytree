@@ -16,6 +16,9 @@ class CreateSettingsTable extends Migration
             $table->increments('id');
             $table->double('points'); //referral settings
             $table->integer('level_limit'); //referral settings
+            $table->double('referral_commission'); // % per points earned by downlines
+            $table->double('commission_variation'); // % deduction per level
+            $table->double('delivery_charge');
             $table->integer('safety_stock'); //inventory settings
             $table->integer('critical_stock'); //inventory settings
             $table->timestamps();

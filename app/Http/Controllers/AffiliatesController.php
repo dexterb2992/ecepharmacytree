@@ -6,11 +6,9 @@ use Illuminate\Http\Request;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
-use Input;
-use ECEPharmacyTree\Setting;
-use Redirect;
+use ECEPharmacyTree\Patient;
 
-class SettingsController extends Controller
+class AffiliatesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,8 +17,8 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        $settings = Setting::first();
-        return view("admin.settings")->withTitle("Settings")->withSettings($settings);
+        $patients = Patient::all();
+        return view('admin.affiliates')->withPatients($patients);
     }
 
     /**
@@ -73,21 +71,9 @@ class SettingsController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update()
+    public function update(Request $request, $id)
     {
-        $input = Input::all();
-        $setting = Setting::first();
-        $setting->points = $input["points"];
-        $setting->level_limit = $input["level_limit"];
-        $setting->referral_commission = $input["referral_commission"];
-        $setting->commission_variation = $input["commission_variation"];
-        $setting->delivery_charge = $input["delivery_charge"];
-        $setting->safety_stock = $input["safety_stock"];
-        $setting->critical_stock = $input["critical_stock"];
-        if( $setting->save() )
-            return Redirect::to( route('Settings::index') )->withFlash_message("Your changes have been successfully saved!");
-        return Redirect::to( route('Settings::index') )
-            ->withFlash_message("Sorry, we can't process your request right now. Please try again later.");
+        //
     }
 
     /**

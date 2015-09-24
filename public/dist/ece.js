@@ -18,6 +18,11 @@ $(document).ready(function (){
 
     $('.daterange').daterangepicker({format: 'YYYY-MM-DD'});
 
+    $("#org").jOrgChart({
+        chartElement : '#chart',
+        dragAndDrop  : false
+    });
+
     // filter input to numeric characters only
     allowNumericOnly( $('.number'));
 
@@ -248,6 +253,17 @@ $(document).ready(function (){
         console.log(dates);
         $("input[name='start_date']").val( $("input[name='daterangepicker_start']").val() );
         $("input[name='end_date']").val( $("input[name='daterangepicker_end']").val() );
+    });
+
+    $(document).on("click", ".show-downlines", function(){
+        $("#chart").html("");
+        $("ul.referral-chart[data-id='"+$(this).data("id")+"']").jOrgChart({
+            chartElement : '#chart',
+            dragAndDrop  : false
+        });
+
+        $(".show-downlines").removeClass("selected");
+        $(this).addClass("selected");
     });
 		
 });
