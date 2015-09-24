@@ -1,6 +1,9 @@
 <?php use Carbon\Carbon; ?>
+
 @extends('admin.layouts.template')
+
 @section('content')
+
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="box box-success">
@@ -31,9 +34,17 @@
 										</a>
 									</td>
 									<td>
-										<?php $total = $inventory->quantity * $inventory->product->qty_per_packing; ?>
+										<?php 
+											$total = $inventory->quantity * $inventory->product->qty_per_packing; 
+											$safety_stock = $inventory->product->safety_stock >= 0 ? $recent_settings->safety_stock : $inventory->product->safety_stock;
+											// $safety_stock = $inventory->product->safety_stock == "" ? 0 : $inventory->product->safety_stock;
+											$gross_total = $total - $safety_stock;
+										?>
 										{!! $total." ".str_auto_plural($inventory->product->unit, $total)." "
 											."( ".$inventory->quantity." ".str_auto_plural($inventory->product->packing, $inventory->quantity)." )" !!}
+									
+										<p class="text-aqua">{{ $gross_total." ".str_auto_plural($inventory->product->unit, $gross_total)." available " }}</p>
+										<p class="text-light-blue">{{ $safety_stock." ".str_auto_plural($inventory->product->unit, $safety_stock) }} has been added to safety stocks</p>
 									</td>
 									<td>
 										<span class="label label-success"><i class="fa-clock-o fa"></i> 
@@ -84,7 +95,7 @@
 	                            	</select>
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="quantity" title="Add quantity by product's packing">Quantity (<i>By Packing</i>)</label>
+	                            	<label for="quantity" title="Add quantity by product's packing">Quantity (<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</label>
 	                            	<div class="input-group">
 		                            	<input type="text" id="inventory_quantity" name="quantity" class="number form-control" title="Add quantity by product's packing" required>
 		                            	<div class="input-group-addon">

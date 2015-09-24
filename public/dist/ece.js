@@ -18,6 +18,11 @@ $(document).ready(function (){
 
     $('.daterange').daterangepicker({format: 'YYYY-MM-DD'});
 
+    $("#org").jOrgChart({
+        chartElement : '#chart',
+        dragAndDrop  : false
+    });
+
     // filter input to numeric characters only
     allowNumericOnly( $('.number'));
 
@@ -51,8 +56,16 @@ $(document).ready(function (){
                 var start_date = "", end_date;
 
                 $.each(data, function (i, row){
-                    console.log(row);
-                    var newRow = String(row).replace(/\r\n|\n|\r/g, '&#13;&#10;');
+                    
+                    if( i == "description" ){
+                        var str = row+"";
+                        // var reg = /\\r\\n|\\n|\\r/g;
+                        var reg = /\\r?\\n/g;
+                        // var newRow = str.replace(reg, '&#13;&#10;');
+                        var newRow = str.replace(reg, '\n');
+                        console.log("row: "+String(row));
+                        console.log("newRow: "+newRow);
+                    }
 
                     form.find("input[name='"+i+"']").val(row);
                     form.find("textarea[name='"+i+"']").val(newRow);
@@ -84,8 +97,7 @@ $(document).ready(function (){
                 });
 
                 form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing")
-
-                $(modal).modal('show');
+                updateInventoryProductQty();
             });
         } else if(action == "preview_image"){
             var img_source = $(this).children('img').attr('src');
@@ -95,13 +107,17 @@ $(document).ready(function (){
             
         }else{
             title = "Add new "+dataTitle;
-            $(modal).modal('show');
+            
+            form.find("input").not("input[name='_token']").val("");
+            updateInventoryProductQty();
         }
 
         form.attr("data-mode", action);
         form.attr("action", mainurl+action);
 
         form.find(".modal-title").html(title);
+        
+        $(modal).modal('show');
     });
 
 
@@ -110,6 +126,9 @@ $(document).ready(function (){
 
     });
 
+    /**
+     * For alert/confirmation dialogs
+     */
     $(document).on("click", ".action-icon", function (){
         var $this = $(this), url = "", alertType = "";
         var id = $this.data("id"), action = $this.data('action'), mainurl = $this.data('urlmain'), dataTitle = $this.data('title');
@@ -188,11 +207,8 @@ $(document).ready(function (){
 
     $("#inventories_product_id").change(function (){
         var packing = $(this).children('option:selected').data("packing");
+        $("#outer_packing").html(packing);
         $(".add-on-product-packing").html( str_plural(packing) );
-    });
-
-    $("#inventory_quantity").keyup(function (){
-
     });
 
     $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
@@ -237,6 +253,17 @@ $(document).ready(function (){
         console.log(dates);
         $("input[name='start_date']").val( $("input[name='daterangepicker_start']").val() );
         $("input[name='end_date']").val( $("input[name='daterangepicker_end']").val() );
+    });
+
+    $(document).on("click", ".show-downlines", function(){
+        $("#chart").html("");
+        $("ul.referral-chart[data-id='"+$(this).data("id")+"']").jOrgChart({
+            chartElement : '#chart',
+            dragAndDrop  : false
+        });
+
+        $(".show-downlines").removeClass("selected");
+        $(this).addClass("selected");
     });
 		
 });

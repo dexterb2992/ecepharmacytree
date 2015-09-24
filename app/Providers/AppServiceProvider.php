@@ -3,6 +3,7 @@
 namespace ECEPharmacyTree\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use ECEPharmacyTree\Setting;
 
 class AppServiceProvider extends ServiceProvider
 {

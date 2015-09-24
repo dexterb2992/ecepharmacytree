@@ -62,6 +62,7 @@ if ($request == 'register') {
         $sql_insert_patient = "INSERT INTO patients(" . $cols . ") VALUES(" . $values . ")";
         $result_insert_patient = mysql_query($sql_insert_patient) or die(mysql_error());
         $last_patient_id   = mysql_insert_id();
+
         $sql_fetch_patient = "SELECT * FROM patients WHERE id = $last_patient_id";
         $result_fetch_patient = mysql_query($sql_fetch_patient) or die(mysql_error());
         // check for empty result
@@ -167,10 +168,12 @@ if ($request == 'register') {
     exit(0);
 }
 
-function pre($str)
-{
-    echo "<pre>";
-    print_r($str);
-    echo "</pre>";
+
+if( !function_exists('pre') ){
+    function pre($str){
+        echo "<pre>";
+        print_r($str);
+        echo "</pre>";
+    }
 }
 ?>

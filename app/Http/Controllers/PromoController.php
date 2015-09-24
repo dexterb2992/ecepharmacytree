@@ -23,7 +23,7 @@ class PromoController extends Controller
 
         $promos = Promo::all();
 
-        return view('admin.promo')->withPromos($promos)->withTitle('Promo and Discounts');
+        return view('admin.promo')->withPromos($promos)->withTitle('Promotions and Discounts');
         // return view('admin.promo');
     }
 

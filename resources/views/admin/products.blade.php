@@ -241,7 +241,7 @@
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             
                             <div class="form-group">
-                                <label for="subcategory_id">Category</label>
+                                <label for="subcategory_id">Category <i>*</i></label>
                                 <select class="form-control" name="subcategory_id">
                                     @foreach($categories as $category)
                                         <optgroup label="{{ $category->name }}">
@@ -261,34 +261,38 @@
                                 <textarea class="form-control" name="generic_name"></textarea>      
                             </div>
                             <div class="form-group">
-                                <label for="description">Description</label>
-                                <textarea class="form-control" name="description"></textarea>
+                                <label for="description">Description <i>*</i></label>
+                                <textarea class="form-control" name="description" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="prescription_required">Requires prescription?</label>
+                                <label for="prescription_required">Requires prescription? <i>*</i></label>
                                 <select class="form-control" name="prescription_required">
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="price">Price</label>
+                                <label for="price">Price <i>*</i></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">&#x20B1;</span>
-                                    <input type="text" class="form-control number" name="price">
+                                    <input type="text" class="form-control number" name="price" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="packing">Packing</label>
-                                <input type="text" name="packing" class="form-control" placeholder="Ex. box, bottle, strip, etc.">
+                                <label for="packing">Packing <i>*</i></label>
+                                <input type="text" name="packing" class="form-control" placeholder="Ex. box, bottle, strip, etc." required>
                             </div>  
                             <div class="form-group">
-                                <label for="unit">Unit</label>
-                                <input type="text" class="form-control" name="unit" placeholder="Ex. tablet, capsule, etc.">
+                                <label for="unit">Unit <i>*</i></label>
+                                <input type="text" class="form-control" name="unit" placeholder="Ex. tablet, capsule, etc." required>
                             </div>
                             <div class="form-group">
-                                <label for="qty_per_packing">Quantity per packing</label>
-                                <input type="text" class="form-control number" name="qty_per_packing" title="H">
+                                <label for="qty_per_packing">Quantity per packing <i>*</i></label>
+                                <input type="text" class="form-control number" name="qty_per_packing" title="H" required>
+                            </div>
+                            <div class="form-group">
+                                <label title="Enter Safety Stock number per Packing">Safety Stock (<i>per Unit</i>)</label>
+                                <input class="form-control number" name="safety_stock" type="text" title="The extra stock that is maintained to mitigate risk of stockouts" />
                             </div>
 
                         <div class="modal-footer">

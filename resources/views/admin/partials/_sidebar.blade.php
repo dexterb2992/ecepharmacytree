@@ -8,7 +8,7 @@
               <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-              <p>Alexander Pierce</p>
+              <p>Dexter Bengil</p>
               <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
           </div>
@@ -26,7 +26,7 @@
           <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
             <li class="active">
-              <a href="#">
+              <a href="{{ route('dashboard') }}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
               </a>
             </li>
@@ -39,13 +39,19 @@
 
             <li class="treeview">
               <a href="{{ route('Products::index') }}">
-                <i class="fa-medkit fa"></i> <span>Products</span>
+                <i class="fa-stethoscope fa"></i> <span>Products</span>
+              </a>
+            </li>
+
+            <li class="treeview">
+              <a href="{{ route('doctors') }}">
+                <i class="fa-user-md fa"></i><span>Doctors</span>
               </a>
             </li>
 
             <li class="treeview">
               <a href="{{ route('Promo::index') }}">
-                <i class="fa-gift fa"></i> <span>Promo/Discounts</span>
+                <i class="glyphicon glyphicon-tags"></i> <span>Promo/Discounts</span>
               </a>
             </li>
 
@@ -63,20 +69,15 @@
             </li>
 
             <li class="treeview">
-              <a href="#/payments">
-                <i class="fa fa-usd"></i> <span>Payments</span>
+              <a href="#/sales">
+                <i class="fa fa-pie-chart"></i> <span>Sales</span>
               </a>
             </li>
 
             <li class="treeview">
-              <a href="#">
-                <i class="fa-sitemap fa"></i> <span>Categories</span>
-                <i class="fa fa-angle-left pull-right"></i>
+              <a href="#/payments">
+                <i class="fa fa-money"></i> <span>Payments</span>
               </a>
-              <ul class="treeview-menu">
-                <li><a href="{{ route('ProductCategory::index') }}"><i class="fa fa-medkit"></i> Product Categories</a></li>
-                <li><a href="{{ route('DoctorSpecialty::index') }}"><i class="fa fa-stethoscope"></i> Doctor Specialties</a></li>
-              </ul>
             </li>
 
             <li class="treeview">
@@ -92,29 +93,13 @@
             </li>
 
             <li class="treeview">
-              <a href="#/affiliates">
+              <a href="{{ route('Affiliates::index') }}">
                 <i class="fa fa-bar-chart"></i> <span>Affiliates</span>
               </a>
             </li>
-            
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-folder"></i> <span>Examples</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="pages/examples/invoice.html"><i class="fa fa-circle-o"></i> Invoice</a></li>
-                <li><a href="pages/examples/login.html"><i class="fa fa-circle-o"></i> Login</a></li>
-                <li><a href="pages/examples/register.html"><i class="fa fa-circle-o"></i> Register</a></li>
-                <li><a href="pages/examples/lockscreen.html"><i class="fa fa-circle-o"></i> Lockscreen</a></li>
-                <li><a href="pages/examples/404.html"><i class="fa fa-circle-o"></i> 404 Error</a></li>
-                <li><a href="pages/examples/500.html"><i class="fa fa-circle-o"></i> 500 Error</a></li>
-                <li><a href="pages/examples/blank.html"><i class="fa fa-circle-o"></i> Blank Page</a></li>
-              </ul>
-            </li>
              
              <li class="treeview">
-              <a href="#/settings">
+              <a href="{{ route('Settings::index') }}">
                 <i class="fa fa-sliders"></i> <span>Settings</span>
               </a>
             </li>

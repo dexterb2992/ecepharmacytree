@@ -11,26 +11,16 @@
 |
 */
 
+View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 
-// Route::filter('csrf', function ()
-// {
-//     if (Session::token() == "")
-//     {
-//         Session::regenerateToken();
-//     }
-//     Session::regenerateToken();
-// });
-
-Route::get('/', function () {
-	return view('welcome');
-});
+Route::get('/', ['as' => 'dashboard', 'uses' => function () {
+	$recently_added_products = ECEPharmacyTree\Product::latest()->limit(4)->get();
+	return view('dashboard')->withRecently_added_products($recently_added_products)->withTitle("Dashboard");
+}]);
 
 Route::get("try", function (){
-	// $str = "For the relief of minor aches and pains such as headache, backache, menstrual cramps, muscular aches, minor arthritis pain, toothache, and pain associated with the common cold and flu;\r\n\r\nFor fever reduction.";
-	// $str = "For the relief of minor aches and pains such as headache, backache, menstrual cramps, muscular aches, minor arthritis pain, toothache, and pain associated with the common cold and flu;\r\n\r\nFor fever reduction.";
-	$str = "INDICATION:\r\n\r\nA nutritional supplement to provide essential vitamins, minerals and amino acids for general good health, to help promote physical vigor and help improve stamina during physical activity.\r\n\r\nIt contains B-complex vitamins to help optimize conversion of food into energy and Iron, a cofactor of enzymes involved in energy production. It combines the synergistic actions of Calcium, Vitamin D, Magnesium and Manganese to promote healthy bones. Potassium, coupled with Magnesium, Manganese and Calcium also help regulate musclecontraction and nerve impulses.\r\n\r\nit has the essential amino acids Methionine and Lysine which are vital in muscle tissue building.\r\n\r\nDOSAGE and ADMINISTRATION:\r\n\r\nOrally, 1 to 2 tablets daily. Or, as directed by a doctor.\r\n\r\nCONTRAINDICATION:\r\n\r\nHypersensitivity to any ingredient in the product.";
-	pre($str);
-	pre(rn2br($str));
+	$set = get_recent_settings();
+	pre($set);
 });
 
 Route::group(['prefix' => 'branches', 'as' => 'Branches::'], function (){
@@ -151,6 +141,18 @@ Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
 Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
 
 Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
+
+Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@edit' ]);
+
+
+Route::group(['prefix' => 'settings', 'as' => 'Settings::'], function (){
+	/**
+	 * Routes for Admin Settings
+	 */
+	Route::get('/', ['as' => 'index', 'uses' => 'SettingsController@index']);
+	Route::post('referral/update', ['as' => 'update', 'uses' => 'SettingsController@update']);
+});
+
 Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
 Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
 
@@ -160,3 +162,10 @@ Route::get('prescription-approval/', ['as' => 'prescription_approval', 'uses' =>
 Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-disapprove', 'uses' => 'PrescriptionApprovalController@disapprove']);
 
 Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
+
+Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::'], function (){
+	/**
+	 * Routes for Affiliates
+	 */
+	Route::get("/", ["as" => "index", 'uses' => 'AffiliatesController@index']);
+});

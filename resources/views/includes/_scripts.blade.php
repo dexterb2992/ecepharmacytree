@@ -1,5 +1,3 @@
-<!-- jQuery 2.1.4 -->
-{!! HTML::script('plugins/jQuery/jQuery-2.1.4.min.js') !!}
 
 <!-- jQuery UI 1.11.4 -->
 {!! HTML::script('plugins/jQueryUI/jquery-ui.min.js') !!}
@@ -58,6 +56,10 @@
 {!! HTML::script('plugins/input-mask/jquery.inputmask.js') !!}
 {!! HTML::script('plugins/input-mask/jquery.inputmask.date.extensions.js') !!}
 {!! HTML::script('plugins/input-mask/jquery.inputmask.extensions.js') !!}
+
+<!-- jOrgChart -->
+{!! HTML::script('plugins/jOrgChart/jquery.jOrgChart.js') !!}
+{!! HTML::script('plugins/jOrgChart/prettify.js') !!}
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 {!! HTML::script('dist/js/pages/dashboard.js') !!}

@@ -16,30 +16,32 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body class="skin-blue sidebar-mini">
+  <body class="skin-blue fixed sidebar-mini">
     <div class="wrapper">
-        @include('admin.partials._header');
-        @include('admin.partials._sidebar');
+      <!-- jQuery 2.1.4 -->
+      {!! HTML::script('plugins/jQuery/jQuery-2.1.4.min.js') !!}
+      @include('admin.partials._header');
+      @include('admin.partials._sidebar');
 
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-              <h1>
-                {{ isset($title) ? $title : '' }}
-                <small>Control panel</small>
-              </h1>
-              <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i></a></li>
-                <li class="active">{{ isset($title) ? $title : '' }}</li>
-              </ol>
-            </section>
-            
-            <!-- Main content -->
-            <section class="content">
-              @yield('content')
-            </section><!-- /.content -->
-        </div><!-- /.content-wrapper -->
-        @include('admin.partials._footer')
+      <div class="content-wrapper">
+          <!-- Content Header (Page header) -->
+          <section class="content-header">
+            <h1>
+              {{ isset($title) ? $title : '' }}
+              <small>Control panel</small>
+            </h1>
+            <ol class="breadcrumb">
+              <li><a href="#"><i class="fa fa-dashboard"></i></a></li>
+              <li class="active">{{ isset($title) ? $title : '' }}</li>
+            </ol>
+          </section>
+          
+          <!-- Main content -->
+          <section class="content">
+            @yield('content')
+          </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      @include('admin.partials._footer')
     </div><!-- ./wrapper -->
     
     <script type="text/javascript">
@@ -95,10 +97,22 @@
       } 
 
       function str_auto_plural(str, quantity){
-        if( quantity > 1 ){
-          return str_plural( str );
+        try{
+          var pos = str.indexOf("(");
+          var suf = "";
+          if( pos !== -1 ){
+            str = $.trim( str.substr(0, pos) );
+            suf = $.trim( str.substr(pos) );
+            console.log("str: "+str+" suf: "+suf);
+          }
+
+          if( quantity > 1 ){
+            return str_plural( str )+suf;
+          }
+          return str_singular( str )+suf;
+        }catch(Exception){
+          console.log(Exception);
         }
-        return str_singular( str );
       }
     </script>
     @include('includes._scripts')
