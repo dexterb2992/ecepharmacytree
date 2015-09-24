@@ -25,7 +25,7 @@ class Patient extends Model
     }
 
     public function orders(){
-    	return $this->hashMany('ECEPharmacyTree\Order');
+    	return $this->hasMany('ECEPharmacyTree\Order');
     }
 
     
