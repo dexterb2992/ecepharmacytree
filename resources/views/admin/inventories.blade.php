@@ -1,4 +1,7 @@
-<?php use Carbon\Carbon; ?>
+<?php 
+	use Carbon\Carbon; 
+	$is_critical = false;
+?>
 
 @extends('admin.layouts.template')
 
@@ -24,8 +27,10 @@
 						</thead>
 						<tbody>
 							@foreach($inventories as $inventory)
-								<tr>
+								<tr data-pid="{{ $inventory->product_id }}" data-id="{{ $inventory->id }}">
 									<td>
+										<?php $is_critical = $inventory->quantity <= $recent_settings->critical_stock ? true : false; ?>
+										{!! $inventory->quantity <= $recent_settings->critical_stock ? '<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" title="" data-original-title="Critical Stock" title="Critical Stock"></i>' : '' !!}
 										<span> {{ $inventory->product->sku }}</span>
 									</td>
 									<td>
@@ -44,7 +49,7 @@
 											."( ".$inventory->quantity." ".str_auto_plural($inventory->product->packing, $inventory->quantity)." )" !!}
 									
 										<p class="text-aqua">{{ $gross_total." ".str_auto_plural($inventory->product->unit, $gross_total)." available " }}</p>
-										<p class="text-light-blue">{{ $safety_stock." ".str_auto_plural($inventory->product->unit, $safety_stock) }} has been added to safety stocks</p>
+										<p class="text-light-blue">Safety Stock: {{ $safety_stock." ".str_auto_plural($inventory->product->unit, $safety_stock) }}</p>
 									</td>
 									<td>
 										<span class="label label-success"><i class="fa-clock-o fa"></i> 
@@ -55,6 +60,7 @@
 										<span class="label label-primary"><i class="fa-clock-o fa"></i> {{ Carbon::parse($inventory->created_at)->diffForHumans() }}</span>
 
 										<div class="btn-group pull-right">
+											{!! $is_critical ? '<span class="btn-sm btn-default btn action-icon" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}"><i class="fa-refresh fa"></i></span>' : '' !!}
 											<span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
 												 data-id="{{ $inventory->id }}" title="Remove"><i class="fa fa-trash-o"></i>
 											</span>

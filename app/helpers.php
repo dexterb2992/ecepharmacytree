@@ -34,12 +34,16 @@ function get_ph_regions(){
  *			1 = numbers only
  *			2 = letters only
  */
-function generateRandomString($length = 10, $is_number = 0) {
+function generateRandomString($length = 10, $is_number = 0, $is_sku = false) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     if( $is_number  == 1) {
     	$characters = '0123456789';
     }else if( $is_number == 2 ){
-    	$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    	$characters = 'abcdefghjkmnpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    	
+    	if( $is_sku ){
+    		$characters = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
+    	}
     }
 
     $charactersLength = strlen($characters);
@@ -51,8 +55,12 @@ function generateRandomString($length = 10, $is_number = 0) {
 }
 
 function generateSku(){
-	$sku = generateRandomString(4, 2).generateRandomString(4, 1);
-	return strtoupper($sku);
+	$sku = strtoupper( generateRandomString(3, 2, true).generateRandomString(3, 1, true) );
+
+	$check = ECEPharmacyTree\Product::where('sku', '=', $sku)->first();
+	if( $check === null )
+		return $sku;
+	generateSku();
 }
 
 
@@ -133,12 +141,6 @@ function get_patient_referrals($patient){
 	return $count = ECEPharmacyTree\Patient::where('referred_by', '=', $patient->referral_id)->count();
 }
 
-function get_downlines($referral_id){
-
-	$users = ECEPharmacyTree\Patient::where('referred_by', '=', $referral_id)->get()->toArray(); // Primary Level
-	return $users;
-}
-
 function get_all_downlines($referral_id){
 	$settings = ECEPharmacyTree\Setting::first();
 	$patients = ECEPharmacyTree\Patient::where('referred_by', '=', $referral_id)->get()->toArray(); // Primary Level
@@ -183,4 +185,35 @@ function get_recent_settings(){
         $row = mysqli_fetch_object($res);
     }
     return $row;
+}
+
+function check_for_critical_stock(){
+	$settings = ECEPharmacyTree\Setting::first();
+
+	$critical_stock_products = ECEPharmacyTree\Inventory::where("quantity", "<=", $settings->critical_stock)->get();
+	return $critical_stock_products;
+}
+
+function get_branch_full_address($branch){
+	$branch->unit_floor_room_no = $branch->unit_floor_room_no == 0 ? "" : $branch->unit_floor_room_no;
+	$branch->building = $branch->building == 0 ? "" : $branch->building;
+	$branch->lot_no = $branch->lot_no == 0 ? "" : $branch->lot_no;
+	$branch->block_no = $branch->block_no == 0 ? "" : $branch->block_no;
+	$branch->phase_no = $branch->phase_no == 0 ? "" : $branch->phase_no;
+
+	$address = $branch->unit_floor_room_no." ".
+    $branch->building." ".$branch->lot_no." ".$branch->block_no." ".
+    $branch->phase_no." ".
+    $branch->address_street." <br>".
+    $branch->address_barangay.", ".
+    $branch->address_city_municipality.", ".
+    $branch->address_province." <br>".
+    $branch->address_region.", ".
+    $branch->address_zip." ";
+
+    return $address;
+}
+
+function _error($msg){
+	return '<div class="label label-danger">'.$msg.'</div>';
 }

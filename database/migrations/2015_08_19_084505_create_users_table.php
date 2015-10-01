@@ -18,7 +18,6 @@ class CreateUsersTable extends Migration
             $table->string('mname')->nullable();
             $table->string('lname');
             $table->string('email')->unique()->nullable();
-            $table->string('username')->unique();
             $table->text('password');
             $table->integer('branch_id')->unsigned();
             $table->foreign('branch_id')->references('id')->on('branches');

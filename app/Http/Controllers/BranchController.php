@@ -53,6 +53,7 @@ class BranchController extends Controller
         $branch->address_region = $input["address_region"];
         $branch->address_zip = $input["address_zip"];
         if( $branch->save() ) 
+            session()->flash("flash_message", array("msg" => "New branch has been added successfully.", "type" => "success"));
             return Redirect::to( route('Branches::index') );
         
         return false;
@@ -105,6 +106,7 @@ class BranchController extends Controller
         $branch->address_region = $input["address_region"];
         $branch->address_zip = $input["address_zip"];
         if( $branch->save() ) 
+            session()->flash("flash_message", array("msg" => "Branch information has been updated successfully.", "type" => "success"));
             return Redirect::to( route('Branches::index') );
         
         return false;
@@ -123,7 +125,9 @@ class BranchController extends Controller
             if( Branch::destroy( Input::get('id') ) ) 
                 return json_encode( array("status" => "success") );
         }
-        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+        
+        session()->flash("flash_message", array("msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "warning"));
+            return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 
     public function activate_deactivate(){
@@ -132,9 +136,17 @@ class BranchController extends Controller
             $branch = Branch::find( Input::get('id') );
             $branch->status = $branch->status == 0 ? 1 : 0;
             if( $branch->save() ) 
-            return json_encode( array("status" => "success") );
+                if( $branch->status == 0 ){
+                    $flash_message = ["msg" => "Branch has been deactivated.", "type" => "warning"];
+                }else{
+                    $flash_message = ["msg" => "Branch has been activated.", "type" => "info"];
+
+                }
+                session()->flash("flash_message", $flash_message);
+                return json_encode( array("status" => "success") );
         }
-        
+
+        session()->flash("flash_message", array("msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"));
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

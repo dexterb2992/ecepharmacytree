@@ -29,5 +29,6 @@ class Kernel extends HttpKernel
         'auth' => \ECEPharmacyTree\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \ECEPharmacyTree\Http\Middleware\RedirectIfAuthenticated::class,
+        'admin' => \ECEPharmacyTree\Http\Middleware\RedirectIfNotAdmin::class,
     ];
 }

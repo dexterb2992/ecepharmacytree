@@ -175,3 +175,16 @@ select.sort-by {
     font-weight: bold;
 }
 
+tr.selected td{
+    color: #003E55;
+    font-weight: bold;
+}
+
+.alert-important {
+    background-color: #00c0ef !important;
+    color: white;
+}
+
+tr.critical-stock, tr.critical-stock td, tr.critical-stock td a, tr.critical-stock td p {
+    
+}

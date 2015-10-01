@@ -52,11 +52,12 @@ class PromoController extends Controller
         $promo->end_date = $input["end_date"];
 
         if( $promo->save() ){
+            session()->flash("flash_message", ["msg" => "New promo has been added successfully.", "type" => "success"]);
             return Redirect::to( route('Promo::index') );
         }
 
-        return Redirect::to( route('Promo::index') )
-            ->withFlashMessage("Sorry, we can't process your request right now. Please try again later.");
+        session()->flash("flash_message", ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "warning"]);
+        return Redirect::to( route('Promo::index') );
 
     }
 
@@ -102,11 +103,12 @@ class PromoController extends Controller
         $promo->end_date = $input["end_date"];
 
         if( $promo->save() ){
+            session()->flash("flash_message", ["msg" => "Promo information has been updateed.", "type" => "info"]);
             return Redirect::to( route('Promo::index') );
         }
+        session()->flash("flash_message", ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "warning"]);
 
-        return Redirect::to( route('Promo::index') )
-            ->withFlashMessage("Sorry, we can't process your request right now. Please try again later.");
+        return Redirect::to( route('Promo::index') );
     }
 
     /**
@@ -119,8 +121,10 @@ class PromoController extends Controller
     {
         $product = Promo::findOrFail(Input::get("id"));
         if( $product->delete() ){
+            session()->flash("flash_message", ["msg" => "Promo has been successfully removed.", "type" => "danger"]);
             return json_encode( array("status" => "success") );
         }
+        session()->flash("flash_message", ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "warning"]);
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

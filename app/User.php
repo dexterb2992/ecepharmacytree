@@ -44,4 +44,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function payments(){
         return $this->hasMany('ECEPharmacyTree\Payment');
     }
+
+    public function isAdmin(){
+        if( $this->access_level == "1" )
+            return true;
+        return false;
+    }
 }

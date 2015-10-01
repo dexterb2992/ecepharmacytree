@@ -10,7 +10,7 @@
 					<h3>Affiliates</h3> <br/>
 				</div>
 				<div class="box-body">
-					<table class="table table-bordered table-hover datatable">
+					<table class="table table-bordered table-hover datatable table-referrals">
 						<thead>
 							<tr>
 								<th>Name</th>

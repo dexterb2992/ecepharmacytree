@@ -23,15 +23,7 @@
                     <tbody>
                         @foreach($branches as $branch)
                             <?php 
-                                $address = $branch->unit_floor_room_no." ".
-                                $branch->building." ".$branch->lot_no." ".$branch->block_no." ".
-                                $branch->phase_no." ".
-                                $branch->address_street." <br>".
-                                $branch->address_barangay.", ".
-                                $branch->address_city_municipality.", ".
-                                $branch->address_province." <br>".
-                                $branch->address_region.", ".
-                                $branch->address_zip." ";
+                                $address = get_branch_full_address($branch);
                             ?>
                             <tr data-id="{{ $branch->id }}" class="{{ $branch->status == 1? '' : 'warning' }}">
                                 <td>
@@ -53,11 +45,11 @@
                                     <div class="tools">
                                         
                                         @if($branch->status == 1)
-                                            <span class="action-icon deactivate-branch" data-title="category" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}"><i class="fa fa-warning"></i> Deactivate</span> 
+                                            <span class="action-icon deactivate-branch" data-title="branch" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}"><i class="fa fa-warning"></i> Deactivate</span> 
                                         @else
-                                            <span class="action-icon reactivate-branch" data-title="category" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}"><i class="fa fa-check-square-o"></i> Reactivate</span>
+                                            <span class="action-icon reactivate-branch" data-title="branch" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}"><i class="fa fa-check-square-o"></i> Reactivate</span>
                                         @endif
-                                        <span class="action-icon remove-branch" data-action="remove" data-title="category" data-urlmain="/branches/" data-id="{{ $branch->id }}"><i class="fa fa-trash-o"></i> Remove</span>
+                                        <span class="action-icon remove-branch" data-action="remove" data-title="branch" data-urlmain="/branches/" data-id="{{ $branch->id }}"><i class="fa fa-trash-o"></i> Remove</span>
                                     </div>
                                 </td>
                             </tr>

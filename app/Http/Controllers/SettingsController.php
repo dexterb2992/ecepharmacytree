@@ -21,16 +21,7 @@ class SettingsController extends Controller
     {
         $settings = Setting::first();
         return view("admin.settings")->withTitle("Settings")->withSettings($settings);
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -44,27 +35,6 @@ class SettingsController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -78,26 +48,18 @@ class SettingsController extends Controller
         $input = Input::all();
         $setting = Setting::first();
         $setting->points = $input["points"];
+        $setting->points_to_peso = $input["points_to_peso"];
         $setting->level_limit = $input["level_limit"];
         $setting->referral_commission = $input["referral_commission"];
         $setting->commission_variation = $input["commission_variation"];
         $setting->delivery_charge = $input["delivery_charge"];
+        $setting->delivery_minimum = $input["delivery_minimum"];
         $setting->safety_stock = $input["safety_stock"];
         $setting->critical_stock = $input["critical_stock"];
         if( $setting->save() )
-            return Redirect::to( route('Settings::index') )->withFlash_message("Your changes have been successfully saved!");
+            return Redirect::to( route('Settings::index') )->withFlash_message([
+                "msg" => "Your changes have been successfully saved!", "type" => "success"]);
         return Redirect::to( route('Settings::index') )
-            ->withFlash_message("Sorry, we can't process your request right now. Please try again later.");
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
+            ->withFlash_message(["msg" => "Sorry, we can't process your request right now. Please try again later.", "warning"]);
     }
 }
