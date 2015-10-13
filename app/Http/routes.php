@@ -22,8 +22,6 @@ Route::controllers([
 	'password' => 'Auth\PasswordController'
 ]);
 
-Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
-Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
 
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => function () {
 	$recently_added_products = ECEPharmacyTree\Product::latest()->limit(4)->get();
@@ -34,8 +32,12 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@show']);
-Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
+// Routes used for /profile
+	Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
+	Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
+	Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@show']);
+	Route::post('profile', ['as' => 'update_photo', 'middleware' => 'auth', 'uses' => 'UserController@update_photo']);
+	Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
 
 Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'auth'], function (){
 	/**

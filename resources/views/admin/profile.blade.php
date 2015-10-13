@@ -16,8 +16,11 @@
 					<div class="col-md-7">
 						<div class="row">
 							<div class="col-md-6">
-								<img id="user_photo" src="/dist/img/user2-160x160.jpg" class="img-responsive" alt="">
-								{!! Form::open(['method' => 'post', 'enctype' => 'multipart/form-data', 'id' => 'form_update_user_photo']) !!}
+								<img id="user_photo" src="{{ url('images/160x160/'.Auth::user()->photo) }}" class="img-responsive" alt="">
+								{!! Form::open([
+									'method' => 'post', 'enctype' => 'multipart/form-data', 'id' => 'form_update_user_photo',
+									'action' => 'UserController@update_photo'
+								]) !!}
 								<div class="form-group div-change-user-photo">
 									<div class="text-muted no-shadow" id="photo_filename"></div>
 									<input class="form-control hidden" type="file" name="photo" id="browse_photo" accept="image/*"/>
@@ -55,7 +58,8 @@
 										<div class="row">
 								            <div class="col-xs-12">
 								            	{!! Form::button('Update Info', ['class' => 'btn btn-primary btn-block btn-flat', 'id' => 'btn_update_info']) !!}
-								            	{!! Form::button('Change Password', ['class' => 'btn btn-warning btn-block btn-flat', 'id' => 'btn_change_password', 'data-toggle' => 'modal', 'data-target' => '#modal_update_password']) !!}
+								            	{!! Form::button('Change Password', ['class' => 'btn btn-warning btn-block btn-flat', 'id' => 'btn_change_password', 
+								            		'data-toggle' => 'modal', 'data-target' => '#modal_update_password']) !!}
 								            	
 								            </div><!-- /.col -->
 								        </div>

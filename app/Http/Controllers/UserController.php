@@ -1,5 +1,4 @@
 <?php
-
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
@@ -7,6 +6,7 @@ use Input;
 use Auth;
 use Validator;
 use Redirect;
+use Image;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -187,6 +187,43 @@ class UserController extends Controller
 
         $return_data['errors'] = $errors;
         return json_encode($return_data);
+    }
+
+    /**
+     * Update the user's profile photo
+     * @param file $photo
+     * @return Response
+     */
+    public function update_photo(){
+        if( Input::file() ){
+            $image = Input::file('photo');
+            $filename  = time() . '.' . $image->getClientOriginalExtension();
+
+            // save original image
+            $original_imagepath = public_path('images/profile-pictures/' . $filename);
+            Image::make($image->getRealPath())->save($original_imagepath);
+
+            // create image 160x160 size
+                // $path = public_path('profile-pictures/160x160/' . $filename);
+                // Image::make($original_imagepath)->resize(160, 160)->save($path);
+
+            // create image for 128x128 size
+                // $path = public_path('profile-pictures/128x128/' . $filename);
+                // Image::make($original_imagepath)->resize(128, 128)->save($path);
+
+            $user = Auth::user();
+            $user->photo = $filename;
+            if( $user->save() )
+                return redirect()->back()->withFlash_message([
+                    "msg" => "Your profile picture has been updated.", 
+                    "type" => "success"
+                ]);
+            
+            return redirect()->back()->withFlash_message([
+                "msg" => "Sorry, we can't process your request right now. Please try again later.",
+                "type" => "danger"
+            ]);
+        }
     }
 
     /**

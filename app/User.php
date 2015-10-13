@@ -24,7 +24,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    // protected $fillable = ['name', 'email', 'password'];
+    protected $guarded = ['id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -39,12 +40,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     /**
      * Get the payments done by patients associated or assisted by specific user
-     *
+     * Note: users are either Admin or Delivery Man
      */
     public function payments(){
         return $this->hasMany('ECEPharmacyTree\Payment');
     }
 
+    /**
+     * Check whether the user is Admin
+     */
     public function isAdmin(){
         if( $this->access_level == "1" )
             return true;
