@@ -22,7 +22,7 @@ class InventoryController extends Controller
     public function index()
     {
 
-        $inventories = Inventory::all();
+        $inventories = Inventory::where('quantity', '>', '0')->get();
         $products = Product::all();
         return view('admin.inventories')->withInventories($inventories)
             ->withProducts($products)->withTitle('Manage Inventory');

@@ -1,10 +1,11 @@
 @extends('auth._partials.template')
 
+@section('title', 'Login');
 @section('content')
   <body class="login-page">
     <div class="login-box">
       <div class="login-logo">
-        <a href="../../index2.html"><b>ECE </b>Pharmacy Tree</a>
+        <a href="{{ url('/') }}"><b>ECE </b>Pharmacy Tree</a>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>

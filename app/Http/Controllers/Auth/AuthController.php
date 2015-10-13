@@ -54,7 +54,7 @@ class AuthController extends Controller
             'fname' => 'required|max:255|min:3',
             'lname' => 'required|max:255|min:3',
             'email' => 'required|email|max:255|unique:users',
-            'password'         => 'required',
+            'password'         => 'required|min:6',
             'password_confirmation' => 'required|same:password',
             'branch_id' => 'required',
             'access_level' => 'required'
@@ -73,6 +73,7 @@ class AuthController extends Controller
     {
         return User::create([
             'fname' => $data['fname'],
+            'mname' => $data['mname'],
             'lname' => $data['lname'],
             'email' => $data['email'],
             'access_level' => $data['access_level'],

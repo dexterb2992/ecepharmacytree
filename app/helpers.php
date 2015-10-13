@@ -188,10 +188,14 @@ function get_recent_settings(){
 }
 
 function check_for_critical_stock(){
-	$settings = ECEPharmacyTree\Setting::first();
+	try {
+		$settings = ECEPharmacyTree\Setting::first();
 
-	$critical_stock_products = ECEPharmacyTree\Inventory::where("quantity", "<=", $settings->critical_stock)->get();
-	return $critical_stock_products;
+		$critical_stock_products = ECEPharmacyTree\Inventory::where("quantity", "<=", $settings->critical_stock)->get();
+		return $critical_stock_products;
+	} catch (Exception $e) {
+		
+	}
 }
 
 function get_branch_full_address($branch){
@@ -214,6 +218,15 @@ function get_branch_full_address($branch){
     return $address;
 }
 
-function _error($msg){
-	return '<div class="label label-danger">'.$msg.'</div>';
+function _error($msg, $alert_type = 'label'){
+	return '<div class="'.$alert_type.' '.$alert_type.'-danger">'.$msg.'</div>';
+}
+
+function validate_reminder_token($token){
+	$res = DB::table('password_resets')->where('token', '=', $token)
+		->where('created_at','>', Carbon\Carbon::now()->subHours( (config("auth.password.expire"))/60 ))->first();
+
+	if( empty($res)  || $res === null)
+		return false;
+	return $res->email;
 }

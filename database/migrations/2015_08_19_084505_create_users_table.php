@@ -17,11 +17,12 @@ class CreateUsersTable extends Migration
             $table->string('fname');
             $table->string('mname')->nullable();
             $table->string('lname');
-            $table->string('email')->unique()->nullable();
+            $table->string('email')->unique();
             $table->text('password');
             $table->integer('branch_id')->unsigned();
-            $table->foreign('branch_id')->references('id')->on('branches');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->integer('access_level')->default(2);
+            $table->string('photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

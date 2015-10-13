@@ -1,3 +1,5 @@
+/*! fn.ece.js | (c) 2015 ECE Marketing */
+
 var customAlertResponse = false;
 
 /**
@@ -14,8 +16,9 @@ function randomString(length){
 }
 
 /**
- * type = info, success, warning, danger
- * alertType = prompt, confirm, alert
+ * type = info, success, warning, danger (modal's background color varies depending on the value of this parameter)
+ * alertType = prompt, confirm, alert, notify (some buttons will show depending on this parameter)
+ * Note: when alertType = notify, the OK button will just hide the modal, no further functions will be executed
  */
 function showAlert(title, msg, type, alertType){
 	var icon = "", alert = "", buttons = "";
@@ -30,7 +33,13 @@ function showAlert(title, msg, type, alertType){
 	            	'<input type="text" class="form-control input-custom-alert">'+
            		'</div>';
 	}else if( alertType == "alert" ){
+
 		buttons = '<button class="btn btn-outline btn-custom-alert" data-value="true">OK</button>';
+
+	}else if( alertType == "notify" ){
+
+		buttons = '<button class="btn btn-outline btn-custom-alert" data-value="false" data-dismiss="modal">OK</button>';
+
 	}
 
 	switch(type){
@@ -76,6 +85,7 @@ function updateInventoryProductQty(){
 
     $("#total_quantity_in_unit").html( totalQty+" "+unit+" ( "+qty+" "+packing+" )" );
     $(".add-on-product-packing").html(packing);
+    $("#outer_packing").html(packing);
 }
 
 
@@ -95,4 +105,54 @@ function allowNumericOnly(element){
 	        e.preventDefault();
 	    }
 	});
+}
+
+function readURL(input, target) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            target.attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function _clear_form_errors(form){
+	form.find(".label-danger").html("");
+}
+
+function _clear_form_data(form){
+	form.find('input').not('input[name="_token"]').val("");
+	form.find('textarea').not('input[name="_token"]').val("");
+}
+
+function _error(element, error_msg){
+	if( element.next('.label-danger').length ){
+		element.next('.label-danger').html(error_msg);
+	}else{
+		element.after('<div class="label label-danger">'+error_msg+'</label>');
+	}
+}
+
+function formfinder(form, name, fieldType){
+	if(fieldType !== "textarea")
+		return form.find(fieldType+'[name="'+name+'"]').val();
+
+	return form.find(fieldType+'[name="'+name+'"]').html();
+}
+
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
+function limitStr(filename, max){
+	if( filename.length <= max )
+		return filename;
+	return filename.substring(0, 35)+"...";
 }

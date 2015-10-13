@@ -14,10 +14,10 @@ class UserTableSeeder extends Seeder
 
     	$user = new User;
     	$user->id = 1;
-    	$user->fname = "Dexter";
-    	$user->mname = "Mangubat";
-    	$user->lname = "Bengil";
-    	$user->email = "info@dexterbengil.com";
+    	$user->fname = "John";
+    	$user->mname = "Smith";
+    	$user->lname = "Doe";
+    	$user->email = "johndoe@example.com";
     	$user->password = bcrypt("admin");
     	$user->branch_id = 1;
     	$user->access_level = 1;   /** 

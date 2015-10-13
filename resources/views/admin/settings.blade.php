@@ -54,7 +54,7 @@
 						</div>
 
 						<div class="form-group">
-							<label>Default Safety Stock </label>
+							<label>Default Safety Stock <small><i>(This will automatically be used as a safety stock number to any product whose safety stock is not specified.)</i></small></label>
 							<input class="number form-control" type="text" name="safety_stock" title="This will automatically be used as a safety stock number to any product whose safety stock is not specified." 
 								value="{{ $settings->safety_stock }}" />
 						</div>
@@ -87,7 +87,7 @@
 
 
 						<div class="form-group">
-							<button class="btn btn-primary pull-right" type="submit">Save Changes</button>
+							<button class="btn btn-flat btn-primary pull-right" type="submit">Save Changes</button>
 						</div>
 							
 					</div>

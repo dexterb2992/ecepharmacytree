@@ -2,10 +2,10 @@
 <html>
   <head>
     <meta charset="UTF-8">
-     <title>ECE Pharmacy Tree - <?php echo isset($title) ? $title : ''?> | @yield('title') </title>
+     <title>ECEPharmacyTree - <?php echo isset($title) ? $title : ''?> | @yield('title') </title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
+    <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
     
     @include('includes._styles')
 
@@ -39,7 +39,7 @@
           <!-- Main content -->
           <section class="content">
             @if(Session::has("flash_message"))
-              <div class="alert-{{ Session::get('flash_message')['type'] }} alert">
+              <div class="alert-success alert alert-{{ Session::get('flash_message')['type'] }} alert">
                 @if(Session::get('flash_message')["type"] == "important")
                   <button class="close" data-dismiss="alert" aria-hidden="true" type="button">&times;</button>
                 @endif

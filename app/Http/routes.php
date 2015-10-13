@@ -15,6 +15,15 @@ View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 View::share('critical_stocks', check_for_critical_stock());
 View::share('branches', ECEPharmacyTree\Branch::all());
 
+Route::get("try", 'UserController@update_password');
+
+Route::controllers([
+	'auth' => 'Auth\AuthController',
+	'password' => 'Auth\PasswordController'
+]);
+
+Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
+Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
 
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => function () {
 	$recently_added_products = ECEPharmacyTree\Product::latest()->limit(4)->get();
@@ -25,14 +34,8 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::get("try", function (){
-
-});
-
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController'
-]);
+Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@show']);
+Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
 
 Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'auth'], function (){
 	/**
@@ -81,7 +84,7 @@ Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'm
 
 Route::group(['prefix' => 'members', 'as' => 'Members::', 'middleware' => 'auth'], function (){
 	/**
-	 *	Routes for Members/Patients
+	 *	Routes for Members/parents
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'PatientController@index']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'PatientController@show']);
@@ -119,15 +122,18 @@ Route::group(['prefix' => 'doctor-specialties', 'as' => 'DoctorSpecialty::', 'mi
 	Route::post('subspecialties/delete', ['as' => 'remove_doctor_subspecialty', 'uses' => 'SubspecialtyController@destroy']);
 });
 
-Route::get("doctors", ['as' => 'doctors', 'uses' => 'DoctorController@index']);
-Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@show']);
+/** Routes for Doctors and Doctor Specialties
+ * 
+ */
+	Route::get("doctors", ['as' => 'doctors', 'uses' => 'DoctorController@index']);
+	Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@show']);
 
-Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
-Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
+	Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
+	Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
 
-Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
-Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
-Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
+	Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
+	Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
+	Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
 
 Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'admin'], function (){
 	/**
@@ -145,13 +151,13 @@ Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'admin'],
 
 //Routes for Clinics
 
-Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
-Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
+	Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
+	Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
 
-Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
+	Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
 
-Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@edit' ]);
-
+	Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
+	Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
 
 Route::group(['prefix' => 'settings', 'as' => 'Settings::', 'middleware' => 'admin'], function (){
 	/**
@@ -161,15 +167,14 @@ Route::group(['prefix' => 'settings', 'as' => 'Settings::', 'middleware' => 'adm
 	Route::post('referral/update', ['as' => 'update', 'uses' => 'SettingsController@update']);
 });
 
-Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
-Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
+
 
 //Routes for Prescription Approval
-Route::get('prescription-approval/', ['as' => 'prescription_approval', 'uses' => 'PrescriptionApprovalController@index']);
+	Route::get('prescription-approval/', ['as' => 'prescription_approval', 'uses' => 'PrescriptionApprovalController@index']);
 
-Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-disapprove', 'uses' => 'PrescriptionApprovalController@disapprove']);
+	Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-disapprove', 'uses' => 'PrescriptionApprovalController@disapprove']);
 
-Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
+	Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
 
 Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 'auth'], function (){
 	/**

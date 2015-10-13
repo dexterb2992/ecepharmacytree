@@ -41,7 +41,7 @@
 									<td>
 										<?php 
 											$total = $inventory->quantity * $inventory->product->qty_per_packing; 
-											$safety_stock = $inventory->product->safety_stock >= 0 ? $recent_settings->safety_stock : $inventory->product->safety_stock;
+											$safety_stock = $inventory->product->safety_stock <= 0 ? $recent_settings->safety_stock : $inventory->product->safety_stock;
 											// $safety_stock = $inventory->product->safety_stock == "" ? 0 : $inventory->product->safety_stock;
 											$gross_total = $total - $safety_stock;
 										?>

@@ -9,7 +9,6 @@
 
       <div class="register-box-body">
         <p class="login-box-msg">Register an account</p>
-        <!-- <form action="{{ url('auth/register') }}" method="post" enctype="multipart/form-data"> -->
         {!! Form::open(['action' => 'Auth\AuthController@postRegister', 'method' => 'post', 'enctype' => "multipart/form-data"]) !!}
           <div class="form-group has-feedback">
             {!! Form::token() !!}
@@ -37,7 +36,7 @@
           </div>
 
           <div class="form-group has-feedback">
-            {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) !!}
+            {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password (minimum of 6 characters)']) !!}
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             {!! _error($errors->first('password')) !!}
           </div>
@@ -50,7 +49,11 @@
 
           <div class="form-group">
             {!! Form::label('Role') !!}
-            {!! Form::select('access_level', ["1" => "Admin", "2" => "Branch Manager"], '1', ["class" => "form-control"]) !!}
+            <select class="form-control" name="access_level">
+              <!-- <option value="1" {{ !Auth::check() ? 'disabled="disabled"' : '' }}>Admin</option> -->
+              <option value="2">Branch Manager</option>
+            </select>
+            {!! _error($errors->first('access_level')) !!}
           </div>
 
           <div class="form-group has-feedback">
@@ -71,7 +74,6 @@
               {!! Form::submit('Register', ['class' => 'btn btn-primary btn-block btn-flat']) !!}
             </div><!-- /.col -->
           </div>
-        <!-- </form> -->
         {!! Form::close() !!}
 
         <a href="{{ url('/auth/login') }}" class="text-center">I already have an account</a>
