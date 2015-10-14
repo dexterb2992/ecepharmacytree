@@ -16,6 +16,10 @@ use ECEPharmacyTree\Doctor;
 
 class DoctorController extends Controller
 {
+    function __construct() {
+        $this->middleware('admin');
+    }
+
     /**
      * Display a listing of the resource.
      *

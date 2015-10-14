@@ -215,3 +215,37 @@ color: #798c9c;
 .no-margin-left {
     margin-left: 0px;
 }
+
+tr.selected td{
+    color: #003E55;
+    font-weight: bold;
+}
+
+.alert-important {
+    background-color: #00c0ef !important;
+    color: white;
+}
+
+tr.critical-stock, tr.critical-stock td, tr.critical-stock td a, tr.critical-stock td p {
+    
+}
+
+.div-change-user-photo{
+    margin-top: -2px;
+    padding: 4px;
+    padding-left: 0;
+}
+
+.cancel-update-photo {
+    margin-left: 4px;
+}
+
+.cancel-update-photo:hover{
+    color: #dd4b39;
+    cursor: pointer;
+}
+
+#photo_filename {
+    max-width: 281.5px;
+    overflow: hidden;
+}

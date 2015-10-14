@@ -15,8 +15,10 @@ return [
     */
 
     'mailgun' => [
-        'domain' => '',
-        'secret' => '',
+        'domain' => 'sandbox8cb0fea402984f3ba7c9174b5cfd67b5.mailgun.org',
+        'secret' => 'key-fdc84fd7aefbdba498dface332812a29',
+        // 'domain' => 'irishbusiness.ie',
+        // 'secret' => 'key-4-n-fbbr6zlgdto6fdzzuqiqmjrko9x8',
     ],
 
     'mandrill' => [

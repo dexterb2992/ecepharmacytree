@@ -17,6 +17,14 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label>Points to Peso<small><i> ( How much should be equivalent to 1 Point? )</small></i></label>
+							<div class="input-group">
+								<span class="input-group-addon">&#x20B1; </span>
+								<input class="form-control number" type="text" name="points_to_peso" value="{{ $settings->points_to_peso }}" />
+								<span class="input-group-addon"> = 1 Point</span>
+							</div>
+						</div>
+						<div class="form-group">
 							<label>Level limit</label>
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 							<input class="form-control number" type="text" name="level_limit" value="{{ $settings->level_limit }}" />
@@ -46,7 +54,7 @@
 						</div>
 
 						<div class="form-group">
-							<label>Default Safety Stock </label>
+							<label>Default Safety Stock <small><i>(This will automatically be used as a safety stock number to any product whose safety stock is not specified.)</i></small></label>
 							<input class="number form-control" type="text" name="safety_stock" title="This will automatically be used as a safety stock number to any product whose safety stock is not specified." 
 								value="{{ $settings->safety_stock }}" />
 						</div>
@@ -69,9 +77,17 @@
 							</div>
 						</div>
 
+						<div class="form-group">
+							<label>Minimum Amount <small><i>(Minimum amount in &#x20B1; to accept Delivery)</i></small></label>
+							<div class="input-group">
+								<span class="input-group-addon">&#x20B1;</span>
+								<input type="text" name="delivery_minimum" class="number form-control" value="{{ $settings->delivery_minimum }}">
+							</div>
+						</div>
+
 
 						<div class="form-group">
-							<button class="btn btn-primary pull-right" type="submit">Save Changes</button>
+							<button class="btn btn-flat btn-primary pull-right" type="submit">Save Changes</button>
 						</div>
 							
 					</div>

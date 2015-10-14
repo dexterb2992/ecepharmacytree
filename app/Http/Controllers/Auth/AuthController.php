@@ -23,6 +23,8 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
+    protected $redirectTo = "auth/login";
+
     /**
      * Create a new authentication controller instance.
      *
@@ -41,11 +43,24 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
+
+        $messages = [
+            'fname.required' => 'What is your First name?',
+            'lname.required' => 'We need to know your Last name.',
+            'email.required' => 'We need your valid email address.',
+        ];
+
+        $rules = [
+            'fname' => 'required|max:255|min:3',
+            'lname' => 'required|max:255|min:3',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+            'password'         => 'required|min:6',
+            'password_confirmation' => 'required|same:password',
+            'branch_id' => 'required',
+            'access_level' => 'required'
+        ];
+
+        return Validator::make($data, $rules, $messages);
     }
 
     /**
@@ -57,8 +72,12 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'fname' => $data['fname'],
+            'mname' => $data['mname'],
+            'lname' => $data['lname'],
             'email' => $data['email'],
+            'access_level' => $data['access_level'],
+            'branch_id' => $data['branch_id'],
             'password' => bcrypt($data['password']),
         ]);
     }

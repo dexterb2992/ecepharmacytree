@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'postmaster@ecepharmacytree.com', 'name' => "ECEPharmacyTree"],
 
     /*
     |--------------------------------------------------------------------------
@@ -81,6 +81,7 @@ return [
     */
 
     'username' => env('MAIL_USERNAME'),
+    // 'username'  => 'postmaster@irishbusiness.ie',
 
     /*
     |--------------------------------------------------------------------------
@@ -94,6 +95,7 @@ return [
     */
 
     'password' => env('MAIL_PASSWORD'),
+    // 'password' => '167-c6nvwb33',
 
     /*
     |--------------------------------------------------------------------------

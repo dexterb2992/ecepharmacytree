@@ -23,7 +23,7 @@
                     </thead>
                     <tbody>
                         @foreach($members as $member)
-                        <tr data-id="{{ $member->id }}">
+                        <tr data-id="{{ $member->id }}" class="{!! $member->deleted_at != null ? 'warning' : '' !!}">
                             <td>
                                 <span>{{ ucfirst($member->fname) }}</span>
                             </td>
@@ -34,7 +34,7 @@
                             <td>{{ ucfirst($member->address_street).', '.ucfirst($member->address_barangay).', '.ucfirst($member->address_city_municipality) }}</td>
                             <td>{{ $member->email_address }}</td>
                             <td>{{ $member->mobile_no }}</td>
-                            <td>{{ ($member->deleted_at != null ) ? 'blocked' : 'active' }}</td>
+                            <td>{!! ($member->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">
                                  <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $member->id }}" title="">

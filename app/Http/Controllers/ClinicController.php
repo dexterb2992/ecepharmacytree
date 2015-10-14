@@ -13,6 +13,10 @@ use Redirect;
 
 class ClinicController extends Controller
 {
+    function __construct() {
+        $this->middleware('admin');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -60,7 +64,11 @@ class ClinicController extends Controller
         $clinic->address_zip = $input['address_zip'];
 
         if( $clinic->save() )
+            session()->flash('flash_message', ["msg" => "New Clinic has been added successfully.", "type" => "success"]);
             return Redirect::to( route('clinics') );
+        
+        session()->flash('flash_message', ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"]);
+
         return false;
     }
 
@@ -115,7 +123,9 @@ class ClinicController extends Controller
         $clinic->address_zip = $input['address_zip'];
 
         if( $clinic->save() )
+            session()->flash("flash_message", ["msg" => "Clinic information has been updated.", "type" => "info"]);
             return Redirect::to( route('clinics') );
+        session()->flash('flash_message', ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"]);
         return false;
     }
 
@@ -129,8 +139,11 @@ class ClinicController extends Controller
     {
       $clinic = Clinic::findOrFail(Input::get("id"));
       if( $clinic->delete() ){
+        session()->flash("flash_message", ["msg" => "Clinic has deleted successfully.", "type" => "warning"]);
         return json_encode( array("status" => "success") );
     }
+        
+    session()->flash('flash_message', ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"]);
     return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
 }
 }

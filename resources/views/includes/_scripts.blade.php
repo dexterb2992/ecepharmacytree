@@ -69,4 +69,4 @@
 
 <!-- PharmacyTree js -->
 {!! HTML::script('dist/fn.ece.js') !!}
-{!! HTML::script('dist/ece.js') !!}
+<?php include(public_path('dist').'/ece.js.php'); ?>
