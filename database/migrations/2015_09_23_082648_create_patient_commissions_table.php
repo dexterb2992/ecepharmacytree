@@ -14,7 +14,7 @@ class CreatePatientCommissionsTable extends Migration
     {
         Schema::create('patient_commissions', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('patient_id');
+            $table->integer('patient_id')->unsigned();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->double('points');
             $table->timestamps();

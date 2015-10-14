@@ -29,8 +29,11 @@ function showAlert(title, msg, type, alertType){
 	            	'<label>Text</label>'+
 	            	'<input type="text" class="form-control input-custom-alert">'+
            		'</div>';
-	}else if( alertType == "alert" ){
+	} else if( alertType == "alert" ){
 		buttons = '<button class="btn btn-outline btn-custom-alert" data-value="true">OK</button>';
+	} else if( alertType == "mark_as_paid") {
+		buttons = '<button class="btn btn-outline btn-custom-alert" data-value="true">Yes</button>'+
+		'<button class="btn btn-outline btn-custom-alert pull-left" data-value="false" data-dismiss="modal">No</button>';
 	}
 
 	switch(type){

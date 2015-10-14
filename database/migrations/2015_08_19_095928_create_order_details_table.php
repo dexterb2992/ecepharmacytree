@@ -20,6 +20,7 @@ class CreateOrderDetailsTable extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('quantity');
             $table->string('type')->default('delivery'); // pickup or delivery
+            $table->integer('qty_fulfilled')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

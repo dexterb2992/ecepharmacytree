@@ -105,6 +105,8 @@ $(document).ready(function (){
             console.log(img_source); 
             $(modal).modal('show');
             
+        } else if(action == "fulfill_items") {
+
         }else{
             title = "Add new "+dataTitle;
             
@@ -134,11 +136,13 @@ $(document).ready(function (){
         var id = $this.data("id"), action = $this.data('action'), mainurl = $this.data('urlmain'), dataTitle = $this.data('title');
         if( action == "deactivate" ){
             alertType = "warning";
+            type="confirm";
             msg = "Are you sure you want to deactivate this "+dataTitle+"?";
             title = "Warning!";
             url = mainurl+"deactivate";
         } else if( action == "remove" ){
             url = mainurl+"deactivate";
+            type="confirm";
             alertType = "danger";
             url = mainurl+"delete";
             msg = "Are you really sure you want to remove this "+dataTitle+"?";
@@ -146,22 +150,31 @@ $(document).ready(function (){
         } else if(action == "unblock") {
             url = mainurl+"unblock";
             alertType = "warning";
+            type = "confirm";
             msg = "Are you really sure you want to unblock this "+dataTitle+"?";
             title = "Confirmation"; 
         } else if( action == "disapprove" ){
             alertType = "danger";
+            type = "confirm";
             msg = "Are you sure you want to disapprove this "+dataTitle+"?";
             title = "Warning!";
             url = mainurl+"disapprove";
         } else if( action == "approve" ){
             alertType = "success";
+            type = "confirm";
             msg = "Are you sure you want to approve this "+dataTitle+"?";
             title = "Warning!";
             url = mainurl+"approve";
+        } else if(action == "mark_as_paid"){
+            alertType = "primary";
+            type="mark_as_paid";
+            msg = "Processed by <b>"+dataTitle+"</b>.<br/> Are you sure you received the payment for this order? ";
+            title = "Mark as paid";
+            url = "mark_as_paid/"+mainurl;
         }
 
         if( action !== "reactivate" ){
-            showAlert("Warning!", msg, alertType, "confirm");
+            showAlert(title, msg, alertType, type);
         }else{
             $.ajax({
                 url : '/branches/deactivate',

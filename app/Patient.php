@@ -28,5 +28,9 @@ class Patient extends Model
     	return $this->hasMany('ECEPharmacyTree\Order');
     }
 
+     public function payments(){
+        return $this->hasMany('ECEPharmacyTree\Order');
+    }
+
     
 }

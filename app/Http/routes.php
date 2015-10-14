@@ -11,7 +11,7 @@
 |
 */
 
-View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 
 Route::get('/', ['as' => 'dashboard', 'uses' => function () {
 	$recently_added_products = ECEPharmacyTree\Product::latest()->limit(4)->get();
@@ -168,4 +168,19 @@ Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::'], function (){
 	 * Routes for Affiliates
 	 */
 	Route::get("/", ["as" => "index", 'uses' => 'AffiliatesController@index']);
+});
+
+Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
+Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
+Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
+Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
+// Route::post('fulfill_orders', function(){
+// 	pre($_POST);
+	
+// });
+
+Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
+
+Route::get('sad', function(){
+        return getenv('DB_HOST') ?: 'production';
 });

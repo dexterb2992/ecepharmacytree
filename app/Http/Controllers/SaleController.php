@@ -2,31 +2,14 @@
 
 namespace ECEPharmacyTree\Http\Controllers;
 
-use Request;
+use Illuminate\Http\Request;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
-use ECEPharmacyTree\Billing;
+use EcePharmacyTree\Payment;
 
-class BillingController extends Controller
+class SaleController extends Controller
 {
-
-     /**
-     * Mark Order as Paid
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    function mark_order_as_paid($id){
-        $billing = Billing::where('order_id', $id)->first();
-        $billing->payment_status = "paid";
-
-        if( $billing->save() ){
-           return json_encode( array("status" => "success") );
-       }
-       return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
-   }
-
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +17,9 @@ class BillingController extends Controller
      */
     public function index()
     {
-        //
+        $sales = Payment::all();
+
+        return view('admin.sales')->withSales($sales);
     }
 
     /**

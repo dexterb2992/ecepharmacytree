@@ -18,6 +18,8 @@ class CreateBillingsTable extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->double('gross_total');
             $table->double('total');
+            $table->string('payment_status')->default('pending');
+            $table->string('payment_method');
             $table->timestamps();
             $table->softDeletes();
         });

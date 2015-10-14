@@ -10,10 +10,10 @@ class OrderDetail extends Model
     protected $softDelete = true;
 
     public function order(){
-    	return $this->belongsTo('ECEPharmacyTree\Order');
+    	return $this->belongsTo('ECEPharmacyTree\Order', 'order_id');
     }
 
     public function product(){
-    	return $this->hasOne('ECEPharmacyTree\Product');
+    	return $this->belongsTo('ECEPharmacyTree\Product', 'product_id');
     }
 }

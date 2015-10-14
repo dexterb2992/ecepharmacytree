@@ -25,7 +25,7 @@ function get_ph_regions(){
 		'Cordillera Administrative Region (CAR)',
 		'Autonomouse Region in Muslim Mindanao (ARMM)',
 		'Negros Island Region (Region XVIII)'
-	);
+		);
 }
 
 /**
@@ -35,19 +35,19 @@ function get_ph_regions(){
  *			2 = letters only
  */
 function generateRandomString($length = 10, $is_number = 0) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if( $is_number  == 1) {
-    	$characters = '0123456789';
-    }else if( $is_number == 2 ){
-    	$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    }
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	if( $is_number  == 1) {
+		$characters = '0123456789';
+	}else if( $is_number == 2 ){
+		$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	}
 
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
+	$charactersLength = strlen($characters);
+	$randomString = '';
+	for ($i = 0; $i < $length; $i++) {
+		$randomString .= $characters[rand(0, $charactersLength - 1)];
+	}
+	return $randomString;
 }
 
 function generateSku(){
@@ -102,38 +102,42 @@ function get_str_plural($str){
 
 function str_auto_plural($str, $quantity){
 	$pos = strpos($str, "(");
-	$suf = "";
+		$suf = "";
 
-	if( $pos !== false ){
-		$str = trim( substr($str, 0, $pos) );
-		$suf = trim( substr($str, $pos) );
+		if( $pos !== false ){
+			$str = trim( substr($str, 0, $pos) );
+			$suf = trim( substr($str, $pos) );
+		}
+
+		if( $quantity > 1 )	
+			return str_plural($str)." ".$suf;
+
+		return str_singular($str)." ".$suf;
 	}
 
-	if( $quantity > 1 )	
-		return str_plural($str)." ".$suf;
+	function rn2br($str){
+		$newLineArray = array('\r\n','\n\r','\n','\r');
+		return str_replace($newLineArray,'<br/>', nl2br($str));
+	}
 
-	return str_singular($str)." ".$suf;
-}
+	function safety_stock(){
+		$p = Product::all();
+		return $p->toJson();
+	}
 
-function rn2br($str){
-	$newLineArray = array('\r\n','\n\r','\n','\r');
-	return str_replace($newLineArray,'<br/>', nl2br($str));
-}
+	function get_patient_fullname($patient){
+		return ucfirst($patient->fname)." ".ucfirst($patient->lname);
+	}
 
-function safety_stock(){
-	$p = Product::all();
-	return $p->toJson();
-}
+	function get_patient_full_address($patient){
+		return ucfirst($patient->address_street).', '.ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
+	}
 
-function get_patient_fullname($patient){
-	return ucfirst($patient->fname)." ".ucfirst($patient->lname);
-}
+	function get_patient_referrals($patient){
+		return $count = ECEPharmacyTree\Patient::where('referred_by', '=', $patient->referral_id)->count();
+	}
 
-function get_patient_referrals($patient){
-	return $count = ECEPharmacyTree\Patient::where('referred_by', '=', $patient->referral_id)->count();
-}
-
-function get_downlines($referral_id){
+	function get_downlines($referral_id){
 
 	$users = ECEPharmacyTree\Patient::where('referred_by', '=', $referral_id)->get()->toArray(); // Primary Level
 	return $users;
@@ -145,11 +149,11 @@ function get_all_downlines($referral_id){
 
 	$downlines = array();
 	$downlines = $patients;
-		
+
 	foreach($patients as $key => $patient){
 		
 		$child_downlines = get_all_downlines( $patient["referral_id"] );
-			
+
 		$downlines[$key]["downlines"] = $child_downlines;
 
 	}
@@ -168,7 +172,7 @@ function extract_downlines($downlines = array()){
 		}
 
 		$res.= '</li>';
-			
+
 	}
 
 	return $res;
@@ -177,10 +181,24 @@ function extract_downlines($downlines = array()){
 function get_recent_settings(){
 	$con = mysqli_connect("localhost", "root", "", "ece_pharmacy_tree");
 
-    $sql = "SELECT * FROM settings LIMIT 1";
-    $res = mysqli_query($con, $sql);
-    if( mysqli_num_rows($res) > 0 ){
-        $row = mysqli_fetch_object($res);
-    }
-    return $row;
+	$sql = "SELECT * FROM settings LIMIT 1";
+	$res = mysqli_query($con, $sql);
+	if( mysqli_num_rows($res) > 0 ){
+		$row = mysqli_fetch_object($res);
+	}
+	return $row;
+}
+
+function check_if_not_fulfilled($order){
+	if($order->order_details()->count() == $order->order_details()->whereRaw('qty_fulfilled = 0')->count())
+		return true;
+
+	return false;
+}
+
+function check_if_partially_fulfilled($order){
+	if($order->order_details()->whereRaw('quantity != qty_fulfilled')->count() > 0)
+		return true;
+
+	return false;
 }
