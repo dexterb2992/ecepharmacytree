@@ -3,7 +3,6 @@
 namespace PayPal\Api;
 
 use PayPal\Common\PayPalModel;
-use PayPal\Rest\ApiContext;
 
 /**
  * Class PaymentExecution
@@ -12,17 +11,17 @@ use PayPal\Rest\ApiContext;
  *
  * @package PayPal\Api
  *
- * @property string payer_id
- * @property \PayPal\Api\Transactions transactions
+ * @property string                    payer_id
+ * @property string                    carrier_account_id
+ * @property \PayPal\Api\Transaction[] transactions
  */
 class PaymentExecution extends PayPalModel
 {
     /**
-     * PayPal assigned Payer ID returned in the approval return url.
-     * 
+     * The ID of the Payer, passed in the `return_url` by PayPal.
      *
      * @param string $payer_id
-     * 
+     *
      * @return $this
      */
     public function setPayerId($payer_id)
@@ -32,7 +31,7 @@ class PaymentExecution extends PayPalModel
     }
 
     /**
-     * PayPal assigned Payer ID returned in the approval return url.
+     * The ID of the Payer, passed in the `return_url` by PayPal.
      *
      * @return string
      */
@@ -42,11 +41,33 @@ class PaymentExecution extends PayPalModel
     }
 
     /**
-     * If the amount needs to be updated after obtaining the PayPal Payer info (eg. shipping address), it can be updated using this element.
-     * 
+     * Carrier account id for a carrier billing payment. For a carrier billing payment, payer_id is not applicable.
      *
-     * @param \PayPal\Api\Transactions $transactions
-     * 
+     * @param string $carrier_account_id
+     *
+     * @return $this
+     */
+    public function setCarrierAccountId($carrier_account_id)
+    {
+        $this->carrier_account_id = $carrier_account_id;
+        return $this;
+    }
+
+    /**
+     * Carrier account id for a carrier billing payment. For a carrier billing payment, payer_id is not applicable.
+     *
+     * @return string
+     */
+    public function getCarrierAccountId()
+    {
+        return $this->carrier_account_id;
+    }
+
+    /**
+     * Transactional details including the amount and item details.
+     *
+     * @param \PayPal\Api\Transaction[] $transactions
+     *
      * @return $this
      */
     public function setTransactions($transactions)
@@ -56,13 +77,43 @@ class PaymentExecution extends PayPalModel
     }
 
     /**
-     * If the amount needs to be updated after obtaining the PayPal Payer info (eg. shipping address), it can be updated using this element.
+     * Transactional details including the amount and item details.
      *
-     * @return \PayPal\Api\Transactions[]
+     * @return \PayPal\Api\Transaction[]
      */
     public function getTransactions()
     {
         return $this->transactions;
+    }
+
+    /**
+     * Append Transactions to the list.
+     *
+     * @param \PayPal\Api\Transaction $transaction
+     * @return $this
+     */
+    public function addTransaction($transaction)
+    {
+        if (!$this->getTransactions()) {
+            return $this->setTransactions(array($transaction));
+        } else {
+            return $this->setTransactions(
+                array_merge($this->getTransactions(), array($transaction))
+            );
+        }
+    }
+
+    /**
+     * Remove Transactions from the list.
+     *
+     * @param \PayPal\Api\Transaction $transaction
+     * @return $this
+     */
+    public function removeTransaction($transaction)
+    {
+        return $this->setTransactions(
+            array_diff($this->getTransactions(), array($transaction))
+        );
     }
 
 }

@@ -1,5 +1,41 @@
 PayPal PHP SDK release notes
 ============================
+v1.5.1
+----
+* Fixed a bug #343 in Future Payment
+* Minor Improvements
+* Updates to Sample Docs
+
+v1.5.0
+----
+* Enabled Vault List API
+* Added More Fields to Vault Credit Card Object
+* Minor Fixes
+
+v1.4.0
+----
+* Ability to validate Webhook
+* Fixes to Logging Manager to skip if mode is not set
+* SDK updates and fixes
+
+v1.3.2
+----
+* Minor Fix for Agreement Details
+
+v1.3.1
+----
+* PayPalModel to differentiate between empty objects and array
+* Fixed CURLINFO_HEADER_SIZE miscalculations if Proxy Enabled
+
+v1.3.0
+----
+* Updated Payment APIs
+* Updating ModelAccessValidator to be disabled if not set explicitly
+
+v1.2.1
+----
+* Ability to handle missing accesors for unknown objects in json
+
 v1.2.0
 ----
 * Order API Support

@@ -70,11 +70,6 @@ class PayPalLoggingManager
      */
     public function __construct()
     {
-        // To suppress the warning during the date() invocation in logs, we would default the timezone to GMT.
-        if (!ini_get('date.timezone')) {
-            date_default_timezone_set('GMT');
-        }
-
         $config = PayPalConfigManager::getInstance()->getConfigHashmap();
 
         $this->isLoggingEnabled = (array_key_exists('log.LogEnabled', $config) && $config['log.LogEnabled'] == '1');
@@ -100,7 +95,7 @@ class PayPalLoggingManager
         if ($this->isLoggingEnabled) {
             $config = PayPalConfigManager::getInstance()->getConfigHashmap();
             // Check if logging in live
-            if ($config['mode'] == 'live') {
+            if (array_key_exists('mode', $config) && $config['mode'] == 'live') {
                 // Live should not have logging level above INFO.
                 if ($this->loggingLevel >= PayPalLoggingLevel::INFO) {
                     // If it is at Debug Level, throw an warning in the log.

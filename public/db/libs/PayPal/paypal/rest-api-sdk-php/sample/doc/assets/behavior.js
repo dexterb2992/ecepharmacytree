@@ -30,7 +30,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/CreateBillingAgreementWithCreditCard",
             "title": "CreateBillingAgreementWithCreditCard"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Billing Agreement with Credit Card as Payment Source",
+                "slug": "create-billing-agreement-with-credit-card-as-payment-source"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Agreement",
+                    "slug": "create-agreement"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -48,7 +70,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/CreateBillingAgreementWithPayPal",
             "title": "CreateBillingAgreementWithPayPal"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Billing Agreement with PayPal as Payment Source",
+                "slug": "create-billing-agreement-with-paypal-as-payment-source"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Agreement",
+                    "slug": "create-agreement"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Get redirect url",
+                    "slug": "get-redirect-url"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -66,7 +118,45 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/CreatePlan",
             "title": "CreatePlan"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Plan Sample",
+                "slug": "create-plan-sample"
+              },
+              "depth": 1
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Basic Information",
+                "slug": "basic-information"
+              },
+              "depth": 1
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Payment definitions for this billing plan.",
+                "slug": "payment-definitions-for-this-billing-plan"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Plan",
+                    "slug": "create-plan"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -84,7 +174,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/DeletePlan",
             "title": "DeletePlan"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Delete Plan Sample",
+                "slug": "delete-plan-sample"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -102,7 +203,45 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/ExecuteAgreement",
             "title": "ExecuteAgreement"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Execute Agreement",
+                "slug": "execute-agreement"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Approval Status",
+                    "slug": "approval-status"
+                  },
+                  "depth": 2
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Execute Agreement",
+                    "slug": "execute-agreement"
+                  },
+                  "depth": 2
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Get Agreement",
+                    "slug": "get-agreement"
+                  },
+                  "depth": 2
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -120,7 +259,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/GetBillingAgreement",
             "title": "GetBillingAgreement"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Billing Agreement Sample",
+                "slug": "get-billing-agreement-sample"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -138,7 +288,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/GetPlan",
             "title": "GetPlan"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Plan Sample",
+                "slug": "get-plan-sample"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -156,7 +317,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/ListPlans",
             "title": "ListPlans"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get List of Plan Sample",
+                "slug": "get-list-of-plan-sample"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -174,7 +346,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/ReactivateBillingAgreement",
             "title": "ReactivateBillingAgreement"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Reactivate an agreement",
+                "slug": "reactivate-an-agreement"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -192,7 +375,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/SearchBillingTransactions",
             "title": "SearchBillingTransactions"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Search Billing Transactions Sample",
+                "slug": "search-billing-transactions-sample"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -210,7 +404,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/SuspendBillingAgreement",
             "title": "SuspendBillingAgreement"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Suspend an agreement",
+                "slug": "suspend-an-agreement"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -228,7 +433,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/UpdateBillingAgreement",
             "title": "UpdateBillingAgreement"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Update an agreement",
+                "slug": "update-an-agreement"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -246,7 +462,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/UpdatePlan",
             "title": "UpdatePlan"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Update a plan",
+                "slug": "update-a-plan"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Making Plan Active",
+                    "slug": "making-plan-active"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -264,7 +502,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "billing/UpdatePlanPaymentDefinitions",
             "title": "UpdatePlanPaymentDefinitions"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Update a plan",
+                "slug": "update-a-plan"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Changing Plan Amount",
+                    "slug": "changing-plan-amount"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
@@ -292,7 +552,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/CancelInvoice",
             "title": "CancelInvoice"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Cancel Invoice Sample",
+                "slug": "cancel-invoice-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Cancel Notification Object",
+                    "slug": "cancel-notification-object"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Cancel Invoice",
+                    "slug": "cancel-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -310,7 +600,112 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/CreateInvoice",
             "title": "CreateInvoice"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Invoice Sample",
+                "slug": "create-invoice-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Invoice Info",
+                    "slug": "invoice-info"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Merchant Info",
+                    "slug": "merchant-info"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Address Information",
+                    "slug": "address-information"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Billing Information",
+                    "slug": "billing-information"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Items List",
+                    "slug": "items-list"
+                  },
+                  "depth": 3,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Tax Item",
+                        "slug": "tax-item"
+                      },
+                      "depth": 4
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Tax Item",
+                        "slug": "tax-item"
+                      },
+                      "depth": 4
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Final Discount",
+                        "slug": "final-discount"
+                      },
+                      "depth": 4
+                    }
+                  ]
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Shipping Information",
+                    "slug": "shipping-information"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Logo",
+                    "slug": "logo"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Invoice",
+                    "slug": "create-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -328,7 +723,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/DeleteInvoice",
             "title": "DeleteInvoice"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Delete Invoice Sample",
+                "slug": "delete-invoice-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Delete Invoice",
+                    "slug": "delete-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -346,7 +763,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/GetInvoice",
             "title": "GetInvoice"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Invoice Sample",
+                "slug": "get-invoice-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve Invoice",
+                    "slug": "retrieve-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -364,7 +803,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/ListInvoice",
             "title": "ListInvoice"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "List Invoices Sample",
+                "slug": "list-invoices-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve Invoices",
+                    "slug": "retrieve-invoices"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -382,7 +843,45 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/RecordPayment",
             "title": "RecordPayment"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Record Payment Sample",
+                "slug": "record-payment-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Record Object",
+                    "slug": "record-object"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Record Payment for Invoice",
+                    "slug": "record-payment-for-invoice"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve Invoice",
+                    "slug": "retrieve-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -400,7 +899,45 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/RecordRefund",
             "title": "RecordRefund"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Record Refund Sample",
+                "slug": "record-refund-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Record Object",
+                    "slug": "record-object"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Record Refund for Invoice",
+                    "slug": "record-refund-for-invoice"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve Invoice",
+                    "slug": "retrieve-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -418,7 +955,45 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/RemindInvoice",
             "title": "RemindInvoice"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Remind Invoice Sample",
+                "slug": "remind-invoice-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Notification Object",
+                    "slug": "notification-object"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Remind Invoice",
+                    "slug": "remind-invoice"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve Invoice",
+                    "slug": "retrieve-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -436,7 +1011,45 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/RetrieveQRCode",
             "title": "RetrieveQRCode"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Retrieve QR Code for Invoice Sample",
+                "slug": "retrieve-qr-code-for-invoice-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve QR Code of Sent Invoice",
+                    "slug": "retrieve-qr-code-of-sent-invoice"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Optionally Save to File",
+                    "slug": "optionally-save-to-file"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Show the Image",
+                    "slug": "show-the-image"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -454,7 +1067,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/SearchInvoices",
             "title": "SearchInvoices"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Search Invoices Sample",
+                "slug": "search-invoices-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Search Object",
+                    "slug": "search-object"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Search Invoices",
+                    "slug": "search-invoices"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -472,7 +1115,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/SendInvoice",
             "title": "SendInvoice"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Invoice Sample",
+                "slug": "create-invoice-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Send Invoice",
+                    "slug": "send-invoice"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve Invoice",
+                    "slug": "retrieve-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -490,7 +1163,53 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "invoice/UpdateInvoice",
             "title": "UpdateInvoice"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Update Invoice Sample",
+                "slug": "update-invoice-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Update Invoice",
+                    "slug": "update-invoice"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "NOTE: These are the work-around added to the",
+                    "slug": "note-these-are-the-work-around-added-to-the"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Update Invoice",
+                    "slug": "update-invoice"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve Invoice",
+                    "slug": "retrieve-invoice"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
@@ -518,7 +1237,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "lipp/GenerateAccessTokenFromRefreshToken",
             "title": "GenerateAccessTokenFromRefreshToken"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Obtain Access Token From Refresh Token",
+                "slug": "obtain-access-token-from-refresh-token"
+              },
+              "depth": 3
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -536,7 +1266,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "lipp/GetUserInfo",
             "title": "GetUserInfo"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Obtain Access Token From Refresh Token",
+                "slug": "obtain-access-token-from-refresh-token"
+              },
+              "depth": 3
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -554,7 +1295,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "lipp/ObtainUserConsent",
             "title": "ObtainUserConsent"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Get User Consent URL",
+                "slug": "get-user-consent-url"
+              },
+              "depth": 3
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -572,7 +1324,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "lipp/UserConsentRedirect",
             "title": "UserConsentRedirect"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "User Consent Response",
+                "slug": "user-consent-response"
+              },
+              "depth": 3
+            }
+          ]
         }
       ]
     }, {
@@ -594,13 +1357,113 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "PHP"
             },
+            "sourcePath": "/Users/japatel/Documents/workspace/paypal/PayPal-PHP-SDK/sample/notifications/CreateWebhook.php",
+            "projectPath": "notifications/CreateWebhook.php",
+            "targetPath": "notifications/CreateWebhook",
+            "pageTitle": "notifications/CreateWebhook",
+            "title": "CreateWebhook"
+          },
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Webhook Sample",
+                "slug": "create-webhook-sample"
+              },
+              "depth": 1
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Basic Information",
+                "slug": "basic-information"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 4,
+                    "title": "NOTE: Please note that you need an https url for paypal webhooks. You can however override the url with https, and accept",
+                    "slug": "note-please-note-that-you-need-an-https-url-for-paypal-webhooks-you-can-however-override-the-url-with-https-and-accept"
+                  },
+                  "depth": 4
+                }
+              ]
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Event Types",
+                "slug": "event-types"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Webhook",
+                    "slug": "create-webhook"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [{}, ".fbp"],
+              "pygmentsLexer": "php",
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "PHP"
+            },
             "sourcePath": "/Users/japatel/Documents/workspace/paypal/PayPal-PHP-SDK/sample/notifications/DeleteAllWebhooks.php",
             "projectPath": "notifications/DeleteAllWebhooks.php",
             "targetPath": "notifications/DeleteAllWebhooks",
             "pageTitle": "notifications/DeleteAllWebhooks",
             "title": "DeleteAllWebhooks"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Delete All Webhook Sample",
+                "slug": "delete-all-webhook-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Get Webhook Instance",
+                    "slug": "get-webhook-instance"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Delete Webhook",
+                        "slug": "delete-webhook"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -618,7 +1481,40 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "notifications/DeleteWebhook",
             "title": "DeleteWebhook"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Delete Webhook Sample",
+                "slug": "delete-webhook-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Get Webhook Instance",
+                    "slug": "get-webhook-instance"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Delete Webhook",
+                        "slug": "delete-webhook"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -636,7 +1532,40 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "notifications/GetWebhook",
             "title": "GetWebhook"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Webhook Sample",
+                "slug": "get-webhook-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Get Webhook ID.",
+                    "slug": "get-webhook-id"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Get Webhook",
+                        "slug": "get-webhook"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -654,7 +1583,40 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "notifications/ListSubscribedWebhookEventTypes",
             "title": "ListSubscribedWebhookEventTypes"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Webhook Sample",
+                "slug": "get-webhook-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "List Subscribed Event Types",
+                    "slug": "list-subscribed-event-types"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Get List of Subscribed Event Types",
+                        "slug": "get-list-of-subscribed-event-types"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -672,7 +1634,40 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "notifications/ListWebhooks",
             "title": "ListWebhooks"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get All Webhooks Sample",
+                "slug": "get-all-webhooks-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "List Webhooks",
+                    "slug": "list-webhooks"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Get List of All Webhooks",
+                        "slug": "get-list-of-all-webhooks"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -690,7 +1685,48 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "notifications/SearchWebhookEvents",
             "title": "SearchWebhookEvents"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Search Webhook Events Sample",
+                "slug": "search-webhook-events-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Get Webhook Instance",
+                    "slug": "get-webhook-instance"
+                  },
+                  "depth": 2
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "PLEASE NOTE:",
+                    "slug": "please-note"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Search Webhook events",
+                        "slug": "search-webhook-events"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -708,7 +1744,91 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "notifications/UpdateWebhook",
             "title": "UpdateWebhook"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Update Webhook Sample",
+                "slug": "update-webhook-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Get Webhook ID.",
+                    "slug": "get-webhook-id"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Get Webhook",
+                        "slug": "get-webhook"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [{}, ".fbp"],
+              "pygmentsLexer": "php",
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "PHP"
+            },
+            "sourcePath": "/Users/japatel/Documents/workspace/paypal/PayPal-PHP-SDK/sample/notifications/ValidateWebhookEvent.php",
+            "projectPath": "notifications/ValidateWebhookEvent.php",
+            "targetPath": "notifications/ValidateWebhookEvent",
+            "pageTitle": "notifications/ValidateWebhookEvent",
+            "title": "ValidateWebhookEvent"
+          },
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Validate Webhook",
+                "slug": "validate-webhook"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Received Body from Webhook",
+                    "slug": "received-body-from-webhook"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Validate Received Event Method",
+                        "slug": "validate-received-event-method"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -726,25 +1846,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "notifications/WebhookEventTypesList",
             "title": "WebhookEventTypesList"
           },
-          "depth": 2
-        }, {
-          "type": "file",
-          "data": {
-            "language": {
-              "nameMatchers": [{}, ".fbp"],
-              "pygmentsLexer": "php",
-              "singleLineComment": ["//"],
-              "ignorePrefix": "}",
-              "foldPrefix": "^",
-              "name": "PHP"
-            },
-            "sourcePath": "/Users/japatel/Documents/workspace/paypal/PayPal-PHP-SDK/sample/notifications/createWebhook.php",
-            "projectPath": "notifications/createWebhook.php",
-            "targetPath": "notifications/createWebhook",
-            "pageTitle": "notifications/createWebhook",
-            "title": "createWebhook"
-          },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Reference List of all Webhook Event Types",
+                "slug": "get-reference-list-of-all-webhook-event-types"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Get List of all Webhook event types",
+                    "slug": "get-list-of-all-webhook-event-types"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
@@ -772,7 +1896,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payment-experience/CreateWebProfile",
             "title": "CreateWebProfile"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Create Web Profile",
+                "slug": "create-web-profile"
+              },
+              "depth": 3,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 4,
+                    "title": "Payment Web experience profile resource",
+                    "slug": "payment-web-experience-profile-resource"
+                  },
+                  "depth": 4
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -790,7 +1936,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payment-experience/DeleteWebProfile",
             "title": "DeleteWebProfile"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 4,
+                "title": "Delete Web Profile",
+                "slug": "delete-web-profile"
+              },
+              "depth": 4
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -808,7 +1965,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payment-experience/GetWebProfile",
             "title": "GetWebProfile"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Get Web Profile",
+                "slug": "get-web-profile"
+              },
+              "depth": 3
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -826,7 +1994,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payment-experience/ListWebProfiles",
             "title": "ListWebProfiles"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Retrieve List of All Web Profiles",
+                "slug": "retrieve-list-of-all-web-profiles"
+              },
+              "depth": 3
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -844,7 +2023,26 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payment-experience/PartiallyUpdateWebProfile",
             "title": "PartiallyUpdateWebProfile"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 4,
+                "title": "Partially Update Web Profile",
+                "slug": "partially-update-web-profile"
+              },
+              "depth": 4
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Create Patch Operation",
+                "slug": "create-patch-operation"
+              },
+              "depth": 3
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -862,7 +2060,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payment-experience/UpdateWebProfile",
             "title": "UpdateWebProfile"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 4,
+                "title": "Update Web Profile",
+                "slug": "update-web-profile"
+              },
+              "depth": 4
+            }
+          ]
         }
       ]
     }, {
@@ -890,7 +2099,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/AuthorizationCapture",
             "title": "AuthorizationCapture"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "AuthorizationCapture",
+                "slug": "authorizationcapture"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Capture Payment",
+                    "slug": "capture-payment"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -908,7 +2139,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/AuthorizePayment",
             "title": "AuthorizePayment"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Authorize Payment",
+                "slug": "authorize-payment"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Payment",
+                    "slug": "create-payment"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -926,7 +2179,93 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/AuthorizePaymentUsingPayPal",
             "title": "AuthorizePaymentUsingPayPal"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Authorize Payment using PayPal as payment method",
+                "slug": "authorize-payment-using-paypal-as-payment-method"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payer",
+                    "slug": "payer"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Itemized information",
+                    "slug": "itemized-information"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Additional payment details",
+                    "slug": "additional-payment-details"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Amount",
+                    "slug": "amount"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Transaction",
+                    "slug": "transaction"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Redirect urls",
+                    "slug": "redirect-urls"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payment",
+                    "slug": "payment"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Payment",
+                    "slug": "create-payment"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Get redirect url",
+                    "slug": "get-redirect-url"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -944,7 +2283,77 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/CreateFuturePayment",
             "title": "CreateFuturePayment"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Payment using PayPal as payment method",
+                "slug": "create-payment-using-paypal-as-payment-method"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payer",
+                    "slug": "payer"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Amount",
+                    "slug": "amount"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Transaction",
+                    "slug": "transaction"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Redirect urls",
+                    "slug": "redirect-urls"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payment",
+                    "slug": "payment"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Get Refresh Token",
+                    "slug": "get-refresh-token"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Future Payment",
+                    "slug": "create-future-payment"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -962,7 +2371,93 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/CreatePayment",
             "title": "CreatePayment"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "CreatePaymentSample",
+                "slug": "createpaymentsample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "CreditCard",
+                    "slug": "creditcard"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "FundingInstrument",
+                    "slug": "fundinginstrument"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payer",
+                    "slug": "payer"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Itemized information",
+                    "slug": "itemized-information"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Additional payment details",
+                    "slug": "additional-payment-details"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Amount",
+                    "slug": "amount"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Transaction",
+                    "slug": "transaction"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payment",
+                    "slug": "payment"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Payment",
+                    "slug": "create-payment"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -980,7 +2475,93 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/CreatePaymentUsingPayPal",
             "title": "CreatePaymentUsingPayPal"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Payment using PayPal as payment method",
+                "slug": "create-payment-using-paypal-as-payment-method"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payer",
+                    "slug": "payer"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Itemized information",
+                    "slug": "itemized-information"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Additional payment details",
+                    "slug": "additional-payment-details"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Amount",
+                    "slug": "amount"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Transaction",
+                    "slug": "transaction"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Redirect urls",
+                    "slug": "redirect-urls"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payment",
+                    "slug": "payment"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Payment",
+                    "slug": "create-payment"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Get redirect url",
+                    "slug": "get-redirect-url"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -998,7 +2579,93 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/CreatePaymentUsingSavedCard",
             "title": "CreatePaymentUsingSavedCard"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create payment using a saved credit card",
+                "slug": "create-payment-using-a-saved-credit-card"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Credit card token",
+                    "slug": "credit-card-token"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "FundingInstrument",
+                    "slug": "fundinginstrument"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payer",
+                    "slug": "payer"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Itemized information",
+                    "slug": "itemized-information"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Additional payment details",
+                    "slug": "additional-payment-details"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Amount",
+                    "slug": "amount"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Transaction",
+                    "slug": "transaction"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Payment",
+                    "slug": "payment"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Payment",
+                    "slug": "create-payment"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1043,6 +2710,14 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                     "slug": "payment-execute"
                   },
                   "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Optional Changes to Amount",
+                    "slug": "optional-changes-to-amount"
+                  },
+                  "depth": 3
                 }
               ]
             }
@@ -1064,7 +2739,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/GetAuthorization",
             "title": "GetAuthorization"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "GetAuthorization",
+                "slug": "getauthorization"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "GetAuthorization",
+                    "slug": "getauthorization"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1082,7 +2779,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/GetCapture",
             "title": "GetCapture"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "GetCapture",
+                "slug": "getcapture"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve Capture details",
+                    "slug": "retrieve-capture-details"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1100,7 +2819,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/GetPayment",
             "title": "GetPayment"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "GetPaymentSample",
+                "slug": "getpaymentsample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve payment",
+                    "slug": "retrieve-payment"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1118,7 +2859,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/ListPayments",
             "title": "ListPayments"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "GetPaymentList",
+                "slug": "getpaymentlist"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve payment",
+                    "slug": "retrieve-payment"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1776,7 +3539,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/Reauthorization",
             "title": "Reauthorization"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Reauthorization Sample",
+                "slug": "reauthorization-sample"
+              },
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Reauthorization",
+                    "slug": "reauthorization"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Reauthorize with amount being reauthorized",
+                    "slug": "reauthorize-with-amount-being-reauthorized"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1794,7 +3587,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/RefundCapture",
             "title": "RefundCapture"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Refund Capture Sample",
+                "slug": "refund-capture-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Refund",
+                    "slug": "refund"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1812,7 +3627,64 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/UpdatePayment",
             "title": "UpdatePayment"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Update Payment Sample",
+                "slug": "update-payment-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "NOTE",
+                    "slug": "note"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Create a Patch Request",
+                        "slug": "create-a-patch-request"
+                      },
+                      "depth": 4
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Update payment",
+                        "slug": "update-payment"
+                      },
+                      "depth": 3
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Getting Updated Payment Object",
+                        "slug": "getting-updated-payment-object"
+                      },
+                      "depth": 3
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Get redirect url",
+                        "slug": "get-redirect-url"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1830,7 +3702,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payments/VoidAuthorization",
             "title": "VoidAuthorization"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "VoidAuthorization",
+                "slug": "voidauthorization"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "VoidAuthorization",
+                    "slug": "voidauthorization"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
@@ -1858,7 +3752,40 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payouts/CancelPayoutItem",
             "title": "CancelPayoutItem"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Cancel Payout Item Status Sample",
+                "slug": "cancel-payout-item-status-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Payout Item ID",
+                    "slug": "payout-item-id"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Cancel Payout Item",
+                        "slug": "cancel-payout-item"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1876,7 +3803,72 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payouts/CreateBatchPayout",
             "title": "CreateBatchPayout"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Bulk Payout Sample",
+                "slug": "create-bulk-payout-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "NOTE:",
+                    "slug": "note"
+                  },
+                  "depth": 3,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Batch Header Instance",
+                        "slug": "batch-header-instance"
+                      },
+                      "depth": 4
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Sender Item",
+                        "slug": "sender-item"
+                      },
+                      "depth": 4
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Sender Item 2",
+                        "slug": "sender-item-2"
+                      },
+                      "depth": 4
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Sender Item 3",
+                        "slug": "sender-item-3"
+                      },
+                      "depth": 4
+                    }
+                  ]
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Payout",
+                    "slug": "create-payout"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1894,7 +3886,56 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payouts/CreateSinglePayout",
             "title": "CreateSinglePayout"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Single Synchronous Payout Sample",
+                "slug": "create-single-synchronous-payout-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "NOTE:",
+                    "slug": "note"
+                  },
+                  "depth": 3,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Batch Header Instance",
+                        "slug": "batch-header-instance"
+                      },
+                      "depth": 4
+                    }, {
+                      "type": "heading",
+                      "data": {
+                        "level": 4,
+                        "title": "Sender Item",
+                        "slug": "sender-item"
+                      },
+                      "depth": 4
+                    }
+                  ]
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Create Payout",
+                    "slug": "create-payout"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1912,7 +3953,40 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payouts/GetPayoutBatchStatus",
             "title": "GetPayoutBatchStatus"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Payout Batch Status Sample",
+                "slug": "get-payout-batch-status-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Payout Batch ID",
+                    "slug": "payout-batch-id"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Get Payout Batch Status",
+                        "slug": "get-payout-batch-status"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1930,7 +4004,40 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "payouts/GetPayoutItemStatus",
             "title": "GetPayoutItemStatus"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Payout Item Status Sample",
+                "slug": "get-payout-item-status-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 2,
+                    "title": "Payout Item ID",
+                    "slug": "payout-item-id"
+                  },
+                  "depth": 2,
+                  "children": [
+                    {
+                      "type": "heading",
+                      "data": {
+                        "level": 3,
+                        "title": "Get Payout Item Status",
+                        "slug": "get-payout-item-status"
+                      },
+                      "depth": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
@@ -1958,7 +4065,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "sale/GetSale",
             "title": "GetSale"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Sale sample",
+                "slug": "get-sale-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Get Sale From Created Payment",
+                    "slug": "get-sale-from-created-payment"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Retrieve the sale object",
+                    "slug": "retrieve-the-sale-object"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -1976,7 +4113,45 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "sale/RefundSale",
             "title": "RefundSale"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Sale Refund Sample",
+                "slug": "sale-refund-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Refund amount",
+                    "slug": "refund-amount"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Refund object",
+                    "slug": "refund-object"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Sale",
+                    "slug": "sale"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
@@ -2004,7 +4179,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "vault/CreateBankAccount",
             "title": "CreateBankAccount"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Bank Account Sample",
+                "slug": "create-bank-account-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Bank Account",
+                    "slug": "bank-account"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Save bank account",
+                    "slug": "save-bank-account"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -2022,7 +4227,45 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "vault/CreateCreditCard",
             "title": "CreateCreditCard"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Create Credit Card Sample",
+                "slug": "create-credit-card-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "CreditCard",
+                    "slug": "creditcard"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Additional Information",
+                    "slug": "additional-information"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Save card",
+                    "slug": "save-card"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -2040,7 +4283,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "vault/DeleteBankAccount",
             "title": "DeleteBankAccount"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Delete Bank Account Sample",
+                "slug": "delete-bank-account-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Delete Card",
+                    "slug": "delete-card"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -2058,7 +4323,29 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "vault/DeleteCreditCard",
             "title": "DeleteCreditCard"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Delete CreditCard Sample",
+                "slug": "delete-creditcard-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Delete Card",
+                    "slug": "delete-card"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -2076,7 +4363,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "vault/GetBankAccount",
             "title": "GetBankAccount"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Bank Account Sample",
+                "slug": "get-bank-account-sample"
+              },
+              "depth": 1
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -2094,7 +4392,58 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "vault/GetCreditCard",
             "title": "GetCreditCard"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Get Credit Card Sample",
+                "slug": "get-credit-card-sample"
+              },
+              "depth": 1
+            }
+          ]
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [{}, ".fbp"],
+              "pygmentsLexer": "php",
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "PHP"
+            },
+            "sourcePath": "/Users/japatel/Documents/workspace/paypal/PayPal-PHP-SDK/sample/vault/ListCreditCards.php",
+            "projectPath": "vault/ListCreditCards.php",
+            "targetPath": "vault/ListCreditCards",
+            "pageTitle": "vault/ListCreditCards",
+            "title": "ListCreditCards"
+          },
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "List Credit Card Sample",
+                "slug": "list-credit-card-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Parameters to Filter",
+                    "slug": "parameters-to-filter"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -2112,7 +4461,37 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "pageTitle": "vault/UpdateCreditCard",
             "title": "UpdateCreditCard"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Update Credit Card Sample",
+                "slug": "update-credit-card-sample"
+              },
+              "depth": 1,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Patch Object",
+                    "slug": "patch-object"
+                  },
+                  "depth": 3
+                }, {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Another Patch Object",
+                    "slug": "another-patch-object"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }
       ]
     }
@@ -2177,15 +4556,15 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
   };
 
   selectNodeByDocumentPath = function(documentPath, headerSlug) {
-    var link, urlChunks, _i, _len, _ref;
+    var j, len, link, ref, urlChunks;
     if (headerSlug == null) {
       headerSlug = null;
     }
     currentNode$ = fileMap[documentPath];
     if (headerSlug) {
-      _ref = currentNode$.find('.outline a');
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        link = _ref[_i];
+      ref = currentNode$.find('.outline a');
+      for (j = 0, len = ref.length; j < len; j++) {
+        link = ref[j];
         urlChunks = $(link).attr('href').split('#');
         if (urlChunks[1] === headerSlug) {
           currentNode$ = $(link).parents('li').first();
@@ -2199,10 +4578,10 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
   };
 
   moveCurrentNode = function(up) {
-    var i, newIndex, node, visibleNodes$, _i, _len;
+    var i, j, len, newIndex, node, visibleNodes$;
     visibleNodes$ = toc$.find('li:visible:not(.filtered)');
     newIndex = 0;
-    for (i = _i = 0, _len = visibleNodes$.length; _i < _len; i = ++_i) {
+    for (i = j = 0, len = visibleNodes$.length; j < len; i = ++j) {
       node = visibleNodes$[i];
       if (node === currentNode$[0]) {
         newIndex = up ? i - 1 : i + 1;
@@ -2239,7 +4618,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
   currentQuery = '';
 
   searchNodes = function(queryString) {
-    var c, filtered, matched, matcher, nodeInfo, p, _i, _j, _k, _len, _len1, _len2, _results;
+    var c, filtered, j, k, l, len, len1, len2, matched, matcher, nodeInfo, p, results;
     queryString = queryString.toLowerCase().replace(/\s+/, '');
     if (queryString === currentQuery) {
       return;
@@ -2249,18 +4628,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       return clearFilter();
     }
     matcher = new RegExp(((function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = queryString.length; _i < _len; _i++) {
-        c = queryString[_i];
-        _results.push(c.replace(/[-[\]{}()*+?.,\\^$|#\s]/, "\\$&"));
+      var j, len, results;
+      results = [];
+      for (j = 0, len = queryString.length; j < len; j++) {
+        c = queryString[j];
+        results.push(c.replace(/[-[\]{}()*+?.,\\^$|#\s]/, "\\$&"));
       }
-      return _results;
+      return results;
     })()).join('.*'));
     matched = [];
     filtered = [];
-    for (_i = 0, _len = searchableNodes.length; _i < _len; _i++) {
-      nodeInfo = searchableNodes[_i];
+    for (j = 0, len = searchableNodes.length; j < len; j++) {
+      nodeInfo = searchableNodes[j];
       if (matcher.test(nodeInfo[0])) {
         matched.push(nodeInfo);
       } else {
@@ -2271,53 +4650,53 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       return clearFilter();
     }
     nav$.addClass('searching');
-    for (_j = 0, _len1 = filtered.length; _j < _len1; _j++) {
-      nodeInfo = filtered[_j];
+    for (k = 0, len1 = filtered.length; k < len1; k++) {
+      nodeInfo = filtered[k];
       nodeInfo[1].removeClass('matched-child');
       nodeInfo[1].addClass('filtered');
       clearHighlight(nodeInfo[2]);
     }
-    _results = [];
-    for (_k = 0, _len2 = matched.length; _k < _len2; _k++) {
-      nodeInfo = matched[_k];
+    results = [];
+    for (l = 0, len2 = matched.length; l < len2; l++) {
+      nodeInfo = matched[l];
       nodeInfo[1].removeClass('filtered matched-child');
       nodeInfo[1].addClass('matched');
       highlightMatch(nodeInfo[2], queryString);
-      _results.push((function() {
-        var _l, _len3, _ref, _results1;
-        _ref = nodeInfo[1].parents('li');
-        _results1 = [];
-        for (_l = 0, _len3 = _ref.length; _l < _len3; _l++) {
-          p = _ref[_l];
-          _results1.push($(p).addClass('matched-child'));
+      results.push((function() {
+        var len3, m, ref, results1;
+        ref = nodeInfo[1].parents('li');
+        results1 = [];
+        for (m = 0, len3 = ref.length; m < len3; m++) {
+          p = ref[m];
+          results1.push($(p).addClass('matched-child'));
         }
-        return _results1;
+        return results1;
       })());
     }
-    return _results;
+    return results;
   };
 
   clearFilter = function() {
-    var nodeInfo, _i, _len, _results;
+    var j, len, nodeInfo, results;
     nav$.removeClass('searching');
     currentQuery = '';
-    _results = [];
-    for (_i = 0, _len = searchableNodes.length; _i < _len; _i++) {
-      nodeInfo = searchableNodes[_i];
+    results = [];
+    for (j = 0, len = searchableNodes.length; j < len; j++) {
+      nodeInfo = searchableNodes[j];
       nodeInfo[1].removeClass('filtered matched-child');
-      _results.push(clearHighlight(nodeInfo[2]));
+      results.push(clearHighlight(nodeInfo[2]));
     }
-    return _results;
+    return results;
   };
 
   highlightMatch = function(text$, queryString) {
-    var char, foundIndex, furthestIndex, lowerText, markedText, nodeText, _i, _len;
+    var char, foundIndex, furthestIndex, j, len, lowerText, markedText, nodeText;
     nodeText = text$.text();
     lowerText = nodeText.toLowerCase();
     markedText = '';
     furthestIndex = 0;
-    for (_i = 0, _len = queryString.length; _i < _len; _i++) {
-      char = queryString[_i];
+    for (j = 0, len = queryString.length; j < len; j++) {
+      char = queryString[j];
       foundIndex = lowerText.indexOf(char, furthestIndex);
       markedText += nodeText.slice(furthestIndex, foundIndex) + ("<em>" + nodeText[foundIndex] + "</em>");
       furthestIndex = foundIndex + 1;
@@ -2332,26 +4711,26 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
   fileMap = {};
 
   buildNav = function(metaInfo) {
-    var node, sourceURL, _i, _len;
+    var j, len, node, sourceURL;
     nav$ = $("<nav>\n  <ul class=\"tools\">\n    <li class=\"toggle\">Table of Contents</li>\n    <li class=\"search\">\n      <input id=\"search\" type=\"search\" autocomplete=\"off\"/>\n    </li>\n  </ul>\n  <ol class=\"toc\"/>\n  </div>\n</nav>").appendTo($('body'));
     toc$ = nav$.find('.toc');
     if (metaInfo.githubURL) {
       if (metaInfo.documentPath === 'index') {
         sourceURL = metaInfo.githubURL;
       } else {
-        sourceURL = "" + metaInfo.githubURL + "/blob/master/" + metaInfo.projectPath;
+        sourceURL = metaInfo.githubURL + "/blob/master/" + metaInfo.projectPath;
       }
       nav$.find('.tools').prepend("<li class=\"github\">\n  <a href=\"" + sourceURL + "\" title=\"View source on GitHub\">\n    View source on GitHub\n  </a>\n</li>");
     }
-    for (_i = 0, _len = tableOfContents.length; _i < _len; _i++) {
-      node = tableOfContents[_i];
+    for (j = 0, len = tableOfContents.length; j < len; j++) {
+      node = tableOfContents[j];
       toc$.append(buildTOCNode(node, metaInfo));
     }
     return nav$;
   };
 
   buildTOCNode = function(node, metaInfo) {
-    var c, children$, clickLabel, discloser, discloser$, label$, node$, _i, _len, _ref, _ref1, _ref2;
+    var c, children$, clickLabel, discloser, discloser$, j, label$, len, node$, ref, ref1, ref2;
     node$ = $("<li class=\"" + node.type + "\"/>");
     discloser = null;
     switch (node.type) {
@@ -2375,11 +4754,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           return false;
         };
     }
-    if (((_ref = node.children) != null ? _ref.length : void 0) > 0) {
+    if (((ref = node.children) != null ? ref.length : void 0) > 0) {
       children$ = $('<ol class="children"/>');
-      _ref1 = node.children;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        c = _ref1[_i];
+      ref1 = node.children;
+      for (j = 0, len = ref1.length; j < len; j++) {
+        c = ref1[j];
         children$.append(buildTOCNode(c, metaInfo));
       }
       node$.append(children$);
@@ -2387,7 +4766,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
     label$ = node$.find('> .label');
     label$.click(clickLabel);
     discloser$ = $('<span class="discloser"/>').prependTo(label$);
-    if (!(((_ref2 = node.children) != null ? _ref2.length : void 0) > 0)) {
+    if (!(((ref2 = node.children) != null ? ref2.length : void 0) > 0)) {
       discloser$.addClass('placeholder');
     }
     discloser = discloser$.get(0);

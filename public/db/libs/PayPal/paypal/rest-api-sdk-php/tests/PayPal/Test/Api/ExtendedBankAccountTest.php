@@ -2,7 +2,6 @@
 
 namespace PayPal\Test\Api;
 
-use PayPal\Common\PayPalModel;
 use PayPal\Api\ExtendedBankAccount;
 
 /**
@@ -14,6 +13,7 @@ class ExtendedBankAccountTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Gets Json String of Object ExtendedBankAccount
+     *
      * @return string
      */
     public static function getJson()
@@ -23,6 +23,7 @@ class ExtendedBankAccountTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Gets Object Instance with Json data filled in
+     *
      * @return ExtendedBankAccount
      */
     public static function getObject()
@@ -33,6 +34,7 @@ class ExtendedBankAccountTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests for Serialization and Deserialization Issues
+     *
      * @return ExtendedBankAccount
      */
     public function testSerializationDeserialization()
@@ -52,5 +54,6 @@ class ExtendedBankAccountTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($obj->getMandateReferenceNumber(), "TestSample");
     }
+
 
 }

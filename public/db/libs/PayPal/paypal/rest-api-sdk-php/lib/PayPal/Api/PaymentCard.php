@@ -11,20 +11,22 @@ use PayPal\Common\PayPalModel;
  *
  * @package PayPal\Api
  *
- * @property string id
- * @property string number
- * @property string type
- * @property int expire_month
- * @property int expire_year
- * @property int start_month
- * @property int start_year
- * @property int cvv2
- * @property string first_name
- * @property string last_name
+ * @property string              id
+ * @property string              number
+ * @property string              type
+ * @property string              expire_month
+ * @property string              expire_year
+ * @property string              start_month
+ * @property string              start_year
+ * @property string              cvv2
+ * @property string              first_name
+ * @property string              last_name
+ * @property string              billing_country
  * @property \PayPal\Api\Address billing_address
- * @property string external_customer_id
- * @property string status
- * @property string valid_until
+ * @property string              external_customer_id
+ * @property string              status
+ * @property string              valid_until
+ * @property string              issue_number
  * @property \PayPal\Api\Links[] links
  */
 class PaymentCard extends PayPalModel
@@ -33,7 +35,7 @@ class PaymentCard extends PayPalModel
      * ID of the credit card being saved for later use.
      *
      * @param string $id
-     * 
+     *
      * @return $this
      */
     public function setId($id)
@@ -56,7 +58,7 @@ class PaymentCard extends PayPalModel
      * Card number.
      *
      * @param string $number
-     * 
+     *
      * @return $this
      */
     public function setNumber($number)
@@ -80,7 +82,7 @@ class PaymentCard extends PayPalModel
      * Valid Values: ["VISA", "AMEX", "SOLO", "JCB", "STAR", "DELTA", "DISCOVER", "SWITCH", "MAESTRO", "CB_NATIONALE", "CONFINOGA", "COFIDIS", "ELECTRON", "CETELEM", "CHINA_UNION_PAY", "MASTERCARD"]
      *
      * @param string $type
-     * 
+     *
      * @return $this
      */
     public function setType($type)
@@ -102,8 +104,8 @@ class PaymentCard extends PayPalModel
     /**
      * 2 digit card expiry month.
      *
-     * @param int $expire_month
-     * 
+     * @param string $expire_month
+     *
      * @return $this
      */
     public function setExpireMonth($expire_month)
@@ -115,7 +117,7 @@ class PaymentCard extends PayPalModel
     /**
      * 2 digit card expiry month.
      *
-     * @return int
+     * @return string
      */
     public function getExpireMonth()
     {
@@ -123,10 +125,10 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * 4 digit card expiry year.
+     * 4 digit card expiry year
      *
-     * @param int $expire_year
-     * 
+     * @param string $expire_year
+     *
      * @return $this
      */
     public function setExpireYear($expire_year)
@@ -136,9 +138,9 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * 4 digit card expiry year.
+     * 4 digit card expiry year
      *
-     * @return int
+     * @return string
      */
     public function getExpireYear()
     {
@@ -146,10 +148,10 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * 2 digit card start month.
+     * 2 digit card start month. Needed for UK Maestro Card.
      *
-     * @param int $start_month
-     * 
+     * @param string $start_month
+     *
      * @return $this
      */
     public function setStartMonth($start_month)
@@ -159,9 +161,9 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * 2 digit card start month.
+     * 2 digit card start month. Needed for UK Maestro Card.
      *
-     * @return int
+     * @return string
      */
     public function getStartMonth()
     {
@@ -169,10 +171,10 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * 4 digit card start year.
+     * 4 digit card start year. Needed for UK Maestro Card.
      *
-     * @param int $start_year
-     * 
+     * @param string $start_year
+     *
      * @return $this
      */
     public function setStartYear($start_year)
@@ -182,9 +184,9 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * 4 digit card start year.
+     * 4 digit card start year. Needed for UK Maestro Card.
      *
-     * @return int
+     * @return string
      */
     public function getStartYear()
     {
@@ -192,10 +194,10 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * Card validation code. Only supported when making a Payment, but not when saving a payment card for future use.
+     * Card validation code. Only supported when making a Payment but not when saving a payment card for future use.
      *
-     * @param int $cvv2
-     * 
+     * @param string $cvv2
+     *
      * @return $this
      */
     public function setCvv2($cvv2)
@@ -205,9 +207,9 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * Card validation code. Only supported when making a Payment, but not when saving a payment card for future use.
+     * Card validation code. Only supported when making a Payment but not when saving a payment card for future use.
      *
-     * @return int
+     * @return string
      */
     public function getCvv2()
     {
@@ -218,7 +220,7 @@ class PaymentCard extends PayPalModel
      * Card holder's first name.
      *
      * @param string $first_name
-     * 
+     *
      * @return $this
      */
     public function setFirstName($first_name)
@@ -241,7 +243,7 @@ class PaymentCard extends PayPalModel
      * Card holder's last name.
      *
      * @param string $last_name
-     * 
+     *
      * @return $this
      */
     public function setLastName($last_name)
@@ -261,10 +263,33 @@ class PaymentCard extends PayPalModel
     }
 
     /**
+     * 2 letter country code
+     *
+     * @param string $billing_country
+     *
+     * @return $this
+     */
+    public function setBillingCountry($billing_country)
+    {
+        $this->billing_country = $billing_country;
+        return $this;
+    }
+
+    /**
+     * 2 letter country code
+     *
+     * @return string
+     */
+    public function getBillingCountry()
+    {
+        return $this->billing_country;
+    }
+
+    /**
      * Billing Address associated with this card.
      *
      * @param \PayPal\Api\Address $billing_address
-     * 
+     *
      * @return $this
      */
     public function setBillingAddress($billing_address)
@@ -284,10 +309,10 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * A unique identifier of the customer to whom this card account belongs. Generated and provided by the facilitator. This is required when creating or using a stored funding instrument in vault.
+     * A unique identifier of the customer to whom this card account belongs to. Generated and provided by the facilitator. This is required when creating or using a stored funding instrument in vault.
      *
      * @param string $external_customer_id
-     * 
+     *
      * @return $this
      */
     public function setExternalCustomerId($external_customer_id)
@@ -297,7 +322,7 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * A unique identifier of the customer to whom this card account belongs. Generated and provided by the facilitator. This is required when creating or using a stored funding instrument in vault.
+     * A unique identifier of the customer to whom this card account belongs to. Generated and provided by the facilitator. This is required when creating or using a stored funding instrument in vault.
      *
      * @return string
      */
@@ -311,7 +336,7 @@ class PaymentCard extends PayPalModel
      * Valid Values: ["EXPIRED", "ACTIVE"]
      *
      * @param string $status
-     * 
+     *
      * @return $this
      */
     public function setStatus($status)
@@ -331,10 +356,10 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * Date/Time until this resource can be used to fund a payment.
+     * Date/Time until this resource can be used fund a payment.
      *
      * @param string $valid_until
-     * 
+     *
      * @return $this
      */
     public function setValidUntil($valid_until)
@@ -344,7 +369,7 @@ class PaymentCard extends PayPalModel
     }
 
     /**
-     * Date/Time until this resource can be used to fund a payment.
+     * Date/Time until this resource can be used fund a payment.
      *
      * @return string
      */
@@ -354,10 +379,33 @@ class PaymentCard extends PayPalModel
     }
 
     /**
+     * 1-2 digit card issue number. Needed for UK Maestro Card.
+     *
+     * @param string $issue_number
+     *
+     * @return $this
+     */
+    public function setIssueNumber($issue_number)
+    {
+        $this->issue_number = $issue_number;
+        return $this;
+    }
+
+    /**
+     * 1-2 digit card issue number. Needed for UK Maestro Card.
+     *
+     * @return string
+     */
+    public function getIssueNumber()
+    {
+        return $this->issue_number;
+    }
+
+    /**
      * Sets Links
      *
      * @param \PayPal\Api\Links[] $links
-     * 
+     *
      * @return $this
      */
     public function setLinks($links)

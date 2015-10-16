@@ -2,7 +2,6 @@
 
 namespace PayPal\Test\Api;
 
-use PayPal\Common\PayPalModel;
 use PayPal\Api\CreditCardToken;
 
 /**
@@ -14,6 +13,7 @@ class CreditCardTokenTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Gets Json String of Object CreditCardToken
+     *
      * @return string
      */
     public static function getJson()
@@ -23,6 +23,7 @@ class CreditCardTokenTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Gets Object Instance with Json data filled in
+     *
      * @return CreditCardToken
      */
     public static function getObject()
@@ -33,6 +34,7 @@ class CreditCardTokenTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests for Serialization and Deserialization Issues
+     *
      * @return CreditCardToken
      */
     public function testSerializationDeserialization()
@@ -62,5 +64,6 @@ class CreditCardTokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($obj->getExpireMonth(), 123);
         $this->assertEquals($obj->getExpireYear(), 123);
     }
+
 
 }

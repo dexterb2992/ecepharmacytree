@@ -6,7 +6,6 @@
 /** @var \PayPal\Api\Payment $payment */
 $payment = require __DIR__ . '/ExecutePayment.php';
 
-use PayPal\Api\Order;
 use PayPal\Api\Amount;
 use PayPal\Api\Authorization;
 
@@ -37,15 +36,18 @@ if (isset($_GET['success']) && $_GET['success'] == 'true') {
         // Authorize the order by passing authorization object we created.
         // We will get a new authorization object back.
         $result = $order->authorize($authorization, $apiContext);
+        // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
         ResultPrinter::printResult("Authorized Order", "Authorization", $result->getId(), $authorization, $result);
     } catch (Exception $ex) {
-        ResultPrinter::printError("Authorized Order", "Authorization", null, $authorization, $ex);
+        // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
+ 	    ResultPrinter::printError("Authorized Order", "Authorization", null, $authorization, $ex);
         exit(1);
     }
 
     return $result;
 
 } else {
+    // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
     ResultPrinter::printResult("User Cancelled the Approval", null);
     exit;
 }

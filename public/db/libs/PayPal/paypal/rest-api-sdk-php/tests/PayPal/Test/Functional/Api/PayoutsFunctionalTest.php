@@ -2,17 +2,10 @@
 
 namespace PayPal\Test\Functional\Api;
 
-use PayPal\Api\Patch;
 use PayPal\Api\Payout;
 use PayPal\Api\PayoutBatch;
 use PayPal\Api\PayoutItem;
-use PayPal\Common\PayPalModel;
-use PayPal\Rest\ApiContext;
-use PayPal\Rest\IResource;
-use PayPal\Api\CreateProfileResponse;
 use PayPal\Test\Functional\Setup;
-use PayPal\Transport\PayPalRestCall;
-use PayPal\Api\WebProfile;
 
 /**
  * Class Payouts
@@ -27,6 +20,8 @@ class PayoutsFunctionalTest extends \PHPUnit_Framework_TestCase
     public $response;
 
     public $mockPayPalRestCall;
+
+    public $apiContext;
 
     public static $batchId;
 
@@ -62,7 +57,7 @@ class PayoutsFunctionalTest extends \PHPUnit_Framework_TestCase
         }
         PayoutsFunctionalTest::$batchId = $obj->getSenderBatchHeader()->getSenderBatchId();
         $params = array('sync_mode' => 'true');
-        $result = $obj->create($params, null, $this->mockPayPalRestCall);
+        $result = $obj->create($params, $this->apiContext, $this->mockPayPalRestCall);
         $this->assertNotNull($result);
         $this->assertEquals(PayoutsFunctionalTest::$batchId, $result->getBatchHeader()->getSenderBatchHeader()->getSenderBatchId());
         $this->assertEquals('SUCCESS', $result->getBatchHeader()->getBatchStatus());
@@ -80,7 +75,7 @@ class PayoutsFunctionalTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet($payoutBatch)
     {
-        $result = Payout::get($payoutBatch->getBatchHeader()->getPayoutBatchId(), null, $this->mockPayPalRestCall);
+        $result = Payout::get($payoutBatch->getBatchHeader()->getPayoutBatchId(), $this->apiContext, $this->mockPayPalRestCall);
         $this->assertNotNull($result);
         $this->assertNotNull($result->getBatchHeader()->getBatchStatus());
         $this->assertEquals(PayoutsFunctionalTest::$batchId, $result->getBatchHeader()->getSenderBatchHeader()->getSenderBatchId());
@@ -96,7 +91,7 @@ class PayoutsFunctionalTest extends \PHPUnit_Framework_TestCase
     {
         $items = $payoutBatch->getItems();
         $item = $items[0];
-        $result = PayoutItem::get($item->getPayoutItemId(), null, $this->mockPayPalRestCall);
+        $result = PayoutItem::get($item->getPayoutItemId(), $this->apiContext, $this->mockPayPalRestCall);
         $this->assertNotNull($result);
         $this->assertEquals($item->getPayoutItemId(), $result->getPayoutItemId());
         $this->assertEquals($item->getPayoutBatchId(), $result->getPayoutBatchId());
@@ -117,7 +112,7 @@ class PayoutsFunctionalTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Transaction status needs to be Unclaimed for this test ');
             return;
         }
-        $result = PayoutItem::cancel($item->getPayoutItemId(), null, $this->mockPayPalRestCall);
+        $result = PayoutItem::cancel($item->getPayoutItemId(), $this->apiContext, $this->mockPayPalRestCall);
         $this->assertNotNull($result);
         $this->assertEquals($item->getPayoutItemId(), $result->getPayoutItemId());
         $this->assertEquals($item->getPayoutBatchId(), $result->getPayoutBatchId());

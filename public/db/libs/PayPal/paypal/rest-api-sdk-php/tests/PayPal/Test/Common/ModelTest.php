@@ -1,6 +1,8 @@
 <?php
 namespace PayPal\Test\Common;
 
+use PayPal\Api\Payment;
+use PayPal\Common\PayPalModel;
 use PayPal\Core\PayPalConfigManager;
 
 class ModelTest extends \PHPUnit_Framework_TestCase
@@ -84,18 +86,82 @@ class ModelTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testInvalidMagicMethod()
+    /**
+     * Test Case to determine if the unknown object is returned, it would not add that object to the model.
+     */
+    public function testUnknownObjectConversion()
     {
-        $obj = new SimpleClass();
-        try {
-            $obj->invalid = "value2";
-            $this->assertEquals($obj->invalid, "value2");
-            if (PayPalConfigManager::getInstance()->get('validation.level') == 'strict') {
-                $this->fail("It should have thrown a Notice Error");
-            }
-        } catch (\PHPUnit_Framework_Error_Notice $ex) {
+        PayPalConfigManager::getInstance()->addConfigs(array('validation.level' => 'disabled'));
+        $json = '{"name":"test","unknown":{ "id" : "123", "object": "456"},"description":"description"}';
 
-        }
+        $obj = new SimpleClass();
+        $obj->fromJson($json);
+
+        $this->assertEquals("test", $obj->getName());
+        $this->assertEquals("description", $obj->getDescription());
+        $resultJson = $obj->toJSON();
+        $this->assertContains("unknown", $resultJson);
+        $this->assertContains("id", $resultJson);
+        $this->assertContains("object", $resultJson);
+        $this->assertContains("123", $resultJson);
+        $this->assertContains("456", $resultJson);
+        PayPalConfigManager::getInstance()->addConfigs(array('validation.level' => 'strict'));
+    }
+
+    /**
+     * Test Case to determine if the unknown object is returned, it would not add that object to the model.
+     */
+    public function testUnknownArrayConversion()
+    {
+        PayPalConfigManager::getInstance()->addConfigs(array('validation.level' => 'disabled'));
+        $json = '{"name":"test","unknown":[{"object": { "id" : "123", "object": "456"}}, {"more": { "id" : "123", "object": "456"}}],"description":"description"}';
+
+        $obj = new SimpleClass();
+        $obj->fromJson($json);
+
+        $this->assertEquals("test", $obj->getName());
+        $this->assertEquals("description", $obj->getDescription());
+        $resultJson = $obj->toJSON();
+        $this->assertContains("unknown", $resultJson);
+        $this->assertContains("id", $resultJson);
+        $this->assertContains("object", $resultJson);
+        $this->assertContains("123", $resultJson);
+        $this->assertContains("456", $resultJson);
+        PayPalConfigManager::getInstance()->addConfigs(array('validation.level' => 'strict'));
+    }
+
+    public function testEmptyArrayConversion()
+    {
+        $json = '{"id":"PAY-5DW86196ER176274EKT3AEYA","transactions":[{"related_resources":[]}]}';
+        $payment = new Payment($json);
+        $result = $payment->toJSON();
+        $this->assertContains('"related_resources":[]', $result);
+        $this->assertNotNull($result);
+    }
+
+    public function testMultipleEmptyArrayConversion()
+    {
+        $json = '{"id":"PAY-5DW86196ER176274EKT3AEYA","transactions":[{"related_resources":[{},{}]}]}';
+        $payment = new Payment($json);
+        $result = $payment->toJSON();
+        $this->assertContains('"related_resources":[{},{}]', $result);
+        $this->assertNotNull($result);
+    }
+
+    public function testSetterMagicMethod()
+    {
+        $obj = new PayPalModel();
+        $obj->something = "other";
+        $obj->else = array();
+        $obj->there = null;
+        $obj->obj = '{}';
+        $obj->objs = array('{}');
+        $this->assertEquals("other", $obj->something);
+        $this->assertTrue(is_array($obj->else));
+        $this->assertNull($obj->there);
+        $this->assertEquals('{}', $obj->obj);
+        $this->assertTrue(is_array($obj->objs));
+        $this->assertEquals('{}', $obj->objs[0]);
     }
 
     public function testInvalidMagicMethodWithDisabledValidation()
