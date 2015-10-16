@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 // composer require laracasts/testdummy
 // use Laracasts\TestDummy\Factory as TestDummy;
-use ECEPharmacyTree\ProductSubCategory;
+use ECEPharmacyTree\ProductSubcategory;
 
 class ProductSubcategoryTableSeeder extends Seeder
 {
