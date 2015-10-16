@@ -10,7 +10,7 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 use Redirect;
 use Input;
 use ECEPharmacyTree\Specialty;
-use ECEPharmacyTree\Subspecialty;
+use ECEPharmacyTree\SubSpecialty;
 use ECEPharmacyTree\Doctor;
 
 
@@ -29,7 +29,7 @@ class DoctorController extends Controller
     {
         $doctors = Doctor::all();
         $specialties = Specialty::all();
-        $subspecialties = Subspecialty::all();
+        $subspecialties = SubSpecialty::all();
 
         $specialty_names = array();
         foreach ($specialties as $specialty) {
