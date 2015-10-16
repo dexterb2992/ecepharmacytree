@@ -71,7 +71,7 @@ class DoctorController extends Controller
         if( $doctor->save() )
             return Redirect::to( route('doctors') );
         return false;
-   }
+    }
 
     /**
      * Display the specified resource.
@@ -122,10 +122,10 @@ class DoctorController extends Controller
         $specialty = Specialty::find( Input::get('id') );
         $specialty->name = Input::get('name');
         if( $specialty->save() ){
-           return Redirect::to( route('doctor_specialties') );
-       }
-       return false;
-   }
+         return Redirect::to( route('doctor_specialties') );
+     }
+     return false;
+ }
 
     /**
      * Remove the specified resource from storage.
