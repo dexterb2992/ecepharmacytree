@@ -2,31 +2,16 @@
 
 namespace ECEPharmacyTree\Http\Controllers;
 
-use Request;
+use Illuminate\Http\Request;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
-use ECEPharmacyTree\Billing;
+use ECEPharmacyTree\Order;
+use DB;
+use Redirect;
 
-class BillingController extends Controller
+class OrderController extends Controller
 {
-
-     /**
-     * Mark Order as Paid
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    function mark_order_as_paid($id){
-        $billing = Billing::where('order_id', $id)->first();
-        $billing->payment_status = "paid";
-
-        if( $billing->save() ){
-           return json_encode( array("status" => "success") );
-       }
-       return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
-   }
-
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +19,9 @@ class BillingController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::all();
+
+        return view('admin.orders')->withOrders($orders);
     }
 
     /**
@@ -66,7 +53,34 @@ class BillingController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        $order_details = $order->order_details()->get();
+
+        return view('admin.order')->withOrder($order)->withOrderDetails($order_details);
+    }
+
+     /**
+     * Fulfill Orders
+     *
+     * @param  int  $id
+     * @return Response
+     */
+     function fulfill_orders() {
+        $when_and_thens = "";
+        $where_ids = "";
+
+        foreach($_POST['order_fulfillment_qty'] as $key => $value) {
+            echo "key = ".$key." value=".$value;
+            $when_and_thens .= " WHEN " . $key . " THEN ".$value;
+            $where_ids .= $key . ",";
+        }
+        $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
+
+        $sql = "UPDATE order_details SET qty_fulfilled = CASE id ".$when_and_thens." END WHERE id IN (".$where_ids.")";
+
+        $affected = DB::update($sql);
+
+        return Redirect::back();
     }
 
     /**

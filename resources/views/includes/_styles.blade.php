@@ -10,6 +10,9 @@
 <!-- Ionicons 2.0.0 -->
 {!! HTML::style('https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css') !!}
 
+<!-- Paymentfont Icons -->
+{!! HTML::style('bootstrap/css/paymentfont.min.css') !!}
+
 <!-- Theme style -->
 {!! HTML::style('dist/css/AdminLTE.min.css') !!}
 

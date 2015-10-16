@@ -22,4 +22,8 @@ class Product extends Model
     public function basket(){
     	return $this->hasMany('ECEPharmacyTree\Basket');
     }
+
+    public function order_details(){
+        return $this->hasMany('ECEPharmacyTree\OrderDetail');
+    }
 }

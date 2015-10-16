@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBillingsTable extends Migration
+class CreateOrderHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,13 @@ class CreateBillingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('billings', function(Blueprint $table) {
+        Schema::create('order_history', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_id')->unsigned();
+            $table->integer('order_id')->unsigned()->index();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->double('gross_total');
-            $table->double('total');
-            $table->string('payment_status')->default('pending');
-            $table->string('payment_method');
+            $table->integer('order_detail_id')->unsigned()->index();
+            $table->string("action");
+            $table->string("message");
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +31,6 @@ class CreateBillingsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('billings');
+        Schema::drop('clinic_doctor');
     }
 }

@@ -13,4 +13,8 @@ class Branch extends Model
     public function users(){
     	return $this->hasMany('ECEPharmacyTree\User');
     }
+
+    function orders(){
+    	return $this->hasMany('ECEPharmacyTree\Order');
+    }
 }

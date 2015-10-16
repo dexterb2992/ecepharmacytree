@@ -175,6 +175,47 @@ select.sort-by {
     font-weight: bold;
 }
 
+.next-heading {
+    color: #31373d;
+    font-weight: 400;
+    font-size: 18px;
+}
+.borderless {
+    border-top:none!important; 
+}
+
+.great_border {
+    border-top: 1px solid black!important1;
+}
+
+.type-subdued {
+color: #798c9c;
+}
+
+.color-black {
+    color: black!important;
+}
+
+.padding-customer {
+    margin-top: 5px;
+}
+
+.margin-top-5 {
+    margin-top: 5px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.no-margin-left {
+    margin-left: 0px;
+}
+
 tr.selected td{
     color: #003E55;
     font-weight: bold;

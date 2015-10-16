@@ -18,8 +18,10 @@ class CreateOrderDetailsTable extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->integer('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->integer('prescription_id')->default(0);
             $table->double('quantity');
             $table->string('type')->default('delivery'); // pickup or delivery
+            $table->integer('qty_fulfilled')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

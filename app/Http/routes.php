@@ -11,6 +11,7 @@
 |
 */
 
+
 View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 View::share('critical_stocks', check_for_critical_stock());
 View::share('branches', ECEPharmacyTree\Branch::all());
@@ -188,7 +189,17 @@ Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 
 	Route::get("/", ["as" => "index", 'uses' => 'AffiliatesController@index']);
 });
 
+Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
+Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
+Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
+Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
+// Route::post('fulfill_orders', function(){
+// 	pre($_POST);
+	
+// });
 
 Route::get('images/{template}/', function($template){
 	return redirect(url('images/'.$template."/nophoto.png"));
 });
+
+Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
