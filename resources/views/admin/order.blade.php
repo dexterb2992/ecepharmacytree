@@ -69,10 +69,34 @@
           <p class="align-center"><span class="pf pf-cash-on-delivery"></span><span class="pf pf-paypal"></span><span class="pf pf-credit-card"></span> <b>Payment Option:</b> {{ ucFirst($order->billing()->first()->payment_method) }}</p>
           <hr class="margin-top-5"/> 
           <p class="align-center"><i class="fa fa-building"></i> <b>Chosen Branch:</b> {{ ucFirst($order->branch()->first()->name) }}</p>
-
         </div>
-
       </div>
+      @if(check_if_order_had_approved_prescriptions($order))
+       <div class="box box-success">
+        <div class="box-header">
+        <h2 class="next-heading align-center">Approved Prescriptions</h2>
+        </div>
+        <div class="box-body">
+          <table class="table">
+              <thead>
+              <tr>
+                <th>name</th>
+                <th>URL</th>
+                <th>Date Approved</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>asdasd</td>
+                <td>adsadas</td>
+                <td>today</td>
+              </tr>
+              <tr><td>safadasd</td><td>asdasdas</td><td>yesterday</td></tr>
+              </tbody>
+          </table>
+        </div>
+        </div>
+      @endif
     </div>
   </div><!-- /.row -->
   <form method="post" name="order_form_nothing">
