@@ -1,4 +1,6 @@
 $(document).ready(function (){
+    var old_photo_src = $('#user_photo').attr('src');
+    getActiveSidebarMenu();
 
 	$('.datatable').DataTable({
         "paging": true,
@@ -203,12 +205,6 @@ $(document).ready(function (){
         $(this).find("select[disabled='disabled']").removeAttr("disabled");
     });
 
-    $("#inventories_product_id").change(function (){
-        var packing = $(this).children('option:selected').data("packing");
-        $("#outer_packing").html(packing);
-        $(".add-on-product-packing").html( str_plural(packing) );
-    });
-
     $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
         var $this = $(this);
         var redirectUrl = $this.data("redirect"), id = $this.data("id");
@@ -229,7 +225,15 @@ $(document).ready(function (){
         }
     });
 
-    $("#inventories_product_id, #inventory_quantity").change(function (){
+    $("#inventories_product_id").change(function (){
+        var packing = $(this).children('option:selected').attr("data-packing");
+        $(document).find("#outer_packing").html(packing);
+        $(document).find(".add-on-product-packing").html( str_plural(packing) );
+        console.log("packing: "+packing);
+    });
+
+
+    $("#inventory_quantity").change(function (){
         updateInventoryProductQty();
     });
 
@@ -260,5 +264,112 @@ $(document).ready(function (){
         $(this).addClass("selected");
         $(this).parent("td").parent("tr").addClass("selected");
     });
+
+    // added codes below on October 16, 2015 11:30 AM
+        $("#browse_photo").change(function (){
+            readURL(this, $('#user_photo'));
+            var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+            $("#photo_filename").attr("title", filename).html(limitStr(filename, 35)+'<span id="cancel_update_photo" class="cancel-update-photo" data-toggle="tooltip" data-original-title="Cancel"><i class="fa fa-close"></i></span>').show();
+        });
+            
+        $(document).on("click", "#cancel_update_photo", function(){
+            $("#photo_filename").slideUp(function(){ $(this).html(""); });
+            $("#user_photo").attr("src", old_photo_src);
+            var browse = $("#browse_photo");
+            browse.replaceWith( browse = browse.clone( true ) );
+        });
+
+        $("#btn_submit_form_update_password").click(function (){
+            var form = $("#form_update_password");
+            var data = {
+                old_password: formfinder(form, 'old_password', 'input'),
+                new_password: formfinder(form, 'new_password', 'input'),
+                new_password_confirmation: formfinder(form, 'new_password_confirmation', 'input'),
+                _token: formfinder(form, '_token', 'input')
+            };
+
+            var $this = $(this);
+            $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
+
+            $.ajax({
+                url: '/admin/update-password',
+                type: 'post',
+                dataType: 'json',    
+                data: {
+                    old_password: formfinder(form, 'old_password', 'input'),
+                    new_password: formfinder(form, 'new_password', 'input'),
+                    new_password_confirmation: formfinder(form, 'new_password_confirmation', 'input'),
+                    _token: formfinder(form, '_token', 'input')
+                }
+            }).done(function(data){
+                $this.removeClass("disabled").removeAttr("disabled").html("Update password");
+
+                _clear_form_errors(form);
+                _clear_form_data(form);
+
+                $.each(data.errors, function (i, row){
+                    _error($('input[name="'+i+'"]'), row[0]);
+                });
+
+                // if successful, hide the modal
+                if( data.status_code == "200" ){
+                    $("#modal_update_password").modal('hide');
+                    showAlert("Password notification", "Your password has been changed successfully.", 'success', 'notify');
+                }
+
+            }).fail(function (){
+                $this.removeClass("disabled").removeAttr("disabled").html("Update password");
+            });
+        });
+
+        $('#btn_update_info').click(function (){
+            var form = $("#form_update_info");
+            var $this = $(this);
+
+            $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
+
+            var formdata = {
+                fname: formfinder(form, 'fname', 'input'),
+                mname: formfinder(form, 'mname', 'input'),
+                lname: formfinder(form, 'lname', 'input'),
+                email: formfinder(form, 'email', 'input'),
+                _token: formfinder(form, '_token', 'input')
+            };
+
+            $.ajax({
+                url: '/profile/update',
+                type: 'post',
+                dataType: 'json',
+                data: formdata
+            }).done(function (data){
+                console.log(data);
+                _clear_form_errors(form);
+
+                $.each(data.errors, function (i, row){
+                    _error($('input[name="'+i+'"]'), row[0]);
+                });
+
+
+                if( data.status_code == '200' ){
+                    showAlert("Password notification", "Your profile has been updated.", 'info', 'notify');
+
+                    $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
+
+                    $.each(formdata, function (i, row){
+                        if( i !== "_token" ){
+                            form.find('input[name="'+i+'"]').val(row);
+                        }
+                    });
+                }else{
+
+                }
+
+                $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
+
+            }).fail(function(data){
+                console.log(data);
+                $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
+            });
+        });
 		
 });

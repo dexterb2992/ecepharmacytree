@@ -48,14 +48,14 @@ class SettingsController extends Controller
         $input = Input::all();
         $setting = Setting::first();
         $setting->points = $input["points"];
-        $setting->points_to_peso = $input["points_to_peso"];
+        $setting->points_to_peso = _clean_number($input["points_to_peso"]);
         $setting->level_limit = $input["level_limit"];
         $setting->referral_commission = $input["referral_commission"];
         $setting->commission_variation = $input["commission_variation"];
-        $setting->delivery_charge = $input["delivery_charge"];
-        $setting->delivery_minimum = $input["delivery_minimum"];
-        $setting->safety_stock = $input["safety_stock"];
-        $setting->critical_stock = $input["critical_stock"];
+        $setting->delivery_charge = _clean_number($input["delivery_charge"]);
+        $setting->delivery_minimum = _clean_number($input["delivery_minimum"]);
+        $setting->safety_stock = _clean_number($input["safety_stock"]);
+        $setting->critical_stock = _clean_number($input["critical_stock"]);
         if( $setting->save() )
             return Redirect::to( route('Settings::index') )->withFlash_message([
                 "msg" => "Your changes have been successfully saved!", "type" => "success"]);
