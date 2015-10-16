@@ -10,7 +10,7 @@ class BranchTableSeeder extends Seeder
     public function run()
     {
         // TestDummy::times(20)->create('App\Post');
-        $con = mysqli_connect(getenv('DB_HOST'), getenv('DB_DATABASE'), '01gwapoko01', getenv('DB_DATABASE'));
+        $con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
 
         $sql = "DELETE * FROM `ece_pharmacy_tree`.`branches`";
         $res = mysqli_query($con, $sql);
