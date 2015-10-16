@@ -156,3 +156,8 @@ function limitStr(filename, max){
 		return filename;
 	return filename.substring(0, 35)+"...";
 }
+
+function getActiveSidebarMenu(){
+	$(".sidebar-menu li").removeClass("active");
+	$(".sidebar-menu li a[href='"+window.location.href+"']").parent("li").addClass("active");
+}

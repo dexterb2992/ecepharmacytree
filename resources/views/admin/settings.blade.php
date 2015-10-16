@@ -10,7 +10,7 @@
 				<form method="post" action="{{ route('Settings::update') }}">
 					<div class="box-body">
 						<div class="form-group">
-							<label>Points</label>
+							<label>Points <small><i>( How many points a customer will earn in every &#x20B1;100.00? )</i></small></label>
 							<div class="input-group">
 								<input class="form-control number" type="text" name="points" value="{{ $settings->points }}" />
 								<span class="input-group-addon">for every &#x20B1;100.00</span>
@@ -20,7 +20,7 @@
 							<label>Points to Peso<small><i> ( How much should be equivalent to 1 Point? )</small></i></label>
 							<div class="input-group">
 								<span class="input-group-addon">&#x20B1; </span>
-								<input class="form-control number" type="text" name="points_to_peso" value="{{ $settings->points_to_peso }}" />
+								<input class="form-control number" type="text" name="points_to_peso" value="{{ to_money($settings->points_to_peso, 2) }}" />
 								<span class="input-group-addon"> = 1 Point</span>
 							</div>
 						</div>
@@ -56,13 +56,13 @@
 						<div class="form-group">
 							<label>Default Safety Stock <small><i>(This will automatically be used as a safety stock number to any product whose safety stock is not specified.)</i></small></label>
 							<input class="number form-control" type="text" name="safety_stock" title="This will automatically be used as a safety stock number to any product whose safety stock is not specified." 
-								value="{{ $settings->safety_stock }}" />
+								value="{{ to_money($settings->safety_stock) }}" />
 						</div>
 
 						<div class="form-group">
 							<label>Default Critical Inventory Number</label>
 							<input class="form-control number" type="text" name="critical_stock"
-								title="This will inform us when to notify you when any of the products is on a critical stock." value="{{ $settings->critical_stock }}" />
+								title="This will inform us when to notify you when any of the products is on a critical stock." value="{{ to_money($settings->critical_stock) }}" />
 						</div>
 
 						<div class="box-header with-border">
@@ -70,10 +70,10 @@
 						</div>
 
 						<div class="form-group">
-							<label>Delivery Charge</label>
+							<label>Default Delivery Charge</label>
 							<div class="input-group">
 								<span class="input-group-addon">&#x20B1;</span>
-								<input type="text" name="delivery_charge" class="number form-control" value="{{ $settings->delivery_charge }}">
+								<input type="text" name="delivery_charge" class="number form-control" value="{{ to_money($settings->delivery_charge, 2) }}">
 							</div>
 						</div>
 
@@ -81,7 +81,7 @@
 							<label>Minimum Amount <small><i>(Minimum amount in &#x20B1; to accept Delivery)</i></small></label>
 							<div class="input-group">
 								<span class="input-group-addon">&#x20B1;</span>
-								<input type="text" name="delivery_minimum" class="number form-control" value="{{ $settings->delivery_minimum }}">
+								<input type="text" name="delivery_minimum" class="number form-control" value="{{ to_money($settings->delivery_minimum, 2) }}">
 							</div>
 						</div>
 

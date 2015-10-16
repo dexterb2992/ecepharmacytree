@@ -181,9 +181,11 @@ function get_recent_settings(){
 
     $sql = "SELECT * FROM settings LIMIT 1";
     $res = mysqli_query($con, $sql);
+
     if( mysqli_num_rows($res) > 0 ){
         $row = mysqli_fetch_object($res);
     }
+
     return $row;
 }
 
@@ -194,7 +196,7 @@ function check_for_critical_stock(){
 		$critical_stock_products = ECEPharmacyTree\Inventory::where("quantity", "<=", $settings->critical_stock)->get();
 		return $critical_stock_products;
 	} catch (Exception $e) {
-		
+		pre($e);
 	}
 }
 
@@ -229,4 +231,30 @@ function validate_reminder_token($token){
 	if( empty($res)  || $res === null)
 		return false;
 	return $res->email;
+}
+
+/**
+ * @param int $role
+ * @return Response
+ */
+function get_role($role){
+	$roles = [
+		1 => 'Administrator',
+		2 => 'Branch Manager',
+		3 => 'Pharmacist',
+		1001 => 'Developer'
+	];
+
+	if( array_key_exists($role, $roles) )
+		return $roles[$role];
+	return '-';
+}
+
+function to_money($number, $decimal = 0){
+	return number_format( $number , $decimal , "." , "," );
+}
+
+// removes commas from an integer/float
+function _clean_number($number){
+	return str_replace(',', "", $number);
 }

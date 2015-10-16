@@ -97,12 +97,14 @@
                 <i class="fa fa-bar-chart"></i> <span>Affiliates</span>
               </a>
             </li>
-             
+            
+            @if(Auth::user()->isAdmin())
              <li class="treeview">
               <a href="{{ route('Settings::index') }}">
                 <i class="fa fa-sliders"></i> <span>Settings</span>
               </a>
             </li>
+            @endif
           </ul>
         </section>
         <!-- /.sidebar -->

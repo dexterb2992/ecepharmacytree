@@ -15,7 +15,10 @@ View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 View::share('critical_stocks', check_for_critical_stock());
 View::share('branches', ECEPharmacyTree\Branch::all());
 
-Route::get("try", 'UserController@update_password');
+Route::get("try/{var}", function($var){
+	
+	return bcrypt($var);
+});
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
@@ -137,7 +140,7 @@ Route::group(['prefix' => 'doctor-specialties', 'as' => 'DoctorSpecialty::', 'mi
 	Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
 	Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
 
-Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'admin'], function (){
+Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'auth'], function (){
 	/**
 	 * Routes for Promo
 	 */
@@ -186,6 +189,6 @@ Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 
 });
 
 
-Route::get("login", function(){
-	return view("login");
+Route::get('images/{template}/', function($template){
+	return redirect(url('images/'.$template."/nophoto.png"));
 });

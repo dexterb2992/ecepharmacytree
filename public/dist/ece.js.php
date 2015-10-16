@@ -7,6 +7,7 @@ if (typeof $ === "undefined") {
 
 $(document).ready(function (){
     var old_photo_src = $('#user_photo').attr('src');
+    getActiveSidebarMenu();
 
 	$('.datatable').DataTable({
         "paging": true,
