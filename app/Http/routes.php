@@ -12,9 +12,9 @@
 */
 
 
-View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-View::share('critical_stocks', check_for_critical_stock());
-View::share('branches', ECEPharmacyTree\Branch::all());
+// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+// View::share('critical_stocks', check_for_critical_stock());
+// View::share('branches', ECEPharmacyTree\Branch::all());
 
 Route::get("try/{var}", function($var){
 	
@@ -198,8 +198,11 @@ Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderControl
 	
 // });
 
+
+
 Route::get('images/{template}/', function($template){
 	return redirect(url('images/'.$template."/nophoto.png"));
 });
+
 
 Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
