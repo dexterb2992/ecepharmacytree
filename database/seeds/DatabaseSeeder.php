@@ -15,13 +15,13 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call('UserTableSeeder');
+        $this->call('UserTableSeeder');
         // $this->call(Illuminate\Database\Seeder\SeederStarter::class);
-        // $this->call(Illuminate\Database\Seeder\ProductSubcategoryTableSeeder::class);
-        // $this->call(Illuminate\Database\Seeder\ProductTableSeeder::class);
-        // $this->call(Illuminate\Database\Seeder\SettingTableSeeder::class);
-        // $this->call(Illuminate\Database\Seeder\BranchTableSeeder::class);
-        // $this->call(Illuminate\Database\Seeder\UserTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\ProductSubcategoryTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\ProductTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\SettingTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\BranchTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\UserTableSeeder::class);
 
         // Model::reguard();
     }
