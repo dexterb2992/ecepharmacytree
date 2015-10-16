@@ -30,7 +30,7 @@
                             <td>
                                 <span>{{ get_patient_fullname( $order->patient()->first() ) }}</span>
                             </td>
-                            <td>{{ $order->billing()->first()->payment_status }}</td>
+                            <td>{{ ucFirst($order->billing()->first()->payment_status) }}</td>
                             <td>{{ ((check_if_not_fulfilled($order)) ? 'Not Fulfilled' : ((check_if_partially_fulfilled($order)) ? 'Partially Fulfilled' : 'Fulfilled')) }}</td>
                             <td>{{ $order->modeOfDelivery }}</td>
                             <td>{{ $order->billing()->first()->payment_method }}</td>

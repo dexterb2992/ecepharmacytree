@@ -248,3 +248,9 @@ function validate_reminder_token($token){
 		return false;
 	return $res->email;
 }
+
+function check_if_order_had_approved_prescriptions($order){
+	if($order->order_details()->whereRaw('prescription_id != 0')->count() > 0)
+		return true;
+	return false;
+}

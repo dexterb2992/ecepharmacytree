@@ -16,8 +16,6 @@ View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 View::share('critical_stocks', check_for_critical_stock());
 View::share('branches', ECEPharmacyTree\Branch::all());
 
-Route::get("try", 'UserController@update_password');
-
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
