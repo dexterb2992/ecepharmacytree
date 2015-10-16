@@ -182,13 +182,13 @@ function extract_downlines($downlines = array()){
 }
 
 function get_recent_settings(){
-	// $con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), "", "ece_pharmacy_tree");
-	// $sql = "SELECT * FROM settings LIMIT 1";
-	// $res = mysqli_query($con, $sql);
-	// if( mysqli_num_rows($res) > 0 ){
-	// 	$row = mysqli_fetch_object($res);
-	// }
-	// return $row;
+	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_DATABASE'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
+	$sql = "SELECT * FROM settings LIMIT 1";
+	$res = mysqli_query($con, $sql);
+	if( mysqli_num_rows($res) > 0 ){
+		$row = mysqli_fetch_object($res);
+	}
+	return $row;
 }
 
 
