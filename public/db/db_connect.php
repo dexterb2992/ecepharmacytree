@@ -32,7 +32,7 @@ class DB_CONNECT {
           //echo "Failed to connect to MySQL: " . mysqli_connect_error();
         //}
 
-$con = mysql_connect("localhost", "root", "") or die(mysql_error());
+$con = mysql_connect("localhost", "root", "01gwapoko01") or die(mysql_error());
  
         // Selecing database
         $db = mysql_select_db("ece_pharmacy_tree") or die(mysql_error()) or die(mysql_error());
