@@ -104,54 +104,59 @@ var customAlertResponse = false;
 	    	e.preventDefault();
 	    }
 	});
- }
+}
 
- function readURL(input, target) {
- 	if (input.files && input.files[0]) {
- 		var reader = new FileReader();
+function readURL(input, target) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
- 		reader.onload = function (e) {
- 			target.attr('src', e.target.result);
- 		}
+        reader.onload = function (e) {
+            target.attr('src', e.target.result);
+        }
 
- 		reader.readAsDataURL(input.files[0]);
- 	}
- }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 
- function _clear_form_errors(form){
- 	form.find(".label-danger").html("");
- }
+function _clear_form_errors(form){
+	form.find(".label-danger").html("");
+}
 
- function _clear_form_data(form){
- 	form.find('input').not('input[name="_token"]').val("");
- 	form.find('textarea').not('input[name="_token"]').val("");
- }
+function _clear_form_data(form){
+	form.find('input').not('input[name="_token"]').val("");
+	form.find('textarea').not('input[name="_token"]').val("");
+}
 
- function _error(element, error_msg){
- 	if( element.next('.label-danger').length ){
- 		element.next('.label-danger').html(error_msg);
- 	}else{
- 		element.after('<div class="label label-danger">'+error_msg+'</label>');
- 	}
- }
+function _error(element, error_msg){
+	if( element.next('.label-danger').length ){
+		element.next('.label-danger').html(error_msg);
+	}else{
+		element.after('<div class="label label-danger">'+error_msg+'</label>');
+	}
+}
 
- function formfinder(form, name, fieldType){
- 	if(fieldType !== "textarea")
- 		return form.find(fieldType+'[name="'+name+'"]').val();
+function formfinder(form, name, fieldType){
+	if(fieldType !== "textarea")
+		return form.find(fieldType+'[name="'+name+'"]').val();
 
- 	return form.find(fieldType+'[name="'+name+'"]').html();
- }
+	return form.find(fieldType+'[name="'+name+'"]').html();
+}
 
- Object.size = function(obj) {
- 	var size = 0, key;
- 	for (key in obj) {
- 		if (obj.hasOwnProperty(key)) size++;
- 	}
- 	return size;
- };
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
- function limitStr(filename, max){
- 	if( filename.length <= max )
- 		return filename;
- 	return filename.substring(0, 35)+"...";
- }
+function limitStr(filename, max){
+	if( filename.length <= max )
+		return filename;
+	return filename.substring(0, 35)+"...";
+}
+
+function getActiveSidebarMenu(){
+	$(".sidebar-menu li").removeClass("active");
+	$(".sidebar-menu li a[href='"+window.location.href+"']").parent("li").addClass("active");
+}

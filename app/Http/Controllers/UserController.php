@@ -199,19 +199,19 @@ class UserController extends Controller
             $image = Input::file('photo');
             $filename  = time() . '.' . $image->getClientOriginalExtension();
 
+            $path = public_path('images/profile-pictures/');
+
             // save original image
-            $original_imagepath = public_path('images/profile-pictures/' . $filename);
+            $original_imagepath = $path.$filename; 
             Image::make($image->getRealPath())->save($original_imagepath);
 
-            // create image 160x160 size
-                // $path = public_path('profile-pictures/160x160/' . $filename);
-                // Image::make($original_imagepath)->resize(160, 160)->save($path);
-
-            // create image for 128x128 size
-                // $path = public_path('profile-pictures/128x128/' . $filename);
-                // Image::make($original_imagepath)->resize(128, 128)->save($path);
-
             $user = Auth::user();
+            $old_photo = $user->photo;
+
+            if( !empty($old_photo) && file_exists($path.$old_photo) )
+                unlink($path.$old_photo);
+            
+
             $user->photo = $filename;
             if( $user->save() )
                 return redirect()->back()->withFlash_message([

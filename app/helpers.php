@@ -25,7 +25,7 @@ function get_ph_regions(){
 		'Cordillera Administrative Region (CAR)',
 		'Autonomouse Region in Muslim Mindanao (ARMM)',
 		'Negros Island Region (Region XVIII)'
-		);
+	);
 }
 
 /**
@@ -191,6 +191,7 @@ function get_recent_settings(){
 	return $row;
 }
 
+
 function check_if_not_fulfilled($order){
 	if($order->order_details()->count() == $order->order_details()->whereRaw('qty_fulfilled = 0')->count())
 		return true;
@@ -212,7 +213,7 @@ function check_for_critical_stock(){
 		$critical_stock_products = ECEPharmacyTree\Inventory::where("quantity", "<=", $settings->critical_stock)->get();
 		return $critical_stock_products;
 	} catch (Exception $e) {
-		
+		pre($e);
 	}
 }
 
@@ -249,8 +250,36 @@ function validate_reminder_token($token){
 	return $res->email;
 }
 
+
+/**
+ * @param int $role
+ * @return Response
+ */
+function get_role($role){
+	$roles = [
+		1 => 'Administrator',
+		2 => 'Branch Manager',
+		3 => 'Pharmacist',
+		1001 => 'Developer'
+	];
+
+	if( array_key_exists($role, $roles) )
+		return $roles[$role];
+	return '-';
+}
+
+function to_money($number, $decimal = 0){
+	return number_format( $number , $decimal , "." , "," );
+}
+
+// removes commas from an integer/float
+function _clean_number($number){
+	return str_replace(',', "", $number);
+}
+
 function check_if_order_had_approved_prescriptions($order){
 	if($order->order_details()->whereRaw('prescription_id != 0')->count() > 0)
 		return true;
 	return false;
+
 }

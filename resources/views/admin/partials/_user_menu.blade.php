@@ -10,24 +10,12 @@
     <li class="user-header">
       {!! HTML::image( url('images/128x128/'.Auth::user()->photo), "", ["class"=>"img-circle"]) !!}
       <p>
-        {{ Auth::user()->fname." ".Auth::user()->lname }} - Web Developer
+        {{ Auth::user()->fname." ".Auth::user()->lname }} - {{ get_role(Auth::user()->access_level) }}
         <small>Member {{ \Carbon\Carbon::parse(Auth::user()->created_at)->diffForHumans() }}</small>
       </p>
     </li>
     <!-- Menu Body -->
     <li class="user-body">
-      <div class="col-xs-4 text-center">
-        <a href="#">Followers</a>
-      </div>
-      <div class="col-xs-4 text-center">
-        <a href="#">Sales</a>
-      </div>
-      <div class="col-xs-4 text-center">
-        <a href="#">Friends</a>
-      </div>
-    </li>
-    <!-- Menu Footer-->
-    <li class="user-footer">
       <div class="pull-left">
         <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Profile</a>
       </div>
