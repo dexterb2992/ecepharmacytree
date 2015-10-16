@@ -182,7 +182,7 @@ function extract_downlines($downlines = array()){
 }
 
 function get_recent_settings(){
-	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_DATABASE'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
+	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
 	$sql = "SELECT * FROM settings LIMIT 1";
 	$res = mysqli_query($con, $sql);
 	if( mysqli_num_rows($res) > 0 ){
