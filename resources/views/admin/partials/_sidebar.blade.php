@@ -63,7 +63,7 @@
             </li>
 
             <li class="treeview">
-              <a href="#/orders">
+              <a href="orders">
                 <i class="fa fa-shopping-cart"></i> <span>Orders</span>
               </a>
             </li>
