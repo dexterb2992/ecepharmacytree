@@ -16,9 +16,9 @@ View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 View::share('critical_stocks', check_for_critical_stock());
 View::share('branches', ECEPharmacyTree\Branch::all());
 
-Route::get("try/{var}", function($var){
+Route::get("try/", function(){
 	
-	return bcrypt($var);
+	return $_SERVER['DOCUMENT_ROOT']."/public/upload";
 });
 
 Route::controllers([
