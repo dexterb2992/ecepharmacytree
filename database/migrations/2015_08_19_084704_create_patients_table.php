@@ -42,7 +42,9 @@ class CreatePatientsTable extends Migration
             $table->string('address_region');
             $table->string('address_zip');
             $table->string('referral_id');
-            $table->string('referred_by')->nullable(); // referral_id of the user who referred this new user
+            // $table->string('referred_by')->nullable(); // referral_id of the user who referred this new user
+            $table->string('referred_byUser')->nullable();
+            $table->string('referred_byDoctor')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

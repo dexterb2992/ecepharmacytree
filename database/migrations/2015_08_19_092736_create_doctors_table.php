@@ -23,6 +23,7 @@ class CreateDoctorsTable extends Migration
             // $table->longText('photo')->nullable();
             $table->longText('affiliation')->nullable();
             $table->string('email')->nullable();
+            $table->string('referral_id');
             $table->timestamps();
             $table->softDeletes();
         });

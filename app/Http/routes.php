@@ -196,5 +196,4 @@ Route::get('images/{template}/', function($template){
 	return redirect(url('images/'.$template."/nophoto.png"));
 });
 
-
 Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
