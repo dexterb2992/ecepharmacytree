@@ -11,6 +11,7 @@ use Image;
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\User;
+use ECEPharmacyTree\Product;
 
 class UserController extends Controller
 {
@@ -26,7 +27,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $recently_added_products = Product::latest()->limit(4)->get();
+        return view('dashboard')->withRecently_added_products($recently_added_products)->withTitle("Dashboard");
     }
 
     /**

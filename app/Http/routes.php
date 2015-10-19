@@ -16,21 +16,13 @@ View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
 View::share('critical_stocks', check_for_critical_stock());
 View::share('branches', ECEPharmacyTree\Branch::all());
 
-Route::get("try/", function(){
-	
-	return $_SERVER['DOCUMENT_ROOT']."/public/upload";
-});
-
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
 ]);
 
 
-Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => function () {
-	$recently_added_products = ECEPharmacyTree\Product::latest()->limit(4)->get();
-	return view('dashboard')->withRecently_added_products($recently_added_products)->withTitle("Dashboard");
-}]);
+Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@index']);
 
 Route::get('home', function(){
 	return redirect('/');

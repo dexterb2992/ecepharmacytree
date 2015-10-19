@@ -140,6 +140,7 @@ return [
         Illuminate\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
+
         /*
          * Application Service Providers...
          */
