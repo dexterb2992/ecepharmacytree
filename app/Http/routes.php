@@ -75,14 +75,14 @@ Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'm
 	 */
 	Route::get('/', ['as' => 'index','uses' => 'ProductCategoryController@index']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'ProductCategoryController@show']);
-	Route::get('subcategories/{id}', ['as' => 'product_subcategories', 'uses' => 'ProductSubcategoryController@show']);
+	Route::get('subcategories/{id}', ['as' => 'product_subcategories', 'uses' => 'ProductSubCategoryController@show']);
 	
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductCategoryController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductCategoryController@update']);
 	Route::post('delete', ['as' => 'remove', 'uses' => 'ProductCategoryController@destroy']);
-	Route::post('subcategories/create', ['as' => 'create_product_subcategory', 'uses' => 'ProductSubcategoryController@store']);
-	Route::post('subcategories/edit', ['as' => 'edit_product_subcategory', 'uses' => 'ProductSubcategoryController@update']);
-	Route::post('subcategories/delete', ['as' => 'remove_product_subcategory', 'uses' => 'ProductSubcategoryController@destroy']);
+	Route::post('subcategories/create', ['as' => 'create_product_subcategory', 'uses' => 'ProductSubCategoryController@store']);
+	Route::post('subcategories/edit', ['as' => 'edit_product_subcategory', 'uses' => 'ProductSubCategoryController@update']);
+	Route::post('subcategories/delete', ['as' => 'remove_product_subcategory', 'uses' => 'ProductSubCategoryController@destroy']);
 
 });
 
