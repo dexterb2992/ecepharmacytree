@@ -286,3 +286,35 @@ function check_if_order_had_approved_prescriptions($order){
 	return false;
 
 }
+
+/**
+ * @param string $path_to_source_file
+ * @param array $columns
+ *
+ * @return array $rows
+ */
+function extract_db_to_array($path_to_source_file, $columns = array()){
+	// for example, $columns = ['id', 'province_id', 'name'];
+	// to use this function properly, the content structure of a file should be
+	// 1. each column value should be separated by a Tab
+	// 2. each row should be represented by a newline
+
+
+	$data = file_get_contents($path_to_source_file);
+	$arr_data =  explode(PHP_EOL, $data);
+	$rows = [];
+
+	foreach ($arr_data as $key => $value) {
+		$entry = preg_split("/[\t]/", $value);
+		if( isset($entry[ count($columns)-1 ]) )
+			$new_row = [];
+
+			for($x = 0; $x < count($columns); $x++){
+				if( isset($entry[$x]) )
+					$new_row[$columns[$x]] = $entry[$x];
+			}
+			$rows[] = $new_row;
+	}
+
+	return array_values($rows);
+}

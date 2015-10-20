@@ -28,6 +28,23 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
+Route::get('try/', function(){
+	$columns = ['id', 'province_id', 'name'];
+	// dd(count($columns)-1);
+	$municipalities = extract_db_to_array(public_path()."/db-src/municipalities.dat", $columns);
+	dd($municipalities);
+	exit(0);
+	// $data = file_get_contents(public_path()."/municipalities.php");
+	// $arr_data =  explode(PHP_EOL, $data);
+	// $municipalities = [];
+
+	// foreach ($arr_data as $key => $value) {
+	// 	$entry = preg_split("/[\t]/", $value);
+	// 	if( isset($entry[2]) )
+	// 		$municipalities[$key] = ['id' => $entry[0], 'province_id' => $entry[1], 'name' => $entry[2]];
+	// }
+});
+
 // Routes used for /profile
 	Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
 	Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
