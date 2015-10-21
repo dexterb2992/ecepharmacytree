@@ -29,7 +29,7 @@ class PatientTableSeeder extends Seeder
         	"address_region" => "Region XI",
         	"address_zip" => "8000",
         	"referral_id" => "ABC123",
-        	"created_at" => new DateTime;
+        	"created_at" => new DateTime
         ]);
     }
 }
