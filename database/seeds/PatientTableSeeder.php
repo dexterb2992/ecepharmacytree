@@ -28,8 +28,7 @@ class PatientTableSeeder extends Seeder
         	"address_city_municipality" => "Davao City",
         	"address_region" => "Region XI",
         	"address_zip" => "8000",
-        	"referral_id" => "ABC123",
-        	"created_at" => new DateTime
+        	"referral_id" => "ABC123"
         ]);
     }
 }
