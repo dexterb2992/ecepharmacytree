@@ -76,7 +76,37 @@
                                 <label for="name">Branch Name <i>*</i></label>
                                 <input type="text" class="form-control" id="name" placeholder="Branch name" name="name" required>
                             </div>
-                            <div class="row">
+                            <div class="form-group">
+                                <label for="address_province">Region<i>*</i></label>
+                                <select class="form-control select2" name="address_region">
+
+                                @foreach($regions as $region)
+                                    {{ dd($region->provinces()) }}
+                                    <option value="{{ $region->id }}">{{ $region->name }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address_province">Province<i>*</i></label>
+                                
+                                <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address_city_municipality">Municipality<i>*</i></label>
+                                <select class="form-control select2" name="address_city_municipality">
+                                    
+                                </select>
+                                <!-- <input type="text" class="form-control" id="address_city_municipality" placeholder="Municipality" name="address_city_municipality" required> -->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address_barangay">Barangay<i>*</i></label>
+                                <input type="text" class="form-control" id="address_barangay" placeholder="Barangay" name="address_barangay" required>
+                            </div>
+
+                            <div class="row"> <!-- labels -->
                                 <div class="col-xs-4">
                                     <label for="unit_floor_room_no">Unit/Room No.</label>
                                 </div>
@@ -87,7 +117,7 @@
                                     <label for="block_no">Block No.</label>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row"> <!-- input fields -->
                                 <div class="col-xs-4">
                                     <input type="text" class="form-control" name="unit_floor_room_no" id="unit_floor_room_no" placeholder="Unit/Room No.">
                                 </div>
@@ -98,7 +128,7 @@
                                     <input type="text" class="form-control" name="block_no" id="block_no" placeholder="Block No.">
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row"> <!-- labels -->
                                 <div class="col-xs-4">
                                     <label for="lot_no">Lot No.</label>
                                 </div>
@@ -109,7 +139,7 @@
                                     <label for="address_zip">ZIP Code <i>*</i></label>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row"> <!-- input fields -->
                                 <div class="col-xs-4">
                                     <input type="text" class="form-control" name="lot_no" id="lot_no" placeholder="Lot No.">
                                 </div>
@@ -120,30 +150,12 @@
                                     <input type="text" class="form-control" name="address_zip" id="address_zip" placeholder="ZIP Code" required>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group"> 
                                 <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>
                                 <input type="text" class="form-control" id="address_street" placeholder="Street" name="address_street" required>
                             </div>
-                            <div class="form-group">
-                                <label for="address_barangay">Barangay<i>*</i></label>
-                                <input type="text" class="form-control" id="address_barangay" placeholder="Barangay" name="address_barangay" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address_city_municipality">Municipality<i>*</i></label>
-                                <input type="text" class="form-control" id="address_city_municipality" placeholder="Municipality" name="address_city_municipality" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address_province">Province<i>*</i></label>
-                                <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address_province">Region<i>*</i></label>
-                                <select class="form-control" name="address_region">
-                                @foreach(get_ph_regions() as $region)
-                                <option value="{{ $region }}">{{ $region }}</option>
-                                @endforeach
-                                </select>
-                            </div>
+                            
+                            
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" name="submit">Save changes</button>

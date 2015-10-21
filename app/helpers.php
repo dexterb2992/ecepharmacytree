@@ -308,6 +308,8 @@ function extract_db_to_array($path_to_source_file, $columns = array()){
 		$entry = preg_split("/[\t]/", $value);
 		if( isset($entry[ count($columns)-1 ]) )
 			$new_row = [];
+			$new_row['created_at'] = new DateTime;
+    		$new_row['updated_at'] = $new_row['created_at'];
 
 			for($x = 0; $x < count($columns); $x++){
 				if( isset($entry[$x]) )

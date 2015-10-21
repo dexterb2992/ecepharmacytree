@@ -29,20 +29,8 @@ Route::get('home', function(){
 });
 
 Route::get('try/', function(){
-	$columns = ['id', 'province_id', 'name'];
-	// dd(count($columns)-1);
-	$municipalities = extract_db_to_array(public_path()."/db-src/municipalities.dat", $columns);
-	dd($municipalities);
-	exit(0);
-	// $data = file_get_contents(public_path()."/municipalities.php");
-	// $arr_data =  explode(PHP_EOL, $data);
-	// $municipalities = [];
-
-	// foreach ($arr_data as $key => $value) {
-	// 	$entry = preg_split("/[\t]/", $value);
-	// 	if( isset($entry[2]) )
-	// 		$municipalities[$key] = ['id' => $entry[0], 'province_id' => $entry[1], 'name' => $entry[2]];
-	// }
+	$region = ECEPharmacyTree\Province::find(1)->municipalities;
+	dd($region);
 });
 
 // Routes used for /profile
@@ -202,15 +190,19 @@ Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
 Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
 Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
 Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
-// Route::post('fulfill_orders', function(){
-// 	pre($_POST);
-	
-// });
-
-
 
 Route::get('images/{template}/', function($template){
 	return redirect(url('images/'.$template."/nophoto.png"));
 });
 
 Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
+
+/**
+ * @param string $location = ['provinces', 'municipalities']
+ * @param int $id
+ * @return json $response
+ */
+Route::get('locations/get/regions/', 'LocationController@show');
+Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
+// get-provinces-where-region_id=1
+// get-municipalities-where-province_id=1
