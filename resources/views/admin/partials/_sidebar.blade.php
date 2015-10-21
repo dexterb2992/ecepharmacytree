@@ -26,7 +26,7 @@
           <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
             <li class="active">
-              <a href="{{ route('dashboard') }}">
+              <a href="{{ route('dashboard').'/' }}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
               </a>
             </li>
@@ -63,7 +63,7 @@
             </li>
 
             <li class="treeview">
-              <a href="orders">
+              <a href="{{ route('orders') }}">
                 <i class="fa fa-shopping-cart"></i> <span>Orders</span>
               </a>
             </li>

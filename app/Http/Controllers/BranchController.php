@@ -3,12 +3,13 @@
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
-use ECEPharmacyTree\Branch;
 use Input;
 use Redirect;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
+use ECEPharmacyTree\Branch;
+use ECEPharmacyTree\Region;
 
 class BranchController extends Controller
 {
@@ -19,8 +20,10 @@ class BranchController extends Controller
      */
     public function index(){
         //
+        $regions = Region::all();
         $branches = Branch::all();
-        return view('admin.branches')->withBranches($branches);
+        return view('admin.branches')->withBranches($branches)
+            ->withRegions($regions);
     }
 
     /**

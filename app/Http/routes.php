@@ -12,14 +12,9 @@
 */
 
 
-View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-View::share('critical_stocks', check_for_critical_stock());
-View::share('branches', ECEPharmacyTree\Branch::all());
-
-Route::get("try/", function(){
-	
-	return $_SERVER['DOCUMENT_ROOT']."/public/upload";
-});
+// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+// View::share('critical_stocks', check_for_critical_stock());
+// View::share('branches', ECEPharmacyTree\Branch::all());
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
@@ -27,13 +22,15 @@ Route::controllers([
 ]);
 
 
-Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => function () {
-	$recently_added_products = ECEPharmacyTree\Product::latest()->limit(4)->get();
-	return view('dashboard')->withRecently_added_products($recently_added_products)->withTitle("Dashboard");
-}]);
+Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@index']);
 
 Route::get('home', function(){
 	return redirect('/');
+});
+
+Route::get('try/', function(){
+	$region = ECEPharmacyTree\Province::find(1)->municipalities;
+	dd($region);
 });
 
 // Routes used for /profile
@@ -75,14 +72,14 @@ Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'm
 	 */
 	Route::get('/', ['as' => 'index','uses' => 'ProductCategoryController@index']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'ProductCategoryController@show']);
-	Route::get('subcategories/{id}', ['as' => 'product_subcategories', 'uses' => 'ProductSubcategoryController@show']);
+	Route::get('subcategories/{id}', ['as' => 'product_subcategories', 'uses' => 'ProductSubCategoryController@show']);
 	
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductCategoryController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductCategoryController@update']);
 	Route::post('delete', ['as' => 'remove', 'uses' => 'ProductCategoryController@destroy']);
-	Route::post('subcategories/create', ['as' => 'create_product_subcategory', 'uses' => 'ProductSubcategoryController@store']);
-	Route::post('subcategories/edit', ['as' => 'edit_product_subcategory', 'uses' => 'ProductSubcategoryController@update']);
-	Route::post('subcategories/delete', ['as' => 'remove_product_subcategory', 'uses' => 'ProductSubcategoryController@destroy']);
+	Route::post('subcategories/create', ['as' => 'create_product_subcategory', 'uses' => 'ProductSubCategoryController@store']);
+	Route::post('subcategories/edit', ['as' => 'edit_product_subcategory', 'uses' => 'ProductSubCategoryController@update']);
+	Route::post('subcategories/delete', ['as' => 'remove_product_subcategory', 'uses' => 'ProductSubCategoryController@destroy']);
 
 });
 
@@ -193,16 +190,19 @@ Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
 Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
 Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
 Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
-// Route::post('fulfill_orders', function(){
-// 	pre($_POST);
-	
-// });
-
-
 
 Route::get('images/{template}/', function($template){
 	return redirect(url('images/'.$template."/nophoto.png"));
 });
 
-
 Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
+
+/**
+ * @param string $location = ['provinces', 'municipalities']
+ * @param int $id
+ * @return json $response
+ */
+Route::get('locations/get/regions/', 'LocationController@show');
+Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
+// get-provinces-where-region_id=1
+// get-municipalities-where-province_id=1

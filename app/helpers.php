@@ -148,7 +148,10 @@ function str_auto_plural($str, $quantity){
 
 function get_all_downlines($referral_id){
 	$settings = ECEPharmacyTree\Setting::first();
-	$patients = ECEPharmacyTree\Patient::where('referred_by', '=', $referral_id)->get()->toArray(); // Primary Level
+	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
+
+	if( empty($patients) )
+		$patients = ECEPharmacyTree\Doctor::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
 
 	$downlines = array();
 	$downlines = $patients;
@@ -282,4 +285,38 @@ function check_if_order_had_approved_prescriptions($order){
 		return true;
 	return false;
 
+}
+
+/**
+ * @param string $path_to_source_file
+ * @param array $columns
+ *
+ * @return array $rows
+ */
+function extract_db_to_array($path_to_source_file, $columns = array()){
+	// for example, $columns = ['id', 'province_id', 'name'];
+	// to use this function properly, the content structure of a file should be
+	// 1. each column value should be separated by a Tab
+	// 2. each row should be represented by a newline
+
+
+	$data = file_get_contents($path_to_source_file);
+	$arr_data =  explode(PHP_EOL, $data);
+	$rows = [];
+
+	foreach ($arr_data as $key => $value) {
+		$entry = preg_split("/[\t]/", $value);
+		if( isset($entry[ count($columns)-1 ]) )
+			$new_row = [];
+			$new_row['created_at'] = new DateTime;
+    		$new_row['updated_at'] = $new_row['created_at'];
+
+			for($x = 0; $x < count($columns); $x++){
+				if( isset($entry[$x]) )
+					$new_row[$columns[$x]] = $entry[$x];
+			}
+			$rows[] = $new_row;
+	}
+
+	return array_values($rows);
 }

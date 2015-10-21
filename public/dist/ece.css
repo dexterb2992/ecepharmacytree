@@ -249,3 +249,7 @@ tr.critical-stock, tr.critical-stock td, tr.critical-stock td a, tr.critical-sto
     max-width: 281.5px;
     overflow: hidden;
 }
+
+.select2-container {
+    width: 100% !important;
+}

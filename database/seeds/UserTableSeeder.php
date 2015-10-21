@@ -13,7 +13,7 @@ class UserTableSeeder extends Seeder
         User::where("id", ">", "0")->delete();
 
     	$user = new User;
-    	$user->id = 2;
+    	$user->id = 1;
     	$user->fname = "John";
     	$user->mname = "Smith";
     	$user->lname = "Doe";
