@@ -10,6 +10,8 @@ use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Branch;
 use ECEPharmacyTree\Region;
+use ECEPharmacyTree\Municipality;
+use ECEPharmacyTree\Province;
 
 class BranchController extends Controller
 {
@@ -44,17 +46,12 @@ class BranchController extends Controller
         $input = Input::all();
         $branch = new Branch;
         $branch->name = $input["name"];
-        $branch->unit_floor_room_no = $input["unit_floor_room_no"];
-        $branch->building = $input["building"];
-        $branch->lot_no = $input["lot_no"];
-        $branch->block_no = $input["block_no"];
-        $branch->phase_no = $input["phase_no"];
-        $branch->address_street = $input["address_street"];
-        $branch->address_barangay = $input["address_barangay"];
-        $branch->address_city_municipality = $input["address_city_municipality"];
-        $branch->address_province = $input["address_province"];
-        $branch->address_region = $input["address_region"];
-        $branch->address_zip = $input["address_zip"];
+        $branch->full_address = $input["unit_floor_room_no"].", ".$input["building"].",
+            ".$input["lot_no"].', '.$input["block_no"].', '.$input["phase_no"].', 
+            '.$input["address_street"].", ".$input["address_barangay"].",
+            ".Municipality::find($input["address_city_municipality"])->name.", 
+            ".Province::find($input["address_province"])->name.", 
+            ".Region::find($input["address_region"])->name.", ".$input["address_zip"];
         if( $branch->save() ) 
             session()->flash("flash_message", array("msg" => "New branch has been added successfully.", "type" => "success"));
             return Redirect::to( route('Branches::index') );
@@ -70,7 +67,7 @@ class BranchController extends Controller
      */
     public function show($id)
     {
-        $branch = Branch::find($id);
+        $branch = Branch::findOrFail($id);
         return $branch->toJson();
     }
 
@@ -95,7 +92,7 @@ class BranchController extends Controller
     public function update()
     {
         $input = Input::all();
-        $branch = Branch::find($input["id"]);
+        $branch = Branch::findOrFail($input["id"]);
         $branch->name = $input["name"];
         $branch->unit_floor_room_no = $input["unit_floor_room_no"];
         $branch->building = $input["building"];
@@ -136,7 +133,7 @@ class BranchController extends Controller
     public function activate_deactivate(){
 
         if( Request::ajax() ){
-            $branch = Branch::find( Input::get('id') );
+            $branch = Branch::findOrFail( Input::get('id') );
             $branch->status = $branch->status == 0 ? 1 : 0;
             if( $branch->save() ) 
                 if( $branch->status == 0 ){

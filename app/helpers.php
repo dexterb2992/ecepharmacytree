@@ -122,29 +122,29 @@ function str_auto_plural($str, $quantity){
 			return str_plural($str)." ".$suf;
 
 		return str_singular($str)." ".$suf;
-	}
+}
 
-	function rn2br($str){
-		$newLineArray = array('\r\n','\n\r','\n','\r');
-		return str_replace($newLineArray,'<br/>', nl2br($str));
-	}
+function rn2br($str){
+	$newLineArray = array('\r\n','\n\r','\n','\r');
+	return str_replace($newLineArray,'<br/>', nl2br($str));
+}
 
-	function safety_stock(){
-		$p = Product::all();
-		return $p->toJson();
-	}
+function safety_stock(){
+	$p = Product::all();
+	return $p->toJson();
+}
 
-	function get_patient_fullname($patient){
-		return ucfirst($patient->fname)." ".ucfirst($patient->lname);
-	}
+function get_patient_fullname($patient){
+	return ucfirst($patient->fname)." ".ucfirst($patient->lname);
+}
 
-	function get_patient_full_address($patient){
-		return ucfirst($patient->address_street).', '.ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
-	}
+function get_patient_full_address($patient){
+	return ucfirst($patient->address_street).', '.ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
+}
 
-	function get_patient_referrals($patient){
-		return $count = ECEPharmacyTree\Patient::where('referred_by', '=', $patient->referral_id)->count();
-	}
+function get_patient_referrals($patient){
+	return $count = ECEPharmacyTree\Patient::where('referred_by', '=', $patient->referral_id)->count();
+}
 
 function get_all_downlines($referral_id){
 	$settings = ECEPharmacyTree\Setting::first();
@@ -256,6 +256,7 @@ function validate_reminder_token($token){
 
 /**
  * @param int $role
+ *
  * @return Response
  */
 function get_role($role){
@@ -271,6 +272,7 @@ function get_role($role){
 	return '-';
 }
 
+// formats number to money
 function to_money($number, $decimal = 0){
 	return number_format( $number , $decimal , "." , "," );
 }

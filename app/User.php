@@ -54,4 +54,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return true;
         return false;
     }
+
+    public function isBranchManager(){
+        if( $this->access_level == "2" )
+            return true;
+        return false;
+    }
+
+    public function isPharmacist(){
+        if( $this->access_level == "3" )
+            return true;
+        return false;
+    }
 }
