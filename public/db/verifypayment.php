@@ -100,7 +100,7 @@ define('DEFAULT_CURRENCY', 'PHP');
 
                         if($counter == 0 ){
 
-                            $sql_orders_save = "INSERT INTO orders VALUES ('', $user_id, '$recipient_name', '$recipient_address', '$recipient_contactNumber', '', '$branch_server_id', '$modeOfDelivery', 'open', '$server_timestamp', '', '')";
+                            $sql_orders_save = "INSERT INTO orders VALUES ('', $user_id, '$recipient_name', '$recipient_address', '$recipient_contactNumber', '', '$branch_server_id', '$modeOfDelivery', 'Pending', '$server_timestamp', '', '')";
 
                             if(mysql_query($sql_orders_save )){
                                 $order_id = mysql_insert_id(); 
@@ -139,7 +139,7 @@ define('DEFAULT_CURRENCY', 'PHP');
                     }
                 // end of billing
 
-                    $sql_paypal_payment = "INSERT INTO payments VALUES ('', $billing_id, '$payment->id','or number', $branch_server_id, '$server_timestamp', '', '')";
+                    $sql_paypal_payment = "INSERT INTO payments VALUES ('', $billing_id, '$payment->id','or number', '$server_timestamp', '', '')";
 
                     if(mysql_query($sql_paypal_payment )){
                         $response['message'] = "payment saved on database";
@@ -212,4 +212,4 @@ define('DEFAULT_CURRENCY', 'PHP');
             }
 
 
-            ?>		
+            ?>      

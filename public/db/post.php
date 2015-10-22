@@ -139,7 +139,7 @@ if ($request == 'register') {
 
 			if($counter == 0 ){
 
-				$sql_orders_save = "INSERT INTO orders VALUES ('', $user_id, '$recipient_name', '$recipient_address', '$recipient_contactNumber', '', '$branch_id', '$modeOfDelivery', 'open', '$datenow', '', '')";
+				$sql_orders_save = "INSERT INTO orders VALUES ('', $user_id, '$recipient_name', '$recipient_address', '$recipient_contactNumber', '', '$branch_id', '$modeOfDelivery', 'Pending', '$datenow', '', '')";
 
 				if(mysql_query($sql_orders_save )){
 					$order_id = mysql_insert_id(); 
