@@ -29,7 +29,8 @@ Route::get('home', function(){
 });
 
 Route::get('try/{template}', function($template){
-	dd(config("imagecache.templates.{$template}"));
+	// dd(config("imagecache.templates.{$template}"));
+	dd(class_exists(config("imagecache.templates.{$template}")));
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
