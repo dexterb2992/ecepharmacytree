@@ -417,5 +417,25 @@ $(document).ready(function (){
                 });
             }
         });
+
+        $('select#address_city_municipality').change(function (){
+            if( $(this).val() != '0' ){
+                $.ajax({
+                    url: '/locations/get/barangays/where-municipalities/'+$(this).val(),
+                    type: 'get',
+                    dataType: 'json'
+                }).done(function (data){
+                    console.log(typeof(data));
+                    if( typeof(data) == 'object' ){
+                        var barangays = '<option value="0">- Select Barangay -</option>';
+                        $.each(data, function (i, row){
+                            barangays += '<option value="'+row.id+'">'+row.name+'</option>';
+                        });
+
+                        $("#address_barangay").html(barangays).select2();
+                    }
+                });
+            }
+        });
 		
 });

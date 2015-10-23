@@ -10,6 +10,7 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Region;
 use ECEPharmacyTree\Province;
 use ECEPharmacyTree\Municipality;
+use ECEPharmacyTree\Barangay;
 
 
 class LocationController extends Controller
@@ -56,17 +57,22 @@ class LocationController extends Controller
     public function show($get_location = 'regions', $parent_location = '', $parent_location_id = 0)
     {   
         if( $get_location == "regions" )
-            $response =  Region::all();
+            $response =  Region::all()->toArray();
 
         else if( $get_location == "provinces" && $parent_location == "regions")
             
-            $response =  Region::findOrFail($parent_location_id)->provinces; 
+            $response =  Region::findOrFail($parent_location_id)->provinces->toArray(); 
 
         else if( $get_location == "municipalities" && $parent_location == "provinces" )
 
-            $response =  Province::findOrFail($parent_location_id)->municipalities;
+            $response =  Province::findOrFail($parent_location_id)->municipalities->toArray();
 
-        return !empty($response) ? $response : json_encode(array());
+        else if( $get_location == "barangays" && $parent_location == "municipalities" )
+            
+            $response = Municipality::findOrFail($parent_location_id)->barangays->toArray();
+
+        return $response = decode_utf8($response);
+
     }
 
     /**
