@@ -19,7 +19,7 @@ class CreatePatientsTable extends Migration
             $table->string('lname');
             $table->string('username')->unique();
             $table->string('password');
-            $table->string('email_address')->unique();
+            $table->string('email_address');
             $table->string('mobile_no');
             $table->string('tel_no')->nullable();
             $table->longText('photo')->nullable();
@@ -36,11 +36,9 @@ class CreatePatientsTable extends Migration
             $table->integer('phase_no')->nullable();
             $table->integer('address_house_no')->nullable();
             $table->string('address_street')->nullable();
-            $table->string('address_barangay');
-            $table->string('address_city_municipality');
-            $table->string('address_province');
-            $table->string('address_region');
-            $table->string('address_zip');
+            $table->integer('address_barangay_id')->unsigned()->nullable();
+            // $table->foreign('address_barangay_id')->references('id')->on('barangays');
+            $table->double('points');
             $table->string('referral_id');
             // $table->string('referred_by')->nullable(); // referral_id of the user who referred this new user
             $table->string('referred_byUser')->nullable();
