@@ -16,7 +16,7 @@ return array(
     |
     */
    
-    'route' => null,
+    'route' => "images",
 
     /*
     |--------------------------------------------------------------------------
@@ -32,7 +32,12 @@ return array(
     
     'paths' => array(
         public_path('upload'),
-        public_path('images')
+        public_path('images'),
+        public_path('img'),
+        public_path('dist/img'),
+        public_path('dist/img/credit'),
+        public_path('images/profile-pictures'),
+        public_path('images/product-photo-gallery')
     ),
 
     /*
@@ -55,6 +60,9 @@ return array(
         'small' => 'Intervention\Image\Templates\Small',
         'medium' => 'Intervention\Image\Templates\Medium',
         'large' => 'Intervention\Image\Templates\Large',
+        '160x160' => 'Intervention\Image\Templates\Size160x160',
+        '128x128' => 'Intervention\Image\Templates\Size128x128',
+        '50x50' => 'Intervention\Image\Templates\Size50x50',
     ),
 
     /*
