@@ -13,8 +13,8 @@ class MunicipalityTableSeeder extends Seeder
     public function run()
     {
         Municipality::where('id', '>', 0)->delete();
-        $columns = ['id', 'province_id', 'name'];
-        $municipalities = extract_db_to_array(public_path()."/db-src/municipalities.dat", $columns);
+        $columns = ['id', 'name', 'province_id'];
+        $municipalities = extract_db_to_array(public_path()."/db-src/municipalities.dex", $columns);
 
         Municipality::insert( $municipalities );
     }

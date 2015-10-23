@@ -14,8 +14,8 @@ class ProvinceTableSeeder extends Seeder
     {
         Province::where('id', '>', 0)->delete();
 
-        $columns = ['id', 'region_id', 'name'];
-        $provinces = extract_db_to_array(public_path()."/db-src/provinces.dat", $columns);
+        $columns = ['id', 'name', 'region_id'];
+        $provinces = extract_db_to_array(public_path()."/db-src/provinces.dex", $columns);
 
         Province::insert( $provinces );
     }

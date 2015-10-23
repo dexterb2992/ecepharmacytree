@@ -15,7 +15,7 @@ class RegionTableSeeder extends Seeder
         Region::where('id', '>', 0)->delete();
 
         $columns = ['id', 'code', 'name'];
-        $regions = extract_db_to_array(public_path()."/db-src/regions.dat", $columns);
+        $regions = extract_db_to_array(public_path()."/db-src/regions.dex", $columns);
 
         Region::insert($regions);
 
