@@ -167,6 +167,26 @@ switch ($request) {
     $tbl = "messages";
     break;
 
+    case 'regions':
+    $result = mysql_query("SELECT * FROM regions") or returnError(mysql_error());
+    $tbl = "regions";
+    break;
+
+    case 'provinces':
+    $result = mysql_query("SELECT * FROM provinces WHERE region_id =".$_GET['region_id']) or returnError(mysql_error());
+    $tbl = "provinces";
+    break;
+
+    case 'municipalities':
+    $result = mysql_query("SELECT * FROM municipalities WHERE province_id =".$_GET['province_id']) or returnError(mysql_error());
+    $tbl = "municipalities";
+    break;
+
+    case 'barangays':
+    $result = mysql_query("SELECT * FROM barangays WHERE municipality_id =".$_GET['municipality_id']) or returnError(mysql_error());
+    $tbl = "barangays";
+    break;
+
     default:
         # code...
     break;
@@ -222,9 +242,9 @@ function returnError($msg) {
 }
 
 function pre($str){
- echo "<pre>";
- print_r($str);
- echo "</pre>";
+   echo "<pre>";
+   print_r($str);
+   echo "</pre>";
 }
 
 function fetchRows($result, $tbl){
