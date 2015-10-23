@@ -167,22 +167,22 @@ switch ($request) {
     $tbl = "messages";
     break;
 
-    case 'regions':
+    case 'get_regions':
     $result = mysql_query("SELECT * FROM regions") or returnError(mysql_error());
     $tbl = "regions";
     break;
 
-    case 'provinces':
+    case 'get_provinces':
     $result = mysql_query("SELECT * FROM provinces WHERE region_id =".$_GET['region_id']) or returnError(mysql_error());
     $tbl = "provinces";
     break;
 
-    case 'municipalities':
+    case 'get_municipalities':
     $result = mysql_query("SELECT * FROM municipalities WHERE province_id =".$_GET['province_id']) or returnError(mysql_error());
     $tbl = "municipalities";
     break;
 
-    case 'barangays':
+    case 'get_barangays':
     $result = mysql_query("SELECT * FROM barangays WHERE municipality_id =".$_GET['municipality_id']) or returnError(mysql_error());
     $tbl = "barangays";
     break;
