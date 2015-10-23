@@ -21,15 +21,14 @@
     },
     "autoload": {
         "classmap": [
-            "database",
-            "config/imagecache.php"
+            "database"
         ],
         "psr-4": {
             "ECEPharmacyTree\\": "app/"
         },
         "files": [
             "app/helpers.php",
-            "vendor/intervention/imagecache/"
+            "config/imagecache.php"
 
         ]
     },
