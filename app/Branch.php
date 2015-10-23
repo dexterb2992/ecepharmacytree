@@ -10,7 +10,7 @@ class Branch extends Model
     protected $softDelete = true;
 
     public function users(){
-    	return $this->hasMany('ECEPharmacyTree\User');
+    	return $this->hasMany('ECEPharmacyTree\User', 'branch_id');
     }
 
     function orders(){

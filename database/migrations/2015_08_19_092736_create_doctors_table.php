@@ -24,7 +24,7 @@ class CreateDoctorsTable extends Migration
             $table->longText('affiliation')->nullable();
             $table->string('email')->nullable();
             $table->string('referral_id');
-            $table->double('points');
+            $table->double('points')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
