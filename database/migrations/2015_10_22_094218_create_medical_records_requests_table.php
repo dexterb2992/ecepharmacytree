@@ -16,8 +16,8 @@ class CreateMedicalRecordsRequestsTable extends Migration
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->string('username');
-            $table->string('password');
+            $table->integer('clinic_patients_id')->unsigned();
+            $table->integer('clinic_patients_id')->references('id')->on('clinic_patients')->onDelete('cascade');
             $table->integer('access_granted')->default(0);
             $table->timestamps();
             $table->softDeletes();

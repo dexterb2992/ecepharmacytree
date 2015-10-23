@@ -322,3 +322,47 @@ function extract_db_to_array($path_to_source_file, $columns = array()){
 
 	return array_values($rows);
 }
+
+function arrayUnique($array, $preserveKeys = false)  
+{  
+    // Unique Array for return  
+    $arrayRewrite = array();  
+    // Array with the md5 hashes  
+    $arrayHashes = array();  
+    foreach($array as $key => $item) {  
+        // Serialize the current element and create a md5 hash  
+        $hash = md5(serialize($item));  
+        // If the md5 didn't come up yet, add the element to  
+        // to arrayRewrite, otherwise drop it  
+        if (!isset($arrayHashes[$hash])) {  
+            // Save the current element hash  
+            $arrayHashes[$hash] = $hash;  
+            // Add element to the unique Array  
+            if ($preserveKeys) {  
+                $arrayRewrite[$key] = $item;  
+            } else {  
+                $arrayRewrite[] = $item;  
+            }  
+        }  
+    }  
+    return $arrayRewrite;  
+}  
+
+/**
+ * Searches a key or value of a multidensional array
+ *
+ * @param string $needle
+ * @param array $array_key  // the array key that you want to compare
+ * @param string $haystack
+ */
+function multi_array_search($needle, $array_key = 0, $haystack){
+	$arrIt = new RecursiveIteratorIterator(new RecursiveArrayIterator($haystack));
+
+	foreach ($arrIt as $sub) {
+	    $subArray = $arrIt->getSubIterator();
+	    if ($subArray[$array_key] === $needle) {
+	        $outputArray[] = iterator_to_array($subArray);
+	    }
+	}
+	return $outputArray;
+}

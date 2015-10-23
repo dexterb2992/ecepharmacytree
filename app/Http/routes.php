@@ -29,8 +29,171 @@ Route::get('home', function(){
 });
 
 Route::get('try/', function(){
-	$region = ECEPharmacyTree\Province::find(1)->municipalities;
-	dd($region);
+	ini_set('max_execution_time', 300);
+
+	$data = file_get_contents(public_path()."/db-src/mainsource.dat");
+		$arr_data =  explode(PHP_EOL, $data);
+		$rows = [];
+		$barangays = ["name", "municipality"];
+		$municipalities = ["name", "province"];
+		$provinces = ["name", "region"];
+		$regions = ["name"];
+
+		foreach ($arr_data as $key => $value) {
+			$entry = preg_split("/[\t]/", $value);
+			// $entry[0] = barangay
+			// $entry[1] = municipalities		
+			// $entry[2] = province
+			// $entry[3] = region
+			if( isset($entry[0]) && isset($entry[1]) )
+				$barangays[$key] = [
+					"name" => $entry[0],
+					"municipality" => $entry[1]
+				];
+			if( isset($entry[1]) && isset($entry[2]) )
+				$municipalities[$key] = [
+					"name" => $entry[1],
+					"province" => $entry[2]
+				];
+			if( isset($entry[2]) && isset($entry[3]))
+				$provinces[$key] =  [
+					"name" => $entry[2],
+					"region" => $entry[3]
+				];
+			if( isset($entry[3]) )
+				$regions[$key] = [
+					"name" => $entry[3]
+				];
+		}
+
+		// let's make sure our arrays are unique
+
+		$regions = arrayUnique($regions);
+		$provinces = arrayUnique($provinces);
+		$municipalities = arrayUnique($municipalities);
+		$barangays = arrayUnique($barangays);
+
+		// add ids to every array
+
+		## regions
+		$x = 1;
+		$new_array = [];
+		$regions_txt = "";
+		foreach ($regions as $key => $value) {
+			// $new_array[$x] = $value;
+			array_push($new_array, ["id" => $x, "name" => $value['name']]);
+			// $regions_txt.= $x."\t".$value['name'].PHP_EOL;
+
+			$x++;
+		}
+		$regions = $new_array;
+
+		// save regions
+		// file_put_contents(public_path()."/db-src/regions.final.dat", $regions_txt);
+		// dd($regions);
+
+
+		## provinces
+		$x = 1;
+		$new_array = [];
+		$provinces_txt = "";
+		foreach ($provinces as $province) {
+			$new_array[$x]["id"] = $x;
+			$new_array[$x]["name"] = $province["name"];
+			$try_search = multi_array_search($province["region"], 'name', $regions);
+
+			if( is_array($try_search) ){
+				$new_array[$x]["region_id"] = $try_search[0]['id'];
+			}else{
+				$new_array[$x]["region_id"] = '0';
+			}
+
+			// dd($new_array[$x]["region_id"]);
+
+			// $provinces_txt.= $x."\t".$province['name']."\t".$new_array[$x]["region_id"].PHP_EOL;
+			$x++;
+		}
+		$provinces = $new_array;
+
+		// file_put_contents(public_path()."/db-src/provinces.final.dat", $provinces_txt);
+		// dd($provinces);
+
+
+		## municipalities
+		$x = 1;
+		$new_array = [];
+		$municipalities_txt = "";
+		foreach ($municipalities as $municipality) {
+			// $new_array[$x] = $municipality["name"];
+			// $new_array["province_id"] = array_search($municipality["province"], $provinces);
+			$try_search = multi_array_search($municipality["province"], 'name', $provinces);
+			// pre($try_search);
+			if(is_array($try_search)){
+				$new_array[$x]['name'] = $municipality["name"];
+				$new_array[$x]["id"] = $x;
+				$new_array[$x]['province_id'] = $try_search[0]['id'];
+			}
+
+			// $municipalities_txt.= $x."\t".$municipality['name']."\t".$try_search[0]['id'].PHP_EOL;
+			$x++;
+		}
+		$municipalities = $new_array;
+		// file_put_contents(public_path()."/db-src/municipalities.final.dat", $municipalities_txt);
+
+
+		## barangays
+		$x = 1;
+		$new_array = [];
+		$barangays_txt = "";
+		foreach ($barangays as $barangay) {
+			// $new_array[$x] = $barangay["name"];
+			// $new_array[$x]['id'] = $x;
+			// $new_array["municipality_id"] = array_search($barangay["municipality"], $municipalities);
+
+			$try_search = multi_array_search($barangay["municipality"], 'name', $municipalities);
+			pre($try_search[0]['name']);
+			if(is_array($try_search)){
+				$new_array[$x]['id'] = $x;
+				$new_array[$x]["name"] = $barangay["name"];
+				$new_array[$x]['municipality_id'] = $try_search[0]['id'];
+
+				$barangays_txt.= $x."\t".$barangay["name"]."\t".$new_array[$x]['municipality_id'].PHP_EOL;
+			}
+
+
+			$x++;
+		}
+		$barangays = $new_array;
+
+		file_put_contents(public_path()."/db-src/barangays.final.dat", $barangays_txt);
+
+		// dd($barangays);
+
+
+		// return array_values($rows);
+		/*$regions = array_unique($regions);
+
+		$regions_new = "";
+		// let's replace the regions here with the regions' array key
+		$x = 1;
+		foreach ($regions as $key => $value) {
+			$data = str_replace($value, $key, $data);
+			$regions_new .= $x."\t".$value.PHP_EOL;
+			$x++;
+		}
+
+		file_put_contents(public_path()."/db-src/regions.final.dat", $regions_new);
+
+		$data = file_get_contents(public_path()."/db-src/barangays.php");
+		$arr_data =  explode(PHP_EOL, $data);*/
+
+		// $columns = ['id', 'name'];
+	 //    $regions = extract_db_to_array(public_path()."/db-src/new-regions.dat", $columns);
+	 //    ECEPharmacyTree\Region::where('id', '>', 0)->delete();
+		// ECEPharmacyTree\Region::insert($regions);
+		// dd($regions);
+	
+	##########################################################################################
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
