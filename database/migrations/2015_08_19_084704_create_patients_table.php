@@ -38,7 +38,7 @@ class CreatePatientsTable extends Migration
             $table->string('address_street')->nullable();
             $table->integer('address_barangay_id')->unsigned()->nullable();
             // $table->foreign('address_barangay_id')->references('id')->on('barangays');
-            $table->double('points');
+            $table->double('points')->default(0);
             $table->string('referral_id');
             // $table->string('referred_by')->nullable(); // referral_id of the user who referred this new user
             $table->string('referred_byUser')->nullable();
