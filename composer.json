@@ -28,7 +28,9 @@
             "ECEPharmacyTree\\": "app/"
         },
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "vendor/intervention/imagecache/"
+
         ]
     },
     "autoload-dev": {
