@@ -11,4 +11,8 @@ class Municipality extends Model
     public function province(){
     	return $this->belongsTo('ECEPharmacyTree\Province');
     }
+
+    public function barangays(){
+    	return $this->hasMany('ECEPharmacyTree\Barangay');
+    }
 }

@@ -29,7 +29,9 @@ Route::get('home', function(){
 });
 
 Route::get('try/', function(){
-	
+	echo json_encode('&#209');
+	echo "\n";
+	echo iconv("UTF-8", "UTF-8//IGNORE", '\u00c3');
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
