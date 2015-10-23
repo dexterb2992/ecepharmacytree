@@ -154,7 +154,7 @@ define('DEFAULT_CURRENCY', 'PHP');
 
                         $result = mysql_query($sql_get_settings) or returnError(mysql_error());
 
-                        $point = 0;
+                        $points = 0;
                         $earned_points = 0;
 
                         $db_result = mysql_num_rows($result);
@@ -163,8 +163,8 @@ define('DEFAULT_CURRENCY', 'PHP');
                         if ($db_result > 0) {
                             $row = mysql_fetch_assoc($result);
                             
-                            $point = $row['points']/100;
-                            $earned_points = $points*$totalAmount;
+                            $points = $row['points']/100;
+                            $earned_points = $points * $totalAmount;
                         }
 
                         $sql_update_buyer_points = "UPDATE patients SET points = points + ".$earned_points;
