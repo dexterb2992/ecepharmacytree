@@ -24,10 +24,7 @@ class PatientTableSeeder extends Seeder
         	"civil_status" => "Single",
         	"height" => "5.4",
         	"weight" => "75",
-        	"address_barangay" => "Deca Homes Tigatto",
-        	"address_city_municipality" => "Davao City",
-        	"address_region" => "Region XI",
-        	"address_zip" => "8000",
+        	"address_barangay_id" => 1,
         	"referral_id" => "ABC123"
         ]);
     }
