@@ -1,0 +1,79 @@
+<?php
+
+return array(
+
+    /*
+    |--------------------------------------------------------------------------
+    | Name of route
+    |--------------------------------------------------------------------------
+    |
+    | Enter the routes name to enable dynamic imagecache manipulation.
+    | This handle will define the first part of the URI:
+    | 
+    | {route}/{template}/{filename}
+    | 
+    | Examples: "images", "img/cache"
+    |
+    */
+   
+    'route' => "images",
+
+    /*
+    |--------------------------------------------------------------------------
+    | Storage paths
+    |--------------------------------------------------------------------------
+    |
+    | The following paths will be searched for the image filename, submited 
+    | by URI. 
+    | 
+    | Define as many directories as you like.
+    |
+    */
+    
+    'paths' => array(
+        $_SERVER['DOCUMENT_ROOT'].'/upload',
+        $_SERVER['DOCUMENT_ROOT'].'/images',
+        $_SERVER['DOCUMENT_ROOT'].'/img',
+        $_SERVER['DOCUMENT_ROOT'].'/dist/img',
+        $_SERVER['DOCUMENT_ROOT'].'/dist/img/credit',
+        $_SERVER['DOCUMENT_ROOT'].'/images/profile-pictures',
+        $_SERVER['DOCUMENT_ROOT'].'/images/product-photo-gallery'
+    ),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Manipulation templates
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify your own manipulation filter templates.
+    | The keys of this array will define which templates 
+    | are available in the URI:
+    |
+    | {route}/{template}/{filename}
+    |
+    | The values of this array will define which filter class
+    | will be applied, by its fully qualified name.
+    |
+    */
+   
+    'templates' => array(
+        'small' => 'Intervention\Image\Templates\Small',
+        'medium' => 'Intervention\Image\Templates\Medium',
+        'large' => 'Intervention\Image\Templates\Large',
+        '160x160' => 'Intervention\Image\Templates\Size160x160',
+        '128x128' => 'Intervention\Image\Templates\Size128x128',
+        '50x50' => 'Intervention\Image\Templates\Size50x50',
+    ),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Image Cache Lifetime
+    |--------------------------------------------------------------------------
+    |
+    | Lifetime in minutes of the images handled by the imagecache route.
+    |
+    */
+   
+    'lifetime' => 43200,
+
+);

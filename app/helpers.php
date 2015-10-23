@@ -366,3 +366,24 @@ function multi_array_search($needle, $array_key = 0, $haystack){
 	}
 	return $outputArray;
 }
+
+function cp1250_to_utf2($text){
+    $dict  = array(chr(225) => 'á', chr(228) =>  'ä', chr(232) => 'č', chr(239) => 'ď', 
+        chr(233) => 'é', chr(236) => 'ě', chr(237) => 'í', chr(229) => 'ĺ', chr(229) => 'ľ', 
+        chr(242) => 'ň', chr(244) => 'ô', chr(243) => 'ó', chr(154) => 'š', chr(248) => 'ř', 
+        chr(250) => 'ú', chr(249) => 'ů', chr(157) => 'ť', chr(253) => 'ý', chr(158) => 'ž',
+        chr(193) => 'Á', chr(196) => 'Ä', chr(200) => 'Č', chr(207) => 'Ď', chr(201) => 'É', 
+        chr(204) => 'Ě', chr(205) => 'Í', chr(197) => 'Ĺ',    chr(188) => 'Ľ', chr(210) => 'Ň', 
+        chr(212) => 'Ô', chr(211) => 'Ó', chr(138) => 'Š', chr(216) => 'Ř', chr(218) => 'Ú', 
+        chr(217) => 'Ů', chr(141) => 'Ť', chr(221) => 'Ý', chr(142) => 'Ž', 
+        chr(150) => '-', 'Ã±' => 'ň', 'Ã‘' => 'Ň', '&Ntilde;' => 'Ň', '&ntilde' => 'ň'
+    );
+    return strtr($text, $dict);
+}
+
+function decode_utf8($arrays = array()){
+	foreach ($arrays as $key => $array) {
+		$arrays[$key]['name'] = cp1250_to_utf2($array['name']);
+	}
+	return $arrays;
+}

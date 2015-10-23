@@ -21,10 +21,10 @@ class DatabaseSeeder extends Seeder
         $this->call(Illuminate\Database\Seeder\ProductSubcategoryTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\ProductTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\SettingTableSeeder::class);
-        $this->call(Illuminate\Database\Seeder\RegionTableSeeder::class);
-        $this->call(Illuminate\Database\Seeder\ProvinceTableSeeder::class);
-        $this->call(Illuminate\Database\Seeder\MunicipalityTableSeeder::class);
-        $this->call(Illuminate\Database\Seeder\BarangayTableSeeder::class);
+        // $this->call(Illuminate\Database\Seeder\RegionTableSeeder::class);
+        // $this->call(Illuminate\Database\Seeder\ProvinceTableSeeder::class);
+        // $this->call(Illuminate\Database\Seeder\MunicipalityTableSeeder::class);
+        // $this->call(Illuminate\Database\Seeder\BarangayTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\PatientTableSeeder::class);
         // Model::reguard();
     }

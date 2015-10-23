@@ -41,7 +41,12 @@
                     @if(Auth::check())
                     <p><span class="text-muted">You're logged in at Branch: </span>
                         <span class="text-aqua text-bold">
-                            {{ ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name }}
+                            <?php $branches_count = ECEPharmacyTree\Branch::all()->count(); ?>
+                            @if(Auth::user()->isAdmin() && $branches_count > 1)
+                                {{ ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name }}
+                            @else
+                                {{ Auth::user()->branch->name }}
+                            @endif
                         </span>
                     </p>
                     @endif

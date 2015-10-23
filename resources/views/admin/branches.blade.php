@@ -104,7 +104,10 @@
 
                             <div class="form-group">
                                 <label for="address_barangay">Barangay<i>*</i></label>
-                                <input type="text" class="form-control" id="address_barangay" placeholder="Barangay" name="address_barangay" required>
+                                <select class="form-control select2" name="address_barangay" id="address_barangay">
+                                    <option value="0">- Select Barangay -</option>
+                                </select>
+                                <!-- <input type="text" class="form-control" id="address_barangay" placeholder="Barangay" name="address_barangay" required> -->
                             </div>
 
                             <div class="row"> <!-- labels -->
