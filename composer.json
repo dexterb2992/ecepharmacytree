@@ -21,7 +21,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "app/filters"
         ],
         "psr-4": {
             "ECEPharmacyTree\\": "app/"
