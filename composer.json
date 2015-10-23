@@ -22,7 +22,7 @@
     "autoload": {
         "classmap": [
             "database",
-            "vendor/intervention"
+            "config/imagecache.php"
         ],
         "psr-4": {
             "ECEPharmacyTree\\": "app/"
