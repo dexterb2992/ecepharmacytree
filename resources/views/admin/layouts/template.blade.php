@@ -38,11 +38,13 @@
           
                 <!-- Main content -->
                 <section class="content">
+                    @if(Auth::check())
                     <p><span class="text-muted">You're logged in at Branch: </span>
                         <span class="text-aqua text-bold">
                             {{ ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name }}
                         </span>
                     </p>
+                    @endif
                     @if(Session::has("flash_message"))
                     <div class="alert-success alert alert-{{ Session::get('flash_message')['type'] }} alert">
                         @if(Session::get('flash_message')["type"] == "important")
