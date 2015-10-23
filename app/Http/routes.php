@@ -28,7 +28,8 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::get('try/', function(){
+Route::get('try/{template}', function($template){
+	dd(config("imagecache.templates.{$template}"));
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
