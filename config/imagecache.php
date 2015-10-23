@@ -31,13 +31,13 @@ return array(
     */
     
     'paths' => array(
-        public_path('upload'),
-        public_path('images'),
-        public_path('img'),
-        public_path('dist/img'),
-        public_path('dist/img/credit'),
-        public_path('images/profile-pictures'),
-        public_path('images/product-photo-gallery')
+        $_SERVER['DOCUMENT_ROOT'].'/upload',
+        $_SERVER['DOCUMENT_ROOT'].'/images',
+        $_SERVER['DOCUMENT_ROOT'].'/img',
+        $_SERVER['DOCUMENT_ROOT'].'/dist/img',
+        $_SERVER['DOCUMENT_ROOT'].'/dist/img/credit',
+        $_SERVER['DOCUMENT_ROOT'].'/images/profile-pictures',
+        $_SERVER['DOCUMENT_ROOT'].'/images/product-photo-gallery'
     ),
 
     /*
