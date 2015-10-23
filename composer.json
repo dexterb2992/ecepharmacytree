@@ -22,7 +22,7 @@
     "autoload": {
         "classmap": [
             "database",
-            "app/filters"
+            "vendor/intervention"
         ],
         "psr-4": {
             "ECEPharmacyTree\\": "app/"
