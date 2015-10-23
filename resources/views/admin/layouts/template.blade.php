@@ -41,7 +41,7 @@
                     @if(Auth::check())
                     <p><span class="text-muted">You're logged in at Branch: </span>
                         <span class="text-aqua text-bold">
-                            {{ ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name }}
+                            {{ Auth::user()->branch()->first()->name }}
                         </span>
                     </p>
                     @endif
