@@ -167,7 +167,7 @@ define('DEFAULT_CURRENCY', 'PHP');
                             $earned_points = $points * $totalAmount;
                         }
 
-                        $sql_update_buyer_points = "UPDATE patients SET points = points + ".$earned_points;
+                        $sql_update_buyer_points = "UPDATE patients SET points = points + ".round($earned_points, 2). "where id = ".$user_id;
                         if(mysql_query($sql_update_buyer_points)){
                             $response['points_update_message'] = "points updated";
                         } else {
