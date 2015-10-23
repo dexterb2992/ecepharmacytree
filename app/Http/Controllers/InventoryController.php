@@ -22,7 +22,8 @@ class InventoryController extends Controller
     public function index()
     {
 
-        $inventories = Inventory::where('quantity', '>', '0')->get();
+        $inventories = Inventory::where('quantity', '>', '0')
+            ->where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
         return view('admin.inventories')->withInventories($inventories)
             ->withProducts($products)->withTitle('Manage Inventory');
@@ -62,6 +63,7 @@ class InventoryController extends Controller
 
         $inventory->quantity = $quantity;
         $inventory->expiration_date = $input["expiration_date"];
+        $inventory->branch_id = session()->get('selected_branch');
         if( $inventory->save() ){
             return Redirect::to( route('Inventory::index') );
         }

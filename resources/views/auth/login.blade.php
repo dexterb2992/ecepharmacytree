@@ -35,7 +35,6 @@
         {!! Form::close() !!}
 
         <a href="/password/email">I forgot my password</a><br>
-        <a href="/auth/register" class="text-center">Register a new account</a>
 
       </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->

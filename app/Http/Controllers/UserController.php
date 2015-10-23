@@ -12,6 +12,7 @@ use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\User;
 use ECEPharmacyTree\Product;
+use ECEPharmacyTree\Patient;
 
 class UserController extends Controller
 {
@@ -27,8 +28,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $recently_added_products = Product::latest()->limit(4)->get();
-        return view('dashboard')->withRecently_added_products($recently_added_products)->withTitle("Dashboard");
+        $employees = User::where('id', '!=', Auth::user()->id)->get();
+        $members = Patient::all();
+        return view('admin.employees')->withTitle('Emloyees')->withEmployees($employees)
+            ->withMembers($members);
     }
 
     /**
@@ -117,7 +120,7 @@ class UserController extends Controller
 
     protected function validator(array $data){
         // $messages (optional), use it to alter laravel's default 
-        // error messages for those specific rules.
+        //      error messages for those specific rules.
         $messages = [
             'fname.required' => 'What is your First name?',
             'lname.required' => 'We need to know your Last name.',
@@ -194,6 +197,7 @@ class UserController extends Controller
     /**
      * Update the user's profile photo
      * @param file $photo
+     *
      * @return Response
      */
     public function update_photo(){
@@ -226,6 +230,25 @@ class UserController extends Controller
                 "type" => "danger"
             ]);
         }
+    }
+
+    /**
+     * Sets the selected branch on Session 
+     *
+     * @param $branch_id
+     * @return Illuminate/Http/Response
+     */
+    public function setBranchToLogin(){
+        $input = Input::all();
+        session()->put('selected_branch', $input['branch_id']); 
+        if (session()->get('selected_branch') > 0)
+            return Redirect::to( route('dashboard') );
+        return Redirect::to( '/auth/logout' );
+    }
+
+    public function dashboard(){
+        $recently_added_products = Product::latest()->limit(4)->get();
+        return view('dashboard')->withRecently_added_products($recently_added_products)->withTitle("Dashboard");
     }
 
     /**

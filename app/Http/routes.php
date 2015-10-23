@@ -22,7 +22,7 @@ Route::controllers([
 ]);
 
 
-Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@index']);
+Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
 
 Route::get('home', function(){
 	return redirect('/');
@@ -33,12 +33,17 @@ Route::get('try/', function(){
 	dd($region);
 });
 
+Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
+
 // Routes used for /profile
 	Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
 	Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
 	Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@show']);
 	Route::post('profile', ['as' => 'update_photo', 'middleware' => 'auth', 'uses' => 'UserController@update_photo']);
 	Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
+
+	Route::get('employees', ['as' => 'employees', 'uses' => 'UserController@index']);
+
 
 Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'auth'], function (){
 	/**
@@ -200,9 +205,9 @@ Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
 /**
  * @param string $location = ['provinces', 'municipalities']
  * @param int $id
+ *
  * @return json $response
  */
 Route::get('locations/get/regions/', 'LocationController@show');
 Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
-// get-provinces-where-region_id=1
-// get-municipalities-where-province_id=1
+

@@ -33,7 +33,7 @@
                                     <span>{{ $branch->name }}</span>
                                 </td>
                                 <td>
-                                    <span>{!! $address !!}</span>
+                                    <span>{!! $branch->full_address !!}</span>
                                 </td>
                                 <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
                                 <td>
@@ -78,10 +78,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="address_province">Region<i>*</i></label>
-                                <select class="form-control select2" name="address_region">
-
+                                <select class="form-control select2" name="address_region" id="address_region">
+                                    <option value="0">- Select Region - </option>
                                 @foreach($regions as $region)
-                                    {{ dd($region->provinces()) }}
                                     <option value="{{ $region->id }}">{{ $region->name }}</option>
                                 @endforeach
                                 </select>
@@ -89,14 +88,16 @@
 
                             <div class="form-group">
                                 <label for="address_province">Province<i>*</i></label>
-                                
-                                <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province" required>
+                                <select class="form-control select2" id="address_province" name="address_province" required>
+                                    <option value="0">- Select Province -</option>
+                                </select>
+                                <!-- <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province" required> -->
                             </div>
 
                             <div class="form-group">
                                 <label for="address_city_municipality">Municipality<i>*</i></label>
-                                <select class="form-control select2" name="address_city_municipality">
-                                    
+                                <select class="form-control select2" name="address_city_municipality" id="address_city_municipality">
+                                    <option value="0">- Select Municipality -</option>
                                 </select>
                                 <!-- <input type="text" class="form-control" id="address_city_municipality" placeholder="Municipality" name="address_city_municipality" required> -->
                             </div>

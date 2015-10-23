@@ -371,5 +371,51 @@ $(document).ready(function (){
                 $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
             });
         });
+
+        $('select#address_region').change(function(){
+            var provinces = '<option value="0">- Select Province -</option>';
+            $("#address_province").html(provinces).select2();
+
+            if( $(this).val() !='0' ){
+                $.ajax({
+                    url: '/locations/get/provinces/where-regions/'+$(this).val(),
+                    type: 'get',
+                    dataType: 'json'
+                }).done(function (data){
+                    console.log(typeof(data));
+                    if( typeof(data) == 'object' ){
+                        
+                        $("#address_city_municipality").html('<option value="0">- Select Municipality -</option>');
+
+                        $.each(data, function (i, row){
+                            provinces += '<option value="'+row.id+'">'+row.name+'</option>';
+                        });
+
+                        $("#address_province").html(provinces).select2();
+                        $('#address_city_municipality').select2();
+                    }
+                });
+            }
+        });
+
+        $('select#address_province').change(function(){
+            if( $(this).val() !='0' ){
+                $.ajax({
+                    url: '/locations/get/municipalities/where-provinces/'+$(this).val(),
+                    type: 'get',
+                    dataType: 'json'
+                }).done(function (data){
+                    console.log(typeof(data));
+                    if( typeof(data) == 'object' ){
+                        var municipalities = '<option value="0">- Select Municipality -</option>';
+                        $.each(data, function (i, row){
+                            municipalities += '<option value="'+row.id+'">'+row.name+'</option>';
+                        });
+
+                        $("#address_city_municipality").html(municipalities).select2();
+                    }
+                });
+            }
+        });
 		
 });
