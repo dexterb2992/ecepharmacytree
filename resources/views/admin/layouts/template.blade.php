@@ -46,7 +46,7 @@
                                 {{ 
                                     Session::has('selected_branch') ?
                                         Branch::find(Session::get('selected_branch'))->name :
-                                        Session::put('selected_branch', Auth::user()->branch->id)
+                                        Session::put('selected_branch', Auth::user()->branch->id);
                                         Branch::find(Session::get('selected_branch'))->name
                                 }}
                             @else
