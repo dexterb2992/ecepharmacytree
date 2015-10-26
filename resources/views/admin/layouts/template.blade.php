@@ -42,7 +42,7 @@
                     <p><span class="text-muted">You're logged in at Branch: </span>
                         <span class="text-aqua text-bold">
                             <?php $branches_count = ECEPharmacyTree\Branch::all()->count(); ?>
-                            @if(Auth::user()->isAdmin() && $branches_count > 1)
+                            @if( Auth::check() && Auth::user()->isAdmin() && $branches_count > 1)
                                 {{ ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name }}
                             @else
                                 {{ Auth::check() ? Auth::user()->branch->name : '' }}
