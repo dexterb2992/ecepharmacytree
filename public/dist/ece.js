@@ -20,6 +20,9 @@ $(document).ready(function (){
 
     $('.daterange').daterangepicker({format: 'YYYY-MM-DD'});
 
+    // make sure to add 'fade' class only once
+    $('div.modal').removeClass('fade').addClass('fade');
+
     $("#org").jOrgChart({
         chartElement : '#chart',
         dragAndDrop  : false

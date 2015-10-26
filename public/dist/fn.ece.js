@@ -60,7 +60,7 @@ var customAlertResponse = false;
  	modal.removeClass('modal-info')
  	.removeClass('modal-danger')
  	.removeClass('modal-success')
- 	.removeClass('modal-warning').addClass("modal-"+type);
+ 	.removeClass('modal-warning').addClass("modal-"+type).addClass('fade');
  	modal.find(".modal-title").html(title);
  	modal.find(".modal-body").html(msg);
  	modal.find(".modal-footer").html(buttons);

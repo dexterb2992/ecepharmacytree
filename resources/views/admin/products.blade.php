@@ -32,6 +32,7 @@
                             <table class="table table-bordered table-hover datatable">
                                 <thead>
                                     <tr>
+                                        <th>Photo</th>
                                         <th>Name</th>
                                         <th>Generic Name</th>
                                         <th>Description</th>
@@ -44,6 +45,11 @@
                                 <tbody>
                                     @foreach($products as $product)
                                         <tr data-id="{{ $product->id }}">
+                                            <td>
+                                                <a href="#" data-toggle="modal" data-target="#modal-products-gallery">
+                                                    <img src="{{ url('images/50x50/nophoto.jpg') }}">
+                                                </a>
+                                            </td>
                                             <td>
                                                 {!! $product->prescription_required == 1 ? '<span class="rx" title="Requires a prescription">&#8478;</span>' : '' !!}
                                                 <span>{{ ucfirst($product->name) }}</span>
@@ -124,7 +130,7 @@
                     </div><!-- /.box -->
 
                     <!-- Modal for Create/Edit Category -->
-                    <div class="modal" id="modal-add-edit-category">
+                    <div class="modal fade" id="modal-add-edit-category">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- form start -->
@@ -190,7 +196,7 @@
                     </div><!-- /.box -->
 
                     <!-- Modal for Create/Edit SubCategory -->
-                    <div class="modal" id="modal-add-edit-subcategory">
+                    <div class="modal fade" id="modal-add-edit-subcategory" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- form start -->
@@ -227,7 +233,7 @@
         </div><!-- nav-tabs-custom -->
 
         <!-- Modal for Create/Edit product -->
-        <div class="modal" id="modal-add-edit-product">
+        <div class="modal fade" id="modal-add-edit-product" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- form start -->
@@ -306,5 +312,53 @@
 
     </div><!-- /.col -->
 </div><!-- /.row -->
+
+<!-- Modal for Products Photo Gallery -->
+<div class="modal fade" id="modal-products-gallery" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"></div>
+            <div class="modal-body">
+                <!-- START CAROUSEL-->
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img src="http://placehold.it/900x500/39CCCC/ffffff&text=I+Love+Bootstrap" alt="First slide">
+                            <div class="carousel-caption">
+                                First Slide
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img src="http://placehold.it/900x500/3c8dbc/ffffff&text=I+Love+Bootstrap" alt="Second slide">
+                            <div class="carousel-caption">
+                                Second Slide
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img src="http://placehold.it/900x500/f39c12/ffffff&text=I+Love+Bootstrap" alt="Third slide">
+                            <div class="carousel-caption">
+                                Third Slide
+                            </div>
+                        </div>
+                    </div>
+                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                        <span class="fa fa-angle-left"></span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                        <span class="fa fa-angle-right"></span>
+                    </a>
+                </div>
+                <!-- END CAROUSEL-->
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<!-- End Modal for Products Photo Gallery -->
 @stop
 
