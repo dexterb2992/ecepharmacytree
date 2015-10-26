@@ -43,7 +43,11 @@
                         <span class="text-aqua text-bold">
                             <?php $branches_count = ECEPharmacyTree\Branch::all()->count(); ?>
                             @if( Auth::check() && Auth::user()->isAdmin() && $branches_count > 1)
-                                {{ ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name }}
+                                {{ 
+                                    Session::has('selected_branch') ?
+                                        ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name :
+                                        Session::put('selected_branch', Auth::user()->branch->id)
+                                }}
                             @else
                                 {{ Auth::check() ? Auth::user()->branch->name : '' }}
                             @endif
