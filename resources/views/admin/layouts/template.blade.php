@@ -45,7 +45,7 @@
                             @if(Auth::user()->isAdmin() && $branches_count > 1)
                                 {{ ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name }}
                             @else
-                                {{ Auth::user()->branch->name }}
+                                {{ Auth::check() ? Auth::user()->branch->name : '' }}
                             @endif
                         </span>
                     </p>
