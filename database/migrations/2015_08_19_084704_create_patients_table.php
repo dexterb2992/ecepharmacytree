@@ -29,18 +29,12 @@ class CreatePatientsTable extends Migration
             $table->string('civil_status', 20);
             $table->string('height', 10);
             $table->string('weight', 10);
-            $table->integer('unit_floor_room_no')->nullable();
-            $table->string('building')->nullable();
-            $table->integer('lot_no')->nullable();
-            $table->integer('block_no')->nullable();
-            $table->integer('phase_no')->nullable();
-            $table->integer('address_house_no')->nullable();
-            $table->string('address_street')->nullable();
+            $table->string('optional_address');
+            $table->string('address_street');
             $table->integer('address_barangay_id')->unsigned()->nullable();
-            // $table->foreign('address_barangay_id')->references('id')->on('barangays');
+            $table->foreign('address_barangay_id')->references('id')->on('barangays');
             $table->double('points')->default(0);
             $table->string('referral_id');
-            // $table->string('referred_by')->nullable(); // referral_id of the user who referred this new user
             $table->string('referred_byUser')->nullable();
             $table->string('referred_byDoctor')->nullable();
             $table->timestamps();
