@@ -22,7 +22,7 @@ class CreateClinicPatientsTable extends Migration
             // since the relationship of clinic and doctor is many to many,
             //  we'll need both clinic_id and doctor_id
             $table->integer('clinic_id')->unsigned();
-            $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');=
+            $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
             $table->integer('doctor_id')->unsigned();
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
             $table->string('mobile_no');
@@ -34,18 +34,10 @@ class CreateClinicPatientsTable extends Migration
             $table->string('civil_status', 20);
             $table->string('height', 10);
             $table->string('weight', 10);
-            $table->integer('unit_floor_room_no')->nullable();
-            $table->string('building')->nullable();
-            $table->integer('lot_no')->nullable();
-            $table->integer('block_no')->nullable();
-            $table->integer('phase_no')->nullable();
-            $table->integer('address_house_no')->nullable();
-            $table->string('address_street')->nullable();
-            $table->string('address_barangay');
-            $table->string('address_city_municipality');
-            $table->string('address_province');
-            $table->string('address_region');
-            $table->string('address_zip');
+            $table->string('optional_address');
+            $table->string('address_street');
+            $table->integer('address_barangay_id')->unsigned()->nullable();
+            $table->foreign('address_barangay_id')->references('id')->on('barangays');
             $table->timestamps();
             $table->softDeletes();
         });
