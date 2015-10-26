@@ -363,6 +363,7 @@ $(document).ready(function (){
                             form.find('input[name="'+i+'"]').val(row);
                         }
                     });
+                    $("div.user-panel .info p, li.user.user-menu a.dropdown-toggle span").html(formdata.fname+" "+formdata.lname);
                 }else{
 
                 }
@@ -440,5 +441,91 @@ $(document).ready(function (){
                 });
             }
         });
+
+        $(".products-gallery-toggler").click(function (){
+            var productId = $(this).parent("td").parent("tr").data("id");
+            var targetModal = $(this).data("target");
+            $("#droppable_div").attr("data-id", productId);
+            $.ajax({
+                url: '/products/gallery/'+productId,
+                type: 'get',
+                dataType: 'json'
+            }).done(function (data){
+                if( data.length > 0 ){
+                    $('#product-gallery-carousel .carousel-indicators, #product-gallery-carousel .carousel-inner').html("");
+                    var isActive = "active";
+                    $.each(data, function (i, row){
+                        if( i != 0 ) isActive = '';
+                        $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"></li>')
+                        $('#product-gallery-carousel .carousel-inner').append('<div class="item '+isActive+'">'+
+                            '<img src="/images/original/'+row.filename+'">'+
+                        '</div>');
+                    });
+                    $('#product-gallery-carousel').carousel();
+                }else{
+                    $('#product-gallery-carousel').hide();
+                    $(".add-new-gallery-outer").show();
+                }
+
+                $(targetModal).modal('show');
+            });
+        });
+
+        $("#add_gallery").click(function (){
+            if( $(this).html() == "Add new" ){
+                $("#product-gallery-carousel").fadeOut(function (){
+                    $(".add-new-gallery-outer").fadeIn(function(){
+                        $(this).removeClass('hidden').show(function(){
+                            $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
+                        });
+                    });
+                });
+            }else{
+
+                $(".add-new-gallery-outer").fadeOut(function (){
+                    $("#product-gallery-carousel").fadeIn(function(){
+                        $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
+                        $("#droppable_div").next(".statusbar").remove();
+                    });
+                });
+            }
+        });
 		
+        // let's create our drag and drop file uploader
+            var obj = $("#droppable_div");
+            obj.on('dragenter', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                $(this).css('border', '2px solid #0B85A1');
+            });
+            obj.on('dragover', function (e) {
+                 e.stopPropagation();
+                 e.preventDefault();
+            });
+
+            obj.on('drop', function (e) {
+             
+                 $(this).css('border', '2px dotted #0B85A1');
+                 e.preventDefault();
+                 var files = e.originalEvent.dataTransfer.files;
+             
+                 //We need to send dropped files to Server
+                 handleFileUpload(files,obj);
+            });
+
+            $(document).on('dragenter', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            });
+
+            $(document).on('dragover', function (e) {
+              e.stopPropagation();
+              e.preventDefault();
+              obj.css('border', '2px dotted #0B85A1');
+            });
+
+            $(document).on('drop', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            });
 });
