@@ -22,7 +22,7 @@ class CreateClinicPatientsTable extends Migration
             // since the relationship of clinic and doctor is many to many,
             //  we'll need both clinic_id and doctor_id
             $table->integer('clinic_id')->unsigned();
-            $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');=
+            $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
             $table->integer('doctor_id')->unsigned();
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
             $table->string('mobile_no');
