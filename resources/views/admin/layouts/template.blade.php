@@ -6,7 +6,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
-    
+    <?php use ECEPharmacyTree\Branch; ?>
     @include('includes._styles')
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -41,12 +41,13 @@
                     @if(Auth::check())
                     <p><span class="text-muted">You're logged in at Branch: </span>
                         <span class="text-aqua text-bold">
-                            <?php $branches_count = ECEPharmacyTree\Branch::all()->count(); ?>
+                            <?php $branches_count = Branch::all()->count(); ?>
                             @if( Auth::check() && Auth::user()->isAdmin() && $branches_count > 1)
                                 {{ 
                                     Session::has('selected_branch') ?
-                                        ECEPharmacyTree\Branch::find(Session::get('selected_branch'))->name :
+                                        Branch::find(Session::get('selected_branch'))->name :
                                         Session::put('selected_branch', Auth::user()->branch->id)
+                                        Branch::find(Session::get('selected_branch'))->name
                                 }}
                             @else
                                 {{ Auth::check() ? Auth::user()->branch->name : '' }}
