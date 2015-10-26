@@ -24,7 +24,8 @@ class PatientTableSeeder extends Seeder
         	"civil_status" => "Single",
         	"height" => "5.4",
         	"weight" => "75",
-        	"address_barangay_id" => 1,
+        	"address_barangay_id" => 2,
+            "address_street" => "150th A St.",
         	"referral_id" => "ABC123"
         ]);
     }
