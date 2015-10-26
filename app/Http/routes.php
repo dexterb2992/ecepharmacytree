@@ -12,9 +12,9 @@
 */
 
 
-// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-// View::share('critical_stocks', check_for_critical_stock());
-// View::share('branches', ECEPharmacyTree\Branch::all());
+View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+View::share('critical_stocks', check_for_critical_stock());
+View::share('branches', ECEPharmacyTree\Branch::all());
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
@@ -28,7 +28,9 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::get('try/', function(){
+Route::get('try/{template}', function($template){
+	// dd(config("imagecache.templates.{$template}"));
+	dd(class_exists(config("imagecache.templates.{$template}")));
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);

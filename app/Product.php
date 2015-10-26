@@ -26,4 +26,8 @@ class Product extends Model
     public function order_details(){
         return $this->hasMany('ECEPharmacyTree\OrderDetail');
     }
+
+    public function gallery(){
+        return $this->hasMany('ECEPharmacyTree\ProductsGallery');
+    }
 }
