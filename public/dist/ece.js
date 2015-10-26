@@ -452,13 +452,16 @@ $(document).ready(function (){
                 dataType: 'json'
             }).done(function (data){
                 if( data.length > 0 ){
+                    $('#product-gallery-carousel').show();
+                    $(".add-new-gallery-outer").hide();
+
                     $('#product-gallery-carousel .carousel-indicators, #product-gallery-carousel .carousel-inner').html("");
                     var isActive = "active";
                     $.each(data, function (i, row){
                         if( i != 0 ) isActive = '';
                         $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"></li>')
                         $('#product-gallery-carousel .carousel-inner').append('<div class="item '+isActive+'">'+
-                            '<img src="/images/original/'+row.filename+'">'+
+                            '<img src="/images/original/'+row.filename+'" class="product-gallery-item" data-id="'+row.id+'">'+
                         '</div>');
                     });
                     $('#product-gallery-carousel').carousel();
@@ -528,4 +531,25 @@ $(document).ready(function (){
                 e.stopPropagation();
                 e.preventDefault();
             });
+
+
+
+        // $.ajax({
+        //     url: '/products/gallery/delete/'+$(this).children('.product-gallery-item').data("id"),
+        //     type: "post",
+        //     dataType: "json",
+        //     data: { _token: $('input[name="_token"]').val() }
+        // }).done(function (data){
+        //     if( data.status == "success" ){
+        //         $this.fadeOut(function (){
+        //             $this.remove();
+        //             $("body").trigger("click");
+        //         });
+        //     }else{
+        //         alert(data.msg);
+        //     }
+        // }); 
+
+
+        
 });

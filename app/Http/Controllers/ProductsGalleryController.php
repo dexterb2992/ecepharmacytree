@@ -116,6 +116,16 @@ class ProductsGalleryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if( Request::ajax() ){
+            $gallery = ProductsGallery::find($id);
+            $filename = $gallery->filename;
+            if( $gallery->delete() ){
+                $path = public_path('images/product-photo-gallery/');
+
+                // delete photo
+                if( file_exists($path.$old_photo) )
+                    unlink($path.$old_photo);
+            }
+        }
     }
 }

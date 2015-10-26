@@ -45,5 +45,8 @@
 <!-- bootstrap wysihtml5 - text editor -->
 {!! HTML::style('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') !!}
 
+<!-- Custom Context Menu -->
+{!! HTML::style('plugins/contextmenu/context.standalone.css') !!}
+
 <!-- PharmacyTree custom css -->
 {!! HTML::style('dist/ece.css') !!}

@@ -47,11 +47,11 @@
                                         <tr data-id="{{ $product->id }}">
                                             <td>
                                                 <a href="javascript:void(0)" class="products-gallery-toggler" data-target="#modal-products-gallery">
-                                                    <img src="{{ url('images/50x50/nophoto.jpg') }}">
+                                                    <img data-toggle="tooltip" data-original-title="Click to view gallery" src="{{ !empty($product->galleries[0]) ? url('images/50x50/'.$product->galleries[0]->filename) : url('images/50x50/nophoto.jpg') }}">
                                                 </a>
                                             </td>
                                             <td>
-                                                {!! $product->prescription_required == 1 ? '<span class="rx" title="Requires a prescription">&#8478;</span>' : '' !!}
+                                                {!! $product->prescription_required == 1 ? '<span class="rx" data-toggle="tooltip" data-original-title="This product requires a prescription">&#8478;</span>' : '' !!}
                                                 <span>{{ ucfirst($product->name) }}</span>
                                             </td>
                                             <td>{{ $product->generic_name }}</td>

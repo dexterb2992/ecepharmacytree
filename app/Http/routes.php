@@ -70,6 +70,7 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('delete', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
 	Route::get('gallery/{product_id}', ['as' => 'gallery', 'uses' => 'ProductsGalleryController@show']);
 	Route::post('gallery/upload', ['as' => 'add_gallery', 'uses' => 'ProductsGalleryController@store']);
+	Route::post('gallery/delete/{id}', ['as' => 'delete_gallery', 'uses' => 'ProductsGalleryController@destroy']);
 	
 });
 

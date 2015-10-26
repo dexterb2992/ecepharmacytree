@@ -67,6 +67,9 @@
 <!-- AdminLTE for demo purposes -->
 {!! HTML::script('dist/js/demo.js') !!}
 
+<!-- Custom Context Menu -->
+{!! HTML::script('plugins/contextmenu/context.js') !!}
+
 <!-- PharmacyTree js -->
 {!! HTML::script('dist/fn.ece.js') !!}
 {!! HTML::script('dist/ece.js') !!}
