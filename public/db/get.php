@@ -187,6 +187,11 @@ switch ($request) {
     $tbl = "barangays";
     break;
 
+    case 'get_clinic_patients';
+    $result = mysql_query("SELECT cp.*, b.municipality_id, m.province_id, p.region_id FROM clinic_patients as cp inner join barangays as b on cp.address_barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE username = '".$_GET['username']."' and password= '".$_GET['password']."'") or returnError(mysql_error());  
+    $tbl = "clinic_patients";
+    break;
+
     default:
         # code...
     break;
@@ -215,7 +220,7 @@ if ($db_result > 0) {
     $server_timestamp             = date('Y-m-d H:i:s', time());
 
     $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
-    
+
     if(mysql_num_rows($result_latest_updated_at) > 0){
         $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
         $latest_updated_at = $result_latest_updated_at_array['updated_at'];
@@ -242,9 +247,9 @@ function returnError($msg) {
 }
 
 function pre($str){
-   echo "<pre>";
-   print_r($str);
-   echo "</pre>";
+    echo "<pre>";
+    print_r($str);
+    echo "</pre>";
 }
 
 function fetchRows($result, $tbl){
