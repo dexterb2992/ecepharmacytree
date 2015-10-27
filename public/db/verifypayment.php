@@ -71,7 +71,7 @@ define('DEFAULT_CURRENCY', 'PHP');
                 date_default_timezone_set('Asia/Manila');
                 $server_timestamp             = date('Y-m-d H:i:s', time());
 
-                $sql = "SELECT b.*, p.*, b.id as basketID, pr.price FRom patients as p inner join baskets as b on p.id = b.patient_id inner join products as pr on b.product_id = pr.id WHERE p.id = ".$user_id." and b.is_approved = 1" ;
+                $sql = "SELECT b.*, p.*, b.id as basketID, pr.price FRom patients as p inner join baskets as b on p.id = b.patient_id inner join products as pr on b.product_id = pr.id WHERE p.id = ".$user_id." and b.is_approved = 1";
 
                 $result = mysql_query($sql) or returnError(mysql_error());
                 $counter = 0;

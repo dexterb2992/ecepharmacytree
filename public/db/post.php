@@ -112,7 +112,7 @@ if ($request == 'register') {
 	$payment_status = "pending";
 	$status = $_POST['status'];
 
-	$sql = "SELECT b.*, p.*, b.id as basketID, pr.price FRom patients as p inner join baskets as b on p.id = b.patient_id inner join products as pr on b.product_id = pr.id WHERE p.id = ".$user_id." and b.is_approved = 1" ;
+	$sql = "SELECT b.*, p.*, b.id as basketID, pr.price FRom patients as p inner join baskets as b on p.id = b.patient_id inner join products as pr on b.product_id = pr.id WHERE p.id = ".$user_id ;
 
 	$result = mysql_query($sql) or returnError(mysql_error());
 	$counter = 0;
