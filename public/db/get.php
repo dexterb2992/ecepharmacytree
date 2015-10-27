@@ -192,8 +192,8 @@ switch ($request) {
     $tbl = "clinic_patients";
     break;
 
-    case 'get_prescription_usage':
-    $result = mysql_query("SELECT * from baskets where prescription_id = ".$_GET['prescription_id']." union SELECT * from baskets where prescription_id = ".$_GET['prescription_id']) or returnError(mysql_error());
+    case 'get_medical_records':
+    $result = mysql_query("SELECT * from clinic_patients as cp inner join medical_records_requests as mrr on cp.id = mrr.clinic_patients_id") or returnError(mysql_error());
     break;
 
     default:
