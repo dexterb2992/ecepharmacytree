@@ -12,9 +12,9 @@
 */
 
 
-View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-View::share('critical_stocks', check_for_critical_stock());
-View::share('branches', ECEPharmacyTree\Branch::all());
+// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+// View::share('critical_stocks', check_for_critical_stock());
+// View::share('branches', ECEPharmacyTree\Branch::all());
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
@@ -68,6 +68,9 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
+	Route::get('gallery/{product_id}', ['as' => 'gallery', 'uses' => 'ProductsGalleryController@show']);
+	Route::post('gallery/upload', ['as' => 'add_gallery', 'uses' => 'ProductsGalleryController@store']);
+	Route::post('gallery/delete/{id}', ['as' => 'delete_gallery', 'uses' => 'ProductsGalleryController@destroy']);
 	
 });
 
@@ -197,7 +200,7 @@ Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' =>
 Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
 
 Route::get('images/{template}/', function($template){
-	return redirect(url('images/'.$template."/nophoto.png"));
+	return redirect(url('images/'.$template."/".config('imagecache.default_image_404')));
 });
 
 Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
