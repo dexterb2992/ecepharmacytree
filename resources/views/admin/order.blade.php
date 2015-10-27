@@ -85,11 +85,11 @@
               </tr>
             </thead>
             <tbody>
-             @foreach($order_details_with_prescriptions as $order_details_with_prescription))
+             @foreach($order_details_with_prescriptions as $order_details_with_prescription)
              <tr>
               <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
               <td>{{ $order_details_with_prescriptions->patient_prescriptions()->first()->filename }}</td>
-              <td>{{ Carbon\Carbon::parse($order_detials_with_prescriptions->patient_prescriptions()->first()->created_at)->toDayDateTimeString() }}</td>
+              <td>{{ Carbon\Carbon::parse($order_details_with_prescriptions->patient_prescriptions()->first()->created_at)->toDayDateTimeString() }}</td>
             </tr>
             @endforeach
           </tbody>
