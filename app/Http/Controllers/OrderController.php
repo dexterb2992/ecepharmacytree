@@ -55,7 +55,7 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
         $order_details = $order->order_details()->get();
-        $order_details_with_prescriptions = $order_details->whereRaw('prescription_id > 0')->get();
+        $order_details_with_prescriptions = $order->order_details()->whereRaw('prescription_id > 0')->get();
 
         return view('admin.order')->withOrder($order)->withOrderDetails($order_details)->withOrderDetailsWithPrescriptions($order_details_with_prescriptions);
     }
