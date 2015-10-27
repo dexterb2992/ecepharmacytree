@@ -192,6 +192,10 @@ switch ($request) {
     $tbl = "clinic_patients";
     break;
 
+    case 'get_prescription_usage':
+    $result = mysql_query("SELECT * from baskets where prescription_id = ".$_GET['prescription_id']." union SELECT * from baskets where prescription_id = ".$_GET['prescription_id']) or returnError(mysql_error());
+    break;
+
     default:
         # code...
 	break;
