@@ -252,7 +252,7 @@ if ($request == 'register') {
     } else if ($action == "delete_prescription") {
     	$result = mysql_query("SELECT * from baskets where prescription_id = ".$_POST['id']." union SELECT * from baskets where prescription_id = ".$_POST['id']) or returnError(mysql_error());
     
-    	if(mysql_num_rows($result)) {
+    	if(mysql_num_rows($result) < 1) {
     		$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
 
     		if (mysql_query($sql)) {
