@@ -117,18 +117,19 @@ class ProductsGalleryController extends Controller
     public function destroy($id)
     {
         if( Request::ajax() ){
-            $gallery = ProductsGallery::find($id);
+            $gallery = ProductsGallery::findOrFail($id);
             $filename = $gallery->filename;
             if( $gallery->delete() ){
                 $path = public_path('images/product-photo-gallery/');
 
                 // delete photo
                 if( file_exists($path.$filename) )
-                    if( unlink($path.$filename) ){
-                        return json_encode(["msg" => "Successfully deleted.", "status_code" => 200]);
-                    }
+                    unlink($path.$filename);
+                    
 
-                return json_encode(["msg" => "Sorry, we can't find the photo you are referring to.", "status_code" => 500]);
+                return json_encode(["msg" => "Successfully deleted.", "status_code" => 200]);
+                    
+
             }else{
                 return json_encode(["msg" => "Sorry, we can't process your request right now. Please try again later.", "status_code" => 500]);
             }

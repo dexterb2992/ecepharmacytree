@@ -117,11 +117,6 @@ class BranchController extends Controller
     }
 
 
-    public function validate($input){
-        
-    }
-
-
     /**
      * Remove the specified resource from storage.
      *
