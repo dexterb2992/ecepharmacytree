@@ -249,6 +249,16 @@ if ($request == 'register') {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
+    } else if ($action == "delete_file") {
+    	$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
+
+    	if (mysql_query($sql)) {
+    		unlink($_POST['url']);
+    		$response["success"] = 1;
+    	} else {
+    		$response["success"] = 0;
+    		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
+    	}
     } else if ($action == 'multiple_delete') {
     	$sql = "DELETE FROM ".$_POST['table']." WHERE id IN (".$_POST['serverID'].")";
 
