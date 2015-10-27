@@ -253,7 +253,7 @@ if ($request == 'register') {
     	$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
 
     	if (mysql_query($sql)) {
-    		unlink($_POST['url']);
+    		unlink(getcwd().$_POST['url']);
     		$response["success"] = 1;
     	} else {
     		$response["success"] = 0;
