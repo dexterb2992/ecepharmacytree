@@ -46,12 +46,12 @@
                                     @foreach($products as $product)
                                         <tr data-id="{{ $product->id }}">
                                             <td>
-                                                <a href="#" data-toggle="modal" data-target="#modal-products-gallery">
-                                                    <img src="{{ url('images/50x50/nophoto.jpg') }}">
+                                                <a href="javascript:void(0)" class="products-gallery-toggler" data-target="#modal-products-gallery">
+                                                    <img data-toggle="tooltip" data-original-title="Click to view gallery" src="{{ !empty($product->galleries[0]) ? url('images/50x50/'.$product->galleries[0]->filename) : url('images/50x50/nophoto.jpg') }}">
                                                 </a>
                                             </td>
                                             <td>
-                                                {!! $product->prescription_required == 1 ? '<span class="rx" title="Requires a prescription">&#8478;</span>' : '' !!}
+                                                {!! $product->prescription_required == 1 ? '<span class="rx" data-toggle="tooltip" data-original-title="This product requires a prescription">&#8478;</span>' : '' !!}
                                                 <span>{{ ucfirst($product->name) }}</span>
                                             </td>
                                             <td>{{ $product->generic_name }}</td>
@@ -317,14 +317,25 @@
 <div class="modal fade" id="modal-products-gallery" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header"></div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Gallery</h4>
+            </div>
             <div class="modal-body">
+                <div class="pull-right" class="add-gallery-outer-div">
+                    <a href="#" class="btn-info btn btn-flat" id="add_gallery">Add new</a>
+                </div><br/>
+                <div class="add-new-gallery-outer hidden">
+                    <div id="droppable_div">Drag & Drop Files Here</div>
+                    <br/><br/>
+                    <div id="status1"></div>
+                </div>
                 <!-- START CAROUSEL-->
-                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <div id="product-gallery-carousel" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
-                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+                        <!-- <li data-target="#product-gallery-carousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#product-gallery-carousel" data-slide-to="1" class=""></li>
+                        <li data-target="#product-gallery-carousel" data-slide-to="2" class=""></li> -->
                     </ol>
                     <div class="carousel-inner">
                         <div class="item active">
@@ -346,16 +357,18 @@
                             </div>
                         </div>
                     </div>
-                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                    <a class="left carousel-control" href="#product-gallery-carousel" data-slide="prev">
                         <span class="fa fa-angle-left"></span>
                     </a>
-                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                    <a class="right carousel-control" href="#product-gallery-carousel" data-slide="next">
                         <span class="fa fa-angle-right"></span>
                     </a>
                 </div>
                 <!-- END CAROUSEL-->
             </div>
-            <div class="modal-footer"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>

@@ -76,4 +76,6 @@ return array(
    
     'lifetime' => 43200,
 
+    'default_image_404' => 'nophoto.jpg'
+
 );

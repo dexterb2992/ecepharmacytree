@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>jQuery ClassyContextMenu Plugin Example</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery.hoverintent.js"></script>
+<script src="js/jquery.classycontextmenu.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/jquery.classycontextmenu.min.css" />
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="http://www.jqueryscript.net/menu/Customizable-jQuery-Context-Menu-Plugin-ClassyContextMenu.html">Download This Plugin</a></li>
+<li><a href="http://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+<div id="page-container" style="margin-top:150px;">
+<div id="main-container">
+<div id="page-content">
+<div class="content-header">
+<div class="header-section">
+<h1>jQuery ClassyContextMenu Plugin Example</h1>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="block">
+<div class="clearfix"> <br />
+<div id="callbackmenu">
+<ul>
+<li id="MenuItem1"><img src="images/icon1.png" /><a href="#Item1">Menu Item 1</a></li>
+<li class="disabled" id="MenuItem2"><a href="#Item2">Menu Item 2</a></li>
+<li id="MenuItem3"><a href="#Item3">Menu Item 3</a>
+<ul>
+<li id="MenuItem3.1"><a href="#Item3.1">Menu Item 3.1</a></li>
+<li id="MenuItem3.2"><a href="#Item3.2">Menu Item 3.2</a></li>
+<li id="MenuItem3.3"><a href="#Item3.3">Menu Item 3.3</a>
+<ul>
+<li id="MenuItem3.3.1"><a href="#Item3.3.1">Menu Item 3.3.1</a></li>
+<li id="MenuItem3.3.2"><a href="#Item3.3.2">Menu Item 3.3.2</a></li>
+<li id="MenuItem3.3.3"><a href="#Item3.3.3">Menu Item 3.3.3</a></li>
+<li id="MenuItem3.3.4"><a href="#Item3.3.4">Menu Item 3.3.4</a></li>
+</ul>
+</li>
+<li id="MenuItem3.4"><a href="#Item3.4">Menu Item 3.4</a></li>
+</ul>
+</li>
+<li id="MenuItem4" class="separator"><a href="#Item4">Menu Item 4</a></li>
+</ul>
+</div>
+<div class="btn btn-danger callback1">Right Click Me</div>
+<br />
+<br />
+<div class="btn btn-success callback2">Left Click Me</div>
+<br />
+<br />
+<script>
+                                        $(document).ready(function() {
+                                            $(".callback1").ClassyContextMenu({
+                                                menu: 'callbackmenu',
+                                                onSelect: function(e) {
+                                                    alert("You clicked on a menu item!\n\nThe item's action is: " + e.action + "\nThe item's id is: " + e.id);
+                                                }
+                                            });
+                                            $(".callback2").ClassyContextMenu({
+                                                menu: 'callbackmenu',
+                                                mouseButton: 'left',
+                                                onSelect: function(e) {
+                                                    alert("You clicked on a menu item!\n\nThe item's action is: " + e.action + "\nThe item's id is: " + e.id);
+                                                }
+                                            });
+                                        });
+                                    </script> 
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</html>
