@@ -41,6 +41,15 @@ function generateSku(){
 	generateSku();
 }
 
+function generate_referral_id(){
+	$referral_id = strtoupper( generateRandomString(3, 2, true).generateRandomString(3, 1, true) );
+	$check = ECEPharmacyTree\Patient::where('referral_id', '=', $referral_id)->first();
+	$check2 = ECEPharmacyTree\Doctor::where('referral_id', '=', $referral_id)->first();
+	if( $check === null && $check2 === null)
+		return $referral_id;
+	
+	generate_referral_id();
+}
 
 
 
@@ -120,15 +129,15 @@ function get_patient_full_address($patient){
 }
 
 function get_patient_referrals($patient){
-	return $count = ECEPharmacyTree\Patient::where('referred_by', '=', $patient->referral_id)->count();
+	return $count = ECEPharmacyTree\Patient::where('referred_byUser', '=', $patient->referral_id)->count();
 }
 
 function get_all_downlines($referral_id){
 	$settings = ECEPharmacyTree\Setting::first();
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
 
-	if( empty($patients) )
-		$patients = ECEPharmacyTree\Doctor::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
+	// if( empty($patients) )
+	// 	$patients = ECEPharmacyTree\Doctor::where('referral_id', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
 
 	$downlines = array();
 	$downlines = $patients;

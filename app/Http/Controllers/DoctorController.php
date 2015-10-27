@@ -67,6 +67,7 @@ class DoctorController extends Controller
         $doctor->sub_specialty_id = $input['sub_specialty_id'];
         $doctor->affiliation = $input['affiliation'];
         $doctor->email = $input['email'];
+        $doctor->referral_id = generate_referral_id();
 
         if( $doctor->save() )
             return Redirect::to( route('doctors') );

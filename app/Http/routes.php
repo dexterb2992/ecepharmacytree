@@ -214,3 +214,9 @@ Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
 Route::get('locations/get/regions/', 'LocationController@show');
 Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
 
+Route::get('api/generate/{what}', function ($what){
+	if( $what == "sku" )
+		return generateSku();
+	if( $what == "referral_id" )
+		return generate_referral_id();
+});
