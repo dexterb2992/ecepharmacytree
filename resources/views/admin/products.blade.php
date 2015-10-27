@@ -322,7 +322,11 @@
                 <h4 class="modal-title">Gallery</h4>
             </div>
             <div class="modal-body">
-                <div class="pull-right" class="add-gallery-outer-div">
+                <div class="pull-left">
+                    <i class="fa-info-circle fa"></i>
+                    <i>Right click image to delete</i> 
+                </div>
+                <div class="pull-right add-gallery-outer-div">
                     <a href="#" class="btn-info btn btn-flat" id="add_gallery">Add new</a>
                 </div><br/>
                 <div class="add-new-gallery-outer hidden">

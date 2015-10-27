@@ -591,10 +591,14 @@ $(document).ready(function (){
                 $("#product-gallery-carousel").carousel("pause").removeData();
                 
                 var activeItem = $(this).children("div.item.active");
-                var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
                 var pid = activeItem.children("img").data("id");
+                var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
+                
+                console.log("activeIndicator: ");
+                console.log(activeIndicator);
 
-                console.log(pid);
+                console.log("activeItem: ");
+                console.log(activeItem);
 
                 var $this = $(this);
 
@@ -617,15 +621,16 @@ $(document).ready(function (){
                         }).done(function (data){
                             console.log(data);
                             $(".deleting-photo").remove();
-                            
+
                             if( data.status_code == "200" ){
                                 // if( activeIndicator.next("li").length > 0 ){
                                 //     activeIndicator.next("li").addClass("active");
                                 // }else if( activeIndicator.prev("li").length > 0 ){
                                 //     activeIndicator.prev("li").addClass("active");
                                 // }
-
-                                activeItem.remove();
+                                $("#product-gallery-carousel").carousel("next");
+                                activeItem.removeClass("item").addClass("hidden");
+                                // activeIndicator.css("display", "none");
                                 activeIndicator.remove();
                                 $(".carousel-indicators li").removeClass("active");
                                 $(".carousel-indicators li:first").addClass("active");
