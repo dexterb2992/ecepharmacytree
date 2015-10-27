@@ -120,7 +120,7 @@ function get_patient_full_address($patient){
 }
 
 function get_patient_referrals($patient){
-	return $count = ECEPharmacyTree\Patient::where('referred_by', '=', $patient->referral_id)->count();
+	return $count = ECEPharmacyTree\Patient::where('referred_byUser', '=', $patient->referral_id)->count();
 }
 
 function get_all_downlines($referral_id){
