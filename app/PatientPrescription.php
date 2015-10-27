@@ -20,4 +20,8 @@ class PatientPrescription extends Model
     	return $this->hasMany('ECEPharmacyTree\Basket');
     }
 
+    public function order_detail(){
+    	return $this->hasMany('ECEPharmacyTree\OrderDetail');
+    }
+
 }
