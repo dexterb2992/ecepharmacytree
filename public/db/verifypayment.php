@@ -71,7 +71,7 @@ define('DEFAULT_CURRENCY', 'PHP');
                 date_default_timezone_set('Asia/Manila');
                 $server_timestamp             = date('Y-m-d H:i:s', time());
 
-                $sql = "SELECT b.*, p.*, b.id as basketID, pr.price FRom patients as p inner join baskets as b on p.id = b.patient_id inner join products as pr on b.product_id = pr.id WHERE p.id = ".$user_id." and b.is_approved = 1";
+                $sql = "SELECT b.*, p.*, b.id as basketID, pr.price FRom patients as p inner join baskets as b on p.id = b.patient_id inner join products as pr on b.product_id = pr.id WHERE p.id = ".$user_id;
 
                 $result = mysql_query($sql) or returnError(mysql_error());
                 $counter = 0;
@@ -144,7 +144,7 @@ define('DEFAULT_CURRENCY', 'PHP');
                     if(mysql_query($sql_paypal_payment )){
                         $response['message'] = "payment saved on database";
 
-                        if(mysql_query("DELETE FROM baskets WHERE patient_id =".$user_id." and is_approved = 1")){
+                        if(mysql_query("DELETE FROM baskets WHERE patient_id =".$user_id)){
                             $response['basket_message'] = "basket/s deleted on database";
                         } else { 
                             $response['basket_message'] = "basket/s not deleted on database";

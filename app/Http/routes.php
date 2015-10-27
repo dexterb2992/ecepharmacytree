@@ -16,6 +16,7 @@
 // View::share('critical_stocks', check_for_critical_stock());
 // View::share('branches', ECEPharmacyTree\Branch::all());
 
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'

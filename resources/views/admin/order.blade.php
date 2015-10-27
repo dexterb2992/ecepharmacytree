@@ -72,75 +72,98 @@
         </div>
       </div>
       @if(check_if_order_had_approved_prescriptions($order))
-       <div class="box box-success">
+      <div class="box box-success">
         <div class="box-header">
-        <h2 class="next-heading align-center">Approved Prescriptions</h2>
+          <h2 class="next-heading align-center">Prescriptions</h2>
         </div>
         <div class="box-body">
           <table class="table">
-              <thead>
+            <thead>
               <tr>
-                <th>name</th>
-                <th>URL</th>
-                <th>Date Approved</th>
+                <th>Image</th>
+                <th>Date Uploaded</th>
               </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td>asdasd</td>
-                <td>adsadas</td>
-                <td>today</td>
-              </tr>
-              <tr><td>safadasd</td><td>asdasdas</td><td>yesterday</td></tr>
-              </tbody>
-          </table>
-        </div>
-        </div>
-      @endif
+            </thead>
+            <tbody>
+             @foreach($order_details_with_prescriptions as $order_details_with_prescription)
+             <tr>
+              <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
+              <td>
+                <a href="javascript:void(0);" class="add-edit-btn" data-action="preview_image" data-modal-target="#modal-view-prescription" data-target="#view-prescription-form">
+                  <img class="img-responsive primary-photo table-size-image" name="photo" src="{{ URL::to('/db/uploads/user_'.$order->patient_id.'/'.$order_details_with_prescription->patient_prescriptions()->first()->filename) }}" alt="Photo">
+                </a>
+              </td>
+              <td>{{ Carbon\Carbon::parse($order_details_with_prescription->patient_prescriptions()->first()->created_at)->toDayDateTimeString() }}</td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div><!-- /.row -->
-  <form method="post" name="order_form_nothing">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-  </form>
+    @endif
+  </div>
+</div><!-- /.row -->
+<form method="post" name="order_form_nothing">
+  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+</form>
 
-  <form method="post" name="fulfill_orders" action="/fulfill_orders">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    <div class="modal" id="modal-fulfill-items">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title next-heading">Fulfill Items</h4>
-          </div>
-          <div class="modal-body">
-            <table class="table">
-              <thead>
-                <th>Items</th>
-                <th></th>
-                <th>Quantity</th>
-              </thead>
-              <tbody>
-                @foreach($order_details as $order_detail)
-                <tr>
-                  <td>{{ $order_detail->product()->first()->name }}</td>
-                  <td>&nbsp;</td>
-                  <td class="col-xs-3">
-                    <div class="input-group">
-                      <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity }}" max="{{ $order_detail->quantity }}" min="0">
-                      <div class="input-group-addon">
-                        of  <strong>{{ $order_detail->quantity }}</strong>
-                      </div>
+<form method="post" name="fulfill_orders" action="/fulfill_orders">
+  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+  <div class="modal" id="modal-fulfill-items">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title next-heading">Fulfill Items</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <thead>
+              <th>Items</th>
+              <th></th>
+              <th>Quantity</th>
+            </thead>
+            <tbody>
+              @foreach($order_details as $order_detail)
+              <tr>
+                <td>{{ $order_detail->product()->first()->name }}</td>
+                <td>&nbsp;</td>
+                <td class="col-xs-3">
+                  <div class="input-group">
+                    <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity }}" max="{{ $order_detail->quantity }}" min="0">
+                    <div class="input-group-addon">
+                      of  <strong>{{ $order_detail->quantity }}</strong>
                     </div>
-                  </td>
-                </tr>
-                @endforeach
-                <tr><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td><td class="borderless"><button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Fulfill Items</button></td></tr>
-              </tbody>
-            </table>
-          </div>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+              <tr><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td><td class="borderless"><button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Fulfill Items</button></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-  </form>
-  @stop
+  </div>
+</form>
+
+<!-- Modal for Create/Edit product -->
+  <div class="modal" id="modal-view-prescription">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- <form role="form" id="form_view_member" data-urlmain="/members/"> -->
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">View Prescription</h4>
+        </div>
+        <div class="modal-body">
+          <div class="ytp-thumbnail-overlay ytp-cued-thumbnail-overlay">
+            <img id="image_holder" class="img-responsive primary-photo" src="">
+          </div>
+        </div>
+        <!-- </form> -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div><!-- /.col -->
+@stop
 
