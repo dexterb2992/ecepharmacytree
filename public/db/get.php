@@ -193,7 +193,7 @@ switch ($request) {
     break;
 
     case 'get_medical_records':
-    $result = mysql_query("SELECT * from clinic_patients as cp inner join medical_records_requests as mrr on cp.id = mrr.clinic_patients_id") or returnError(mysql_error());
+    $result = mysql_query("SELECT * from clinic_patients as cp inner join medical_records_requests as mrr on cp.id = mrr.clinic_patients_id where username = '".$_GET['username']."' and password = '".$_GET['password']."'") or returnError(mysql_error());
     break;
 
     default:

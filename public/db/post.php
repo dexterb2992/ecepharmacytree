@@ -280,6 +280,7 @@ if ($request == 'register') {
     	echo json_encode($response);
     	exit(0);
     }
+    
     echo json_encode($response);
     exit(0);
 }
