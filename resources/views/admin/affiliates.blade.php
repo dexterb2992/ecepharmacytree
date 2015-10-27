@@ -28,7 +28,7 @@
 											<li>
 												{!! $patient->fname." ".$patient->lname."<br/>(".$patient->referral_id.")" !!}
 												<ul>
-												{!! extract_downlines( get_all_downlines($patient->referral_id) ) !!}
+												{!! $patient->referred_byUser != '' ? extract_downlines( get_all_downlines($patient->referral_id) ) : 'referred by doctor' !!}
 												</ul>
 											</li>
 										</ul>
