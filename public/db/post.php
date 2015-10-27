@@ -250,7 +250,7 @@ if ($request == 'register') {
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
     } else if ($action == "delete_prescription") {
-    	$result = mysql_query("SELECT * from baskets where prescription_id = ".$_GET['id']." union SELECT * from baskets where prescription_id = ".$_GET['id']) or returnError(mysql_error());
+    	$result = mysql_query("SELECT * from baskets where prescription_id = ".$_POST['id']." union SELECT * from baskets where prescription_id = ".$_POST['id']) or returnError(mysql_error());
     
     	if(mysql_num_rows($result)) {
     		$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
@@ -280,7 +280,7 @@ if ($request == 'register') {
     	echo json_encode($response);
     	exit(0);
     }
-    
+
     echo json_encode($response);
     exit(0);
 }
