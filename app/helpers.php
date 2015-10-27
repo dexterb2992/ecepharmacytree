@@ -128,7 +128,7 @@ function get_all_downlines($referral_id){
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
 
 	if( empty($patients) )
-		$patients = ECEPharmacyTree\Doctor::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
+		$patients = ECEPharmacyTree\Doctor::where('referral_id', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
 
 	$downlines = array();
 	$downlines = $patients;
