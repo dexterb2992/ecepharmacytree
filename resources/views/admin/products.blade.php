@@ -319,13 +319,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Gallery</h4>
+                <h4 class="modal-title">
+                    Gallery
+                    <small>
+                        <i>
+                            ( <i class="fa-info-circle fa"></i>
+                            <i> Right click image to delete </i> )
+                        </i>
+                    </small>
+                </h4>
             </div>
             <div class="modal-body">
-                <div class="pull-left">
-                    <i class="fa-info-circle fa"></i>
-                    <i>Right click image to delete</i> 
-                </div>
                 <div class="pull-right add-gallery-outer-div">
                     <a href="#" class="btn-info btn btn-flat" id="add_gallery">Add new</a>
                 </div><br/>
