@@ -80,7 +80,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Image</th>
                 <th>Date Uploaded</th>
               </tr>
             </thead>
@@ -88,7 +88,11 @@
              @foreach($order_details_with_prescriptions as $order_details_with_prescription)
              <tr>
               <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
-              <td>{{ $order_details_with_prescription->patient_prescriptions()->first()->filename }}</td>
+              <td>
+                <a href="javascript:void(0);" class="add-edit-btn" data-action="preview_image" data-modal-target="#modal-view-prescription" data-target="#view-prescription-form">
+                  <img class="img-responsive primary-photo table-size-image" name="photo" src="{{ URL::to('/db/uploads/user_'.$order->patient_id.'/'.$order_details_with_prescription->patient_prescriptions()->first()->filename) }}" alt="Photo">
+                </a>
+              </td>
               <td>{{ Carbon\Carbon::parse($order_details_with_prescription->patient_prescriptions()->first()->created_at)->toDayDateTimeString() }}</td>
             </tr>
             @endforeach
@@ -142,5 +146,24 @@
     </div>
   </div>
 </form>
+
+<!-- Modal for Create/Edit product -->
+  <div class="modal" id="modal-view-prescription">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- <form role="form" id="form_view_member" data-urlmain="/members/"> -->
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">View Prescription</h4>
+        </div>
+        <div class="modal-body">
+          <div class="ytp-thumbnail-overlay ytp-cued-thumbnail-overlay">
+            <img id="image_holder" class="img-responsive primary-photo" src="">
+          </div>
+        </div>
+        <!-- </form> -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </div><!-- /.col -->
 @stop
 
