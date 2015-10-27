@@ -5,40 +5,48 @@ $(document).ready(function (){
 
     /* Morris.js Charts */
     // Sales chart
-    var area = new Morris.Area({
-        element: 'revenue-chart',
-        resize: true,
-        data: [
-            {y: '2011 Q1', item1: 2666, item2: 2666},
-            {y: '2011 Q2', item1: 2778, item2: 2294},
-            {y: '2011 Q3', item1: 4912, item2: 1969},
-            {y: '2011 Q4', item1: 3767, item2: 3597},
-            {y: '2012 Q1', item1: 6810, item2: 1914},
-            {y: '2012 Q2', item1: 5670, item2: 4293},
-            {y: '2012 Q3', item1: 4820, item2: 3795},
-            {y: '2012 Q4', item1: 15073, item2: 5967},
-            {y: '2013 Q1', item1: 10687, item2: 4460},
-            {y: '2013 Q2', item1: 8432, item2: 5713}
-        ],
-        xkey: 'y',
-        ykeys: ['item1', 'item2'],
-        labels: ['Item 1', 'Item 2'],
-        lineColors: ['#a0d0e0', '#3c8dbc'],
-        hideHover: 'auto'
-    });
+    try{
+        var area = new Morris.Area({
+            element: 'revenue-chart',
+            resize: true,
+            data: [
+                {y: '2011 Q1', item1: 2666, item2: 2666},
+                {y: '2011 Q2', item1: 2778, item2: 2294},
+                {y: '2011 Q3', item1: 4912, item2: 1969},
+                {y: '2011 Q4', item1: 3767, item2: 3597},
+                {y: '2012 Q1', item1: 6810, item2: 1914},
+                {y: '2012 Q2', item1: 5670, item2: 4293},
+                {y: '2012 Q3', item1: 4820, item2: 3795},
+                {y: '2012 Q4', item1: 15073, item2: 5967},
+                {y: '2013 Q1', item1: 10687, item2: 4460},
+                {y: '2013 Q2', item1: 8432, item2: 5713}
+            ],
+            xkey: 'y',
+            ykeys: ['item1', 'item2'],
+            labels: ['Item 1', 'Item 2'],
+            lineColors: ['#a0d0e0', '#3c8dbc'],
+            hideHover: 'auto'
+        });
+    }catch(Exception){
+        console.log(Exception);   
+    }
 
-    //Donut Chart
-    var donut = new Morris.Donut({
-        element: 'sales-chart',
-        resize: true,
-        colors: ["#3c8dbc", "#f56954", "#00a65a"],
-        data: [
-            {label: "Download Sales", value: 12},
-            {label: "In-Store Sales", value: 30},
-            {label: "Mail-Order Sales", value: 20}
-        ],
-        hideHover: 'auto'
-    });
+    try{
+        //Donut Chart
+        var donut = new Morris.Donut({
+            element: 'sales-chart',
+            resize: true,
+            colors: ["#3c8dbc", "#f56954", "#00a65a"],
+            data: [
+                {label: "Download Sales", value: 12},
+                {label: "In-Store Sales", value: 30},
+                {label: "Mail-Order Sales", value: 20}
+            ],
+            hideHover: 'auto'
+        });
+    }catch(Exception){
+        console.log(Exception);   
+    }
 
     //Fix for charts under tabs
     $('.box ul.nav a').on('shown.bs.tab', function (e) {
@@ -503,7 +511,7 @@ $(document).ready(function (){
                     var isActive = "active";
                     $.each(data, function (i, row){
                         if( i != 0 ) isActive = '';
-                        $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"></li>')
+                        $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"  data-id="'+row.id+'"></li>')
                         $('#product-gallery-carousel .carousel-inner').append('<div class="item '+isActive+'">'+
                             '<img src="/images/original/'+row.filename+'" class="product-gallery-item" data-id="'+row.id+'">'+
                         '</div>');
@@ -577,22 +585,63 @@ $(document).ready(function (){
             });
 
 
+        // Let's enable the right click context menu to delete product photo
+        $(".carousel-inner").mousedown(function(e){
+            if(e.which == 3 ){  // if mouse's right button is clicked
+                $("#product-gallery-carousel").carousel("pause").removeData();
+                
+                var activeItem = $(this).children("div.item.active");
+                var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
+                var pid = activeItem.children("img").data("id");
 
-        // $.ajax({
-        //     url: '/products/gallery/delete/'+$(this).children('.product-gallery-item').data("id"),
-        //     type: "post",
-        //     dataType: "json",
-        //     data: { _token: $('input[name="_token"]').val() }
-        // }).done(function (data){
-        //     if( data.status == "success" ){
-        //         $this.fadeOut(function (){
-        //             $this.remove();
-        //             $("body").trigger("click");
-        //         });
-        //     }else{
-        //         alert(data.msg);
-        //     }
-        // }); 
+                console.log(pid);
+
+                var $this = $(this);
+
+                if( !$this.is(":focus") && !$("div.context-menu").parent("td").parent("tr").parent("tbody")
+                    .parent("table").is(":focus") ){
+                    $(document).find("div.context-menu").parent("td").parent("tr").parent("tbody").parent("table").remove();
+                    $(document).find('div.context-menu-shadow').remove();
+                }
+
+                var menu = [{
+                    'Delete': function(menuItem, menu) { 
+                        $.ajax({
+                            url: '/products/gallery/delete/'+pid,
+                            type: "post",
+                            dataType: "json",
+                            data: { _token: $('input[name="_token"]').val() },
+                            beforeSend: function(){
+                                activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
+                            }
+                        }).done(function (data){
+                            console.log(data);
+                            $(".deleting-photo").remove();
+                            
+                            if( data.status_code == "200" ){
+                                // if( activeIndicator.next("li").length > 0 ){
+                                //     activeIndicator.next("li").addClass("active");
+                                // }else if( activeIndicator.prev("li").length > 0 ){
+                                //     activeIndicator.prev("li").addClass("active");
+                                // }
+
+                                activeItem.remove();
+                                activeIndicator.remove();
+                                $(".carousel-indicators li").removeClass("active");
+                                $(".carousel-indicators li:first").addClass("active");
+
+                                $("#product-gallery-carousel").carousel();
+                            }else{
+                                alert(data.msg);
+                            }
+                        }); 
+                    } 
+                }];
+
+                $('.carousel-inner').contextMenu(menu,{theme:'vista'});
+
+            }
+        });
 
 
         

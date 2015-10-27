@@ -69,7 +69,7 @@
 {!! HTML::script('dist/js/demo.js') !!}
 
 <!-- Custom Context Menu -->
-{!! HTML::script('plugins/contextmenu/context.js') !!}
+{!! HTML::script('plugins/contextmenu/jquery.contextmenu.js') !!}
 
 <!-- PharmacyTree js -->
 {!! HTML::script('dist/fn.ece.js') !!}

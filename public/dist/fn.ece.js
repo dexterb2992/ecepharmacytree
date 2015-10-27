@@ -191,9 +191,8 @@ function sendFileToServer(formData,status)
 	        cache: false,
 	        data: formData,
 	        success: function(data){
-	            status.setProgress(100);
-	 
-	            $("#status1").append('<div class="upload-status-success">'+formData.file.filename+' has been uploaded.</div>');         
+                console.log(data);
+	            status.setProgress(100);     
 	        }
     }); 
  

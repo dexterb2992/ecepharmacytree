@@ -139,9 +139,9 @@
                                 <div class="col-xs-4">
                                     <label for="phase_no">Phase No.</label>
                                 </div>
-                                <div class="col-xs-4">
+                                <!-- <div class="col-xs-4">
                                     <label for="address_zip">ZIP Code <i>*</i></label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row"> <!-- input fields -->
                                 <div class="col-xs-4">
@@ -150,9 +150,9 @@
                                 <div class="col-xs-4">
                                     <input type="text" class="form-control" name="phase_no" id="phase_no" placeholder="Phase No.">
                                 </div>
-                                <div class="col-xs-4">
+                                <!-- <div class="col-xs-4">
                                     <input type="text" class="form-control" name="address_zip" id="address_zip" placeholder="ZIP Code" required>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-group"> 
                                 <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>

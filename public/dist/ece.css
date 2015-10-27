@@ -344,3 +344,16 @@ tr.critical-stock, tr.critical-stock td, tr.critical-stock td a, tr.critical-sto
     margin-top: -14px;
     margin-bottom: 4px;
 }
+
+.deleting-photo {
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    font-size: large;
+    font-weight: bold;
+    background: rgba(221, 75, 57, 0.75);
+    text-align: center;
+    color: white;
+    margin-top: 48px;
+    padding: 8px;
+}

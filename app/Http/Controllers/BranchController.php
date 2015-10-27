@@ -104,13 +104,23 @@ class BranchController extends Controller
         $branch->address_city_municipality = $input["address_city_municipality"];
         $branch->address_province = $input["address_province"];
         $branch->address_region = $input["address_region"];
-        $branch->address_zip = $input["address_zip"];
+        // $branch->address_zip = $input["address_zip"];
         if( $branch->save() ) 
             session()->flash("flash_message", array("msg" => "Branch information has been updated successfully.", "type" => "success"));
             return Redirect::to( route('Branches::index') );
         
-        return false;
+        return Redirect::back()->withInput()->withErrors()
+            ->withFlash_message([
+                "msg" => "Sorry, we can't process your request right now. Please try again later.",
+                "type" => "danger"
+            ]);
     }
+
+
+    public function validate($input){
+        
+    }
+
 
     /**
      * Remove the specified resource from storage.

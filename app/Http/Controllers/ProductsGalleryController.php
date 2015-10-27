@@ -123,9 +123,17 @@ class ProductsGalleryController extends Controller
                 $path = public_path('images/product-photo-gallery/');
 
                 // delete photo
-                if( file_exists($path.$old_photo) )
-                    unlink($path.$old_photo);
+                if( file_exists($path.$filename) )
+                    if( unlink($path.$filename) ){
+                        return json_encode(["msg" => "Successfully deleted.", "status_code" => 200]);
+                    }
+
+                return json_encode(["msg" => "Sorry, we can't find the photo you are referring to.", "status_code" => 500]);
+            }else{
+                return json_encode(["msg" => "Sorry, we can't process your request right now. Please try again later.", "status_code" => 500]);
             }
+        }else{
+            abort(404);
         }
     }
 }
