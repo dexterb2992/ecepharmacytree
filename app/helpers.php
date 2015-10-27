@@ -41,6 +41,15 @@ function generateSku(){
 	generateSku();
 }
 
+function generate_referral_id(){
+	$referral_id = strtoupper( generateRandomString(3, 2, true).generateRandomString(3, 1, true) );
+	$check = ECEPharmacyTree\Patient::where('referral_id', '=', $referral_id)->first();
+	$check2 = ECEPharmacyTree\Doctor::where('referral_id', '=', $referral_id)->first();
+	if( $check === null && $check2 === null)
+		return $referral_id;
+	
+	generate_referral_id();
+}
 
 
 

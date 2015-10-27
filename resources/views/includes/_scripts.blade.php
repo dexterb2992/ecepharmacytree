@@ -13,7 +13,8 @@
 <!-- Morris.js charts -->
 {!! HTML::script('plugins/raphael/raphael-min.js') !!}
 
-<!-- HTML::script('plugins/morris/morris.min.js') -->
+{!! HTML::script('plugins/morris/morris.min.js') !!}
+
 <!-- Sparkline -->
 {!! HTML::script('plugins/sparkline/jquery.sparkline.min.js') !!}
 
