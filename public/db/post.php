@@ -189,7 +189,7 @@ if ($request == 'register') {
 		exit(0);
 	}
 
-} else if( $request == "esel_request" ) {
+} else if( $request == "insert_medical_record" ) {
 	$check_clinic_patients = mysql_query("SELECT * from clinic_patients where username = '".$_POST['username']."' and password ='".$_POST['password']."'");
 	if(mysql_num_rows($check_clinic_patients) > 0) {
 		$clinic_patients_rows = mysql_fetch_assoc($check_clinic_patients);
