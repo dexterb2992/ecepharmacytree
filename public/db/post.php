@@ -197,7 +197,6 @@ if ($request == 'register') {
 		if(mysql_query("INSERT into medical_records_requests(patient_id, clinic_patients_id, created_at)  VALUES (".$_POST['patient_id'].", ".$clinic_patients_rows['id'].", '".$datenow."')"))
 		{
 			$response["success"] = 1;
-			$response["message"] = "saved";
 		}
 	} else {
 		$response["success"] = 0;
