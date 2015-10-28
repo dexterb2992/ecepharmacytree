@@ -189,6 +189,21 @@ if ($request == 'register') {
 		exit(0);
 	}
 
+} else if( $request == "esel_request" ) {
+	$check_clinic_patients = mysql_query("SELECT * from clinic_patients where username = '".$_POST['username']."' and password ='".$_POST['password']."'");
+	if(mysql_num_rows($check_clinic_patients) > 0) {
+		$clinic_patients_rows = mysql_fetch_assoc($check_clinic_patients);
+
+		if(mysql_query("INSERT into medical_records_requests(patient_id, clinic_patients_id, created_at)  VALUES (".$_POST['patient_id'].", ".$clinic_patients_rows['id'].", '".$datenow."')"))
+		{
+			$response["success"] = 1;
+			$response["message"] = "saved";
+		}
+	} else {
+		$response["success"] = 0;
+		$response["message"] = "no match username and password for clinic_patients";
+	}
+
 } else if ($request == "crud") {
     /**    
     * @param table: asks for table name to insert    
