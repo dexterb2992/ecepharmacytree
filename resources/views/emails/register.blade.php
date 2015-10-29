@@ -50,14 +50,15 @@
 			<tbody>
 				<tr>
 					<td>
-						<div>
-							<b>{{ Auth::user()->fname." ".Auth::user()->lname }}</b> has added you as {{ $role }} at {{ $branch_name }}. <br/> Please login using this credentials:
+						<div style="font-size: 14px;color:black !important;">
+							<b style="color:black;">{{ Auth::user()->fname." ".Auth::user()->lname }}</b> has added you as {{ $role }} at {{ $branch_name }}. <br/>
+							<span style="color:black;">Please login using this credentials:</span>
 							<br/><br/>
-							Email: <code>{{ $email }}</code><br/>
-							Password: <code>{{ $password }}</code>
+							<span style="color:black;">Email:</span><code>{{ $email }}</code><br/>
+							<span style="color:black;">Password:</span><code>{{ $password }}</code>
 							<br/><br/>
 							<div style="text-align: center;">
-								<a style="    -webkit-box-shadow: none;
+								<a style="-webkit-box-shadow: none;
 								    box-shadow: none;
 								    background-color: #00a65a;
 								    border-color: #008d4c;
@@ -81,10 +82,10 @@
 								    border: 1px solid transparent;
 								    border-radius: 4px;
 								    color: #fff;
-								    text-decoration: none;" href="{{ url('auth/login') }}">Login now</a>
+								    text-decoration: none;" href="{{ url('profile') }}">Login now</a>
 							</div>
 							<br/>
-							<b>Note: It is strictly recommended that you change your password after your first login.</b>
+							<b style="font-size: 13px;color: black;">Note: It is strictly recommended that you change your password after your first login.</b>
 							<br/>
 							<br/>
 							
@@ -100,7 +101,7 @@
 								<small>
 									If the link above doesn't work. Please copy and paste this url to your browser.
 									<br/>
-									{{ url('auth/login') }}
+									{{ url('profile') }}
 								</small>
 							</code>
 						</i>

@@ -61,14 +61,23 @@ class UserController extends Controller
         $branch = Branch::findOrFail($input['branch_id']);
         $branch_name = $branch->name;
 
-        $res = $this->mailer->send( 'emails.register', 
-            compact('email', 'password', 'role', 'branch_name'), function ($m) use ($email, $password, $role, $branch_name) {
-                $m->subject('Pharmacy Tree Registration');
-                $m->to($email);
-        }); 
+        $user = new User;
+        $user->email = $email;
+        $user->password = bcrypt($password);
+        $user->branch_id = $branch->id;
+        $user->access_level = $input['access_level'];
 
-        pre($res);
-        pre(json_decode($res));
+        if( $user->save() )
+            $res = $this->mailer->send( 'emails.register', 
+                compact('email', 'password', 'role', 'branch_name'), function ($m) use ($email, $password, $role, $branch_name) {
+                    $m->subject('Pharmacy Tree Registration');
+                    $m->to($email);
+            }); 
+
+        return redirect(route('employees'))->withFlash_message([
+            'msg' => 'An email has been sent to '.$email.'. Please tell this person to check his/her email.',
+            'type' => 'success'
+        ]);
 
     }
 
