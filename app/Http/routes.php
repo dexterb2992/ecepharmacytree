@@ -30,6 +30,7 @@ Route::get('home', function(){
 });
 
 Route::get('try', function(){
+	dd(config('mail'));
 	return view('emails.register')->withRole('Branch Manager')
 		->withEmail('dexterb2992@gmail.com')->withPassword(generateRandomString(6))
 		->withBranch_name("ECE Marketing - Davao");
