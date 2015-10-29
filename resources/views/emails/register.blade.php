@@ -31,12 +31,12 @@
 		    border-spacing: 2px;
 		    border-color: rgba(128, 128, 128, 0.52);
 		    background-image: url({{ url('images/original/email-bg.jpg') }});
-		    background-size: cover;
-		    background-position-x: -260px;">
+			    background-size: cover;
+			    background-position-x: -260px;">
 			<thead>
 				<tr>
 					<th>
-						<img src="http://localhost:8000/images/50x50/favicon.png">
+						<img src="{{ url('/images/50x50/favicon.png' }}">
 						<div style="font-size: larger;">Welcome to Pharmacy Tree</div>
 					</th>
 				</tr>
