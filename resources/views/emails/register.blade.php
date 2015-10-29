@@ -18,6 +18,12 @@
 			<i>If the link above doesn't work. Please copy and paste this url to your browser.</i><br/>
 			{{ url('auth/login') }}
 		</div> -->
+		<style type="text/css">
+			table{
+				background-size: cover;
+				background-position-x: -260px;
+			}
+		</style>
 		<table style="font-family: 'Source Sans Pro',sans-serif;
 		    font-size: medium;
 		    background-color: rgba(0, 128, 0, 0.15);
