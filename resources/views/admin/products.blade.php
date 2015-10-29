@@ -29,7 +29,7 @@
                             <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-product" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <table class="table table-bordered table-hover datatable">
+                            <table class="table table-bordered table-hover datatable products-table">
                                 <thead>
                                     <tr>
                                         <th>Photo</th>
@@ -324,7 +324,7 @@
                     <small>
                         <i>
                             ( <i class="fa-info-circle fa"></i>
-                            <i> Right click image to delete </i> )
+                            <i> Right click image for more options </i> )
                         </i>
                     </small>
                 </h4>
@@ -334,6 +334,7 @@
                     <a href="#" class="btn-info btn btn-flat" id="add_gallery">Add new</a>
                 </div><br/>
                 <div class="add-new-gallery-outer hidden">
+                    <div class="gallery-empty"></div>
                     <div id="droppable_div">Drag & Drop Files Here</div>
                     <br/><br/>
                     <div id="status1"></div>
@@ -341,28 +342,19 @@
                 <!-- START CAROUSEL-->
                 <div id="product-gallery-carousel" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
-                        <!-- <li data-target="#product-gallery-carousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#product-gallery-carousel" data-slide-to="0" class="active"></li>
                         <li data-target="#product-gallery-carousel" data-slide-to="1" class=""></li>
-                        <li data-target="#product-gallery-carousel" data-slide-to="2" class=""></li> -->
+                        <li data-target="#product-gallery-carousel" data-slide-to="2" class=""></li>
                     </ol>
                     <div class="carousel-inner">
                         <div class="item active">
-                            <img src="http://placehold.it/900x500/39CCCC/ffffff&text=I+Love+Bootstrap" alt="First slide">
-                            <div class="carousel-caption">
-                                First Slide
-                            </div>
+                            <img src="http://placehold.it/900x500/39CCCC/ffffff&text=Add photos for this product" alt="First slide">
                         </div>
                         <div class="item">
-                            <img src="http://placehold.it/900x500/3c8dbc/ffffff&text=I+Love+Bootstrap" alt="Second slide">
-                            <div class="carousel-caption">
-                                Second Slide
-                            </div>
+                            <img src="http://placehold.it/900x500/3c8dbc/ffffff&text=Click the button 'Add new'" alt="Second slide">
                         </div>
                         <div class="item">
-                            <img src="http://placehold.it/900x500/f39c12/ffffff&text=I+Love+Bootstrap" alt="Third slide">
-                            <div class="carousel-caption">
-                                Third Slide
-                            </div>
+                            <img src="http://placehold.it/900x500/f39c12/ffffff&text=Drop photos on the dotted space" alt="Third slide">
                         </div>
                     </div>
                     <a class="left carousel-control" href="#product-gallery-carousel" data-slide="prev">

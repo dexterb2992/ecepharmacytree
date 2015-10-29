@@ -18,7 +18,7 @@ class UserTableSeeder extends Seeder
     	$user->mname = "Smith";
     	$user->lname = "Doe";
     	$user->email = "johndoe@example.com";
-    	$user->password = bcrypt("admin");
+    	$user->password = bcrypt("admin1");
     	$user->branch_id = 1;
     	$user->access_level = 1;   /** 
                                     * Note: 1 => Admin, 2 => maybe, employees 

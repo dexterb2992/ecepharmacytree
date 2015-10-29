@@ -172,7 +172,7 @@
                     <img src="{{ !empty($product->galleries[0]) ? url('images/50x50/'.$product->galleries[0]->filename) : url('images/50x50/nophoto.jpg') }}" alt="Product Image" />
                   </div>
                   <div class="product-info">
-                    <a href="javascript::;" class="product-title">
+                    <a href="javascript:void(0);" class="product-title">
                       {{ $product->name }}
                       <span class="label label-success pull-right">&#x20B1; {{ $product->price." / ".$product->unit }}</span>
                     </a>

@@ -357,3 +357,7 @@ tr.critical-stock, tr.critical-stock td, tr.critical-stock td a, tr.critical-sto
     margin-top: 48px;
     padding: 8px;
 }
+
+.gallery-empty {
+    margin-left: 8px;
+}

@@ -189,10 +189,17 @@ $(document).ready(function (){
 
     /**
      * For alert/confirmation dialogs
+     * usage: add class 'action-icon' to any element with a data attributes of
+     * 1. data-id  => the id of the specific database entry
+     * 2. data-url => the url where the next functions should take place (ex.: http://mydomain.com/products/)
+     * 3. data-action => the type of the alert dialog
+     * 4. data-urlmain => the url where the next functions should take place (ex.: http://mydomain.com/products/)
      */
     $(document).on("click", ".action-icon", function (){
         var $this = $(this), url = "", alertType = "";
-        var id = $this.data("id"), action = $this.data('action'), mainurl = $this.data('urlmain'), dataTitle = $this.data('title');
+        var id = $this.data("id"), action = $this.data('action'), mainurl = $this.data('urlmain'), 
+            dataTitle = $this.data('title');
+
         if( action == "deactivate" ){
             alertType = "warning";
             type="confirm";
@@ -503,7 +510,11 @@ $(document).ready(function (){
                 type: 'get',
                 dataType: 'json'
             }).done(function (data){
+                console.log(data);
+                console.log("length: "+data.length);
                 if( data.length > 0 ){
+                    $(".gallery-empty").html("");
+                    $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
                     $('#product-gallery-carousel').show();
                     $(".add-new-gallery-outer").hide();
 
@@ -513,13 +524,18 @@ $(document).ready(function (){
                         if( i != 0 ) isActive = '';
                         $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"  data-id="'+row.id+'"></li>')
                         $('#product-gallery-carousel .carousel-inner').append('<div class="item '+isActive+'">'+
-                            '<img src="/images/original/'+row.filename+'" class="product-gallery-item" data-id="'+row.id+'">'+
+                            '<img src="/images/original/'+row.filename+'" class="product-gallery-item" data-product_id="'+productId+'" data-id="'+row.id+'">'+
                         '</div>');
                     });
+                    $(".carousel-inner").removeClass("disable-contextmenu");
                     $('#product-gallery-carousel').carousel();
                 }else{
+                    $('#product-gallery-carousel').carousel('pause').html(getOriginalCarouselItems()).carousel();
+                    $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
                     $('#product-gallery-carousel').hide();
-                    $(".add-new-gallery-outer").show();
+                    $(".add-new-gallery-outer").removeClass("hidden").show();
+                    $(".gallery-empty").html('<code> No available photo for this product yet. Drop some photos here.</code>');
+                    $(".carousel-inner").addClass("disable-contextmenu");
                 }
 
                 $(targetModal).modal('show');
@@ -527,6 +543,8 @@ $(document).ready(function (){
         });
 
         $("#add_gallery").click(function (){
+            $("#status1").html("");
+
             if( $(this).html() == "Add new" ){
                 $("#product-gallery-carousel").fadeOut(function (){
                     $(".add-new-gallery-outer").fadeIn(function(){
@@ -554,18 +572,18 @@ $(document).ready(function (){
                 $(this).css('border', '2px solid #0B85A1');
             });
             obj.on('dragover', function (e) {
-                 e.stopPropagation();
-                 e.preventDefault();
+                e.stopPropagation();
+                e.preventDefault();
             });
 
             obj.on('drop', function (e) {
              
-                 $(this).css('border', '2px dotted #0B85A1');
-                 e.preventDefault();
-                 var files = e.originalEvent.dataTransfer.files;
-             
-                 //We need to send dropped files to Server
-                 handleFileUpload(files,obj);
+                $(this).css('border', '2px dotted #0B85A1');
+                e.preventDefault();
+                var files = e.originalEvent.dataTransfer.files;
+
+                //We need to send dropped files to Server
+                handleFileUpload(files,obj);
             });
 
             $(document).on('dragenter', function (e) {
@@ -586,14 +604,14 @@ $(document).ready(function (){
 
 
         // Let's enable the right click context menu to delete product photo
-        $(".carousel-inner").mousedown(function(e){
+        $(document).on("mousedown", ".carousel-inner:not(.disable-contextmenu)", function(e){
             if(e.which == 3 ){  // if mouse's right button is clicked
                 $("#product-gallery-carousel").carousel("pause").removeData();
-                
+
                 var activeItem = $(this).children("div.item.active");
                 var pid = activeItem.children("img").data("id");
                 var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
-                
+                var product_id = activeItem.children("img").data("product_id");
                 console.log("activeIndicator: ");
                 console.log(activeIndicator);
 
@@ -608,38 +626,50 @@ $(document).ready(function (){
                     $(document).find('div.context-menu-shadow').remove();
                 }
 
-                var menu = [{
-                    'Delete': function(menuItem, menu) { 
-                        $.ajax({
-                            url: '/products/gallery/delete/'+pid,
-                            type: "post",
-                            dataType: "json",
-                            data: { _token: $('input[name="_token"]').val() },
-                            beforeSend: function(){
-                                activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
-                            }
-                        }).done(function (data){
-                            console.log(data);
-                            $(".deleting-photo").remove();
+                var menu = [
+                    {
+                        'Make Primary': function(menuItem, menu){
+                            $.ajax({
+                                url: '/products/gallery/change-primary/'+pid,
+                                type: "post",
+                                dataType: "json",
+                                data: { _token: $('input[name="_token"]').val() }
+                            }).done(function (data){
+                                console.log(data);
+                                if( data.status_code == "200" ){
+                                    refreshProductPrimaryPhoto(product_id);
+                                    $("#modal-products-gallery").modal('hide');
+                                }
+                            });
+                        }
+                    },
+                    {
+                        'Delete': function(menuItem, menu) { 
+                            $.ajax({
+                                url: '/products/gallery/delete/'+pid,
+                                type: "post",
+                                dataType: "json",
+                                data: { _token: $('input[name="_token"]').val() },
+                                beforeSend: function(){
+                                    activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
+                                }
+                            }).done(function (data){
+                                console.log(data);
+                                $(".deleting-photo").remove();
 
-                            if( data.status_code == "200" ){
-                                // if( activeIndicator.next("li").length > 0 ){
-                                //     activeIndicator.next("li").addClass("active");
-                                // }else if( activeIndicator.prev("li").length > 0 ){
-                                //     activeIndicator.prev("li").addClass("active");
-                                // }
-                                $("#product-gallery-carousel").carousel("next");
-                                activeItem.removeClass("item").addClass("hidden");
-                                // activeIndicator.css("display", "none");
-                                activeIndicator.remove();
-                                $(".carousel-indicators li").removeClass("active");
-                                $(".carousel-indicators li:first").addClass("active");
+                                if( data.status_code == "200" ){
+                                    $("#product-gallery-carousel").carousel("next");
+                                    activeItem.removeClass("item").addClass("hidden");
+                                    activeIndicator.remove();
+                                    $(".carousel-indicators li").removeClass("active");
+                                    $(".carousel-indicators li:first").addClass("active");
 
-                                $("#product-gallery-carousel").carousel();
-                            }else{
-                                alert(data.msg);
-                            }
-                        }); 
+                                    $("#product-gallery-carousel").carousel();
+                                    refreshProductPrimaryPhoto(product_id);
+                                }else{
+                                    alert(data.msg);
+                                }
+                            }); 
                     } 
                 }];
 

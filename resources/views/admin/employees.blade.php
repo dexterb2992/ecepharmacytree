@@ -69,8 +69,12 @@
                 <div class="moda-body">
                 	<div class="register-box-body">
 				        <p class="login-box-msg">Register an account</p>
-				        {!! Form::open(['action' => 'Auth\AuthController@postRegister', 'method' => 'post', 'enctype' => "multipart/form-data"]) !!}
-				          
+				        {!! Form::open(['action' => 'UserController@create', 'method' => 'post', 'enctype' => "multipart/form-data"]) !!}
+				          	<div class="form-group">
+				          		{!! Form::label('Email') !!}
+				          		{!! Form::email('email', '', ['class' => 'form-control']) !!}
+				          		{!! _error($errors->first('email')) !!}
+				          	</div>
 
 							<div class="form-group">
 								{!! Form::label('Role') !!}

@@ -7,18 +7,21 @@ use Auth;
 use Validator;
 use Redirect;
 use Image;
+use Illuminate\Mail\Mailer;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\User;
 use ECEPharmacyTree\Product;
 use ECEPharmacyTree\Patient;
+use ECEPharmacyTree\Branch;
 
 class UserController extends Controller
 {
 
-    function __construct() {
+    function __construct(Mailer $mailer) {
         $this->middleware('auth');
+        $this->mailer = $mailer;
     }
 
     /**
@@ -30,20 +33,43 @@ class UserController extends Controller
     {
         $employees = User::where('id', '!=', Auth::user()->id)->get();
         $members = Patient::all();
-        return view('admin.employees')->withTitle('Emloyees')->withEmployees($employees)
+        return view('admin.employees')->withTitle('Employees')->withEmployees($employees)
             ->withMembers($members);
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param  Request  $request
      * @return Response
      */
     public function create()
     {
-        //
-       $user = new User;
-       
+        $return_data = [];
+        
+        $input = Input::all();
+        //dd($input);
+        $step1_validator = $this->step1_validator($input);
+        if( $step1_validator->fails() ){
+            $return_data['status_code'] = '500';
+            $errors = $validator->errors()->toArray();
+        }
+
+        $email = $input['email'];
+        $password = generateRandomString(6);
+        $role = get_role($input['access_level']);
+        $branch = Branch::findOrFail($input['branch_id']);
+        $branch_name = $branch->name;
+
+        $res = $this->mailer->send( 'emails.register', 
+            compact('email', 'password', 'role', 'branch_name'), function ($m) use ($email, $password, $role, $branch_name) {
+                $m->subject('Pharmacy Tree Registration');
+                $m->to($email);
+        }); 
+
+        pre($res);
+        pre(json_decode($res));
+
     }
 
     /**
@@ -54,7 +80,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -154,6 +180,11 @@ class UserController extends Controller
         return Validator::make($data, $rules, $messages);
     }
 
+    public function step1_validator(array $data){
+        $rules = ['email' => 'required'];
+        return Validator::make($data, $rules);
+    }
+
     public function update_password(){
         if( Request::ajax() ){
 
@@ -185,7 +216,6 @@ class UserController extends Controller
                     $return_data['status_code']= '200';
             }
 
-            // return json_encode($return_data);
         }else{
             return redirect('/');
         }
