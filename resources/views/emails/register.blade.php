@@ -38,7 +38,7 @@
 		    border-color: rgba(128, 128, 128, 0.52);
 		    background-size: cover;
 			background-position-x: -260px;
-		    background-image: url({{ url('images/original/email-bg.jpg') }});">
+		    background: url({{ url('images/original/email-bg.jpg') }}) no-repeat right top;">
 			<thead>
 				<tr>
 					<th>
