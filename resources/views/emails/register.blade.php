@@ -36,7 +36,7 @@
 			<thead>
 				<tr>
 					<th>
-						<img src="{{ url('/images/50x50/favicon.png' }}">
+						<img src="{{ url('/images/50x50/favicon.png') }}">
 						<div style="font-size: larger;">Welcome to Pharmacy Tree</div>
 					</th>
 				</tr>
