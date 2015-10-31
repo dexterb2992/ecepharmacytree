@@ -14,38 +14,36 @@
                         <tr>
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Age</th>
-                            <th>Full Address</th>
                             <th>Email Address</th>
-                            <th>Mobile Number</th>
+                            <th>Role</th>
+                            <th>Branch</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($members as $member)
-                        <tr data-id="{{ $member->id }}" class="{!! $member->deleted_at != null ? 'warning' : '' !!}">
+                        @foreach($employees as $employee)
+                        <tr data-id="{{ $employee->id }}" class="{!! $employee->deleted_at != null ? 'warning' : '' !!}">
                             <td>
-                                <span>{{ ucfirst($member->fname) }}</span>
+                                <span>{{ ucfirst($employee->fname) }}</span>
                             </td>
                             <td>
-                                <span>{{ ucfirst($member->lname) }}</span>
+                                <span>{{ ucfirst($employee->lname) }}</span>
                             </td>
-                            <td>{{ Carbon\Carbon::createFromFormat('Y-m-d', $member->birthdate)->age }}</td>
-                            <td>{{ ucfirst($member->address_street).', '.ucfirst($member->address_barangay).', '.ucfirst($member->address_city_municipality) }}</td>
-                            <td>{{ $member->email_address }}</td>
-                            <td>{{ $member->mobile_no }}</td>
-                            <td>{!! ($member->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
+                            <td>{{ $employee->email }}</td>
+                            <td>{{ get_role($employee->access_level) }}</td>
+                            <td>{{ $employee->branch->name }}</td>
+                            <td>{!! ($employee->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">
-	                                <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $member->id }}" title="">
+	                                <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $employee->id }}" title="">
 	                                    <i class="fa fa-eye"></i> View
 	                                </a>
 	                                <br/>
-	                                @if($member->deleted_at != null )
-	                                <span class="action-icon marginleft-zero" data-action="unblock" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}"><i class="fa fa-thumbs-o-up"></i> Unblock </span>
+	                                @if($employee->deleted_at != null )
+	                                <span class="action-icon marginleft-zero" data-action="unblock" data-title="member" data-urlmain="/members/" data-id="{{ $employee->id }}"><i class="fa fa-thumbs-o-up"></i> Unblock </span>
 	                                @else
-	                                <span class="action-icon marginleft-zero" data-action="deactivate" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}"><i class="fa fa-thumbs-o-down"></i> Block </span>
+	                                <span class="action-icon marginleft-zero" data-action="deactivate" data-title="member" data-urlmain="/members/" data-id="{{ $employee->id }}"><i class="fa fa-thumbs-o-down"></i> Block </span>
 	                                @endif
                             	</div>
 	                        </td>
