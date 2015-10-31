@@ -6,7 +6,7 @@
         <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">Members</h3><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-view-employee" data-target="#form_add_employee" data-action="create" data-title="inventory"><i class="fa-plus fa"></i> Add New</button>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-view-employee" data-action="create" data-title="inventory"><i class="fa-plus fa"></i> Add New</button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable">
@@ -66,11 +66,11 @@
                     <h4 class="modal-title">View Employee Information</h4>
                 </div>
                     
-                <div class="moda-body">
+                <div class="modal-body">
                 	<div class="register-box-body">
 				        <p class="login-box-msg">Register an account</p>
-				        {!! Form::open(['action' => 'UserController@create', 'method' => 'post', 
-				        	'id' => 'form_add_employee', 'enctype' => "multipart/form-data"]) !!}
+				        {!! Form::open(['action' => 'UserController@create', 'method' => 'post', 'id' => 'form_add_employee', 'enctype' => "multipart/form-data"]) !!}
+				       
 				          	<div class="form-group">
 				          		{!! Form::label('Email') !!}
 				          		{!! Form::email('email', '', ['class' => 'form-control']) !!}

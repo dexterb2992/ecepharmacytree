@@ -319,7 +319,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy()
     {
         $id = Input::get('id');
         $user = User::findOrFail($id);

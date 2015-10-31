@@ -44,25 +44,16 @@ Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController
 	Route::post('profile', ['as' => 'update_photo', 'middleware' => 'auth', 'uses' => 'UserController@update_photo']);
 	Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
 
-	// Route::get('employees', ['as' => 'employees', 'uses' => 'UserController@index']);
-	// Route::post('employees', ['as' => 'employees', 'uses' => 'UserController@create']);
-	// Route::post('employees/deactivate', ['as' => 'deactivate_employee', 'middleware' => 'admin',
-	// 	'uses' => 'UserController@destroy']);
-	// Route::post('employees/reactivate', ['as' => 'reactivate_employee', 'middleware' => 'admin',
-	// 	'uses' => 'UserController@reactivate']);
-	// Route::post('employee/change/branch', ['as'=> 'update_employee_branch', 'middleware' => 'admin',
-	// 	'uses' => 'UserController@update'])
-
-Route::group(['prefix' => 'employees', 'middleware' => 'admin'], function (){
-	Route::get('/', ['as' => 'employees', 'uses' => 'UserController@index']);
-	Route::post('/', ['as' => 'employees', 'uses' => 'UserController@create']);
-	Route::post('deactivate', ['as' => 'deactivate_employee', 'middleware' => 'admin',
+	Route::get('employees', ['as' => 'employees', 'uses' => 'UserController@index']);
+	Route::post('employees', ['as' => 'employees', 'uses' => 'UserController@create']);
+	Route::post('employees/deactivate', ['as' => 'deactivate_employee', 'middleware' => 'admin',
 		'uses' => 'UserController@destroy']);
-	Route::post('reactivate', ['as' => 'reactivate_employee', 'middleware' => 'admin',
+	Route::post('employees/reactivate', ['as' => 'reactivate_employee', 'middleware' => 'admin',
 		'uses' => 'UserController@reactivate']);
-	Route::post('change/branch', ['as'=> 'update_employee_branch', 'middleware' => 'admin',
+	Route::post('employee/change/branch', ['as'=> 'update_employee_branch', 'middleware' => 'admin',
 		'uses' => 'UserController@update_branch']);
-});
+
+
 
 Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'auth'], function (){
 	/**
