@@ -94,7 +94,7 @@ class PatientController extends Controller
         if($member->delete())
             return json_encode( array("status" => "success") );
          
-         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 
      public function unblock()
@@ -105,6 +105,6 @@ class PatientController extends Controller
         if($member->restore())
             return json_encode( array("status" => "success") );
          
-         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

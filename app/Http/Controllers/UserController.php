@@ -31,10 +31,18 @@ class UserController extends Controller
      */
     public function index()
     {
-        $employees = User::where('id', '!=', Auth::user()->id)->get();
-        $members = Patient::all();
+
+        if( Auth::user()->isBranchManager() ){
+            $employees = User::where('id', '!=', Auth::user()->id)
+                ->where('branch_id', '=', Auth::user()->branch->id)->get();
+            $branches = Branch::where('id', '=', Auth::user()->branch->id)->get();
+        }else{
+            $employees = User::where('id', '!=', Auth::user()->id)->get();
+            $branches = Branch::all();
+        }
+
         return view('admin.employees')->withTitle('Employees')->withEmployees($employees)
-            ->withMembers($members);
+            ->withBranches($branches);
     }
 
     /**
@@ -151,6 +159,21 @@ class UserController extends Controller
         }else{
             return redirect('/');
         }
+    }
+
+    public function update_branch(){
+        $input = Input::all();
+        $branch = Branch::findOrFail($input['branch_id']);
+        if( !empty($branch) )
+            $user = User::findOrFail($input['id']);
+            $user->branch_id = $branch->id;
+            if( $user->save() )
+                // let's send some emailnotificaion here
+                return json_encode( array("status" => "success") );
+
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+
+            
     }
 
     protected function validator(array $data){
@@ -298,6 +321,22 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $id = Input::get('id');
+        $user = User::findOrFail($id);
+
+        if($user->delete())
+            return json_encode( array("status" => "success") );
+         
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+    }
+
+    public function reactivate(){
+        $id = Input::get('id');
+        $user = User::withTrashed()->findOrFail($id);
+
+        if($user->restore())
+            return json_encode( array("status" => "success") );
+         
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

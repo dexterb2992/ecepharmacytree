@@ -6,7 +6,7 @@
         <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">Members</h3><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-view-member" data-target="#form_edit_inventory" data-action="create" data-title="inventory"><i class="fa-plus fa"></i> Add New</button>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-view-employee" data-target="#form_add_employee" data-action="create" data-title="inventory"><i class="fa-plus fa"></i> Add New</button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable">
@@ -32,18 +32,20 @@
                             </td>
                             <td>{{ $employee->email }}</td>
                             <td>{{ get_role($employee->access_level) }}</td>
-                            <td>{{ $employee->branch->name }}</td>
+                            <td>
+                            	{{ $employee->branch->name }}
+                            	<a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-toggle="tooltip" data-original-title="Change branch for this employee?" data-modal-target="#modal-view-employee" data-title="Employee Info" data-target="#form_update_employee" data-id="{{ $employee->id }}" title="">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
                             <td>{!! ($employee->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">
-	                                <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $employee->id }}" title="">
-	                                    <i class="fa fa-eye"></i> View
-	                                </a>
 	                                <br/>
 	                                @if($employee->deleted_at != null )
-	                                <span class="action-icon marginleft-zero" data-action="unblock" data-title="member" data-urlmain="/members/" data-id="{{ $employee->id }}"><i class="fa fa-thumbs-o-up"></i> Unblock </span>
+	                                <span class="action-icon marginleft-zero" data-action="reactivate" data-title="employee" data-urlmain="/employees/" data-id="{{ $employee->id }}"><i class="fa fa-thumbs-o-up"></i> Reactivate </span>
 	                                @else
-	                                <span class="action-icon marginleft-zero" data-action="deactivate" data-title="member" data-urlmain="/members/" data-id="{{ $employee->id }}"><i class="fa fa-thumbs-o-down"></i> Block </span>
+	                                <span class="action-icon marginleft-zero" data-action="deactivate" data-title="employee" data-urlmain="/employees/" data-id="{{ $employee->id }}"><i class="fa fa-thumbs-o-down"></i> Deactivate </span>
 	                                @endif
                             	</div>
 	                        </td>
@@ -55,19 +57,20 @@
 	    </div><!-- /.box -->
 
     <!-- Modal for Create/Edit product -->
-    <div class="modal" id="modal-view-member">
+    <div class="modal" id="modal-view-employee">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">View Member Information</h4>
+                    <h4 class="modal-title">View Employee Information</h4>
                 </div>
                     
                 <div class="moda-body">
                 	<div class="register-box-body">
 				        <p class="login-box-msg">Register an account</p>
-				        {!! Form::open(['action' => 'UserController@create', 'method' => 'post', 'enctype' => "multipart/form-data"]) !!}
+				        {!! Form::open(['action' => 'UserController@create', 'method' => 'post', 
+				        	'id' => 'form_add_employee', 'enctype' => "multipart/form-data"]) !!}
 				          	<div class="form-group">
 				          		{!! Form::label('Email') !!}
 				          		{!! Form::email('email', '', ['class' => 'form-control']) !!}
