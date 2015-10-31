@@ -3,11 +3,17 @@
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
+use Input;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Patient;
-use Input;
+use ECEPharmacyTree\Region;
+use ECEPharmacyTree\Province;
+use ECEPharmacyTree\Municipality;
+use ECEPharmacyTree\Barangay;
+
+
 
 class PatientController extends Controller
 {
@@ -19,8 +25,9 @@ class PatientController extends Controller
     public function index()
     {
         $members = Patient::withTrashed()->get();
+        $regions = Region::all();
 
-        return view('admin.members')->withMembers($members);
+        return view('admin.members')->withMembers($members)->withRegions($regions);
     }
 
     /**
