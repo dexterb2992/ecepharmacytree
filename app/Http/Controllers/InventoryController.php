@@ -63,6 +63,7 @@ class InventoryController extends Controller
 
         $inventory->quantity = $quantity;
         $inventory->expiration_date = $input["expiration_date"];
+        $inventory->lot_number = generate_lot_number();
         $inventory->branch_id = session()->get('selected_branch');
         if( $inventory->save() ){
             return Redirect::to( route('Inventory::index') );

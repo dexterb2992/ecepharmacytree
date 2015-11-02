@@ -16,10 +16,8 @@ class SettingTableSeeder extends Seeder
         	"level_limit" => 3,
             "referral_commission" => 50, // 50%
             "commission_variation" => 50, // 50%
-        	"safety_stock" => 20,
             "delivery_charge" => 25,
-            "delivery_minimum" => 200,
-        	"critical_stock" => 10
+            "delivery_minimum" => 200
         ]);
     }
 }

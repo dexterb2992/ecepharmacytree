@@ -54,8 +54,6 @@ class SettingsController extends Controller
         $setting->commission_variation = $input["commission_variation"];
         $setting->delivery_charge = _clean_number($input["delivery_charge"]);
         $setting->delivery_minimum = _clean_number($input["delivery_minimum"]);
-        $setting->safety_stock = _clean_number($input["safety_stock"]);
-        $setting->critical_stock = _clean_number($input["critical_stock"]);
         if( $setting->save() )
             return Redirect::to( route('Settings::index') )->withFlash_message([
                 "msg" => "Your changes have been successfully saved!", "type" => "success"]);

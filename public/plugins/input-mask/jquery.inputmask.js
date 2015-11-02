@@ -1606,7 +1606,7 @@
                     maskScope($.extend(true, {}, masksets), activeMasksetIndex, opts, { "action": "mask", "el": this });
                 });
             } else if (fn == undefined) {
-                //look for data-inputmask atribute - the attribute should only contain optipns
+                //look for data-inputmask atribute - the attribute should only contain options
                 return this.each(function () {
                     var attrOptions = $(this).attr("data-inputmask");
                     if (attrOptions && attrOptions != "") {

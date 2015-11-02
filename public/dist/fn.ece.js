@@ -123,8 +123,10 @@ function _clear_form_errors(form){
 }
 
 function _clear_form_data(form){
-	form.find('input').not('input[name="_token"]').val("");
-	form.find('textarea').not('input[name="_token"]').val("");
+    // to retain default value on form element, use data-default-value attribute
+    form.find('input, textarea').not('input[name="_token"]').each(function(i, row){
+        $(row).val( $(row).data("default-value") != "" ? $(row).data("default-value") : '' )
+    });
 }
 
 function _error(element, error_msg){

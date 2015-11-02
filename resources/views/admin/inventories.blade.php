@@ -21,8 +21,10 @@
 								<th>SKU</th>
 								<th>Product name</th>
 								<th>Quantity</th>
+								<th>Lot #</th>
 								<th>Stock Expiration</th>
 								<th>Date Added</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -41,24 +43,25 @@
 									<td>
 										<?php 
 											$total = $inventory->quantity * $inventory->product->qty_per_packing; 
-											$safety_stock = $inventory->product->safety_stock <= 0 ? $recent_settings->safety_stock : $inventory->product->safety_stock;
-											// $safety_stock = $inventory->product->safety_stock == "" ? 0 : $inventory->product->safety_stock;
-											$gross_total = $total - $safety_stock;
 										?>
 										{!! $total." ".str_auto_plural($inventory->product->unit, $total)." "
 											."( ".$inventory->quantity." ".str_auto_plural($inventory->product->packing, $inventory->quantity)." )" !!}
 									
-										<p class="text-aqua">{{ $gross_total." ".str_auto_plural($inventory->product->unit, $gross_total)." available " }}</p>
-										<p class="text-light-blue">Safety Stock: {{ $safety_stock." ".str_auto_plural($inventory->product->unit, $safety_stock) }}</p>
 									</td>
 									<td>
-										<span class="label label-success"><i class="fa-clock-o fa"></i> 
-											{{ Carbon::parse($inventory->expiration_date)->diffForHumans() }}
+										{{ $inventory->lot_number }}
+									</td>
+									<td>
+										<?php $expiration = Carbon::parse($inventory->expiration_date); ?>
+										<span class="label label-success" data-toggle="tooltip" data-original-title="{{ $expiration->formatLocalized('%A %d %B %Y') }}">
+											<i class="fa-clock-o fa"></i> 
+											{{ $expiration->diffForHumans() }}
 										</span>
 									</td>
 									<td>
 										<span class="label label-primary"><i class="fa-clock-o fa"></i> {{ Carbon::parse($inventory->created_at)->diffForHumans() }}</span>
-
+									</td>
+									<td>
 										<div class="btn-group pull-right">
 											{!! $is_critical ? '<span class="btn-sm btn-default btn action-icon" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}"><i class="fa-refresh fa"></i></span>' : '' !!}
 											<span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
@@ -69,9 +72,6 @@
 	                                            <i class="fa fa-edit"></i>
 	                                        </a>
 					                    </div>
-										
-
-										
 									</td>
 								</tr>
 							@endforeach

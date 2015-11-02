@@ -54,7 +54,7 @@ $(document).ready(function (){
         donut.redraw();
     });
 
-	$('.datatable').DataTable({
+	$('.datatable:not(.table-referrals)').DataTable({
         "paging": true,
         "lengthChange": false,
         "searching": true,
@@ -62,6 +62,12 @@ $(document).ready(function (){
         "info": true,
         "autoWidth": false
     });
+
+    $('.table-referrals').DataTable({
+        "iDisplayLength": -1,
+        "aaSorting": [[ 2, "desc" ]]
+    });
+
 
     $('.select2').select2();
     $(".datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
@@ -96,7 +102,7 @@ $(document).ready(function (){
         dataTitle = $this.data('title');
 
         console.log('target: '+target+" id: "+target+" mainurl: "+mainurl);
-        form.find ("input[type='text']").val("");
+        _clear_form_data(form);
         url = mainurl+action;
         if( action == "edit" ){
             title = "Edit "+dataTitle;
@@ -168,7 +174,7 @@ $(document).ready(function (){
         }else{
             title = "Add new "+dataTitle;
             
-            form.find("input").not("input[name='_token']").val("");
+            _clear_form_data(form);
             form.find('#inventories_product_id').removeAttr("disabled");
             updateInventoryProductQty();
         }
@@ -315,369 +321,385 @@ $(document).ready(function (){
     });
 
     $(document).on("click", ".show-downlines", function(){
+        $(".table-referrals tr").removeClass("selected");
+        $(".show-downlines").removeClass("selected");
+        $(this).addClass("selected");
+        $(this).parent("td").parent("tr").addClass("selected");
+
+        $('html, body').animate({
+            scrollTop: $(".referral-chart-row").offset().top
+        }, 1500);
+
         $("#chart").html("");
         $("ul.referral-chart[data-id='"+$(this).data("id")+"']").jOrgChart({
             chartElement : '#chart',
             dragAndDrop  : false
         });
-
-        $(".table-referrals tr").removeClass("selected");
-        $(".show-downlines").removeClass("selected");
-        $(this).addClass("selected");
-        $(this).parent("td").parent("tr").addClass("selected");
     });
 
-    // added codes below on October 16, 2015 11:30 AM
-        $("#browse_photo").change(function (){
-            readURL(this, $('#user_photo'));
-            var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
-            $("#photo_filename").attr("title", filename).html(limitStr(filename, 35)+'<span id="cancel_update_photo" class="cancel-update-photo" data-toggle="tooltip" data-original-title="Cancel"><i class="fa fa-close"></i></span>').show();
-        });
-            
-        $(document).on("click", "#cancel_update_photo", function(){
-            $("#photo_filename").slideUp(function(){ $(this).html(""); });
-            $("#user_photo").attr("src", old_photo_src);
-            var browse = $("#browse_photo");
-            browse.replaceWith( browse = browse.clone( true ) );
-        });
+    $("#browse_photo").change(function (){
+        readURL(this, $('#user_photo'));
+        var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+        $("#photo_filename").attr("title", filename).html(limitStr(filename, 35)+'<span id="cancel_update_photo" class="cancel-update-photo" data-toggle="tooltip" data-original-title="Cancel"><i class="fa fa-close"></i></span>').show();
+    });
+        
+    $(document).on("click", "#cancel_update_photo", function(){
+        $("#photo_filename").slideUp(function(){ $(this).html(""); });
+        $("#user_photo").attr("src", old_photo_src);
+        var browse = $("#browse_photo");
+        browse.replaceWith( browse = browse.clone( true ) );
+    });
 
-        $("#btn_submit_form_update_password").click(function (){
-            var form = $("#form_update_password");
-            var data = {
+    $("#btn_submit_form_update_password").click(function (){
+        var form = $("#form_update_password");
+        var data = {
+            old_password: formfinder(form, 'old_password', 'input'),
+            new_password: formfinder(form, 'new_password', 'input'),
+            new_password_confirmation: formfinder(form, 'new_password_confirmation', 'input'),
+            _token: formfinder(form, '_token', 'input')
+        };
+
+        var $this = $(this);
+        $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
+
+        $.ajax({
+            url: '/admin/update-password',
+            type: 'post',
+            dataType: 'json',    
+            data: {
                 old_password: formfinder(form, 'old_password', 'input'),
                 new_password: formfinder(form, 'new_password', 'input'),
                 new_password_confirmation: formfinder(form, 'new_password_confirmation', 'input'),
                 _token: formfinder(form, '_token', 'input')
-            };
+            }
+        }).done(function(data){
+            $this.removeClass("disabled").removeAttr("disabled").html("Update password");
 
-            var $this = $(this);
-            $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
+            _clear_form_errors(form);
+            _clear_form_data(form);
 
-            $.ajax({
-                url: '/admin/update-password',
-                type: 'post',
-                dataType: 'json',    
-                data: {
-                    old_password: formfinder(form, 'old_password', 'input'),
-                    new_password: formfinder(form, 'new_password', 'input'),
-                    new_password_confirmation: formfinder(form, 'new_password_confirmation', 'input'),
-                    _token: formfinder(form, '_token', 'input')
-                }
-            }).done(function(data){
-                $this.removeClass("disabled").removeAttr("disabled").html("Update password");
-
-                _clear_form_errors(form);
-                _clear_form_data(form);
-
-                $.each(data.errors, function (i, row){
-                    _error($('input[name="'+i+'"]'), row[0]);
-                });
-
-                // if successful, hide the modal
-                if( data.status_code == "200" ){
-                    $("#modal_update_password").modal('hide');
-                    showAlert("Password notification", "Your password has been changed successfully.", 'success', 'notify');
-                }
-
-            }).fail(function (){
-                $this.removeClass("disabled").removeAttr("disabled").html("Update password");
+            $.each(data.errors, function (i, row){
+                _error($('input[name="'+i+'"]'), row[0]);
             });
+
+            // if successful, hide the modal
+            if( data.status_code == "200" ){
+                $("#modal_update_password").modal('hide');
+                showAlert("Password notification", "Your password has been changed successfully.", 'success', 'notify');
+            }
+
+        }).fail(function (){
+            $this.removeClass("disabled").removeAttr("disabled").html("Update password");
         });
+    });
 
-        $('#btn_update_info').click(function (){
-            var form = $("#form_update_info");
-            var $this = $(this);
+    $('#btn_update_info').click(function (){
+        var form = $("#form_update_info");
+        var $this = $(this);
 
-            $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
+        $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
 
-            var formdata = {
-                fname: formfinder(form, 'fname', 'input'),
-                mname: formfinder(form, 'mname', 'input'),
-                lname: formfinder(form, 'lname', 'input'),
-                email: formfinder(form, 'email', 'input'),
-                _token: formfinder(form, '_token', 'input')
-            };
+        var formdata = {
+            fname: formfinder(form, 'fname', 'input'),
+            mname: formfinder(form, 'mname', 'input'),
+            lname: formfinder(form, 'lname', 'input'),
+            email: formfinder(form, 'email', 'input'),
+            _token: formfinder(form, '_token', 'input')
+        };
 
-            $.ajax({
-                url: '/profile/update',
-                type: 'post',
-                dataType: 'json',
-                data: formdata
-            }).done(function (data){
-                console.log(data);
-                _clear_form_errors(form);
+        $.ajax({
+            url: '/profile/update',
+            type: 'post',
+            dataType: 'json',
+            data: formdata
+        }).done(function (data){
+            console.log(data);
+            _clear_form_errors(form);
 
-                $.each(data.errors, function (i, row){
-                    _error($('input[name="'+i+'"]'), row[0]);
-                });
+            $.each(data.errors, function (i, row){
+                _error($('input[name="'+i+'"]'), row[0]);
+            });
 
 
-                if( data.status_code == '200' ){
-                    showAlert("Password notification", "Your profile has been updated.", 'info', 'notify');
-
-                    $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
-
-                    $.each(formdata, function (i, row){
-                        if( i !== "_token" ){
-                            form.find('input[name="'+i+'"]').val(row);
-                        }
-                    });
-                    $("div.user-panel .info p, li.user.user-menu a.dropdown-toggle span").html(formdata.fname+" "+formdata.lname);
-                }else{
-
-                }
+            if( data.status_code == '200' ){
+                showAlert("Password notification", "Your profile has been updated.", 'info', 'notify');
 
                 $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
 
-            }).fail(function(data){
-                console.log(data);
-                $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
-            });
-        });
-
-        $('select#address_region').change(function(){
-            var provinces = '<option value="0">- Select Province -</option>';
-            $("#address_province").html(provinces).select2();
-
-            if( $(this).val() !='0' ){
-                $.ajax({
-                    url: '/locations/get/provinces/where-regions/'+$(this).val(),
-                    type: 'get',
-                    dataType: 'json'
-                }).done(function (data){
-                    console.log(typeof(data));
-                    if( typeof(data) == 'object' ){
-                        
-                        $("#address_city_municipality").html('<option value="0">- Select Municipality -</option>');
-
-                        $.each(data, function (i, row){
-                            provinces += '<option value="'+row.id+'">'+row.name+'</option>';
-                        });
-
-                        $("#address_province").html(provinces).select2();
-                        $('#address_city_municipality').select2();
+                $.each(formdata, function (i, row){
+                    if( i !== "_token" ){
+                        form.find('input[name="'+i+'"]').val(row);
                     }
                 });
+                $("div.user-panel .info p, li.user.user-menu a.dropdown-toggle span").html(formdata.fname+" "+formdata.lname);
+            }else{
+
             }
+
+            $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
+
+        }).fail(function(data){
+            console.log(data);
+            $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
         });
+    });
 
-        $('select#address_province').change(function(){
-            if( $(this).val() !='0' ){
-                $.ajax({
-                    url: '/locations/get/municipalities/where-provinces/'+$(this).val(),
-                    type: 'get',
-                    dataType: 'json'
-                }).done(function (data){
-                    console.log(typeof(data));
-                    if( typeof(data) == 'object' ){
-                        var municipalities = '<option value="0">- Select Municipality -</option>';
-                        $.each(data, function (i, row){
-                            municipalities += '<option value="'+row.id+'">'+row.name+'</option>';
-                        });
+    $('select#address_region').change(function(){
+        var provinces = '<option value="0">- Select Province -</option>';
+        $("#address_province").html(provinces).select2();
 
-                        $("#address_city_municipality").html(municipalities).select2();
-                    }
-                });
-            }
-        });
-
-        $('select#address_city_municipality').change(function (){
-            if( $(this).val() != '0' ){
-                $.ajax({
-                    url: '/locations/get/barangays/where-municipalities/'+$(this).val(),
-                    type: 'get',
-                    dataType: 'json'
-                }).done(function (data){
-                    console.log(typeof(data));
-                    if( typeof(data) == 'object' ){
-                        var barangays = '<option value="0">- Select Barangay -</option>';
-                        $.each(data, function (i, row){
-                            barangays += '<option value="'+row.id+'">'+row.name+'</option>';
-                        });
-
-                        $("#address_barangay").html(barangays).select2();
-                    }
-                });
-            }
-        });
-
-        $(".products-gallery-toggler").click(function (){
-            var productId = $(this).parent("td").parent("tr").data("id");
-            var targetModal = $(this).data("target");
-            $("#droppable_div").attr("data-id", productId);
+        if( $(this).val() !='0' ){
             $.ajax({
-                url: '/products/gallery/'+productId,
+                url: '/locations/get/provinces/where-regions/'+$(this).val(),
                 type: 'get',
                 dataType: 'json'
             }).done(function (data){
-                console.log(data);
-                console.log("length: "+data.length);
-                if( data.length > 0 ){
-                    $(".gallery-empty").html("");
-                    $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
-                    $('#product-gallery-carousel').show();
-                    $(".add-new-gallery-outer").hide();
+                console.log(typeof(data));
+                if( typeof(data) == 'object' ){
+                    
+                    $("#address_city_municipality").html('<option value="0">- Select Municipality -</option>');
 
-                    $('#product-gallery-carousel .carousel-indicators, #product-gallery-carousel .carousel-inner').html("");
-                    var isActive = "active";
                     $.each(data, function (i, row){
-                        if( i != 0 ) isActive = '';
-                        $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"  data-id="'+row.id+'"></li>')
-                        $('#product-gallery-carousel .carousel-inner').append('<div class="item '+isActive+'">'+
-                            '<img src="/images/original/'+row.filename+'" class="product-gallery-item" data-product_id="'+productId+'" data-id="'+row.id+'">'+
-                        '</div>');
+                        provinces += '<option value="'+row.id+'">'+row.name+'</option>';
                     });
-                    $(".carousel-inner").removeClass("disable-contextmenu");
-                    $('#product-gallery-carousel').carousel();
-                }else{
-                    $('#product-gallery-carousel').carousel('pause').html(getOriginalCarouselItems()).carousel();
-                    $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
-                    $('#product-gallery-carousel').hide();
-                    $(".add-new-gallery-outer").removeClass("hidden").show();
-                    $(".gallery-empty").html('<code> No available photo for this product yet. Drop some photos here.</code>');
-                    $(".carousel-inner").addClass("disable-contextmenu");
+
+                    $("#address_province").html(provinces).select2();
+                    $('#address_city_municipality').select2();
                 }
-
-                $(targetModal).modal('show');
             });
-        });
+        }
+    });
 
-        $("#add_gallery").click(function (){
-            $("#status1").html("");
-
-            if( $(this).html() == "Add new" ){
-                $("#product-gallery-carousel").fadeOut(function (){
-                    $(".add-new-gallery-outer").fadeIn(function(){
-                        $(this).removeClass('hidden').show(function(){
-                            $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
-                        });
+    $('select#address_province').change(function(){
+        if( $(this).val() !='0' ){
+            $.ajax({
+                url: '/locations/get/municipalities/where-provinces/'+$(this).val(),
+                type: 'get',
+                dataType: 'json'
+            }).done(function (data){
+                console.log(typeof(data));
+                if( typeof(data) == 'object' ){
+                    var municipalities = '<option value="0">- Select Municipality -</option>';
+                    $.each(data, function (i, row){
+                        municipalities += '<option value="'+row.id+'">'+row.name+'</option>';
                     });
+
+                    $("#address_city_municipality").html(municipalities).select2();
+                }
+            });
+        }
+    });
+
+    $('select#address_city_municipality').change(function (){
+        if( $(this).val() != '0' ){
+            $.ajax({
+                url: '/locations/get/barangays/where-municipalities/'+$(this).val(),
+                type: 'get',
+                dataType: 'json'
+            }).done(function (data){
+                console.log(typeof(data));
+                if( typeof(data) == 'object' ){
+                    var barangays = '<option value="0">- Select Barangay -</option>';
+                    $.each(data, function (i, row){
+                        barangays += '<option value="'+row.id+'">'+row.name+'</option>';
+                    });
+
+                    $("#address_barangay").html(barangays).select2();
+                }
+            });
+        }
+    });
+
+    $(".products-gallery-toggler").click(function (){
+        var productId = $(this).parent("td").parent("tr").data("id");
+        var targetModal = $(this).data("target");
+        $("#droppable_div").attr("data-id", productId);
+        $.ajax({
+            url: '/products/gallery/'+productId,
+            type: 'get',
+            dataType: 'json'
+        }).done(function (data){
+            console.log(data);
+            console.log("length: "+data.length);
+            if( data.length > 0 ){
+                $(".gallery-empty").html("");
+                $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
+                $('#product-gallery-carousel').show();
+                $(".add-new-gallery-outer").hide();
+
+                $('#product-gallery-carousel .carousel-indicators, #product-gallery-carousel .carousel-inner').html("");
+                var isActive = "active";
+                $.each(data, function (i, row){
+                    if( i != 0 ) isActive = '';
+                    $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"  data-id="'+row.id+'"></li>')
+                    $('#product-gallery-carousel .carousel-inner').append('<div class="item '+isActive+'">'+
+                        '<img src="/images/original/'+row.filename+'" class="product-gallery-item" data-product_id="'+productId+'" data-id="'+row.id+'">'+
+                    '</div>');
                 });
+                $(".carousel-inner").removeClass("disable-contextmenu");
+                $('#product-gallery-carousel').carousel();
             }else{
+                $('#product-gallery-carousel').carousel('pause').html(getOriginalCarouselItems()).carousel();
+                $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
+                $('#product-gallery-carousel').hide();
+                $(".add-new-gallery-outer").removeClass("hidden").show();
+                $(".gallery-empty").html('<code> No available photo for this product yet. Drop some photos here.</code>');
+                $(".carousel-inner").addClass("disable-contextmenu");
+            }
 
-                $(".add-new-gallery-outer").fadeOut(function (){
-                    $("#product-gallery-carousel").fadeIn(function(){
-                        $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
-                        $("#droppable_div").next(".statusbar").remove();
+            $(targetModal).modal('show');
+        });
+    });
+
+    $("#add_gallery").click(function (){
+        $("#status1").html("");
+
+        if( $(this).html() == "Add new" ){
+            $("#product-gallery-carousel").fadeOut(function (){
+                $(".add-new-gallery-outer").fadeIn(function(){
+                    $(this).removeClass('hidden').show(function(){
+                        $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
                     });
                 });
-            }
+            });
+        }else{
+
+            $(".add-new-gallery-outer").fadeOut(function (){
+                $("#product-gallery-carousel").fadeIn(function(){
+                    $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
+                    $("#droppable_div").next(".statusbar").remove();
+                });
+            });
+        }
+    });
+	
+    // let's create our drag and drop file uploader
+        var obj = $("#droppable_div");
+        obj.on('dragenter', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $(this).css('border', '2px solid #0B85A1');
         });
-		
-        // let's create our drag and drop file uploader
-            var obj = $("#droppable_div");
-            obj.on('dragenter', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-                $(this).css('border', '2px solid #0B85A1');
-            });
-            obj.on('dragover', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
+        obj.on('dragover', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        });
 
-            obj.on('drop', function (e) {
-             
-                $(this).css('border', '2px dotted #0B85A1');
-                e.preventDefault();
-                var files = e.originalEvent.dataTransfer.files;
+        obj.on('drop', function (e) {
+         
+            $(this).css('border', '2px dotted #0B85A1');
+            e.preventDefault();
+            var files = e.originalEvent.dataTransfer.files;
 
-                //We need to send dropped files to Server
-                handleFileUpload(files,obj);
-            });
+            //We need to send dropped files to Server
+            handleFileUpload(files,obj);
+        });
 
-            $(document).on('dragenter', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
+        $(document).on('dragenter', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        });
 
-            $(document).on('dragover', function (e) {
-              e.stopPropagation();
-              e.preventDefault();
-              obj.css('border', '2px dotted #0B85A1');
-            });
+        $(document).on('dragover', function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+          obj.css('border', '2px dotted #0B85A1');
+        });
 
-            $(document).on('drop', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
-
-
-        // Let's enable the right click context menu to delete product photo
-        $(document).on("mousedown", ".carousel-inner:not(.disable-contextmenu)", function(e){
-            if(e.which == 3 ){  // if mouse's right button is clicked
-                $("#product-gallery-carousel").carousel("pause").removeData();
-
-                var activeItem = $(this).children("div.item.active");
-                var pid = activeItem.children("img").data("id");
-                var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
-                var product_id = activeItem.children("img").data("product_id");
-                console.log("activeIndicator: ");
-                console.log(activeIndicator);
-
-                console.log("activeItem: ");
-                console.log(activeItem);
-
-                var $this = $(this);
-
-                if( !$this.is(":focus") && !$("div.context-menu").parent("td").parent("tr").parent("tbody")
-                    .parent("table").is(":focus") ){
-                    $(document).find("div.context-menu").parent("td").parent("tr").parent("tbody").parent("table").remove();
-                    $(document).find('div.context-menu-shadow').remove();
-                }
-
-                var menu = [
-                    {
-                        'Make Primary': function(menuItem, menu){
-                            $.ajax({
-                                url: '/products/gallery/change-primary/'+pid,
-                                type: "post",
-                                dataType: "json",
-                                data: { _token: $('input[name="_token"]').val() }
-                            }).done(function (data){
-                                console.log(data);
-                                if( data.status_code == "200" ){
-                                    refreshProductPrimaryPhoto(product_id);
-                                    $("#modal-products-gallery").modal('hide');
-                                }
-                            });
-                        }
-                    },
-                    {
-                        'Delete': function(menuItem, menu) { 
-                            $.ajax({
-                                url: '/products/gallery/delete/'+pid,
-                                type: "post",
-                                dataType: "json",
-                                data: { _token: $('input[name="_token"]').val() },
-                                beforeSend: function(){
-                                    activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
-                                }
-                            }).done(function (data){
-                                console.log(data);
-                                $(".deleting-photo").remove();
-
-                                if( data.status_code == "200" ){
-                                    $("#product-gallery-carousel").carousel("next");
-                                    activeItem.removeClass("item").addClass("hidden");
-                                    activeIndicator.remove();
-                                    $(".carousel-indicators li").removeClass("active");
-                                    $(".carousel-indicators li:first").addClass("active");
-
-                                    $("#product-gallery-carousel").carousel();
-                                    refreshProductPrimaryPhoto(product_id);
-                                }else{
-                                    alert(data.msg);
-                                }
-                            }); 
-                    } 
-                }];
-
-                $('.carousel-inner').contextMenu(menu,{theme:'vista'});
-
-            }
+        $(document).on('drop', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
         });
 
 
+    // Let's enable the right click context menu to delete product photo
+    $(document).on("mousedown", ".carousel-inner:not(.disable-contextmenu)", function(e){
+        if(e.which == 3 ){  // if mouse's right button is clicked
+            $("#product-gallery-carousel").carousel("pause").removeData();
+
+            var activeItem = $(this).children("div.item.active");
+            var pid = activeItem.children("img").data("id");
+            var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
+            var product_id = activeItem.children("img").data("product_id");
+            console.log("activeIndicator: ");
+            console.log(activeIndicator);
+
+            console.log("activeItem: ");
+            console.log(activeItem);
+
+            var $this = $(this);
+
+            if( !$this.is(":focus") && !$("div.context-menu").parent("td").parent("tr").parent("tbody")
+                .parent("table").is(":focus") ){
+                $(document).find("div.context-menu").parent("td").parent("tr").parent("tbody").parent("table").remove();
+                $(document).find('div.context-menu-shadow').remove();
+            }
+
+            var menu = [
+                {
+                    'Make Primary': function(menuItem, menu){
+                        $.ajax({
+                            url: '/products/gallery/change-primary/'+pid,
+                            type: "post",
+                            dataType: "json",
+                            data: { _token: $('input[name="_token"]').val() }
+                        }).done(function (data){
+                            console.log(data);
+                            if( data.status_code == "200" ){
+                                refreshProductPrimaryPhoto(product_id);
+                                $("#modal-products-gallery").modal('hide');
+                            }
+                        });
+                    }
+                },
+                {
+                    'Delete': function(menuItem, menu) { 
+                        $.ajax({
+                            url: '/products/gallery/delete/'+pid,
+                            type: "post",
+                            dataType: "json",
+                            data: { _token: $('input[name="_token"]').val() },
+                            beforeSend: function(){
+                                activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
+                            }
+                        }).done(function (data){
+                            console.log(data);
+                            $(".deleting-photo").remove();
+
+                            if( data.status_code == "200" ){
+                                $("#product-gallery-carousel").carousel("next");
+                                activeItem.removeClass("item").addClass("hidden");
+                                activeIndicator.remove();
+                                $(".carousel-indicators li").removeClass("active");
+                                $(".carousel-indicators li:first").addClass("active");
+
+                                $("#product-gallery-carousel").carousel();
+                                refreshProductPrimaryPhoto(product_id);
+                            }else{
+                                alert(data.msg);
+                            }
+                        }); 
+                } 
+            }];
+
+            $('.carousel-inner').contextMenu(menu,{theme:'vista'});
+
+        }
+    });
+
+    // let's validate the expiration date set on adding an inventory
+    $("input[name='expiration_date']").change(function (){
+        var CurrentDate = new Date();
+        var ExpirationDate = new Date( $(this).val() );
+        if(CurrentDate >= ExpirationDate){
+            _error($("input[name='expiration_date']"), "Expiration date is invalid");
+        }else{
+            _clear_form_errors($("#form_edit_inventory"));
+        }
+    });
         
+    $("#form_edit_inventory").submit(function (){
+        if( $.trim( $(this).find('div.label-danger').html() ) != "" )
+            return false;
+    });
 });

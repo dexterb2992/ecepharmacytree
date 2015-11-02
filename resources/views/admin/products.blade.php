@@ -285,20 +285,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="packing">Packing <i>*</i></label>
+                                <label for="packing">Packing <i>(Ex. box, bottle, strip, etc.)*</i></label>
                                 <input type="text" name="packing" class="form-control" placeholder="Ex. box, bottle, strip, etc." required>
                             </div>  
                             <div class="form-group">
-                                <label for="unit">Unit <i>*</i></label>
+                                <label for="unit">Unit <i>(Ex. tablet, capsule, etc.)*</i></label>
                                 <input type="text" class="form-control" name="unit" placeholder="Ex. tablet, capsule, etc." required>
                             </div>
                             <div class="form-group">
-                                <label for="qty_per_packing">Quantity per packing <i>*</i></label>
-                                <input type="text" class="form-control number" name="qty_per_packing" title="H" required>
+                                <label for="qty_per_packing">Quantity per packing <i>(How many units are there in 1 packing?) *</i></label>
+                                <input type="text" class="form-control number" name="qty_per_packing" title="How many units are there in 1 packing?" required>
                             </div>
                             <div class="form-group">
-                                <label title="Enter Safety Stock number per Packing">Safety Stock (<i>per Unit</i>)</label>
-                                <input class="form-control number" name="safety_stock" type="text" title="The extra stock that is maintained to mitigate risk of stockouts" />
+                                <label>Default Critical Inventory Number <i>(Enter quantity by packing)</i>*</label>
+                                <input class="form-control number" type="text" name="critical_stock" data-default-value="10"
+                                    title="This will inform us when to notify you when any of the products is on a critical stock."/>
                             </div>
 
                         <div class="modal-footer">

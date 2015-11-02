@@ -232,4 +232,7 @@ Route::get('api/generate/{what}', function ($what){
 		return generateSku();
 	if( $what == "referral_id" )
 		return generate_referral_id();
+
+	if( $what == "lot_number" )
+		return generate_lot_number();
 });

@@ -36,6 +36,7 @@ class ProductTableSeeder extends Seeder
     	$product->unit = $unit;
     	$product->packing = $packing;
     	$product->qty_per_packing = $qty_per_packing;
+        $product->critical_stock = 10;
     	$product->sku = $sku;
     	$product->created_at = $created_at;
     	$product->updated_at = $updated_at;
