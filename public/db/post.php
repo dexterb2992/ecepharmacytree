@@ -229,6 +229,7 @@ if ($request == 'register') {
     	if (mysql_query($sql)) {
     		$response["last_inserted_id"] = mysql_insert_id();
     		$response["success"]          = 1;
+    		$response["created_at"] = $datenow;
     	} else {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
