@@ -70,7 +70,7 @@ class ProductController extends Controller
         $product->qty_per_packing = $input['qty_per_packing'];
         $product->subcategory_id = $input['subcategory_id'];
         $product->sku = generateSku();
-        $product->safety_stock = $input["safety_stock"] != "" ? $input["safety_stock"] : null;
+        $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
 
         if( $product->save() )
             return Redirect::to( route('Products::index') );
@@ -123,7 +123,7 @@ class ProductController extends Controller
         $product->qty_per_packing = $input['qty_per_packing'];
         $product->subcategory_id = $input['subcategory_id'];
         $product->sku = generateSku();
-        $product->safety_stock = $input["safety_stock"] != "" ? $input["safety_stock"] : null;
+        $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
 
         if( $product->save() )
             return Redirect::to( route('Products::index') );

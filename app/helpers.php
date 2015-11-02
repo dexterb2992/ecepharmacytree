@@ -1,4 +1,6 @@
 <?php
+use Illuminate\Support\Str;
+
 function pre($str){
 	echo '<pre>';
 	print_r($str);
@@ -49,6 +51,17 @@ function generate_referral_id(){
 		return $referral_id;
 	
 	generate_referral_id();
+}
+
+function generate_lot_number(){
+	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')->first();
+	$new_lot_number = $inventory->lot_number == 0 ? $inventory->lot_number + 1001 : $inventory->lot_number + 1;
+
+	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)->first();
+	if( $check === null )
+		return $new_lot_number;
+
+	generate_lot_number();
 }
 
 
@@ -129,15 +142,21 @@ function get_patient_full_address($patient){
 }
 
 function get_patient_referrals($patient){
-	return $count = ECEPharmacyTree\Patient::where('referred_byUser', '=', $patient->referral_id)->count();
+	$count1 = 0;
+	$count2 = 0;
+	
+	$count1 = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $patient->referral_id)->count();
+	$count2 = ECEPharmacyTree\Patient::where('referred_byUser', '=', $patient->referral_id)->count();
+
+	return $count1 + $count2;
 }
 
 function get_all_downlines($referral_id){
 	$settings = ECEPharmacyTree\Setting::first();
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
 
-	// if( empty($patients) )
-	// 	$patients = ECEPharmacyTree\Doctor::where('referral_id', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
+	if( empty($patients) )
+		$patients = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
 
 	$downlines = array();
 	$downlines = $patients;
@@ -157,7 +176,10 @@ function get_all_downlines($referral_id){
 function extract_downlines($downlines = array()){
 	$res = "";
 	foreach($downlines as $key => $downline){
-		$res.= '<li>'.$downline["fname"]." ".$downline["lname"]."<br/>(".$downline["referral_id"].")";
+		$res.= '<li class="bg-teal-active">'
+			.'<span data-original-title="'.$downline["fname"]." ".$downline["lname"].'" data-toggle="tooltip">'
+				.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'</span>'
+			."<br/>(".$downline["referral_id"].")";
 		if( count($downline['downlines']) > 0 ){
 			$new_dls = extract_downlines($downline['downlines']);
 			$res.= '<ul>'.$new_dls.'</ul>';

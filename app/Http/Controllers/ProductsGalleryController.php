@@ -13,25 +13,6 @@ use ECEPharmacyTree\ProductsGallery;
 
 class ProductsGalleryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -46,7 +27,7 @@ class ProductsGalleryController extends Controller
         if( Input::file() ){
             $image = Input::file('file');
 
-            $filename  = time() . '.' . $image->getClientOriginalExtension();
+            $filename  = generateRandomString(6).time() . '.' . $image->getClientOriginalExtension();
 
             $path = public_path('images/product-photo-gallery/');
 
@@ -61,7 +42,10 @@ class ProductsGalleryController extends Controller
             if( $gallery->save() )
                 return json_encode([
                     "msg" => "New photos has been added to gallery.", 
-                    "status_code" => "200"
+                    "status_code" => "200",
+                    "filename" => $filename,
+                    "id" => $gallery->id,
+                    "product_id" => $product_id
                 ]);
                 
             return json_encode([
@@ -85,28 +69,39 @@ class ProductsGalleryController extends Controller
         return $product->galleries;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    public function get_primary($product_id, $is_json = true){
+        $product = Product::findOrFail($product_id);
+        // dd($product->galleries);
+
+        if( $is_json )
+            return isset($product->galleries[0]) ? json_encode([
+                    'filename' => $product->galleries[0]['filename']
+                ]) : json_encode([
+                    'filename' => 'nophoto.jpg'
+                ]) ;
+
+        return isset($product->galleries[0]) ? $product->galleries[0] : false ;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    public function change_primary($id){
+        $gallery = ProductsGallery::findOrFail($id);
+        $primary_photo = $this->get_primary($gallery->product->id, false);
+
+
+        if( !empty($primary_photo) ){
+            $old_primary_photo = new ProductsGallery;
+            $old_primary_photo->product_id = $primary_photo->product_id;
+            $old_primary_photo->filename = $primary_photo->filename;
+            $gallery->id = $primary_photo->id;
+
+            if( $primary_photo->delete() && $old_primary_photo->save() && $gallery->save() )
+                return json_encode(['msg' => 'Product primary photo successfully updated.', 'status_code' => '200']);
+        }
+        
+        return json_encode(['msg' => 'Sorry, we can\'t process your request right now. Please try again later.', 'status_code' => '500']);
+
     }
+
 
     /**
      * Remove the specified resource from storage.

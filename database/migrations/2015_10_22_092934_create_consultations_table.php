@@ -27,6 +27,7 @@ class CreateConsultationsTable extends Migration
             $table->integer('is_alarm');
             $table->string('alarm_time');
             $table->integer('finished')->default(0);
+            $table->integer('is_approved')->default(0);
             $table->timestamps();
         });
     }

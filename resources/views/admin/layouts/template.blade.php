@@ -52,6 +52,7 @@
                             @else
                                 {{ Auth::check() ? Auth::user()->branch->name : '' }}
                             @endif
+                            <small><i>[<a href="{{ url('change-branch') }}">Change</a>]</i></small>
                         </span>
                     </p>
                     @endif

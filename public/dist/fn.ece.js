@@ -123,8 +123,10 @@ function _clear_form_errors(form){
 }
 
 function _clear_form_data(form){
-	form.find('input').not('input[name="_token"]').val("");
-	form.find('textarea').not('input[name="_token"]').val("");
+    // to retain default value on form element, use data-default-value attribute
+    form.find('input, textarea').not('input[name="_token"]').each(function(i, row){
+        $(row).val( $(row).data("default-value") != "" ? $(row).data("default-value") : '' )
+    });
 }
 
 function _error(element, error_msg){
@@ -161,9 +163,20 @@ function getActiveSidebarMenu(){
 	$(".sidebar-menu li a[href='"+window.location.href+"']").parent("li").addClass("active");
 }
 
+function refreshProductPrimaryPhoto(id){
+    var filename = "";
+    $.ajax({
+        url: '/products/gallery/primary/'+id,
+        type: 'get',
+        dataType: 'json'
+    }).done(function (data){
+        filename = data.filename;
+        $(".products-table tbody tr[data-id='"+id+"'] td:first a img").attr("src", "/images/50x50/"+filename);
+    });
 
-function sendFileToServer(formData,status)
-{
+}
+
+function sendFileToServer(formData,status){
     var uploadURL ="/products/gallery/upload"; //Upload URL
     var extraData ={}; //Extra Data.
     var jqXHR = $.ajax(
@@ -192,7 +205,11 @@ function sendFileToServer(formData,status)
 	        data: formData,
 	        success: function(data){
                 console.log(data);
-	            status.setProgress(100);     
+	            status.setProgress(100);   
+                if( data.status_code == "200" ){
+                    refreshProductPrimaryPhoto(data.product_id);
+                    $("#status1").append('<label class="label label-success">'+data.msg+'</label>');
+                } 
 	        }
     }); 
  
@@ -261,4 +278,31 @@ function handleFileUpload(files,obj){
  
    }
 }
+
+function getOriginalCarouselItems(){
+    return '<ol class="carousel-indicators">'+
+        '<li data-target="#product-gallery-carousel" data-slide-to="0" class="active"></li>'+
+        '<li data-target="#product-gallery-carousel" data-slide-to="1" class=""></li>'+
+        '<li data-target="#product-gallery-carousel" data-slide-to="2" class=""></li>'+
+    '</ol>'+
+    '<div class="carousel-inner disable-contextmenu">'+
+        '<div class="item active">'+
+            '<img src="http://placehold.it/900x500/39CCCC/ffffff&text=Add photos for this product" alt="First slide">'+
+        '</div>'+
+        '<div class="item">'+
+            '<img src="http://placehold.it/900x500/3c8dbc/ffffff&text=Click the button \'Add new\'" alt="Second slide">'+
+        '</div>'+
+        '<div class="item">'+
+            '<img src="http://placehold.it/900x500/f39c12/ffffff&text=Drop photos on the dotted space" alt="Third slide">'+
+        '</div>'+
+    '</div>'+
+    '<a class="left carousel-control" href="#product-gallery-carousel" data-slide="prev">'+
+        '<span class="fa fa-angle-left"></span>'+
+    '</a>'+
+    '<a class="right carousel-control" href="#product-gallery-carousel" data-slide="next">'+
+        '<span class="fa fa-angle-right"></span>'+
+    '</a>';
+}
+
+
  

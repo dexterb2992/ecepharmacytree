@@ -86,7 +86,7 @@ class SubspecialtyController extends Controller
         $subspecialty->name = Input::get('name');
         $subspecialty->specialty_id = Input::get('specialty_id');
         if( $subspecialty->save() )
-            return Redirect::to( route('doctor_specialties') );
+        return Redirect::to( route('doctors') );
         return false;
     }
 

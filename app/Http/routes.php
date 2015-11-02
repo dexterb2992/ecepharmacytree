@@ -12,9 +12,9 @@
 */
 
 
-// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-// View::share('critical_stocks', check_for_critical_stock());
-// View::share('branches', ECEPharmacyTree\Branch::all());
+View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+View::share('critical_stocks', check_for_critical_stock());
+View::share('branches', ECEPharmacyTree\Branch::all());
 
 
 Route::controllers([
@@ -29,9 +29,10 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::get('try/{template}', function($template){
-	// dd(config("imagecache.templates.{$template}"));
-	dd(class_exists(config("imagecache.templates.{$template}")));
+Route::get('try', function(){
+	return view('emails.register')->withRole('Branch Manager')
+		->withEmail('dexterb2992@gmail.com')->withPassword(generateRandomString(6))
+		->withBranch_name("ECE Marketing - Davao");
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
@@ -44,6 +45,14 @@ Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController
 	Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
 
 	Route::get('employees', ['as' => 'employees', 'uses' => 'UserController@index']);
+	Route::post('employees', ['as' => 'employees', 'uses' => 'UserController@create']);
+	Route::post('employees/deactivate', ['as' => 'deactivate_employee', 'middleware' => 'admin',
+		'uses' => 'UserController@destroy']);
+	Route::post('employees/reactivate', ['as' => 'reactivate_employee', 'middleware' => 'admin',
+		'uses' => 'UserController@reactivate']);
+	Route::post('employee/change/branch', ['as'=> 'update_employee_branch', 'middleware' => 'admin',
+		'uses' => 'UserController@update_branch']);
+
 
 
 Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'auth'], function (){
@@ -58,6 +67,7 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'aut
 	Route::post('delete', ['as' => 'remove', 'uses' => 'BranchController@destroy']);
 });
 
+Route::get('change-branch', 'BranchController@get_which_branch');
 
 
 Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products::'], function (){
@@ -69,10 +79,12 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
+
 	Route::get('gallery/{product_id}', ['as' => 'gallery', 'uses' => 'ProductsGalleryController@show']);
+	Route::get('gallery/primary/{product_id}', ['as' => 'gallery_primary', 'uses' => 'ProductsGalleryController@get_primary']);
 	Route::post('gallery/upload', ['as' => 'add_gallery', 'uses' => 'ProductsGalleryController@store']);
 	Route::post('gallery/delete/{id}', ['as' => 'delete_gallery', 'uses' => 'ProductsGalleryController@destroy']);
-	
+	Route::post('gallery/change-primary/{id}', ['as' => 'gallery_change_primary', 'uses' => 'ProductsGalleryController@change_primary']);
 });
 
 Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'middleware' => 'auth'], function (){
@@ -220,4 +232,7 @@ Route::get('api/generate/{what}', function ($what){
 		return generateSku();
 	if( $what == "referral_id" )
 		return generate_referral_id();
+
+	if( $what == "lot_number" )
+		return generate_lot_number();
 });

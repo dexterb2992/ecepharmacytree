@@ -7,18 +7,21 @@ use Auth;
 use Validator;
 use Redirect;
 use Image;
+use Illuminate\Mail\Mailer;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\User;
 use ECEPharmacyTree\Product;
 use ECEPharmacyTree\Patient;
+use ECEPharmacyTree\Branch;
 
 class UserController extends Controller
 {
 
-    function __construct() {
+    function __construct(Mailer $mailer) {
         $this->middleware('auth');
+        $this->mailer = $mailer;
     }
 
     /**
@@ -28,22 +31,62 @@ class UserController extends Controller
      */
     public function index()
     {
-        $employees = User::where('id', '!=', Auth::user()->id)->get();
-        $members = Patient::all();
-        return view('admin.employees')->withTitle('Emloyees')->withEmployees($employees)
-            ->withMembers($members);
+
+        if( Auth::user()->isBranchManager() ){
+            $employees = User::where('id', '!=', Auth::user()->id)
+                ->where('branch_id', '=', Auth::user()->branch->id)->get();
+            $branches = Branch::where('id', '=', Auth::user()->branch->id)->get();
+        }else{
+            $employees = User::where('id', '!=', Auth::user()->id)->get();
+            $branches = Branch::all();
+        }
+
+        return view('admin.employees')->withTitle('Employees')->withEmployees($employees)
+            ->withBranches($branches);
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param  Request  $request
      * @return Response
      */
     public function create()
     {
-        //
-       $user = new User;
-       
+        $return_data = [];
+        
+        $input = Input::all();
+        //dd($input);
+        $step1_validator = $this->step1_validator($input);
+        if( $step1_validator->fails() ){
+            $return_data['status_code'] = '500';
+            $errors = $validator->errors()->toArray();
+        }
+
+        $email = $input['email'];
+        $password = generateRandomString(6);
+        $role = get_role($input['access_level']);
+        $branch = Branch::findOrFail($input['branch_id']);
+        $branch_name = $branch->name;
+
+        $user = new User;
+        $user->email = $email;
+        $user->password = bcrypt($password);
+        $user->branch_id = $branch->id;
+        $user->access_level = $input['access_level'];
+
+        if( $user->save() )
+            $res = $this->mailer->send( 'emails.register', 
+                compact('email', 'password', 'role', 'branch_name'), function ($m) use ($email, $password, $role, $branch_name) {
+                    $m->subject('Pharmacy Tree Registration');
+                    $m->to($email);
+            }); 
+
+        return redirect(route('employees'))->withFlash_message([
+            'msg' => 'An email has been sent to '.$email.'. Please tell this person to check his/her email.',
+            'type' => 'success'
+        ]);
+
     }
 
     /**
@@ -54,7 +97,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -118,6 +161,21 @@ class UserController extends Controller
         }
     }
 
+    public function update_branch(){
+        $input = Input::all();
+        $branch = Branch::findOrFail($input['branch_id']);
+        if( !empty($branch) )
+            $user = User::findOrFail($input['id']);
+            $user->branch_id = $branch->id;
+            if( $user->save() )
+                // let's send some emailnotificaion here
+                return json_encode( array("status" => "success") );
+
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+
+            
+    }
+
     protected function validator(array $data){
         // $messages (optional), use it to alter laravel's default 
         //      error messages for those specific rules.
@@ -154,6 +212,11 @@ class UserController extends Controller
         return Validator::make($data, $rules, $messages);
     }
 
+    public function step1_validator(array $data){
+        $rules = ['email' => 'required'];
+        return Validator::make($data, $rules);
+    }
+
     public function update_password(){
         if( Request::ajax() ){
 
@@ -185,7 +248,6 @@ class UserController extends Controller
                     $return_data['status_code']= '200';
             }
 
-            // return json_encode($return_data);
         }else{
             return redirect('/');
         }
@@ -257,8 +319,24 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        $id = Input::get('id');
+        $user = User::findOrFail($id);
+
+        if($user->delete())
+            return json_encode( array("status" => "success") );
+         
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+    }
+
+    public function reactivate(){
+        $id = Input::get('id');
+        $user = User::withTrashed()->findOrFail($id);
+
+        if($user->restore())
+            return json_encode( array("status" => "success") );
+         
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

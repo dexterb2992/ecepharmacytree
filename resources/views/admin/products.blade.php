@@ -29,7 +29,7 @@
                             <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-product" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <table class="table table-bordered table-hover datatable">
+                            <table class="table table-bordered table-hover datatable products-table">
                                 <thead>
                                     <tr>
                                         <th>Photo</th>
@@ -285,20 +285,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="packing">Packing <i>*</i></label>
+                                <label for="packing">Packing <i>(Ex. box, bottle, strip, etc.)*</i></label>
                                 <input type="text" name="packing" class="form-control" placeholder="Ex. box, bottle, strip, etc." required>
                             </div>  
                             <div class="form-group">
-                                <label for="unit">Unit <i>*</i></label>
+                                <label for="unit">Unit <i>(Ex. tablet, capsule, etc.)*</i></label>
                                 <input type="text" class="form-control" name="unit" placeholder="Ex. tablet, capsule, etc." required>
                             </div>
                             <div class="form-group">
-                                <label for="qty_per_packing">Quantity per packing <i>*</i></label>
-                                <input type="text" class="form-control number" name="qty_per_packing" title="H" required>
+                                <label for="qty_per_packing">Quantity per packing <i>(How many units are there in 1 packing?) *</i></label>
+                                <input type="text" class="form-control number" name="qty_per_packing" title="How many units are there in 1 packing?" required>
                             </div>
                             <div class="form-group">
-                                <label title="Enter Safety Stock number per Packing">Safety Stock (<i>per Unit</i>)</label>
-                                <input class="form-control number" name="safety_stock" type="text" title="The extra stock that is maintained to mitigate risk of stockouts" />
+                                <label>Default Critical Inventory Number <i>(Enter quantity by packing)</i>*</label>
+                                <input class="form-control number" type="text" name="critical_stock" data-default-value="10"
+                                    title="This will inform us when to notify you when any of the products is on a critical stock."/>
                             </div>
 
                         <div class="modal-footer">
@@ -324,7 +325,7 @@
                     <small>
                         <i>
                             ( <i class="fa-info-circle fa"></i>
-                            <i> Right click image to delete </i> )
+                            <i> Right click image for more options </i> )
                         </i>
                     </small>
                 </h4>
@@ -334,6 +335,7 @@
                     <a href="#" class="btn-info btn btn-flat" id="add_gallery">Add new</a>
                 </div><br/>
                 <div class="add-new-gallery-outer hidden">
+                    <div class="gallery-empty"></div>
                     <div id="droppable_div">Drag & Drop Files Here</div>
                     <br/><br/>
                     <div id="status1"></div>
@@ -341,28 +343,19 @@
                 <!-- START CAROUSEL-->
                 <div id="product-gallery-carousel" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
-                        <!-- <li data-target="#product-gallery-carousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#product-gallery-carousel" data-slide-to="0" class="active"></li>
                         <li data-target="#product-gallery-carousel" data-slide-to="1" class=""></li>
-                        <li data-target="#product-gallery-carousel" data-slide-to="2" class=""></li> -->
+                        <li data-target="#product-gallery-carousel" data-slide-to="2" class=""></li>
                     </ol>
                     <div class="carousel-inner">
                         <div class="item active">
-                            <img src="http://placehold.it/900x500/39CCCC/ffffff&text=I+Love+Bootstrap" alt="First slide">
-                            <div class="carousel-caption">
-                                First Slide
-                            </div>
+                            <img src="http://placehold.it/900x500/39CCCC/ffffff&text=Add photos for this product" alt="First slide">
                         </div>
                         <div class="item">
-                            <img src="http://placehold.it/900x500/3c8dbc/ffffff&text=I+Love+Bootstrap" alt="Second slide">
-                            <div class="carousel-caption">
-                                Second Slide
-                            </div>
+                            <img src="http://placehold.it/900x500/3c8dbc/ffffff&text=Click the button 'Add new'" alt="Second slide">
                         </div>
                         <div class="item">
-                            <img src="http://placehold.it/900x500/f39c12/ffffff&text=I+Love+Bootstrap" alt="Third slide">
-                            <div class="carousel-caption">
-                                Third Slide
-                            </div>
+                            <img src="http://placehold.it/900x500/f39c12/ffffff&text=Drop photos on the dotted space" alt="Third slide">
                         </div>
                     </div>
                     <a class="left carousel-control" href="#product-gallery-carousel" data-slide="prev">

@@ -53,18 +53,6 @@
 							<h3 class="box-title" style="margin-left: -10px;">Inventory Settings</h3>
 						</div>
 
-						<div class="form-group">
-							<label>Default Safety Stock <small><i>(This will automatically be used as a safety stock number to any product whose safety stock is not specified.)</i></small></label>
-							<input class="number form-control" type="text" name="safety_stock" title="This will automatically be used as a safety stock number to any product whose safety stock is not specified." 
-								value="{{ to_money($settings->safety_stock) }}" />
-						</div>
-
-						<div class="form-group">
-							<label>Default Critical Inventory Number</label>
-							<input class="form-control number" type="text" name="critical_stock"
-								title="This will inform us when to notify you when any of the products is on a critical stock." value="{{ to_money($settings->critical_stock) }}" />
-						</div>
-
 						<div class="box-header with-border">
 							<h3 class="box-title" style="margin-left: -10px;">Delivery</h3>
 						</div>

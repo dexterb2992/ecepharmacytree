@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Patient;
+use ECEPharmacyTree\Doctor;
 
 class AffiliatesController extends Controller
 {
@@ -18,7 +19,9 @@ class AffiliatesController extends Controller
     public function index()
     {
         $patients = Patient::all();
-        return view('admin.affiliates')->withPatients($patients);
+        $doctors = Doctor::all();
+        return view('admin.affiliates')->withPatients($patients)->withDoctors($doctors)
+            ->withTitle("Affiliates");
     }
 
     /**

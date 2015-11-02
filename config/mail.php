@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'mailgun'),
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME'),
+    'username' => env('MAIL_USERNAME', 'postmaster@sandbox8cb0fea402984f3ba7c9174b5cfd67b5.mailgun.org'),
     // 'username'  => 'postmaster@irishbusiness.ie',
 
     /*
@@ -94,7 +94,7 @@ return [
     |
     */
 
-    'password' => env('MAIL_PASSWORD'),
+    'password' => env('MAIL_PASSWORD', 'b54417d7ba5b15f12be7335d23c9811b'),
     // 'password' => '167-c6nvwb33',
 
     /*
