@@ -295,25 +295,30 @@ if ($request == 'register') {
     	if($_POST['consultation_request'] == "delete"){
     		$sql = "DELETE FROM ".$_POST['table']." WHERE is_approved = 0 and id = ".$_POST['id'];
     	} else {
-    		// $settings = "";
-    		// foreach ($_POST as $key => $value) {
-    		// 	if ($key != "request" && $key != "table" && $key != "id" && $key != "action") {
-    		// 		$settings .= $key . "='" . $value . "',";
-      //       	// if( $_POST['table'] == "baskets" && $key == "quantity" && $basket_is_direct_update == "false" ){
-      //       		// $settings .= $key . "= (" . $key . "+" . trim($value) . "),";
-      //       	// }else{																																	
-    		// 		$settings .= $key . "='" . $value . "',";
-      //       	// }
-    		// 	}
-    		// 	$x++;
-    		// }
-    		// $settings = substr($settings, 0, strlen($settings) - 1);
-    		// $sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE id=" . $_POST['id'];
+    		$settings = "";
+    		foreach ($_POST as $key => $value) {
+    			if ($key != "request" && $key != "table" && $key != "id" && $key != "action") {
+    				$settings .= $key . "='" . $value . "',";
+            	// if( $_POST['table'] == "baskets" && $key == "quantity" && $basket_is_direct_update == "false" ){
+            		// $settings .= $key . "= (" . $key . "+" . trim($value) . "),";
+            	// }else{																																	
+    				$settings .= $key . "='" . $value . "',";
+            	// }
+    			}
+    			$x++;
+    		}
+    		$settings = substr($settings, 0, strlen($settings) - 1);
+    		$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE id=" . $_POST['id'];
     	}
 
 
     	if(mysql_query($sql)) {
-    		$response["success"] = 1;
+    		if(mysql_affected_rows() > 0)
+    			$response["success"] = 1;
+    		else {
+    			$response["success"] = 0;
+	    		$response["message"] = "No record is updated or deleted";
+    		}
     	} else {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
