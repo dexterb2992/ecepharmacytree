@@ -266,7 +266,7 @@ if ($request == 'register') {
     	}
     } else if ($action == "delete_prescription") {
     	$result = mysql_query("SELECT * from baskets where prescription_id = ".$_POST['id']." union SELECT * from baskets where prescription_id = ".$_POST['id']) or returnError(mysql_error());
-    
+    	
     	if(mysql_num_rows($result) < 1) {
     		$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
 
@@ -291,6 +291,35 @@ if ($request == 'register') {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
+    } else if ($action == 'check_and_delete_consultation') {
+    	if($_POST['consultation_request'] = "delete")
+    		$sql = "DELETE FROM ".$_POST['table']." WHERE is_approved = 0 and id = ".$_POST['id'];
+    	else {
+    		$settings = "";
+    		foreach ($_POST as $key => $value) {
+    			if ($key != "request" && $key != "table" && $key != "id" && $key != "action") {
+    				$settings .= $key . "='" . $value . "',";
+            	// if( $_POST['table'] == "baskets" && $key == "quantity" && $basket_is_direct_update == "false" ){
+            		// $settings .= $key . "= (" . $key . "+" . trim($value) . "),";
+            	// }else{																																	
+    				$settings .= $key . "='" . $value . "',";
+            	// }
+    			}
+    			$x++;
+    		}
+    		$settings = substr($settings, 0, strlen($settings) - 1);
+    		$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE id=" . $_POST['id'];
+    	}
+
+
+    	if(mysql_query($sql)) {
+    		$response["success"] = 1;
+    	} else {
+    		$response["success"] = 0;
+    		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
+    	}
+
+
     } else {
     	echo json_encode($response);
     	exit(0);
