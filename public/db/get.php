@@ -157,7 +157,7 @@ switch ($request) {
     // break;
 
     case 'get_consultations_notif' :
-    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_ID']." and is_approved != 0") or returnError(mysql_error());
+    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_ID']." and is_approved != 0 and isRead = 0") or returnError(mysql_error());
     $tbl = "consultations";
     break;
 
