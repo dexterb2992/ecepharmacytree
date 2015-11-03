@@ -152,8 +152,7 @@ switch ($request) {
     break;
 
     case 'get_notifications' :
-    $result = mysql_query("SELECT * FROM notifications WHERE patient_id = ".$_GET['patient_ID'].
-        " AND table_name = '".$_GET['table_name']."' AND isRead = 0") or returnError(mysql_error());
+    $result = mysql_query("SELECT * FROM notifications WHERE patient_id = ".$_GET['patient_ID']) or returnError(mysql_error());
     $tbl = "notifications";
     break;
 
