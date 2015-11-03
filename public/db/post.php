@@ -317,7 +317,7 @@ if ($request == 'register') {
     } else if ($action == "update_with_custom_where_clause") {
     	$settings = "";
     	foreach ($_POST as $key => $value) {
-    		if ($key != "request" && $key != "table" && $key != "id" && $key != "action") {
+    		if ($key != "request" && $key != "table" && $key != "id" && $key != "action" && $key != "custom_where_clause") {
     			$settings .= $key . "='" . $value . "',";
     		}
     		$x++;
