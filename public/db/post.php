@@ -292,7 +292,7 @@ if ($request == 'register') {
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
     } else if ($action == 'check_and_delete_consultation') {
-    	if($_POST['consultation_request'] = "delete"){
+    	if($_POST['consultation_request'] == "delete"){
     		$sql = "DELETE FROM ".$_POST['table']." WHERE is_approved = 0 and id = ".$_POST['id'];
     	} else {
     		$settings = "";
