@@ -151,9 +151,14 @@ switch ($request) {
     $tbl = "order_details";
     break;
 
-    case 'get_notifications' :
-    $result = mysql_query("SELECT * FROM notifications WHERE patient_id = ".$_GET['patient_ID']) or returnError(mysql_error());
-    $tbl = "notifications";
+    // case 'get_notifications' :
+    // $result = mysql_query("SELECT * FROM notifications WHERE patient_id = ".$_GET['patient_ID']) or returnError(mysql_error());
+    // $tbl = "notifications";
+    // break;
+
+    case 'get_consultations_notif' :
+    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_ID']." and is_approved != 0") or returnError(mysql_error());
+    $tbl = "consultations";
     break;
 
     case 'get_settings' :
