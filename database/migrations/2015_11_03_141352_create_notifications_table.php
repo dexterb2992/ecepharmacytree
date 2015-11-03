@@ -17,7 +17,7 @@ class CreateNotificationsTable extends Migration
             $table->integer('patient_id')->unsigned();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->string('table_name');
-            $table->integer('isRead');
+            $table->integer('isRead')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
