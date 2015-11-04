@@ -288,7 +288,7 @@ if ($request == 'register') {
     	}
     } else if ($action == 'check_and_delete_consultation') {
     	if($_POST['consultation_request'] == "delete"){
-    		$sql = "DELETE FROM ".$_POST['table']." WHERE is_approved = 0 and id = ".$_POST['id'];
+    		$sql = "DELETE FROM ".$_POST['table']." WHERE is_approved = 0 or is_approved = 2 and id = ".$_POST['id'];
     	} else {
     		$settings = "";
     		foreach ($_POST as $key => $value) {
@@ -326,10 +326,10 @@ if ($request == 'register') {
     	$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE ".$_POST['custom_where_clause'];
 
     	if(mysql_query($sql)) {
-    		if(mysql_affected_rows() > 0)
+    		if(mysql_affected_rows() > 0){
     			$response["success"] = 1;
-    			$response['server_id'] = mysql_affected_rows()
-    		else {
+    			$response['server_id'] = mysql_affected_rows();
+    		} else {
     			$response["success"] = 0;
     			$response["message"] = "No record is updated or deleted";
     		}
