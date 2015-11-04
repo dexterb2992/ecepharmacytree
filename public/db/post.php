@@ -324,11 +324,11 @@ if ($request == 'register') {
     	}
     	$settings = substr($settings, 0, strlen($settings) - 1);
     	$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE ".$_POST['custom_where_clause'];
-    	$response["query"] = $sql;
 
     	if(mysql_query($sql)) {
     		if(mysql_affected_rows() > 0)
     			$response["success"] = 1;
+    			$response['server_id'] = 
     		else {
     			$response["success"] = 0;
     			$response["message"] = "No record is updated or deleted";
