@@ -288,7 +288,7 @@ if ($request == 'register') {
     	}
     } else if ($action == 'check_and_delete_consultation') {
     	if($_POST['consultation_request'] == "delete"){
-    		$sql = "DELETE FROM ".$_POST['table']." WHERE (is_approved = 0 or is_approved = 2) and id = ".$_POST['id'];
+    		$sql = "DELETE FROM ".$_POST['table']." WHERE is_approved = 0 and id = ".$_POST['id'];
     	} else {
     		$settings = "";
     		foreach ($_POST as $key => $value) {
