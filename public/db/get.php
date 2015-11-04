@@ -162,86 +162,86 @@ switch ($request) {
     break;
 
     case 'get_consultations':
-    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_id'] or returnError(mysql_error());
-        $tbl = "consultations";
-        break;
+    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
+    $tbl = "consultations";
+    break;
 
-        case 'get_settings' :
-        $result = mysql_query("SELECT * FROM settings") or returnError(mysql_error());
-        $tbl = "settings";
-        break;
+    case 'get_settings' :
+    $result = mysql_query("SELECT * FROM settings") or returnError(mysql_error());
+    $tbl = "settings";
+    break;
 
-        case 'get_messages_by_user' :
-        $result = mysql_query("SELECT * FROM messages WHERE patient_id = ".$_GET['patient_id']." order by created_at DESC") or returnError(mysql_error());
-        $tbl = "messages";
-        break;
+    case 'get_messages_by_user' :
+    $result = mysql_query("SELECT * FROM messages WHERE patient_id = ".$_GET['patient_id']." order by created_at DESC") or returnError(mysql_error());
+    $tbl = "messages";
+    break;
 
-        case 'get_regions':
-        $result = mysql_query("SELECT * FROM regions") or returnError(mysql_error());
-        $tbl = "regions";
-        break;
+    case 'get_regions':
+    $result = mysql_query("SELECT * FROM regions") or returnError(mysql_error());
+    $tbl = "regions";
+    break;
 
-        case 'get_provinces':
-        $result = mysql_query("SELECT * FROM provinces WHERE region_id =".$_GET['region_id']) or returnError(mysql_error());
-        $tbl = "provinces";
-        break;
+    case 'get_provinces':
+    $result = mysql_query("SELECT * FROM provinces WHERE region_id =".$_GET['region_id']) or returnError(mysql_error());
+    $tbl = "provinces";
+    break;
 
-        case 'get_municipalities':
-        $result = mysql_query("SELECT * FROM municipalities WHERE province_id =".$_GET['province_id']) or returnError(mysql_error());
-        $tbl = "municipalities";
-        break;
+    case 'get_municipalities':
+    $result = mysql_query("SELECT * FROM municipalities WHERE province_id =".$_GET['province_id']) or returnError(mysql_error());
+    $tbl = "municipalities";
+    break;
 
-        case 'get_barangays':
-        $result = mysql_query("SELECT * FROM barangays WHERE municipality_id =".$_GET['municipality_id']) or returnError(mysql_error());
-        $tbl = "barangays";
-        break;
+    case 'get_barangays':
+    $result = mysql_query("SELECT * FROM barangays WHERE municipality_id =".$_GET['municipality_id']) or returnError(mysql_error());
+    $tbl = "barangays";
+    break;
 
-        case 'get_clinic_patients';
-        $result = mysql_query("SELECT cp.*, b.municipality_id, m.province_id, p.region_id FROM clinic_patients as cp inner join barangays as b on cp.address_barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE username = '".$_GET['username']."' and password= '".$_GET['password']."'") or returnError(mysql_error());  
-        $tbl = "clinic_patients";
-        break;
+    case 'get_clinic_patients';
+    $result = mysql_query("SELECT cp.*, b.municipality_id, m.province_id, p.region_id FROM clinic_patients as cp inner join barangays as b on cp.address_barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE username = '".$_GET['username']."' and password= '".$_GET['password']."'") or returnError(mysql_error());  
+    $tbl = "clinic_patients";
+    break;
 
-        case 'get_medical_records':
-        $result = mysql_query("SELECT * from clinic_patients as cp inner join medical_records_requests as mrr on cp.id = mrr.clinic_patients_id where username = '".$_GET['username']."' and password = '".$_GET['password']."'") or returnError(mysql_error());
-        break;
+    case 'get_medical_records':
+    $result = mysql_query("SELECT * from clinic_patients as cp inner join medical_records_requests as mrr on cp.id = mrr.clinic_patients_id where username = '".$_GET['username']."' and password = '".$_GET['password']."'") or returnError(mysql_error());
+    break;
 
-        default:
+    default:
         # code...
-        break;
-    }
+    break;
+}
 
-    if ($pre_response["success"] == 0) {
-       echo json_encode($pre_response);
-       exit(0);
-   }
+if ($pre_response["success"] == 0) {
+ echo json_encode($pre_response);
+ exit(0);
+}
 
-   if ($result != 0)
-       $db_result = mysql_num_rows($result);
+if ($result != 0)
+ $db_result = mysql_num_rows($result);
 // check for empty result
-   if ($db_result > 0) {
-       $response[$tbl] = array();
-       while ($row = mysql_fetch_assoc($result)) {
+if ($db_result > 0) {
+ $response[$tbl] = array();
+ while ($row = mysql_fetch_assoc($result)) {
         // push single row into final response array
-          foreach ($row as $key => $value) {
+  foreach ($row as $key => $value) {
             // let's remove some special characters as it causes to return null when converted to json
-             $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
-         }
-         array_push($response[$tbl], $row);
-     }
+   $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+}
+array_push($response[$tbl], $row);
+}
     //get the original time from server
-     date_default_timezone_set('Asia/Manila');
-     $server_timestamp             = date('Y-m-d H:i:s', time());
+date_default_timezone_set('Asia/Manila');
+$server_timestamp             = date('Y-m-d H:i:s', time());
 
-     $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
+$result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
 
-     if(mysql_num_rows($result_latest_updated_at) > 0){
-        $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
-        $latest_updated_at = $result_latest_updated_at_array['updated_at'];
-    }
+if(mysql_num_rows($result_latest_updated_at) > 0){
+    $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
+    $latest_updated_at = $result_latest_updated_at_array['updated_at'];
+}
 
-    $response["success"]          = 1;
-    $response["server_timestamp"] = "$server_timestamp";
-    $response["latest_updated_at"] = "$latest_updated_at";
+$response["success"]          = 1;
+$response["server_timestamp"] = "$server_timestamp";
+$response["latest_updated_at"] = "$latest_updated_at";
 } else {
     // no products found
 	$response["success"] = 0;
