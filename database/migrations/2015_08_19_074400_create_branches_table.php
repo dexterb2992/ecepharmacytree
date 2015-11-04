@@ -15,7 +15,9 @@ class CreateBranchesTable extends Migration
         Schema::create('branches', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('full_address');
+            $table->string('additional_address');
+            $table->integer('barangay_id')->unsigned();
+            $table->foreign('barangay_id')->references('id')->on('barangay')->onDelete('cascade');
             $table->integer('status')->default(1);
             $table->timestamps();
             $table->softDeletes();

@@ -21,9 +21,8 @@ class BranchTableSeeder extends Seeder
         //     VALUES ('1', 'ECE Marketing - Davao', NULL, NULL, NULL, NULL, NULL, NULL, '50 5th St.', 'Ecoland Subdivision, Matina', 
         //         'Davao City', 'Davao del Sur', 'Davao Region (Region XI)', '8000', '1', '2015-10-12 00:00:00', '2015-10-12 00:00:00', NULL);";
 
-        $sql = " INSERT INTO `ece_pharmacy_tree`.`branches` (`id`, `name`, `full_address`, `status`, `created_at`, `updated_at`, `deleted_at`) 
-            VALUES ('1', 'ECE Marketing - Davao', '50 5th St., Ecoland Subdivision, Matina, 
-                Davao City, Davao del Sur, Davao Region (Region XI), 8000', '1', '2015-10-12 00:00:00', '2015-10-12 00:00:00', NULL);";
+        $sql = " INSERT INTO `ece_pharmacy_tree`.`branches` (`id`, `name`, `additional_address`, 'barangay_id', `status`, `created_at`, `updated_at`, `deleted_at`) 
+            VALUES ('1', 'ECE Marketing - Davao', '50 5th St. Ecoland Subdivision', 1378, 8000', '1', '2015-10-12 00:00:00', '2015-10-12 00:00:00', NULL);";
 
         $res = mysqli_query($con, $sql);
         mysqli_close($con);
