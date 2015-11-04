@@ -211,30 +211,30 @@ switch ($request) {
 }
 
 if ($pre_response["success"] == 0) {
- echo json_encode($pre_response);
- exit(0);
+   echo json_encode($pre_response);
+   exit(0);
 }
 
 if ($result != 0)
- $db_result = mysql_num_rows($result);
+   $db_result = mysql_num_rows($result);
 // check for empty result
 if ($db_result > 0) {
- $response[$tbl] = array();
- while ($row = mysql_fetch_assoc($result)) {
+   $response[$tbl] = array();
+   while ($row = mysql_fetch_assoc($result)) {
         // push single row into final response array
-  foreach ($row as $key => $value) {
+      foreach ($row as $key => $value) {
             // let's remove some special characters as it causes to return null when converted to json
-   $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
-}
-array_push($response[$tbl], $row);
-}
+         $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+     }
+     array_push($response[$tbl], $row);
+ }
     //get the original time from server
-date_default_timezone_set('Asia/Manila');
-$server_timestamp             = date('Y-m-d H:i:s', time());
+ date_default_timezone_set('Asia/Manila');
+ $server_timestamp             = date('Y-m-d H:i:s', time());
 
-$result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
+ $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
 
-if(mysql_num_rows($result_latest_updated_at) > 0){
+ if(mysql_num_rows($result_latest_updated_at) > 0){
     $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
     $latest_updated_at = $result_latest_updated_at_array['updated_at'];
 }
