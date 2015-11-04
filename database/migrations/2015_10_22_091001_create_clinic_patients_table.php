@@ -17,14 +17,14 @@ class CreateClinicPatientsTable extends Migration
             $table->string('fname');
             $table->string('mname');
             $table->string('lname');
-            $table->string('username')->unique();
-            $table->string('password');
+            // $table->string('username')->unique();
+            // $table->string('password');
             // since the relationship of clinic and doctor is many to many,
             //  we'll need both clinic_id and doctor_id
-            $table->integer('clinic_id')->unsigned();
-            $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
-            $table->integer('doctor_id')->unsigned();
-            $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
+            // $table->integer('clinic_id')->unsigned();
+            // $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
+            // $table->integer('doctor_id')->unsigned();
+            // $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
             $table->string('mobile_no');
             $table->string('tel_no')->nullable();
             $table->longText('photo')->nullable();
