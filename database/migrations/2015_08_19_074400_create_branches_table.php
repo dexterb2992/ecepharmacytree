@@ -17,7 +17,7 @@ class CreateBranchesTable extends Migration
             $table->string('name');
             $table->string('additional_address');
             $table->integer('barangay_id')->unsigned();
-            $table->foreign('barangay_id')->references('id')->on('barangay')->onDelete('cascade');
+            $table->foreign('barangay_id')->references('id')->on('barangays')->onDelete('cascade');
             $table->integer('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
