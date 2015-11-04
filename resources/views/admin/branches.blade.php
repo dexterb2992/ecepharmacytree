@@ -13,46 +13,46 @@
                 <table class="table table-bordered table-hover datatable">
                     <thead>
                         <tr>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th>Date Added</th>
-                        <th>Action</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Date Added</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($branches as $branch)
-                            <?php 
-                                $address = get_branch_full_address($branch);
-                            ?>
-                            <tr data-id="{{ $branch->id }}" class="{{ $branch->status == 1? '' : 'warning' }}">
-                                <td>
-                                    <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-branch" data-title="branch info" data-target="#form_edit_branch" data-id="{{ $branch->id }}" title="Edit">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <span>{{ $branch->name }}</span>
-                                </td>
-                                <td>
-                                    <span>{!! $branch->full_address !!}</span>
-                                </td>
-                                <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
-                                <td>
-                                    <span class="label-primary label"><i class="fa-clock-o fa"></i>
-                                        {{ Carbon::parse($branch->created_at)->diffForHumans() }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="tools">
-                                        
-                                        @if($branch->status == 1)
-                                            <span class="action-icon deactivate-branch" data-title="branch" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}"><i class="fa fa-warning"></i> Deactivate</span> 
-                                        @else
-                                            <span class="action-icon reactivate-branch" data-title="branch" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}"><i class="fa fa-check-square-o"></i> Reactivate</span>
-                                        @endif
-                                        <span class="action-icon remove-branch" data-action="remove" data-title="branch" data-urlmain="/branches/" data-id="{{ $branch->id }}"><i class="fa fa-trash-o"></i> Remove</span>
-                                    </div>
-                                </td>
-                            </tr>
+                        <?php 
+                        $address = get_branch_full_address($branch);
+                        ?>
+                        <tr data-id="{{ $branch->id }}" class="{{ $branch->status == 1? '' : 'warning' }}">
+                            <td>
+                                <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-branch" data-title="branch info" data-target="#form_edit_branch" data-id="{{ $branch->id }}" title="Edit">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <span>{{ $branch->name }}</span>
+                            </td>
+                            <td>
+                                <span>{!! $branch->full_address !!}</span>
+                            </td>
+                            <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
+                            <td>
+                                <span class="label-primary label"><i class="fa-clock-o fa"></i>
+                                    {{ Carbon::parse($branch->created_at)->diffForHumans() }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="tools">
+                                    
+                                    @if($branch->status == 1)
+                                    <span class="action-icon deactivate-branch" data-title="branch" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}"><i class="fa fa-warning"></i> Deactivate</span> 
+                                    @else
+                                    <span class="action-icon reactivate-branch" data-title="branch" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}"><i class="fa fa-check-square-o"></i> Reactivate</span>
+                                    @endif
+                                    <span class="action-icon remove-branch" data-action="remove" data-title="branch" data-urlmain="/branches/" data-id="{{ $branch->id }}"><i class="fa fa-trash-o"></i> Remove</span>
+                                </div>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -80,9 +80,9 @@
                                 <label for="address_province">Region<i>*</i></label>
                                 <select class="form-control select2" name="address_region" id="address_region">
                                     <option value="0">- Select Region - </option>
-                                @foreach($regions as $region)
+                                    @foreach($regions as $region)
                                     <option value="{{ $region->id }}">{{ $region->name }}</option>
-                                @endforeach
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -109,69 +109,21 @@
                                 </select>
                                 <!-- <input type="text" class="form-control" id="address_barangay" placeholder="Barangay" name="address_barangay" required> -->
                             </div>
-
-                            <div class="row"> <!-- labels -->
-                                <div class="col-xs-4">
-                                    <label for="unit_floor_room_no">Unit/Room No.</label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="building">Building</label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="block_no">Block No.</label>
-                                </div>
-                            </div>
-                            <div class="row"> <!-- input fields -->
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="unit_floor_room_no" id="unit_floor_room_no" placeholder="Unit/Room No.">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="building" id="building" placeholder="Building">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="block_no" id="block_no" placeholder="Block No.">
-                                </div>
-                            </div>
-                            <div class="row"> <!-- labels -->
-                                <div class="col-xs-4">
-                                    <label for="lot_no">Lot No.</label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="phase_no">Phase No.</label>
-                                </div>
-                                <!-- <div class="col-xs-4">
-                                    <label for="address_zip">ZIP Code <i>*</i></label>
-                                </div> -->
-                            </div>
-                            <div class="row"> <!-- input fields -->
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="lot_no" id="lot_no" placeholder="Lot No.">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="phase_no" id="phase_no" placeholder="Phase No.">
-                                </div>
-                                <!-- <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="address_zip" id="address_zip" placeholder="ZIP Code" required>
-                                </div> -->
-                            </div>
                             <div class="form-group"> 
                                 <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>
                                 <input type="text" class="form-control" id="address_street" placeholder="Street" name="address_street" required>
                             </div>
-                            
-                            
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </form><!-- /form -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </form><!-- /form -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
 
-        
+            
 
-    </div><!-- /.col -->
-</div><!-- /.row -->
-@stop
-
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+    @stop

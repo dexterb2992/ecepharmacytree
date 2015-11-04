@@ -46,12 +46,14 @@ class BranchController extends Controller
         $input = Input::all();
         $branch = new Branch;
         $branch->name = $input["name"];
-        $branch->full_address = $input["unit_floor_room_no"].", ".$input["building"].",
-            ".$input["lot_no"].', '.$input["block_no"].', '.$input["phase_no"].', 
-            '.$input["address_street"].", ".$input["address_barangay"].",
-            ".Municipality::find($input["address_city_municipality"])->name.", 
-            ".Province::find($input["address_province"])->name.", 
-            ".Region::find($input["address_region"])->name.", ".$input["address_zip"];
+        // $branch->full_address = $input["unit_floor_room_no"].", ".$input["building"].",
+        //     ".$input["lot_no"].', '.$input["block_no"].', '.$input["phase_no"].', 
+        //     '.$input["address_street"].", ".$input["address_barangay"].",
+        //     ".Municipality::find($input["address_city_municipality"])->name.", 
+        //     ".Province::find($input["address_province"])->name.", 
+        //     ".Region::find($input["address_region"])->name.", ".$input["address_zip"];
+        $branch->additional_address = $input["address_street"];
+        $branch->barangay_id = $input["address_barangay"];
         if( $branch->save() ) 
             session()->flash("flash_message", array("msg" => "New branch has been added successfully.", "type" => "success"));
             return Redirect::to( route('Branches::index') );
