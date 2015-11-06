@@ -64,7 +64,12 @@ function generate_referral_id(){
 function generate_lot_number(){
 	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')
 		->withTrashed()->first();
-	$new_lot_number = $inventory->lot_number == 0 ? $inventory->lot_number + 1001 : $inventory->lot_number + 1;
+
+	if(!isset($inventory->lot_number)){
+		$new_lot_number = 1000;
+	}else{
+		$new_lot_number = $inventory->lot_number == 0 ? $inventory->lot_number + 1001 : $inventory->lot_number + 1;
+	}
 
 	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)
 		->withTrashed()->first();

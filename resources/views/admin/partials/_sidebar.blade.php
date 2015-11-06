@@ -47,7 +47,7 @@
             @endif
             <li class="treeview">
                 <a href="{{ route('Products::index') }}">
-                    <i class="fa-bar-chart fa"></i> <span>Marginal Category</span>
+                    <i class="fa-bar-chart fa"></i> <span>Product Groups</span>
                 </a>
             </li>
 

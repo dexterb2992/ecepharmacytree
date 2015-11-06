@@ -12,9 +12,9 @@
 */
 
 
-// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-// View::share('critical_stocks', check_for_critical_stock());
-// View::share('branches', ECEPharmacyTree\Branch::all());
+View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+View::share('critical_stocks', check_for_critical_stock());
+View::share('branches', ECEPharmacyTree\Branch::all());
 
 
 Route::get('showschema', function(){
@@ -159,6 +159,8 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('gallery/upload', ['as' => 'add_gallery', 'uses' => 'ProductsGalleryController@store']);
 	Route::post('gallery/delete/{id}', ['as' => 'delete_gallery', 'uses' => 'ProductsGalleryController@destroy']);
 	Route::post('gallery/change-primary/{id}', ['as' => 'gallery_change_primary', 'uses' => 'ProductsGalleryController@change_primary']);
+
+	// Route::get('groups', ['as' => 'groups', 'uses' => ''])
 });
 
 Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'middleware' => 'auth'], function (){
