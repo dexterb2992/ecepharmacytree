@@ -229,6 +229,7 @@ if ($request == 'register') {
     	if (mysql_query($sql)) {
     		$response["last_inserted_id"] = mysql_insert_id();
     		$response["success"]          = 1;
+    		$response["created_at"] = $datenow;
     	} else {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
@@ -238,11 +239,6 @@ if ($request == 'register') {
     	foreach ($_POST as $key => $value) {
     		if ($key != "request" && $key != "table" && $key != "id" && $key != "action") {
     			$settings .= $key . "='" . $value . "',";
-            	// if( $_POST['table'] == "baskets" && $key == "quantity" && $basket_is_direct_update == "false" ){
-            		// $settings .= $key . "= (" . $key . "+" . trim($value) . "),";
-            	// }else{																																	
-    			$settings .= $key . "='" . $value . "',";
-            	// }
     		}
     		$x++;
     	}
@@ -265,7 +261,7 @@ if ($request == 'register') {
     	}
     } else if ($action == "delete_prescription") {
     	$result = mysql_query("SELECT * from baskets where prescription_id = ".$_POST['id']." union SELECT * from baskets where prescription_id = ".$_POST['id']) or returnError(mysql_error());
-    
+    	
     	if(mysql_num_rows($result) < 1) {
     		$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
 
@@ -290,6 +286,30 @@ if ($request == 'register') {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
+    } else if ($action == "update_with_custom_where_clause") {
+    	$settings = "";
+    	foreach ($_POST as $key => $value) {
+    		if ($key != "request" && $key != "table" && $key != "id" && $key != "action" && $key != "custom_where_clause") {
+    			$settings .= $key . "='" . $value . "',";
+    		}
+    		$x++;
+    	}
+    	$settings = substr($settings, 0, strlen($settings) - 1);
+    	$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE ".$_POST['custom_where_clause'];
+
+    	if(mysql_query($sql)) {
+    		if(mysql_affected_rows() > 0){
+    			$response["success"] = 1;
+    			$response['server_id'] = mysql_affected_rows();
+    		} else {
+    			$response["success"] = 0;
+    			$response["message"] = "No record is updated or deleted";
+    		}
+    	} else {
+    		$response["success"] = 0;
+    		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
+    	}
+
     } else {
     	echo json_encode($response);
     	exit(0);

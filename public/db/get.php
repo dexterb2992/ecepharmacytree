@@ -137,7 +137,7 @@ switch ($request) {
     break;
 
     case 'get_branches' : 
-    $result = mysql_query("SELECT * FROM branches") or returnError(mysql_error());
+    $result = mysql_query("SELECT br.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM branches as br inner join barangays as bg on br.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id") or returnError(mysql_error());
     $tbl = "branches";
     break;
 
@@ -151,10 +151,19 @@ switch ($request) {
     $tbl = "order_details";
     break;
 
-    case 'get_notifications' :
-    $result = mysql_query("SELECT * FROM notifications WHERE patient_ID = ".$_GET['patient_ID'].
-        " AND table_name = '".$_GET['table_name']."' AND isRead = 0") or returnError(mysql_error());
-    $tbl = "notifications";
+    // case 'get_notifications' :
+    // $result = mysql_query("SELECT * FROM notifications WHERE patient_id = ".$_GET['patient_ID']) or returnError(mysql_error());
+    // $tbl = "notifications";
+    // break;
+
+    case 'get_consultations_notif' :
+    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_ID']." and is_approved != 0 and isRead = 0") or returnError(mysql_error());
+    $tbl = "consultations";
+    break;
+
+    case 'get_consultations':
+    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_id']." and is_deleted != 1") or returnError(mysql_error());
+    $tbl = "consultations";
     break;
 
     case 'get_settings' :
@@ -198,41 +207,41 @@ switch ($request) {
 
     default:
         # code...
-	break;
+    break;
 }
 
 if ($pre_response["success"] == 0) {
-	echo json_encode($pre_response);
-	exit(0);
+   echo json_encode($pre_response);
+   exit(0);
 }
 
 if ($result != 0)
-	$db_result = mysql_num_rows($result);
+   $db_result = mysql_num_rows($result);
 // check for empty result
 if ($db_result > 0) {
-	$response[$tbl] = array();
-	while ($row = mysql_fetch_assoc($result)) {
+   $response[$tbl] = array();
+   while ($row = mysql_fetch_assoc($result)) {
         // push single row into final response array
-		foreach ($row as $key => $value) {
+      foreach ($row as $key => $value) {
             // let's remove some special characters as it causes to return null when converted to json
-			$row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
-		}
-		array_push($response[$tbl], $row);
-	}
+         $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+     }
+     array_push($response[$tbl], $row);
+ }
     //get the original time from server
-    date_default_timezone_set('Asia/Manila');
-    $server_timestamp             = date('Y-m-d H:i:s', time());
+ date_default_timezone_set('Asia/Manila');
+ $server_timestamp             = date('Y-m-d H:i:s', time());
 
-    $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
+ $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
 
-    if(mysql_num_rows($result_latest_updated_at) > 0){
-        $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
-        $latest_updated_at = $result_latest_updated_at_array['updated_at'];
-    }
+ if(mysql_num_rows($result_latest_updated_at) > 0){
+    $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
+    $latest_updated_at = $result_latest_updated_at_array['updated_at'];
+}
 
-    $response["success"]          = 1;
-    $response["server_timestamp"] = "$server_timestamp";
-    $response["latest_updated_at"] = "$latest_updated_at";
+$response["success"]          = 1;
+$response["server_timestamp"] = "$server_timestamp";
+$response["latest_updated_at"] = "$latest_updated_at";
 } else {
     // no products found
 	$response["success"] = 0;

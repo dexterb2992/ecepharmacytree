@@ -16,11 +16,11 @@
                 <table class="table table-bordered table-hover datatable">
                     <thead>
                         <tr>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th>Date Added</th>
-                        <th>Action</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Date Added</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,7 +87,11 @@
                                 <select class="form-control select2" name="region_id" id="address_region">
                                     <option value="0">- Select Region - </option>
                                     @foreach($regions as $region)
+<<<<<<< HEAD
                                     <option value="{{ $region->id }}">{{ $region->name.' ('.$region->code.')' }}</option>
+=======
+                                    <option value="{{ $region->id }}">{{ $region->name }}</option>
+>>>>>>> 74a1c7bd316a897386984b23bd04eecc29c8fa25
                                     @endforeach
                                 </select>
                             </div>
@@ -113,6 +117,7 @@
                                     <option value="0">- Select Barangay -</option>
                                 </select>
                             </div>
+<<<<<<< HEAD
 
                             <div class="row"> <!-- labels -->
                                 <div class="col-xs-4">
@@ -160,24 +165,23 @@
                                     <input type="text" class="form-control" name="phase_no" id="phase_no" placeholder="Phase No.">
                                 </div>
                             </div>
+=======
+>>>>>>> 74a1c7bd316a897386984b23bd04eecc29c8fa25
                             <div class="form-group"> 
                                 <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>
                                 <input type="text" class="form-control" id="address_street" placeholder="Street" name="address_street" required>
                             </div>
-                            
-                            
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </form><!-- /form -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </form><!-- /form -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
 
-        
+            
 
-    </div><!-- /.col -->
-</div><!-- /.row -->
-@stop
-
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+    @stop

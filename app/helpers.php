@@ -15,23 +15,31 @@ function pre($str){
  */
 
 function generateRandomString($length = 10, $is_number = 0, $is_sku = false) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if( $is_number  == 1) {
-    	$characters = '0123456789';
-    }else if( $is_number == 2 ){
-    	$characters = 'abcdefghjkmnpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    	
-    	if( $is_sku ){
-    		$characters = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
-    	}
-    }
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	if( $is_number  == 1) {
+		$characters = '0123456789';
+	}else if( $is_number == 2 ){
+		$characters = 'abcdefghjkmnpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		
+		if( $is_sku ){
+			$characters = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
+		}
+	}
 
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
+	$charactersLength = strlen($characters);
+	$randomString = '';
+	for ($i = 0; $i < $length; $i++) {
+		$randomString .= $characters[rand(0, $charactersLength - 1)];
+	}
+	return $randomString;
+}
+
+function strbefore($string, $substring) {
+	$pos = strpos($string, $substring);
+	if ($pos === false)
+		return $string;
+	else 
+		return(substr($string, 0, $pos));
 }
 
 function generateSku(){
@@ -79,38 +87,38 @@ function str_auto_plural($str, $quantity){
 			return str_plural($str)." ".$suf;
 
 		return str_singular($str)." ".$suf;
-}
+	}
 
-function rn2br($str){
-	$newLineArray = array('\r\n','\n\r','\n','\r');
-	return str_replace($newLineArray,'<br/>', nl2br($str));
-}
+	function rn2br($str){
+		$newLineArray = array('\r\n','\n\r','\n','\r');
+		return str_replace($newLineArray,'<br/>', nl2br($str));
+	}
 
-function safety_stock(){
-	$p = Product::all();
-	return $p->toJson();
-}
+	function safety_stock(){
+		$p = Product::all();
+		return $p->toJson();
+	}
 
-function get_patient_fullname($patient){
-	return ucfirst($patient->fname)." ".ucfirst($patient->lname);
-}
+	function get_patient_fullname($patient){
+		return ucfirst($patient->fname)." ".ucfirst($patient->lname);
+	}
 
-function get_patient_full_address($patient){
-	return ucfirst($patient->address_street).', '.ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
-}
+	function get_patient_full_address($patient){
+		return ucfirst($patient->address_street).', '.ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
+	}
 
-function get_patient_referrals($patient){
-	$count1 = 0;
-	$count2 = 0;
-	
-	$count1 = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $patient->referral_id)->count();
-	$count2 = ECEPharmacyTree\Patient::where('referred_byUser', '=', $patient->referral_id)->count();
+	function get_patient_referrals($patient){
+		$count1 = 0;
+		$count2 = 0;
+		
+		$count1 = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $patient->referral_id)->count();
+		$count2 = ECEPharmacyTree\Patient::where('referred_byUser', '=', $patient->referral_id)->count();
 
-	return $count1 + $count2;
-}
+		return $count1 + $count2;
+	}
 
-function get_all_downlines($referral_id){
-	$settings = ECEPharmacyTree\Setting::first();
+	function get_all_downlines($referral_id){
+		$settings = ECEPharmacyTree\Setting::first();
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
 
 	if( empty($patients) )
@@ -135,9 +143,9 @@ function extract_downlines($downlines = array()){
 	$res = "";
 	foreach($downlines as $key => $downline){
 		$res.= '<li class="bg-teal-active">'
-			.'<span data-original-title="'.$downline["fname"]." ".$downline["lname"].'" data-toggle="tooltip">'
-				.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'</span>'
-			."<br/>(".$downline["referral_id"].")";
+		.'<span data-original-title="'.$downline["fname"]." ".$downline["lname"].'" data-toggle="tooltip">'
+		.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'</span>'
+		."<br/>(".$downline["referral_id"].")";
 		if( count($downline['downlines']) > 0 ){
 			$new_dls = extract_downlines($downline['downlines']);
 			$res.= '<ul>'.$new_dls.'</ul>';
@@ -192,7 +200,7 @@ function _error($msg, $alert_type = 'label'){
 
 function validate_reminder_token($token){
 	$res = DB::table('password_resets')->where('token', '=', $token)
-		->where('created_at','>', Carbon\Carbon::now()->subHours( (config("auth.password.expire"))/60 ))->first();
+	->where('created_at','>', Carbon\Carbon::now()->subHours( (config("auth.password.expire"))/60 ))->first();
 
 	if( empty($res)  || $res === null)
 		return false;
@@ -207,10 +215,10 @@ function validate_reminder_token($token){
  */
 function get_role($role){
 	$roles = [
-		1 => 'Administrator',
-		2 => 'Branch Manager',
-		3 => 'Pharmacist',
-		1001 => 'Developer'
+	1 => 'Administrator',
+	2 => 'Branch Manager',
+	3 => 'Pharmacist',
+	1001 => 'Developer'
 	];
 
 	if( array_key_exists($role, $roles) )
@@ -256,14 +264,14 @@ function extract_db_to_array($path_to_source_file, $columns = array()){
 		$entry = preg_split("/[\t]/", $value);
 		if( isset($entry[ count($columns)-1 ]) )
 			$new_row = [];
-			$new_row['created_at'] = new DateTime;
-    		$new_row['updated_at'] = $new_row['created_at'];
+		$new_row['created_at'] = new DateTime;
+		$new_row['updated_at'] = $new_row['created_at'];
 
-			for($x = 0; $x < count($columns); $x++){
-				if( isset($entry[$x]) )
-					$new_row[$columns[$x]] = $entry[$x];
-			}
-			$rows[] = $new_row;
+		for($x = 0; $x < count($columns); $x++){
+			if( isset($entry[$x]) )
+				$new_row[$columns[$x]] = $entry[$x];
+		}
+		$rows[] = $new_row;
 	}
 
 	return array_values($rows);
@@ -272,26 +280,26 @@ function extract_db_to_array($path_to_source_file, $columns = array()){
 function arrayUnique($array, $preserveKeys = false)  
 {  
     // Unique Array for return  
-    $arrayRewrite = array();  
+	$arrayRewrite = array();  
     // Array with the md5 hashes  
-    $arrayHashes = array();  
-    foreach($array as $key => $item) {  
+	$arrayHashes = array();  
+	foreach($array as $key => $item) {  
         // Serialize the current element and create a md5 hash  
-        $hash = md5(serialize($item));  
+		$hash = md5(serialize($item));  
         // If the md5 didn't come up yet, add the element to  
         // to arrayRewrite, otherwise drop it  
-        if (!isset($arrayHashes[$hash])) {  
+		if (!isset($arrayHashes[$hash])) {  
             // Save the current element hash  
-            $arrayHashes[$hash] = $hash;  
+			$arrayHashes[$hash] = $hash;  
             // Add element to the unique Array  
-            if ($preserveKeys) {  
-                $arrayRewrite[$key] = $item;  
-            } else {  
-                $arrayRewrite[] = $item;  
-            }  
-        }  
-    }  
-    return $arrayRewrite;  
+			if ($preserveKeys) {  
+				$arrayRewrite[$key] = $item;  
+			} else {  
+				$arrayRewrite[] = $item;  
+			}  
+		}  
+	}  
+	return $arrayRewrite;  
 }  
 
 /**
@@ -305,26 +313,26 @@ function multi_array_search($needle, $array_key = 0, $haystack){
 	$arrIt = new RecursiveIteratorIterator(new RecursiveArrayIterator($haystack));
 
 	foreach ($arrIt as $sub) {
-	    $subArray = $arrIt->getSubIterator();
-	    if ($subArray[$array_key] === $needle) {
-	        $outputArray[] = iterator_to_array($subArray);
-	    }
+		$subArray = $arrIt->getSubIterator();
+		if ($subArray[$array_key] === $needle) {
+			$outputArray[] = iterator_to_array($subArray);
+		}
 	}
 	return $outputArray;
 }
 
 function cp1250_to_utf2($text){
-    $dict  = array(chr(225) => 'á', chr(228) =>  'ä', chr(232) => 'č', chr(239) => 'ď', 
-        chr(233) => 'é', chr(236) => 'ě', chr(237) => 'í', chr(229) => 'ĺ', chr(229) => 'ľ', 
-        chr(242) => 'ň', chr(244) => 'ô', chr(243) => 'ó', chr(154) => 'š', chr(248) => 'ř', 
-        chr(250) => 'ú', chr(249) => 'ů', chr(157) => 'ť', chr(253) => 'ý', chr(158) => 'ž',
-        chr(193) => 'Á', chr(196) => 'Ä', chr(200) => 'Č', chr(207) => 'Ď', chr(201) => 'É', 
-        chr(204) => 'Ě', chr(205) => 'Í', chr(197) => 'Ĺ',    chr(188) => 'Ľ', chr(210) => 'Ň', 
-        chr(212) => 'Ô', chr(211) => 'Ó', chr(138) => 'Š', chr(216) => 'Ř', chr(218) => 'Ú', 
-        chr(217) => 'Ů', chr(141) => 'Ť', chr(221) => 'Ý', chr(142) => 'Ž', 
-        chr(150) => '-', 'Ã±' => 'ň', 'Ã‘' => 'Ň', '&Ntilde;' => 'Ň', '&ntilde' => 'ň'
-    );
-    return strtr($text, $dict);
+	$dict  = array(chr(225) => 'á', chr(228) =>  'ä', chr(232) => 'č', chr(239) => 'ď', 
+		chr(233) => 'é', chr(236) => 'ě', chr(237) => 'í', chr(229) => 'ĺ', chr(229) => 'ľ', 
+		chr(242) => 'ň', chr(244) => 'ô', chr(243) => 'ó', chr(154) => 'š', chr(248) => 'ř', 
+		chr(250) => 'ú', chr(249) => 'ů', chr(157) => 'ť', chr(253) => 'ý', chr(158) => 'ž',
+		chr(193) => 'Á', chr(196) => 'Ä', chr(200) => 'Č', chr(207) => 'Ď', chr(201) => 'É', 
+		chr(204) => 'Ě', chr(205) => 'Í', chr(197) => 'Ĺ',    chr(188) => 'Ľ', chr(210) => 'Ň', 
+		chr(212) => 'Ô', chr(211) => 'Ó', chr(138) => 'Š', chr(216) => 'Ř', chr(218) => 'Ú', 
+		chr(217) => 'Ů', chr(141) => 'Ť', chr(221) => 'Ý', chr(142) => 'Ž', 
+		chr(150) => '-', 'Ã±' => 'ň', 'Ã‘' => 'Ň', '&Ntilde;' => 'Ň', '&ntilde' => 'ň'
+		);
+	return strtr($text, $dict);
 }
 
 function decode_utf8($arrays = array()){

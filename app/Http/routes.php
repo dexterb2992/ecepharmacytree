@@ -17,6 +17,22 @@
 // View::share('branches', ECEPharmacyTree\Branch::all());
 
 
+Route::get('showschema', function(){
+	$response = array();
+	$final = array();
+	$columns = DB::select("SHOW COLUMNS FROM ". "patients");
+	foreach($columns as $column) {
+		// $new_column = array();
+		$column->Type = strbefore($column->Type,'(');
+		$obj = (object) array('field' => $column->Field, 'type' => $column->Type);
+		array_push($final, $obj);
+	}
+
+	$response['columns'] = $final;
+
+	return json_encode($response);
+});
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
