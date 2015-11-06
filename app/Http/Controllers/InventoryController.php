@@ -4,13 +4,15 @@ namespace ECEPharmacyTree\Http\Controllers;
 use Request;
 use Intput;
 use Redirect;
-use ECEPharmacyTree\Inventory;
-use ECEPharmacyTree\Product;
 use Input;
 use Carbon\Carbon;
+use Auth;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
+use ECEPharmacyTree\Inventory;
+use ECEPharmacyTree\Product;
+use ECEPharmacyTree\Log;
 
 class InventoryController extends Controller
 {
@@ -26,18 +28,9 @@ class InventoryController extends Controller
             ->where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
         return view('admin.inventories')->withInventories($inventories)
-            ->withProducts($products)->withTitle('Manage Inventory');
+            ->withProducts($products)->withTitle('Stocks Receiving');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -66,6 +59,11 @@ class InventoryController extends Controller
         $inventory->lot_number = generate_lot_number();
         $inventory->branch_id = session()->get('selected_branch');
         if( $inventory->save() ){
+            Log::create([
+                'user_id' => Auth::user()->id,
+                'action'  => 'Added an inventory with Lot #'.$inventory->lot_number,
+                'table' => 'inventories'
+            ]);
             return Redirect::to( route('Inventory::index') );
         }
         return Redirect::to( route('Inventory::index') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
@@ -112,6 +110,11 @@ class InventoryController extends Controller
         $inventory->quantity = $input["quantity"];
         $inventory->expiration_date = $input["expiration_date"];
         if( $inventory->save() ){
+            Log::create([
+                'user_id' => Auth::user()->id,
+                'action'  => 'Updated an inventory information with Lot #'.$inventory->lot_number,
+                'table' => 'inventories'
+            ]);
             return Redirect::to( route('Inventory::index') );
         }
         return Redirect::to( route('Inventory::index') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
@@ -128,8 +131,15 @@ class InventoryController extends Controller
     {   
 
         if( Request::ajax() ){
+            $input = Input::all();
+            $inventory = Inventory::findOrFail($input['id']);
 
-            if( Inventory::destroy( Input::get('id') ) )  
+            if( $inventory->delete() )  
+                Log::create([
+                    'user_id' => Auth::user()->id,
+                    'action'  => 'Deleted inventory with Lot #'.$inventory->lot_number,
+                    'table' => 'inventories'
+                ]);
                 return json_encode( array("status" => "success") );
         }
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later." ) );

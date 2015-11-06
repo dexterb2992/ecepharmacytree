@@ -25,7 +25,7 @@
                 <div class="tab-pane active" id="tab_products">
                     <div class="box box-success">
                         <div class="box-header">
-                            <h3 class="box-title">Products</h3><br/>
+                            <h4 class="box-title">Products Master List</h4><br/>
                             <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-product" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
                         </div><!-- /.box-header -->
                         <div class="box-body">
@@ -36,7 +36,7 @@
                                         <th>Name</th>
                                         <th>Generic Name</th>
                                         <th>Description</th>
-                                        <th>Price/Unit</th>
+                                        <th>Selling Price/Unit</th>
                                         <th>Packing</th>
                                         <th>Category</th>
                                         <th>Action</th>
@@ -65,13 +65,16 @@
                                                 <span class="label-primary label">{{ $product->subcategory->name }}</span>
                                             </td>
                                             <td>
-                                                <div class="tools">
-                                                    <div class="btn-group pull-right">
-                                                        <a href="javascript:void(0);" class="btn btn-default btn-sm add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" data-id="{{ $product->id }}" title="Edit">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                        <span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="product" data-urlmain="/products/" data-id="{{ $product->id }}"><i class="fa fa-trash-o"></i></span>
-                                                    </div>
+                                                <div class="btn-group pull-right">
+                                                    <span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="product" 
+                                                    data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Remove">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </span>
+                                                    <span class="btn btn-default btn-sm add-edit-btn" data-action="edit"
+                                                     data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
+                                                     data-id="{{ $product->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
+                                                        <i class="fa fa-edit"></i>
+                                                    </span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -278,7 +281,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="price">Price <i>*</i></label>
+                                <label for="price">Selling Price <i>*</i></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">&#x20B1;</span>
                                     <input type="text" class="form-control number" name="price" required>
@@ -349,13 +352,13 @@
                     </ol>
                     <div class="carousel-inner">
                         <div class="item active">
-                            <img src="http://placehold.it/900x500/39CCCC/ffffff&text=Add photos for this product" alt="First slide">
+                            <img src="http://placehold.it/900x500/39CCCC/ffffff&text=1. Add photos for this product" alt="First slide">
                         </div>
                         <div class="item">
-                            <img src="http://placehold.it/900x500/3c8dbc/ffffff&text=Click the button 'Add new'" alt="Second slide">
+                            <img src="http://placehold.it/900x500/3c8dbc/ffffff&text=2. Click the button 'Add new'" alt="Second slide">
                         </div>
                         <div class="item">
-                            <img src="http://placehold.it/900x500/f39c12/ffffff&text=Drop photos on the dotted space" alt="Third slide">
+                            <img src="http://placehold.it/900x500/f39c12/ffffff&text=3. Drop photos on the dotted space" alt="Third slide">
                         </div>
                     </div>
                     <a class="left carousel-control" href="#product-gallery-carousel" data-slide="prev">

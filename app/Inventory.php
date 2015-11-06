@@ -1,5 +1,4 @@
 <?php
-
 namespace ECEPharmacyTree;
 
 
@@ -8,7 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inventory extends Model
 {
-
+	use SoftDeletes;
+	
     protected $table = "inventories";
     protected $softDelete = true;
 

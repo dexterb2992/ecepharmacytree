@@ -17,10 +17,10 @@
     <!-- Menu Body -->
     <li class="user-body">
       <div class="pull-left">
-        <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Profile</a>
+        <a href="{{ route('profile') }}" class="btn btn-info btn-flat">Profile</a>
       </div>
       <div class="pull-right">
-        <a href="/auth/logout" class="btn btn-default btn-flat">Sign out</a>
+        <a href="/auth/logout" class="btn btn-danger btn-flat">Sign out</a>
       </div>
     </li>
   </ul>

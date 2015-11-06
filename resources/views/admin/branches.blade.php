@@ -1,4 +1,7 @@
-<?php use Carbon\Carbon; ?>
+<?php 
+    use Carbon\Carbon; 
+    use ECEPharmacyTree\Branch;
+?>
 @extends('admin.layouts.template')
 @section('content')
 
@@ -22,18 +25,12 @@
                     </thead>
                     <tbody>
                         @foreach($branches as $branch)
-                            <?php 
-                                $address = get_branch_full_address($branch);
-                            ?>
                             <tr data-id="{{ $branch->id }}" class="{{ $branch->status == 1? '' : 'warning' }}">
                                 <td>
-                                    <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-branch" data-title="branch info" data-target="#form_edit_branch" data-id="{{ $branch->id }}" title="Edit">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
                                     <span>{{ $branch->name }}</span>
                                 </td>
                                 <td>
-                                    <span>{!! $branch->full_address !!}</span>
+                                    <span>{!! get_branch_full_address($branch) !!}</span>
                                 </td>
                                 <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
                                 <td>
@@ -43,13 +40,21 @@
                                 </td>
                                 <td>
                                     <div class="tools">
-                                        
+                                        <a href="javascript:void(0);" class="add-edit-btn btn btn-xs btn-info" data-toggle="tooltip" data-original-title="Edit" data-action="edit" data-modal-target="#modal-add-edit-branch" data-title="branch info" data-target="#form_edit_branch" data-id="{{ $branch->id }}" title="Edit">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
                                         @if($branch->status == 1)
-                                            <span class="action-icon deactivate-branch" data-title="branch" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}"><i class="fa fa-warning"></i> Deactivate</span> 
+                                            <span class="action-icon deactivate-branch btn btn-xs btn-warning" data-toggle="tooltip" data-original-title="Deactivate" data-title="branch" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}">
+                                                <i class="fa fa-warning"></i>
+                                            </span> 
                                         @else
-                                            <span class="action-icon reactivate-branch" data-title="branch" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}"><i class="fa fa-check-square-o"></i> Reactivate</span>
+                                            <span class="action-icon reactivate-branch btn btn-xs btn-purple" data-toggle="tooltip" data-original-title="Reactivate"  btn btn-xs btn-warningdata-title="branch" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}">
+                                                <i class="fa fa-check-square-o"></i>
+                                            </span>
                                         @endif
-                                        <span class="action-icon remove-branch" data-action="remove" data-title="branch" data-urlmain="/branches/" data-id="{{ $branch->id }}"><i class="fa fa-trash-o"></i> Remove</span>
+                                        <span class="action-icon remove-branch btn btn-xs btn-danger" data-toggle="tooltip" data-original-title="Remove" data-action="remove" data-title="branch" data-urlmain="/branches/" data-id="{{ $branch->id }}">
+                                            <i class="fa fa-trash-o"></i>
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
@@ -72,53 +77,56 @@
                         <div class="modal-body">
 
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <small>Note: Fields with <b>(<red>*</red>)</b> on its label is <span class="red">required</span></small>
                             <div class="form-group">
-                                <label for="name">Branch Name <i>*</i></label>
+                                <label for="name">Branch Name <red>*</red></label>
                                 <input type="text" class="form-control" id="name" placeholder="Branch name" name="name" required>
                             </div>
                             <div class="form-group">
-                                <label for="address_province">Region<i>*</i></label>
-                                <select class="form-control select2" name="address_region" id="address_region">
+                                <label for="address_province">Region<red>*</red></label>
+                                <select class="form-control select2" name="region_id" id="address_region">
                                     <option value="0">- Select Region - </option>
-                                @foreach($regions as $region)
-                                    <option value="{{ $region->id }}">{{ $region->name }}</option>
-                                @endforeach
+                                    @foreach($regions as $region)
+                                    <option value="{{ $region->id }}">{{ $region->name.' ('.$region->code.')' }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label for="address_province">Province<i>*</i></label>
-                                <select class="form-control select2" id="address_province" name="address_province" required>
+                                <label for="address_province">Province<red>*</red></label>
+                                <select class="form-control select2" id="address_province" name="province_id" required>
                                     <option value="0">- Select Province -</option>
                                 </select>
                                 <!-- <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province" required> -->
                             </div>
 
                             <div class="form-group">
-                                <label for="address_city_municipality">Municipality<i>*</i></label>
-                                <select class="form-control select2" name="address_city_municipality" id="address_city_municipality">
+                                <label for="address_city_municipality">Municipality<red>*</red></label>
+                                <select class="form-control select2" name="municipality_id" id="address_city_municipality">
                                     <option value="0">- Select Municipality -</option>
                                 </select>
-                                <!-- <input type="text" class="form-control" id="address_city_municipality" placeholder="Municipality" name="address_city_municipality" required> -->
                             </div>
 
                             <div class="form-group">
-                                <label for="address_barangay">Barangay<i>*</i></label>
-                                <select class="form-control select2" name="address_barangay" id="address_barangay">
+                                <label for="address_barangay">Barangay<red>*</red></label>
+                                <select class="form-control select2" name="barangay_id" id="address_barangay">
                                     <option value="0">- Select Barangay -</option>
                                 </select>
-                                <!-- <input type="text" class="form-control" id="address_barangay" placeholder="Barangay" name="address_barangay" required> -->
                             </div>
 
                             <div class="row"> <!-- labels -->
                                 <div class="col-xs-4">
-                                    <label for="unit_floor_room_no">Unit/Room No.</label>
+                                    <label for="unit_floor_room_no">Unit/Room No. <br/>
+                                        <small>(Begin with "#/Rm/Room # "+<i> the unit/room #</i>)</small>
+                                    </label>
                                 </div>
                                 <div class="col-xs-4">
-                                    <label for="building">Building</label>
+                                    <label for="building">Building <br/><small>(The building name)</small></label> <br/>
                                 </div>
                                 <div class="col-xs-4">
-                                    <label for="block_no">Block No.</label>
+                                    <label for="block_no">Block No. <br/>
+                                        <small>(Begin with "Blk./Block "+<i> the block #</i>)</small>
+                                    </label>
                                 </div>
                             </div>
                             <div class="row"> <!-- input fields -->
@@ -134,14 +142,15 @@
                             </div>
                             <div class="row"> <!-- labels -->
                                 <div class="col-xs-4">
-                                    <label for="lot_no">Lot No.</label>
+                                    <label for="lot_no">Lot No. <br/>
+                                        <small>(Begin with "Lot "+<i> the lot #</i>)</small>
+                                    </label>
                                 </div>
                                 <div class="col-xs-4">
-                                    <label for="phase_no">Phase No.</label>
+                                    <label for="phase_no">Phase No. <br/>
+                                        <small>(Begin with "Phase "+<i> the phase #</i>)</small>
+                                    </label>
                                 </div>
-                                <!-- <div class="col-xs-4">
-                                    <label for="address_zip">ZIP Code <i>*</i></label>
-                                </div> -->
                             </div>
                             <div class="row"> <!-- input fields -->
                                 <div class="col-xs-4">
@@ -150,9 +159,6 @@
                                 <div class="col-xs-4">
                                     <input type="text" class="form-control" name="phase_no" id="phase_no" placeholder="Phase No.">
                                 </div>
-                                <!-- <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="address_zip" id="address_zip" placeholder="ZIP Code" required>
-                                </div> -->
                             </div>
                             <div class="form-group"> 
                                 <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>

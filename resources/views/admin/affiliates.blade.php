@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 @extends('admin.layouts.template')
 
 @section('content')
-	<div class="row">
+	<div class="row referrals-row">
 		<div class="col-xs-12">
 			<div class="box box-success">
 				<div class="box-header">
@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 								<th>Name</th>
 								<th>Referral ID</th>
 								<th class="sorting_asc">Referrals</th>
+								<th>Current Points</th>
 								<th>Date Joined</th>
 							</tr>
 						</thead>
@@ -44,6 +45,7 @@ use Illuminate\Support\Str;
 									</td>
 									<td>{{ $doctor->referral_id }}</td>
 									<td>{{ get_patient_referrals($doctor) }}</td>
+									<td>{{ $doctor->points }}</td>
 									<td>{{ Carbon::parse($doctor->created_at)->diffForHumans() }}</td>
 								</tr>
 							@endforeach
@@ -66,6 +68,7 @@ use Illuminate\Support\Str;
 									</td>
 									<td>{{ $patient->referral_id }}</td>
 									<td>{{ get_patient_referrals($patient) }}</td>
+									<td>{{ $doctor->points }}</td>
 									<td>{{ Carbon::parse($patient->created_at)->diffForHumans() }}</td>
 								</tr>
 							@endforeach
@@ -83,6 +86,12 @@ use Illuminate\Support\Str;
 				</div>
 				<div class="box-body">
 					<div id="chart" class="orgChart"></div>
+					<div class="scroll-to-top" style="display:none;">
+						<a href="javascript:void(0);" class="pull-right">
+							<i class="fa-chevron-up fa"></i>
+							Scroll to top
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

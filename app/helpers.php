@@ -54,58 +54,16 @@ function generate_referral_id(){
 }
 
 function generate_lot_number(){
-	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')->first();
+	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')
+		->withTrashed()->first();
 	$new_lot_number = $inventory->lot_number == 0 ? $inventory->lot_number + 1001 : $inventory->lot_number + 1;
 
-	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)->first();
+	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)
+		->withTrashed()->first();
 	if( $check === null )
 		return $new_lot_number;
 
 	generate_lot_number();
-}
-
-
-
-function get_str_plural($str){
-	$str = str_singular($str);
-
-	$lastChar = ""; $replacement = "";
-
-	$lastChar = substr($str, strlen( $str ) - 2);
-	$new_str = substr($str, 0, strlen( $str ) - 2);
-
-	if( $lastChar == "um" ) $replacement = "a";
-	if( $lastChar == "fe" ) $replacement = "ves";
-	if( $lastChar == "us" ) $replacement = "i";
-	if( $lastChar == "ch" )	return $str."es";
-
-	if( $replacement != "" ) return $new_str.$replacement;
-
-
-
-	$lastChar = substr($str, strlen($str) -1 );
-	$new_str = substr($str, 0, strlen( $str ) - 1);
-
-	if( $lastChar == "f" )	$replacement = "ves";
-
-	if( $lastChar == "y" ) $replacement = "ies";
-	
-		// return $new_str.$replacement;
-
-	if( $lastChar == "s" || $lastChar == "x" ){
-		return $str."es";
-	}else{
-		return $str."s";
-	}
-
-
-	if( $replacement == "" ){
-		$new_str = $str;
-	}
-	
-	return $new_str.$replacement;	
-	
-
 }
 
 function str_auto_plural($str, $quantity){
@@ -226,26 +184,6 @@ function check_for_critical_stock(){
 	} catch (Exception $e) {
 		pre($e);
 	}
-}
-
-function get_branch_full_address($branch){
-	$branch->unit_floor_room_no = $branch->unit_floor_room_no == 0 ? "" : $branch->unit_floor_room_no;
-	$branch->building = $branch->building == 0 ? "" : $branch->building;
-	$branch->lot_no = $branch->lot_no == 0 ? "" : $branch->lot_no;
-	$branch->block_no = $branch->block_no == 0 ? "" : $branch->block_no;
-	$branch->phase_no = $branch->phase_no == 0 ? "" : $branch->phase_no;
-
-	$address = $branch->unit_floor_room_no." ".
-    $branch->building." ".$branch->lot_no." ".$branch->block_no." ".
-    $branch->phase_no." ".
-    $branch->address_street." <br>".
-    $branch->address_barangay.", ".
-    $branch->address_city_municipality.", ".
-    $branch->address_province." <br>".
-    $branch->address_region.", ".
-    $branch->address_zip." ";
-
-    return $address;
 }
 
 function _error($msg, $alert_type = 'label'){
@@ -394,4 +332,196 @@ function decode_utf8($arrays = array()){
 		$arrays[$key]['name'] = cp1250_to_utf2($array['name']);
 	}
 	return $arrays;
+}
+
+
+function combine_additional_address(array $addresses){
+
+    foreach ($addresses as $key => $value) {
+    	if( trim($value) == "" ){
+    		unset($addresses[$key]);
+    	}
+    }
+    return implode(', ', $addresses);
+}
+
+function get_branch_full_address($branch){
+	if( !is_null($branch->barangay_id) ){
+		return $branch->additional_address.", ".$branch->barangay->name.", "
+			.$branch->barangay->municipality->name.", ".$branch->barangay->municipality->province->name.", "
+			.$branch->barangay->municipality->province->region->name;
+	}else{
+		return $branch->additional_address;
+	}
+	
+}
+
+function extract_locations_data(){
+	// $region = ECEPharmacyTree\Province::find(1)->municipalities;
+	// dd($region);
+	ini_set('max_execution_time', 3600); // 1 hour
+
+	$data = file_get_contents(public_path()."/db-src/mainsource.dex");
+		$arr_data =  explode(PHP_EOL, $data);
+		$rows = [];
+		$barangays = ["name", "municipality"];
+		$municipalities = ["name", "province"];
+		$provinces = ["name", "region"];
+		$regions = ["name"];
+
+		foreach ($arr_data as $key => $value) {
+			$entry = preg_split("/[\t]/", $value);
+			// $entry[0] = barangay
+			// $entry[1] = municipalities		
+			// $entry[2] = province
+			// $entry[3] = region
+			if( isset($entry[0]) && isset($entry[1]) )
+				$barangays[$key] = [
+					"name" => $entry[0], 
+					"municipality" => $entry[1]
+				];
+			if( isset($entry[1]) && isset($entry[2]) )
+				$municipalities[$key] = [
+					"name" => $entry[1],
+					"province" => $entry[2]
+				];
+			if( isset($entry[2]) && isset($entry[3]))
+				$provinces[$key] =  [
+					"name" => $entry[2],
+					"region" => $entry[3]
+				];
+			if( isset($entry[3]) )
+				$regions[$key] = [
+					"name" => $entry[3]
+				];
+		}
+
+		// let's make sure our arrays are unique
+
+		$regions = arrayUnique($regions);
+		$provinces = arrayUnique($provinces);
+		$municipalities = arrayUnique($municipalities);
+		$barangays = arrayUnique($barangays);
+
+		// add ids to every array
+
+		## regions
+		$x = 1;
+		$new_array = [];
+		$regions_txt = "";
+		foreach ($regions as $key => $value) {
+			// $new_array[$x] = $value;
+			array_push($new_array, ["id" => $x, "name" => $value['name']]);
+			// $regions_txt.= $x."\t".$value['name'].PHP_EOL;
+
+			$x++;
+		}
+		$regions = $new_array;
+
+		// save regions
+		// file_put_contents(public_path()."/db-src/regions.final.dat", $regions_txt);
+		// dd($regions);
+
+
+		## provinces
+		$x = 1;
+		$new_array = [];
+		$provinces_txt = "";
+		foreach ($provinces as $province) {
+			$new_array[$x]["id"] = $x;
+			$new_array[$x]["name"] = $province["name"];
+			$try_search = multi_array_search($province["region"], 'name', $regions);
+
+			if( is_array($try_search) ){
+				$new_array[$x]["region_id"] = $try_search[0]['id'];
+			}else{
+				$new_array[$x]["region_id"] = '0';
+			}
+
+			// dd($new_array[$x]["region_id"]);
+
+			$provinces_txt.= $x."\t".$province['name']."\t".$new_array[$x]["region_id"].PHP_EOL;
+			$x++;
+		}
+		$provinces = $new_array;
+
+		// file_put_contents(public_path()."/db-src/provinces.final.dat", $provinces_txt);
+		// dd($provinces);
+
+		// dd($municipalities);
+		## municipalities
+		$x = 1;
+		$new_array = [];
+		$municipalities_txt = "";
+		foreach ($municipalities as $municipality) {
+			// $new_array[$x] = $municipality["name"];
+			// $new_array["province_id"] = array_search($municipality["province"], $provinces);
+			$try_search = multi_array_search($municipality["province"], 'name', $provinces);
+			// pre($try_search);
+			if(is_array($try_search)){
+				$new_array[$x]['name'] = $municipality["name"];
+				$new_array[$x]["id"] = $x;
+				$new_array[$x]['province_id'] = $try_search[0]['id'];
+			}
+
+			$municipalities_txt.= $x."\t".$municipality['name']."\t".$try_search[0]['id'].PHP_EOL;
+			$x++;
+		}
+		$municipalities = $new_array;
+		file_put_contents(public_path()."/db-src/municipalities.final.dat", $municipalities_txt);
+		// dd($municipalities);
+
+		## barangays
+		$x = 1;
+		$new_array = [];
+		$barangays_txt = "";
+		foreach ($barangays as $barangay) {
+			// $new_array[$x] = $barangay["name"];
+			// $new_array[$x]['id'] = $x;
+			// $new_array["municipality_id"] = array_search($barangay["municipality"], $municipalities);
+
+			$try_search = multi_array_search($barangay["municipality"], 'name', $municipalities);
+			pre($try_search);
+			if(is_array($try_search)){
+				$new_array[$x]['id'] = $x;
+				$new_array[$x]["name"] = $barangay["name"];
+				$new_array[$x]['municipality_id'] = $try_search[0]['id'];
+
+				$barangays_txt.= $x."\t".$barangay["name"]."\t".$new_array[$x]['municipality_id'].PHP_EOL;
+			}
+
+
+			$x++;
+		}
+		$barangays = $new_array;
+
+		file_put_contents(public_path()."/db-src/barangays.final.dat", $barangays_txt);
+
+		// dd($barangays);
+
+
+		// return array_values($rows);
+		/*$regions = array_unique($regions);
+
+		$regions_new = "";
+		// let's replace the regions here with the regions' array key
+		$x = 1;
+		foreach ($regions as $key => $value) {
+			$data = str_replace($value, $key, $data);
+			$regions_new .= $x."\t".$value.PHP_EOL;
+			$x++;
+		}
+
+		file_put_contents(public_path()."/db-src/regions.final.dat", $regions_new);
+
+		$data = file_get_contents(public_path()."/db-src/barangays.php");
+		$arr_data =  explode(PHP_EOL, $data);*/
+
+		// $columns = ['id', 'name'];
+	 //    $regions = extract_db_to_array(public_path()."/db-src/new-regions.dat", $columns);
+	 //    ECEPharmacyTree\Region::where('id', '>', 0)->delete();
+		// ECEPharmacyTree\Region::insert($regions);
+		// dd($regions);
+	
+	##########################################################################################
 }

@@ -41,11 +41,14 @@
                             <td>{!! ($employee->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">
-	                                <br/>
 	                                @if($employee->deleted_at != null )
-	                                <span class="action-icon marginleft-zero" data-action="reactivate" data-title="employee" data-urlmain="/employees/" data-id="{{ $employee->id }}"><i class="fa fa-thumbs-o-up"></i> Reactivate </span>
+	                                <span class="action-icon marginleft-zero btn btn-purple btn-xs" data-toggle="tooltip" data-original-title="Reactivate" data-action="reactivate" data-title="employee" data-urlmain="/employees/" data-id="{{ $employee->id }}">
+                                        <i class="fa fa-thumbs-o-up"></i> 
+                                    </span>
 	                                @else
-	                                <span class="action-icon marginleft-zero" data-action="deactivate" data-title="employee" data-urlmain="/employees/" data-id="{{ $employee->id }}"><i class="fa fa-thumbs-o-down"></i> Deactivate </span>
+	                                <span class="action-icon marginleft-zero btn btn-danger btn-xs" data-toggle="tooltip" data-original-title="Deactivate" data-action="deactivate" data-title="employee" data-urlmain="/employees/" data-id="{{ $employee->id }}">
+                                        <i class="fa fa-thumbs-o-down"></i> 
+                                    </span>
 	                                @endif
                             	</div>
 	                        </td>

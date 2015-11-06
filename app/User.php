@@ -46,6 +46,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
+     * Returns user's activity history
+     */
+    public function logs(){
+        return $this->hasMany('ECEPharmacyTree\Log');
+    }
+
+    /**
      * Check whether the user is Admin
      */
     public function isAdmin(){

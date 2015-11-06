@@ -16,7 +16,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body class="skin-blue fixed sidebar-mini">
+    <body class="skin-green fixed sidebar-mini">
         <div class="wrapper">
             <!-- jQuery 2.1.4 -->
             {!! HTML::script('plugins/jQuery/jQuery-2.1.4.min.js') !!}

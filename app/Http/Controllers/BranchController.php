@@ -5,6 +5,7 @@ namespace ECEPharmacyTree\Http\Controllers;
 use Request;
 use Input;
 use Redirect;
+use Auth;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -23,7 +24,15 @@ class BranchController extends Controller
     public function index(){
         //
         $regions = Region::all();
-        $branches = Branch::all();
+        if( Auth::user()->isAdmin() ){
+            $branches = Branch::all();
+        }else if( Auth::user()->isBranchManager() ){
+            $branches = Branch::find( Auth::user()->branch->id );
+        }else{
+            abort(404);
+        }
+
+
         return view('admin.branches')->withBranches($branches)
             ->withRegions($regions);
     }
@@ -46,17 +55,25 @@ class BranchController extends Controller
         $input = Input::all();
         $branch = new Branch;
         $branch->name = $input["name"];
-        $branch->full_address = $input["unit_floor_room_no"].", ".$input["building"].",
-            ".$input["lot_no"].', '.$input["block_no"].', '.$input["phase_no"].', 
-            '.$input["address_street"].", ".$input["address_barangay"].",
-            ".Municipality::find($input["address_city_municipality"])->name.", 
-            ".Province::find($input["address_province"])->name.", 
-            ".Region::find($input["address_region"])->name.", ".$input["address_zip"];
-        if( $branch->save() ) 
+
+        $additional_addresses = array(
+            "unit_floor_room_no" => $input["unit_floor_room_no"],
+            "building" => $input["building"],
+            "lot_no" => $input["lot_no"],
+            "block_no" => $input["block_no"],
+            "phase_no" => $input["phase_no"],
+            "address_street" => $input["address_street"]
+        );
+
+        $branch->additional_address = combine_additional_address($additional_addresses);
+        $branch->barangay_id = $input['barangay_id'];
+
+        if( $branch->save() )
             session()->flash("flash_message", array("msg" => "New branch has been added successfully.", "type" => "success"));
             return Redirect::to( route('Branches::index') );
         
-        return false;
+        session()->flash("flash_message", array("msg" => "An error occured while processing your request. Please try again later.", "type" => "danger"));
+        return Redirect::to( route('Branches::index') );
     }
 
     /**

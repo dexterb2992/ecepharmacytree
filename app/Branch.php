@@ -13,7 +13,15 @@ class Branch extends Model
     	return $this->hasMany('ECEPharmacyTree\User', 'branch_id');
     }
 
-    function orders(){
+    public function orders(){
     	return $this->hasMany('ECEPharmacyTree\Order');
+    }
+
+    public function barangay(){
+    	return $this->belongsTo('ECEPharmacyTree\Barangay');
+    }
+
+    public function business_hours(){
+    	return $this->hasMany('ECEPharmacyTree\BusinessHour');
     }
 }

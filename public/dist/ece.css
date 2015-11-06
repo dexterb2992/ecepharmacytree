@@ -119,17 +119,6 @@
 	cursor: pointer;
 }
 
-.remove-branch, .delete-category{
-	color: #dd4b39;
-}
-
-.deactivate-branch{
-    color: #f39c12;		
-}
-
-.reactivate-branch, .edit-category {
-    color: green;
-}
 
 .rx {
     color: #dd4b39 !important;
@@ -156,9 +145,11 @@ textarea.form-control[name='description'] {
 select.sort-by {
     border-radius: 0 !important;
     box-shadow: none;
-    border-color: #d2d6de;
-    padding: 5px;
+    padding: 0px;
     margin-left: 10px;
+    border: 0;
+    box-sizing: border-box;
+    border-bottom: 2px solid #009688;
 }
 
 .datatable tr td, .datatable tr th {
@@ -364,4 +355,26 @@ tr.critical-stock, tr.critical-stock td, tr.critical-stock td a, tr.critical-sto
 
 .tooltip.top{
     border: none !important;
+}
+
+.tools a, .tools span {
+    margin: 0px;
+}
+
+.label {
+    border-radius: 0px;
+}
+
+.btn-purple {
+    background-color: #605ca8;
+}
+    .btn-purple i{
+        color: white;
+    }
+
+.red {
+    color: #dd4b39;
+}
+red{
+    color: #dd4b39;
 }

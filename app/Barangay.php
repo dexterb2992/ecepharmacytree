@@ -11,4 +11,8 @@ class Barangay extends Model
     public function municipality(){
     	return $this->belongsTo('ECEPharmacyTree\Municipality');
     }
+
+    public function branches(){
+    	return $this->hasMany('ECEPharmacyTree\Branch');
+    }
 }

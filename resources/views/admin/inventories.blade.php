@@ -11,7 +11,7 @@
 		<div class="col-xs-12">
 			<div class="box box-success">
 				<div class="box-header">
-					<h3>Inventory Management</h3> <br/>
+					<h4>Stock Items List</h4> <br/>
 	                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-inventory" data-target="#form_edit_inventory" data-action="create" data-title="inventory"><i class="fa-plus fa"></i> Add New</button>
 				</div>
 				<div class="box-body">
@@ -29,10 +29,14 @@
 						</thead>
 						<tbody>
 							@foreach($inventories as $inventory)
+								@if(!is_null($inventory->product))
 								<tr data-pid="{{ $inventory->product_id }}" data-id="{{ $inventory->id }}">
 									<td>
 										<?php $is_critical = $inventory->quantity <= $recent_settings->critical_stock ? true : false; ?>
-										{!! $inventory->quantity <= $recent_settings->critical_stock ? '<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" title="" data-original-title="Critical Stock" title="Critical Stock"></i>' : '' !!}
+										{!! $inventory->quantity <= $recent_settings->critical_stock ? 
+											'<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" title="" data-original-title="Critical Stock" title="Critical Stock"></i>' 
+											: '' 
+										!!}
 										<span> {{ $inventory->product->sku }}</span>
 									</td>
 									<td>
@@ -44,8 +48,8 @@
 										<?php 
 											$total = $inventory->quantity * $inventory->product->qty_per_packing; 
 										?>
-										{!! $total." ".str_auto_plural($inventory->product->unit, $total)." "
-											."( ".$inventory->quantity." ".str_auto_plural($inventory->product->packing, $inventory->quantity)." )" !!}
+										{!! '<b>'.$inventory->quantity." ".str_auto_plural($inventory->product->packing, $inventory->quantity)."</b> "
+											."( ".$total." ".str_auto_plural($inventory->product->unit, $total)." )" !!}
 									
 									</td>
 									<td>
@@ -59,21 +63,35 @@
 										</span>
 									</td>
 									<td>
-										<span class="label label-primary"><i class="fa-clock-o fa"></i> {{ Carbon::parse($inventory->created_at)->diffForHumans() }}</span>
+										<?php $date_added = Carbon::parse($inventory->created_at); ?>
+										<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->formatLocalized('%A %d %B %Y') }}">
+											<i class="fa-clock-o fa"></i> 
+											{{ $date_added->diffForHumans() }}
+										</span>
 									</td>
 									<td>
 										<div class="btn-group pull-right">
-											{!! $is_critical ? '<span class="btn-sm btn-default btn action-icon" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}"><i class="fa-refresh fa"></i></span>' : '' !!}
-											<span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
-												 data-id="{{ $inventory->id }}" title="Remove"><i class="fa fa-trash-o"></i>
+											{!! $is_critical ? 
+												'<span class="btn-sm btn-default btn action-icon pull-right" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}">
+												<i class="fa-refresh fa"></i></span>' 
+												: '' 
+											!!}
+											<span class="btn btn-default btn-sm action-icon remove-product pull-right" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
+												 data-id="{{ $inventory->id }}" title="Remove" data-toggle="tooltip" data-original-title="Remove">
+												 <i class="fa fa-trash-o"></i>
 											</span>
-											<a href="javascript:void(0);" class="btn btn-default btn-sm add-edit-btn pull-right" data-action="edit" data-modal-target="#modal-add-edit-inventory" 
-												data-title="inventory" data-target="#form_edit_inventory" data-id="{{ $inventory->id }}" title="Edit">
+											<span class="btn-default btn btn-sm action-icon pull-right" data-action="adjust-stock" title="Stock Adjustment" data-title="Stock Adjustment" data-urlmain="/inventory/"
+												data-id="{{ $inventory->id }}" data-toggle="tooltip" data-original-title="Stock Adjustment">
+												<i class="glyphicon glyphicon-list-alt"></i>
+											</span>
+											<span class="btn btn-default btn-sm add-edit-btn pull-right" data-action="edit" data-modal-target="#modal-add-edit-inventory" 
+												data-title="inventory" data-target="#form_edit_inventory" data-id="{{ $inventory->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
 	                                            <i class="fa fa-edit"></i>
-	                                        </a>
+	                                        </span>
 					                    </div>
 									</td>
 								</tr>
+								@endif
 							@endforeach
 						</tbody>
 					</table>
@@ -121,7 +139,7 @@
 	                            </div>
 	                        <div class="modal-footer">
 	                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-	                            <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
+	                            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
 	                        </div>
 	                    </div><!-- /.modal-content -->
 	                </form><!-- /form -->
