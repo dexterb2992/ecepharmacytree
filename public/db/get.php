@@ -162,7 +162,7 @@ switch ($request) {
     break;
 
     case 'get_consultations':
-    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
+    $result = mysql_query("SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_id']." and is_deleted != 1") or returnError(mysql_error());
     $tbl = "consultations";
     break;
 

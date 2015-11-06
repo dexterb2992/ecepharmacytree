@@ -286,34 +286,6 @@ if ($request == 'register') {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
-    } else if ($action == 'check_and_delete_consultation') {
-    	if($_POST['consultation_request'] == "delete"){
-    		$sql = "DELETE FROM ".$_POST['table']." WHERE is_approved = 0 or is_approved = 2 and id = ".$_POST['id'];
-    	} else {
-    		$settings = "";
-    		foreach ($_POST as $key => $value) {
-    			if ($key != "request" && $key != "table" && $key != "id" && $key != "action") {
-    				$settings .= $key . "='" . $value . "',";
-    			}
-    			$x++;
-    		}
-    		$settings = substr($settings, 0, strlen($settings) - 1);
-    		$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE id=" . $_POST['id'];
-    	}
-
-
-    	if(mysql_query($sql)) {
-    		if(mysql_affected_rows() > 0)
-    			$response["success"] = 1;
-    		else {
-    			$response["success"] = 0;
-    			$response["message"] = "No record is updated or deleted";
-    		}
-    	} else {
-    		$response["success"] = 0;
-    		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
-    	}
-
     } else if ($action == "update_with_custom_where_clause") {
     	$settings = "";
     	foreach ($_POST as $key => $value) {
