@@ -21,7 +21,7 @@
                         @foreach($sales as $sale )
                         <tr data-id="{{ $sale->id }}">
                             <td>
-                                <span>{{ get_patient_fullname( $sale->billing()->first()->patient()->first() ) }}</span>
+                                <span>{{ get_person_fullname $sale->billing()->first()->patient()->first() ) }}</span>
                             </td>
                             <td> {{ $sale->payment_mode }} </td>
                             <td>{{ 'amount' }}</td>

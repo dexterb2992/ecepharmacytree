@@ -72,4 +72,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return true;
         return false;
     }
+
+    public function full_name($reversed = false){
+        if( $reversed )
+            return ucfirst($this->lname).", ".ucfirst($this->fname)." ".substr(ucfirst($this->mname), 0, 1).".";
+        return ucfirst($this->fname)." ".substr(ucfirst($this->mname), 0, 1).". ".ucfirst($this->lname);
+    }
 }

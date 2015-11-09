@@ -56,16 +56,7 @@ class BranchController extends Controller
         $branch = new Branch;
         $branch->name = $input["name"];
 
-        $additional_addresses = array(
-            "unit_floor_room_no" => $input["unit_floor_room_no"],
-            "building" => $input["building"],
-            "lot_no" => $input["lot_no"],
-            "block_no" => $input["block_no"],
-            "phase_no" => $input["phase_no"],
-            "address_street" => $input["address_street"]
-        );
-
-        $branch->additional_address = combine_additional_address($additional_addresses);
+        $branch->additional_address =  $input["additional_address"];
         $branch->barangay_id = $input['barangay_id'];
 
         if( $branch->save() )
@@ -111,16 +102,9 @@ class BranchController extends Controller
         $input = Input::all();
         $branch = Branch::findOrFail($input["id"]);
         $branch->name = $input["name"];
-        $branch->unit_floor_room_no = $input["unit_floor_room_no"];
-        $branch->building = $input["building"];
-        $branch->lot_no = $input["lot_no"];
-        $branch->block_no = $input["block_no"];
-        $branch->phase_no = $input["phase_no"];
-        $branch->address_street = $input["address_street"];
-        $branch->address_barangay = $input["address_barangay"];
-        $branch->address_city_municipality = $input["address_city_municipality"];
-        $branch->address_province = $input["address_province"];
-        $branch->address_region = $input["address_region"];
+        $branch->additional_address =  $input["additional_address"];
+        $branch->barangay_id = $input['barangay_id'];
+        
         // $branch->address_zip = $input["address_zip"];
         if( $branch->save() ) 
             session()->flash("flash_message", array("msg" => "Branch information has been updated successfully.", "type" => "success"));

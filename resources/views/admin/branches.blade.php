@@ -30,7 +30,7 @@
                                     <span>{{ $branch->name }}</span>
                                 </td>
                                 <td>
-                                    <span>{!! get_branch_full_address($branch) !!}</span>
+                                    <span>{{ $branch->full_address() }}</span>
                                 </td>
                                 <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
                                 <td>
@@ -87,11 +87,7 @@
                                 <select class="form-control select2" name="region_id" id="address_region">
                                     <option value="0">- Select Region - </option>
                                     @foreach($regions as $region)
-<<<<<<< HEAD
                                     <option value="{{ $region->id }}">{{ $region->name.' ('.$region->code.')' }}</option>
-=======
-                                    <option value="{{ $region->id }}">{{ $region->name }}</option>
->>>>>>> 74a1c7bd316a897386984b23bd04eecc29c8fa25
                                     @endforeach
                                 </select>
                             </div>
@@ -117,59 +113,10 @@
                                     <option value="0">- Select Barangay -</option>
                                 </select>
                             </div>
-<<<<<<< HEAD
 
-                            <div class="row"> <!-- labels -->
-                                <div class="col-xs-4">
-                                    <label for="unit_floor_room_no">Unit/Room No. <br/>
-                                        <small>(Begin with "#/Rm/Room # "+<i> the unit/room #</i>)</small>
-                                    </label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="building">Building <br/><small>(The building name)</small></label> <br/>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="block_no">Block No. <br/>
-                                        <small>(Begin with "Blk./Block "+<i> the block #</i>)</small>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row"> <!-- input fields -->
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="unit_floor_room_no" id="unit_floor_room_no" placeholder="Unit/Room No.">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="building" id="building" placeholder="Building">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="block_no" id="block_no" placeholder="Block No.">
-                                </div>
-                            </div>
-                            <div class="row"> <!-- labels -->
-                                <div class="col-xs-4">
-                                    <label for="lot_no">Lot No. <br/>
-                                        <small>(Begin with "Lot "+<i> the lot #</i>)</small>
-                                    </label>
-                                </div>
-                                <div class="col-xs-4">
-                                    <label for="phase_no">Phase No. <br/>
-                                        <small>(Begin with "Phase "+<i> the phase #</i>)</small>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row"> <!-- input fields -->
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="lot_no" id="lot_no" placeholder="Lot No.">
-                                </div>
-                                <div class="col-xs-4">
-                                    <input type="text" class="form-control" name="phase_no" id="phase_no" placeholder="Phase No.">
-                                </div>
-                            </div>
-=======
->>>>>>> 74a1c7bd316a897386984b23bd04eecc29c8fa25
                             <div class="form-group"> 
-                                <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>
-                                <input type="text" class="form-control" id="address_street" placeholder="Street" name="address_street" required>
+                                <label for="additional_address">Additional address (<i>Be more specific with the address as you can as possible</i>)</label>
+                                <input type="text" class="form-control" id="additional_address" placeholder="Street" name="additional_address" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

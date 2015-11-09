@@ -87,6 +87,11 @@ $(document).ready(function (){
         dragAndDrop  : false
     });
 
+    var search_keyword = $.getUrlParam('q');
+    if( search_keyword != "" ){
+        $('.dataTables_filter').find('input[type="search"]:visible').val(search_keyword).trigger('keyup');
+    }
+
     // filter input to numeric characters only
     allowNumericOnly( $('.number'));
 

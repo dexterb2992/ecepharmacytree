@@ -44,69 +44,11 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-// Route::get('try', function(){
-// 	return view('emails.register')->withRole('Branch Manager')
-// 		->withEmail('dexterb2992@gmail.com')->withPassword(generateRandomString(6))
-// 		->withBranch_name("ECE Marketing - Davao");
-// });
-Route::get('try/', function(){
-	// $str1 = "Alungin NABUA	CAMARINES SUR	REGION V (Bicol Region)";
-	// $str2 = "NABUA\tCAMARINES SUR\tREGION V (Bicol Region)";
-	// $str3 = str_replace($str2, '2', $str1);
-	// dd($str3);
-	// if( $str1 == $str2 ){
-	// 	echo "yes";
-	// }else{
-	// 	echo "no";
-	// }
-	ini_set('max_execution_time', 3600); // 1 hour
-	
-	/*$municipalities = ECEPharmacyTree\Municipality::all();
-	$arr_municipalities = array();
-
-	$barangays = file_get_contents(public_path()."/db-src/barangays-source.dex");
-	$arr_barangays = explode(PHP_EOL, $barangays);
-	// dd($arr_barangays);
-
-	$new_barangays_arr = array();
-	$barangay_txt = "";
-
-	foreach ($municipalities as $municipality) {
-		$name = $municipality->name."	".$municipality->province->name."	".$municipality->province->region->name;
-		// searching for municipality on barangays
-		foreach ($arr_barangays as $key => $value) {
-			$arr_barangays[$key] = str_replace($name, $municipality->id, $value);
-		}
-
-		// $barangays = str_replace($municipality, $municipality->id, $barangays);
-	}
-
-	// dd($new_barangays_arr);
-
-		
-	foreach ($arr_barangays as $key => $value) {
-		$barangay_txt.= $value.PHP_EOL;
-	}*/
-	
-	$barangays = file_get_contents(public_path()."/db-src/barangays.dex");
-	$arrs = explode(PHP_EOL, $barangays);
-	$x = 1;
-
-	$barangay_txt = "";
-
-	foreach ($arrs as $key => $value) {
-		# code...
-		pre($key." ---- ".$value);
-		$arrs[$key] = $x."\t".$value;
-		$x++;
-	}
-	$barangay_txt = implode(PHP_EOL, $arrs);
-
-	// dd($arr_municipalities);
-	file_put_contents(public_path()."/db-src/barangays.final.dex", $barangay_txt);
-	dd("WELL DONE DEXTER!");
-
- });
+Route::get('try', function(){
+	return view('emails.register')->withRole('Branch Manager')
+		->withEmail('dexterb2992@gmail.com')->withPassword(generateRandomString(6))
+		->withBranch_name("ECE Marketing - Davao");
+});
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
 
@@ -201,6 +143,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'Inventory::', 'middleware' => 'a
 	Route::post('create', ['as' => 'create', 'uses' => 'InventoryController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'InventoryController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'InventoryController@destroy']);
+	Route::post('adjustment', ['as' => 'delete', 'uses' => 'InventoryController@add_adjustments']);
 });
 
 

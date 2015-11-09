@@ -13,6 +13,7 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Inventory;
 use ECEPharmacyTree\Product;
 use ECEPharmacyTree\Log;
+use ECEPharmacyTree\InventoryAdjustment;
 
 class InventoryController extends Controller
 {
@@ -27,8 +28,9 @@ class InventoryController extends Controller
         $inventories = Inventory::where('quantity', '>', '0')
             ->where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
+        $logs = Log::where('table', 'inventories')->get();
         return view('admin.inventories')->withInventories($inventories)
-            ->withProducts($products)->withTitle('Stocks Receiving');
+            ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs);
     }
 
 
@@ -61,12 +63,14 @@ class InventoryController extends Controller
         if( $inventory->save() ){
             Log::create([
                 'user_id' => Auth::user()->id,
-                'action'  => 'Added an inventory with Lot #'.$inventory->lot_number,
+                'action'  => 'Added an inventory with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
+                                target="blank">Lot #'.$inventory->lot_number.'</a>',
                 'table' => 'inventories'
             ]);
             return Redirect::to( route('Inventory::index') );
         }
-        return Redirect::to( route('Inventory::index') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
+        return Redirect::to( route('Inventory::index') )
+            ->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
     }
 
     /**
@@ -82,17 +86,6 @@ class InventoryController extends Controller
             return $inventory->toJson();
         }   
         return false;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit()
-    {
-       
     }
 
     /**
@@ -112,13 +105,52 @@ class InventoryController extends Controller
         if( $inventory->save() ){
             Log::create([
                 'user_id' => Auth::user()->id,
-                'action'  => 'Updated an inventory information with Lot #'.$inventory->lot_number,
+                'action'  => 'Updated an inventory information with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
+                                target="blank">Lot #'.$inventory->lot_number.'</a>',
                 'table' => 'inventories'
             ]);
             return Redirect::to( route('Inventory::index') );
         }
-        return Redirect::to( route('Inventory::index') )->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
+        return Redirect::to( route('Inventory::index') )
+            ->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
     
+    }
+
+    public function add_adjustments(){
+        $input = Input::all();
+        $inventory = Inventory::findOrFail( $input['id'] );
+        $old_qty = $inventory->quantity;
+        $inventory->quantity = $input['new_quantity'];
+
+
+        $adjustment = new InventoryAdjustment;
+        $adjustment->old_quantity = $old_qty;
+        $adjustment->new_quantity = $input['new_quantity'];
+        $adjustment->inventory_id = $inventory->id;
+        $adjustment->user_id = Auth::user()->id;
+        $adjustment->reason = $input['reason'];
+
+        if( $inventory->save() && $adjustment->save() ){
+            Log::create([
+                'user_id' => Auth::user()->id,
+                'action'  => 'Adjusted an inventory information with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
+                                target="blank">Lot #'.$inventory->lot_number.'</a>'
+                                .' and change quantity from '.$old_qty.' to '.$input['new_quantity'],
+                'table' => 'inventories'
+            ]);
+
+            return Redirect::back()->withFlash_message([
+                'msg' => 'Stock adjustment successfully processed.',
+                'type' => 'success'
+            ]);
+        }
+
+        
+        
+        return Redirect::back()->withFlash_message([
+            'msg' => 'Sorry, we can\'t process your request right now. Please try again later.',
+            'type' => 'warning'
+        ]);
     }
 
     /**

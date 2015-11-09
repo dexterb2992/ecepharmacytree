@@ -20,8 +20,7 @@ class CreateClinicPatientDoctor extends Migration
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
             $table->integer('clinic_patients_id')->unsigned();
             $table->foreign('clinic_patients_id')->references('id')->on('clinic_patients')->onDelete('cascade');
-            $table->integer('patient_id')->unsigned();
-            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
+            $table->integer('patient_id')->default(0);
             $table->string('username')->unique();
             $table->string('password');
             $table->timestamps();
