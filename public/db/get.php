@@ -233,7 +233,10 @@ switch ($request) {
         // foreach($as = $data->rows->elements){
         //     array_push($storage, $as->distance->value);
         // }
-        pre(json_decode($data->rows->elements));
+        $row = $data['rows'];
+        $element = $row->elements;
+
+        pre($element);
         // echo $storage;
 
 
