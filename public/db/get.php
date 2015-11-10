@@ -220,14 +220,14 @@ switch ($request) {
             // array_push($storage, $row);
         $str = $row['latitude'].",".$row['longitude']."|";
      }
-        $str = substr($str, 0, strlen($str) - 1);
+            // $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_lang']."&destinations=7.051969,125.5947593&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
+     
+ }
+ $str = substr($str, 0, strlen($str) - 1);
         $tmp_url = $tmp_url.$str."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
 
         echo $tmp_url;
         exit(0);
-            // $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_lang']."&destinations=7.051969,125.5947593&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
-     
- }
     break;
 
     default:
