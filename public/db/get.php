@@ -228,8 +228,8 @@ switch ($request) {
 
         // echo $tmp_url;
         $json = file_get_contents($tmp_url); // this WILL do an http request for you
-        // $data = json_decode($json);
-        var_dump($json);
+        $data = json_decode($json);
+        var_dump($data);
         // echo $data;
         exit(0);
     break;
