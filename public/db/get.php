@@ -197,7 +197,7 @@ switch ($request) {
     break;
 
     case 'get_clinic_patients';
-    $result = mysql_query("SELECT cp.*, b.municipality_id, m.province_id, p.region_id FROM clinic_patients as cp inner join clinic_patient_doctor as cpd on cp.id = cpd.clinic_patients_id inner join barangays as b on cp.address_barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE cpd.username = '".$_GET['username']."' and cpd.password= '".$_GET['password']."'") or returnError(mysql_error());  
+    $result = mysql_query("SELECT cpd.*, cp.*, b.municipality_id, m.province_id, p.region_id FROM clinic_patients as cp inner join clinic_patient_doctor as cpd on cp.id = cpd.clinic_patients_id inner join barangays as b on cp.address_barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE cpd.username = '".$_GET['username']."' and cpd.password= '".$_GET['password']."'") or returnError(mysql_error());  
     $tbl = "clinic_patients";
     break;
 
@@ -212,7 +212,6 @@ switch ($request) {
     $storage = array();
     $responsed = array();
     $result = mysql_query("SELECT br.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM branches as br inner join barangays as bg on br.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id") or returnError(mysql_error());
-    $tbl = "branches";
 
     while ($row1 = mysql_fetch_object($result)) {
         $str = $str.$row1->latitude.",".$row1->longitude."|";
@@ -234,7 +233,7 @@ switch ($request) {
         array_multisort($distance, SORT_ASC, $storage);
         // $responsed["succcess"] = 1;
         $response["sorted_nearest_branches"] = $storage;
-
+        $response["branches"] = $storage;
         // echo json_encode($responsed);
         // exit(0);
         break;
