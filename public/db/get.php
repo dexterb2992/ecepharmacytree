@@ -205,6 +205,31 @@ switch ($request) {
     $result = mysql_query("SELECT * from clinic_patients as cp inner join medical_records_requests as mrr on cp.id = mrr.clinic_patients_id where username = '".$_GET['username']."' and password = '".$_GET['password']."'") or returnError(mysql_error());
     break;
 
+    case 'google_distance_matrix':
+    $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_lang']."&destinations=";
+    $str = "";
+    $storage = array();
+    $result = mysql_query("SELECT * FROM branches") or returnError(mysql_error());
+    while ($row = mysql_fetch_assoc($result)) {
+        // push single row into final response array
+        
+
+      foreach ($row as $key => $value) {
+            // let's remove some special characters as it causes to return null when converted to json
+         // $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+            // array_push($storage, $row);
+        $str = $row['latitude'].",".$row['longitude']."|";
+     }
+        $str = substr($str, 0, strlen($str) - 1);
+        $tmp_url = $tmp_url.$str."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
+
+        echo $tmp_url;
+        exit(0);
+            // $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_lang']."&destinations=7.051969,125.5947593&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
+     
+ }
+    break;
+
     default:
         # code...
     break;
