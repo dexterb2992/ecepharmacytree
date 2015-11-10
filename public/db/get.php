@@ -212,6 +212,7 @@ switch ($request) {
     $storage = array();
     $responsed = array();
     $result = mysql_query("SELECT br.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM branches as br inner join barangays as bg on br.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id") or returnError(mysql_error());
+    $tbl = "branches";
 
     while ($row1 = mysql_fetch_object($result)) {
         $str = $str.$row1->latitude.",".$row1->longitude."|";
