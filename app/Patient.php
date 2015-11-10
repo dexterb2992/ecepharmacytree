@@ -32,5 +32,7 @@ class Patient extends Model
         return $this->hasMany('ECEPharmacyTree\Order');
     }
 
-    
+    public function full_address(){
+        return return ucfirst($patient->address_street).', '.ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
+    }
 }

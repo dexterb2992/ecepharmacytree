@@ -25,6 +25,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
+            <!-- Note: Make sure to use a valid url for anchors' href inside the <li> tag -->
             <li class="active">
                   <a href="{{ route('dashboard').'/' }}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
@@ -44,6 +45,11 @@
                 </a>
             </li>
             @endif
+            <li class="treeview">
+                <a href="{{ route('Products::index') }}">
+                    <i class="fa-bar-chart fa"></i> <span>Product Groups</span>
+                </a>
+            </li>
 
             <li class="treeview">
                 <a href="{{ route('Products::index') }}">
@@ -65,7 +71,7 @@
 
             <li class="treeview">
                 <a href="{{ route('Inventory::index') }}">
-                    <i class="fa-cubes fa"></i> <span>Inventory</span>
+                    <i class="fa-cubes fa"></i> <span>Stock Items</span>
                 </a>
             </li>
 
@@ -102,7 +108,7 @@
 
             <li class="treeview">
                 <a href="{{ route('Affiliates::index') }}">
-                    <i class="fa fa-bar-chart"></i> <span>Affiliates</span>
+                    <i class="fa fa-sitemap"></i> <span>Affiliates</span>
                 </a>
             </li>
 

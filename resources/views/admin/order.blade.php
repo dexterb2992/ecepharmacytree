@@ -47,13 +47,13 @@
     <div class="col-xs-4">
       <div class="box box-primary">
         <div class="box-header">
-          <!-- <h3 class="box-title">{{ get_patient_fullname($order->patient()->first()) }}</h3> -->
+          <!-- <h3 class="box-title">{{ get_person_fullname($order->patient()->first()) }}</h3> -->
           <div class="user-panel">
             <div class="pull-left image">
               <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <h3 class="color-black next-heading padding-customer">{{ get_patient_fullname($order->patient()->first()) }}</h3>
+              <h3 class="color-black next-heading padding-customer">{{ get_person_fullname($order->patient()->first()) }}</h3>
             </div>
           </div>
         </div>

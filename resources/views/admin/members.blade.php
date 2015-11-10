@@ -38,23 +38,26 @@
                             <td>{!! ($member->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">
-                                   <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $member->id }}" title="">
-                                    <i class="fa fa-eye"></i> View
-                                </a>
-                                <br/>
-                                @if($member->deleted_at != null )
-                                <span class="action-icon marginleft-zero" data-action="unblock" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}"><i class="fa fa-thumbs-o-up"></i> Unblock </span>
-                                @else
-                                <span class="action-icon marginleft-zero" data-action="deactivate" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}"><i class="fa fa-thumbs-o-down"></i> Block </span>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div><!-- /.box-body -->
-    </div><!-- /.box -->
+                                   <a href="javascript:void(0);" data-toggle="tooltip" data-original-title="View" class="add-edit-btn btn btn-primary btn-xs" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $member->id }}" title="">
+                                    <i class="fa fa-eye"></i>
+                                    </a>
+                                    @if($member->deleted_at != null )
+                                    <span class="action-icon marginleft-zero  btn btn-purple btn-xs" data-toggle="tooltip" data-original-title="Unblock" data-action="unblock" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}">
+                                        <i class="fa fa-thumbs-o-up"></i> 
+                                    </span>
+                                    @else
+                                    <span class="action-icon marginleft-zero btn btn-danger btn-xs" data-toggle="tooltip" data-original-title="Block" data-action="deactivate" data-title="member" data-urlmain="/members/" data-id="{{ $member->id }}">
+                                        <i class="fa fa-thumbs-o-down"></i>
+                                    </span>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
 
     <!-- Modal for Create/Edit product -->
     <div class="modal" id="modal-view-member">

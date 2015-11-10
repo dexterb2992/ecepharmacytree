@@ -62,58 +62,21 @@ function generate_referral_id(){
 }
 
 function generate_lot_number(){
-	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')->first();
-	$new_lot_number = $inventory->lot_number == 0 ? $inventory->lot_number + 1001 : $inventory->lot_number + 1;
+	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')
+		->withTrashed()->first();
 
-	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)->first();
+	if(!isset($inventory->lot_number)){
+		$new_lot_number = 1000;
+	}else{
+		$new_lot_number = $inventory->lot_number == 0 ? $inventory->lot_number + 1001 : $inventory->lot_number + 1;
+	}
+
+	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)
+		->withTrashed()->first();
 	if( $check === null )
 		return $new_lot_number;
 
 	generate_lot_number();
-}
-
-
-
-function get_str_plural($str){
-	$str = str_singular($str);
-
-	$lastChar = ""; $replacement = "";
-
-	$lastChar = substr($str, strlen( $str ) - 2);
-	$new_str = substr($str, 0, strlen( $str ) - 2);
-
-	if( $lastChar == "um" ) $replacement = "a";
-	if( $lastChar == "fe" ) $replacement = "ves";
-	if( $lastChar == "us" ) $replacement = "i";
-	if( $lastChar == "ch" )	return $str."es";
-
-	if( $replacement != "" ) return $new_str.$replacement;
-
-
-
-	$lastChar = substr($str, strlen($str) -1 );
-	$new_str = substr($str, 0, strlen( $str ) - 1);
-
-	if( $lastChar == "f" )	$replacement = "ves";
-
-	if( $lastChar == "y" ) $replacement = "ies";
-	
-		// return $new_str.$replacement;
-
-	if( $lastChar == "s" || $lastChar == "x" ){
-		return $str."es";
-	}else{
-		return $str."s";
-	}
-
-
-	if( $replacement == "" ){
-		$new_str = $str;
-	}
-	
-	return $new_str.$replacement;	
-	
-
 }
 
 function str_auto_plural($str, $quantity){
@@ -141,8 +104,14 @@ function str_auto_plural($str, $quantity){
 		return $p->toJson();
 	}
 
-	function get_patient_fullname($patient){
-		return ucfirst($patient->fname)." ".ucfirst($patient->lname);
+	function get_person_fullname($person, $reversed = false){
+		$mname = !empty($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : '';
+		$fname = ucfirst($person->fname)." ";
+		$lname = ucfirst($person->lname);
+        if( $reversed )
+            return $lname.", ".$fname.$mname;
+        return $lname." ".$mname.$fname;
+    
 	}
 
 	function get_patient_full_address($patient){
@@ -234,26 +203,6 @@ function check_for_critical_stock(){
 	} catch (Exception $e) {
 		pre($e);
 	}
-}
-
-function get_branch_full_address($branch){
-	$branch->unit_floor_room_no = $branch->unit_floor_room_no == 0 ? "" : $branch->unit_floor_room_no;
-	$branch->building = $branch->building == 0 ? "" : $branch->building;
-	$branch->lot_no = $branch->lot_no == 0 ? "" : $branch->lot_no;
-	$branch->block_no = $branch->block_no == 0 ? "" : $branch->block_no;
-	$branch->phase_no = $branch->phase_no == 0 ? "" : $branch->phase_no;
-
-	$address = $branch->unit_floor_room_no." ".
-	$branch->building." ".$branch->lot_no." ".$branch->block_no." ".
-	$branch->phase_no." ".
-	$branch->address_street." <br>".
-	$branch->address_barangay.", ".
-	$branch->address_city_municipality.", ".
-	$branch->address_province." <br>".
-	$branch->address_region.", ".
-	$branch->address_zip." ";
-
-	return $address;
 }
 
 function _error($msg, $alert_type = 'label'){
@@ -403,3 +352,15 @@ function decode_utf8($arrays = array()){
 	}
 	return $arrays;
 }
+
+
+function combine_additional_address(array $addresses){
+
+    foreach ($addresses as $key => $value) {
+    	if( trim($value) == "" ){
+    		unset($addresses[$key]);
+    	}
+    }
+    return implode(', ', $addresses);
+}
+

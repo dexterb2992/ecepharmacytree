@@ -20,6 +20,11 @@ class AffiliatesController extends Controller
     {
         $patients = Patient::all();
         $doctors = Doctor::all();
+
+        if( empty($doctors) )
+            $doctors = [];
+        if( empty($patients) )
+            $patients = [];
         return view('admin.affiliates')->withPatients($patients)->withDoctors($doctors)
             ->withTitle("Affiliates");
     }

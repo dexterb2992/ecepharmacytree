@@ -68,6 +68,7 @@ $(document).ready(function (){
         "aaSorting": [[ 2, "desc" ]]
     });
 
+    $('.btn').addClass("btn-flat");
 
     $('.select2').select2();
     $(".datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
@@ -85,6 +86,11 @@ $(document).ready(function (){
         chartElement : '#chart',
         dragAndDrop  : false
     });
+
+    var search_keyword = $.getUrlParam('q');
+    if( search_keyword != "" ){
+        $('.dataTables_filter').find('input[type="search"]:visible').val(search_keyword).trigger('keyup');
+    }
 
     // filter input to numeric characters only
     allowNumericOnly( $('.number'));
@@ -335,6 +341,13 @@ $(document).ready(function (){
             chartElement : '#chart',
             dragAndDrop  : false
         });
+        $(".scroll-to-top").fadeIn();
+    });
+
+    $(".scroll-to-top").click(function (){
+        $('html, body').animate({
+            scrollTop: $(".content-header").offset().top
+        }, 500);
     });
 
     $("#browse_photo").change(function (){

@@ -1,17 +1,18 @@
-2	NCR	National Capital Region (NCR)
-3	CAR	Cordillera Administrative Region (CAR)
-4	I	Ilocos Region (Region I)
-5	II	Cagayan Valley (Region II)
-6	III	Central Luzon (Region III)
-7	IV-A	CALABARZON (Region IV-A)
-8	IV-B	MIMAROPA (Region IV-B)
-9	V	Bicol Region (Region V)
-10	VI	Western Visayas (Region VI)
-11	VII	Central Visayas (Region VII)
-12	VIII	Eastern Visayas (Region VIII)
-13	IX	Zamboanga Peninsula (Region IX)
-14	X	Northern Mindanao (Region X)
-15	XI	Davao Region (Region XI)
-16	XII	SOCCSKSARGEN (Region XII)
-17	XIII	Caraga (Region XIII)
-18	ARMM	Autonomouse Region in Muslim Mindanao (ARMM)
+2	NCR	National Capital Region
+3	CAR	Cordillera Administrative Region
+4	Region I	Ilocos Region
+5	Region II	Cagayan Valley
+6	Region III	Central Luzon
+7	Region IV-A	CALABARZON
+8	Region IV-B	MIMAROPA
+9	Region V	Bicol Region
+10	Region VI	Western Visayas
+11	Region VII	Central Visayas
+12	Region VIII	Eastern Visayas
+13	Region IX	Zamboanga Peninsula
+14	Region X	Northern Mindanao
+15	Region XI	Davao Region
+16	Region XII	SOCCSKSARGEN
+17	Region XIII	Caraga
+18	ARMM	Autonomouse Region in Muslim Mindanao
+

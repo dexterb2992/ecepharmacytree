@@ -46,6 +46,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
+     * Returns user's activity history
+     */
+    public function logs(){
+        return $this->hasMany('ECEPharmacyTree\Log');
+    }
+
+    /**
      * Check whether the user is Admin
      */
     public function isAdmin(){
@@ -64,5 +71,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if( $this->access_level == "3" )
             return true;
         return false;
+    }
+
+    public function full_name($reversed = false){
+        if( $reversed )
+            return ucfirst($this->lname).", ".ucfirst($this->fname)." ".substr(ucfirst($this->mname), 0, 1).".";
+        return ucfirst($this->fname)." ".substr(ucfirst($this->mname), 0, 1).". ".ucfirst($this->lname);
     }
 }

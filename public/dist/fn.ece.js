@@ -287,13 +287,13 @@ function getOriginalCarouselItems(){
     '</ol>'+
     '<div class="carousel-inner disable-contextmenu">'+
         '<div class="item active">'+
-            '<img src="http://placehold.it/900x500/39CCCC/ffffff&text=Add photos for this product" alt="First slide">'+
+            '<img src="http://placehold.it/900x500/39CCCC/ffffff&text=1. Add photos for this product" alt="First slide">'+
         '</div>'+
         '<div class="item">'+
-            '<img src="http://placehold.it/900x500/3c8dbc/ffffff&text=Click the button \'Add new\'" alt="Second slide">'+
+            '<img src="http://placehold.it/900x500/3c8dbc/ffffff&text=2. Click the button \'Add new\'" alt="Second slide">'+
         '</div>'+
         '<div class="item">'+
-            '<img src="http://placehold.it/900x500/f39c12/ffffff&text=Drop photos on the dotted space" alt="Third slide">'+
+            '<img src="http://placehold.it/900x500/f39c12/ffffff&text=3. Drop photos on the dotted space" alt="Third slide">'+
         '</div>'+
     '</div>'+
     '<a class="left carousel-control" href="#product-gallery-carousel" data-slide="prev">'+
@@ -302,6 +302,14 @@ function getOriginalCarouselItems(){
     '<a class="right carousel-control" href="#product-gallery-carousel" data-slide="next">'+
         '<span class="fa fa-angle-right"></span>'+
     '</a>';
+}
+
+// get $_GET param values
+$.getUrlParam  = function (name){
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
 

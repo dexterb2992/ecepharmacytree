@@ -23,7 +23,7 @@
           <tbody>
             @foreach($prescription_approvals as $prescription_approval )
             <tr data-id="{{ $prescription_approval->id }}">
-              <td>{{ get_patient_fullname($prescription_approval->patient()->first()) }}</td>
+              <td>{{ get_person_fullname($prescription_approval->patient()->first()) }}</td>
               <td>{{ $prescription_approval->products()->first()->name }}</td>
               <td>{{ $prescription_approval->quantity }}</td>
               <td>
