@@ -206,7 +206,7 @@ switch ($request) {
     break;
 
     case 'google_distance_matrix':
-    $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_lang']."&destinations=";
+    $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&destinations=";
     $str = "";
     $distance = array();
     $storage = array();
