@@ -226,7 +226,10 @@ switch ($request) {
  $str = substr($str, 0, strlen($str) - 1);
         $tmp_url = $tmp_url.$str."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
 
-        echo $tmp_url;
+        // echo $tmp_url;
+        $json = file_get_contents($tmp_url); // this WILL do an http request for you
+        $data = json_decode($json);
+        echo $data;
         exit(0);
     break;
 
