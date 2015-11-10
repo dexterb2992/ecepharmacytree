@@ -214,12 +214,12 @@ switch ($request) {
         // push single row into final response array
         
 
-      foreach ($row as $key => $value) {
+      // foreach ($row as $key => $value) {
             // let's remove some special characters as it causes to return null when converted to json
          // $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
             // array_push($storage, $row);
         $str = $str.$row['latitude'].",".$row['longitude']."|";
-     }
+     // }
             // $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_lang']."&destinations=7.051969,125.5947593&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
      
  }
