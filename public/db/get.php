@@ -9,7 +9,7 @@ $db           = new DB_CONNECT();
 
 $_cleanedGET = array();
 foreach ($_GET as $key => $value) {
-	$_cleanedGET[mysql_real_escape_string($key)] = mysql_real_escape_string($value);
+    $_cleanedGET[mysql_real_escape_string($key)] = mysql_real_escape_string($value);
 }
 
 $_GET = array();
@@ -22,21 +22,21 @@ $tbl          = isset($_GET['table']) ? $_GET['table'] : '';
 date_default_timezone_set('Asia/Manila');
 $datenow = date("Y-m-d H:i:s", time());
 $pre_response = array(
-	"success" => 1,
-	"message" => ""
-	);
+    "success" => 1,
+    "message" => ""
+    );
 switch ($request) {
-	case 'check_if_username_exist':
+    case 'check_if_username_exist':
         //this option is currently unused
-	$username = $_GET['username'];
-	$result = mysql_query("SELECT * FROM patients WHERE username = '" . $username . "' WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-	$tbl = "patients";
-	case 'get_dosages':
+    $username = $_GET['username'];
+    $result = mysql_query("SELECT * FROM patients WHERE username = '" . $username . "' WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $tbl = "patients";
+    case 'get_dosages':
         // get all products from products table
-	$result = mysql_query("SELECT * FROM dosage_format_and_strength WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-	$tbl = "dosage_format_and_strength";
-	break;
-	case 'get_products':
+    $result = mysql_query("SELECT * FROM dosage_format_and_strength WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $tbl = "dosage_format_and_strength";
+    break;
+    case 'get_products':
         // get all products from products table
     $result = mysql_query("SELECT * FROM products WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "products";
@@ -208,71 +208,63 @@ switch ($request) {
     case 'google_distance_matrix':
     $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_lang']."&destinations=";
     $str = "";
+    $distance = array();
     $storage = array();
+    $responsed = array();
     $result = mysql_query("SELECT * FROM branches") or returnError(mysql_error());
-    while ($row = mysql_fetch_assoc($result)) {
-        // push single row into final response array
-        
-
-      // foreach ($row as $key => $value) {
-            // let's remove some special characters as it causes to return null when converted to json
-         // $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
-            // array_push($storage, $row);
-        $str = $str.$row['latitude'].",".$row['longitude']."|";
-     // }
-            // $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_lang']."&destinations=7.051969,125.5947593&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
-     
- }
- $str = substr($str, 0, strlen($str) - 1);
-        $tmp_url = $tmp_url.$str."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
-
-        // echo $tmp_url;
+    while ($row = mysql_fetch_object($result)) {
+        $str = $str.$row->latitude.",".$row->longitude."|";
+        array_push($storage, $row);
+    }
+    $str = substr($str, 0, strlen($str) - 1);
+    $tmp_url = $tmp_url.$str."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
         $json = file_get_contents($tmp_url); // this WILL do an http request for you
         $data = json_decode($json);
-        
-        // foreach($as = $data->rows->elements){
-        //     array_push($storage, $as->distance->value);
-        // }
-        
-        // $element = json_decode($row, true);
 
-        pre($data);
-        // echo $storage;
+        $elements = $data->rows[0]->elements;
 
+        foreach ($elements as $key => $value) {
+            $distance[$key] = $elements[$key]->distance->value;
+            $storage[$key]->distance_from_user =  $elements[$key]->distance->value;
+        }
 
+        array_multisort($distance, SORT_ASC, $storage);
+        $responsed["sorted_nearest_branches"] = $storage;
+
+        echo json_encode($responsed);
         exit(0);
-    break;
+        break;
 
-    default:
+        default:
         # code...
-    break;
-}
+        break;
+    }
 
-if ($pre_response["success"] == 0) {
-   echo json_encode($pre_response);
-   exit(0);
-}
+    if ($pre_response["success"] == 0) {
+     echo json_encode($pre_response);
+     exit(0);
+ }
 
-if ($result != 0)
-   $db_result = mysql_num_rows($result);
+ if ($result != 0)
+     $db_result = mysql_num_rows($result);
 // check for empty result
-if ($db_result > 0) {
-   $response[$tbl] = array();
-   while ($row = mysql_fetch_assoc($result)) {
+ if ($db_result > 0) {
+     $response[$tbl] = array();
+     while ($row = mysql_fetch_assoc($result)) {
         // push single row into final response array
       foreach ($row as $key => $value) {
             // let's remove some special characters as it causes to return null when converted to json
-         $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
-     }
-     array_push($response[$tbl], $row);
- }
+       $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+   }
+   array_push($response[$tbl], $row);
+}
     //get the original time from server
- date_default_timezone_set('Asia/Manila');
- $server_timestamp             = date('Y-m-d H:i:s', time());
+date_default_timezone_set('Asia/Manila');
+$server_timestamp             = date('Y-m-d H:i:s', time());
 
- $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
+$result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
 
- if(mysql_num_rows($result_latest_updated_at) > 0){
+if(mysql_num_rows($result_latest_updated_at) > 0){
     $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
     $latest_updated_at = $result_latest_updated_at_array['updated_at'];
 }
@@ -282,8 +274,8 @@ $response["server_timestamp"] = "$server_timestamp";
 $response["latest_updated_at"] = "$latest_updated_at";
 } else {
     // no products found
-	$response["success"] = 0;
-	$response["message"] = "No $tbl data found.";
+    $response["success"] = 0;
+    $response["message"] = "No $tbl data found.";
 }
 
 // echo no users JSON
@@ -291,10 +283,10 @@ echo json_encode($response);
 
 /* Custom functions */
 function returnError($msg) {
-	$pre_response = array(
-		"success" => 0,
-		"message" => $msg
-		);
+    $pre_response = array(
+        "success" => 0,
+        "message" => $msg
+        );
 }
 
 function pre($str){
@@ -304,15 +296,15 @@ function pre($str){
 }
 
 function fetchRows($result, $tbl){
-	$response[$tbl] = array();
+    $response[$tbl] = array();
 
-	while ($row = mysql_fetch_assoc($result)) {
+    while ($row = mysql_fetch_assoc($result)) {
             // push single row into final response array
-		foreach ($row as $key => $value) {
+        foreach ($row as $key => $value) {
                 // let's remove some special characters as it causes to return null when converted to json
-			$row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
-		}
-		array_push($response[$tbl], $row);
-	}
-	return $response;
+            $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+        }
+        array_push($response[$tbl], $row);
+    }
+    return $response;
 }
