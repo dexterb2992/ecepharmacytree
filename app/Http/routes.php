@@ -100,9 +100,10 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('gallery/upload', ['as' => 'add_gallery', 'uses' => 'ProductsGalleryController@store']);
 	Route::post('gallery/delete/{id}', ['as' => 'delete_gallery', 'uses' => 'ProductsGalleryController@destroy']);
 	Route::post('gallery/change-primary/{id}', ['as' => 'gallery_change_primary', 'uses' => 'ProductsGalleryController@change_primary']);
-
-	// Route::get('groups', ['as' => 'groups', 'uses' => ''])
 });
+
+Route::get('product-groups', ['as' => 'groups', 'uses' => 'ProductGroupController@index']);
+Route::post('product-groups', ['as' => 'groups', 'uses' => 'ProductGroupController@store']);
 
 Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'middleware' => 'auth'], function (){
 	/**
@@ -139,11 +140,11 @@ Route::group(['prefix' => 'inventory', 'as' => 'Inventory::', 'middleware' => 'a
 	 * Routes for inventories
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'InventoryController@index']);
+	Route::post('adjustment', ['as' => 'adjustment', 'uses' => 'InventoryController@add_adjustments']);
 	Route::get('{id}', ['get', 'uses' => 'InventoryController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'InventoryController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'InventoryController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'InventoryController@destroy']);
-	Route::post('adjustment', ['as' => 'delete', 'uses' => 'InventoryController@add_adjustments']);
 });
 
 

@@ -33,6 +33,7 @@ class Patient extends Model
     }
 
     public function full_address(){
-        return return ucfirst($patient->address_street).', '.ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
+        return ucfirst($patient->address_street).', '
+            .ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
     }
 }

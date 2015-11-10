@@ -85,7 +85,7 @@ class InventoryController extends Controller
             $inventory = Inventory::findOrFail($id);
             return $inventory->toJson();
         }   
-        return false;
+        return 'Whoops! It seems like you are lost. Let\'s go back to <a href="'.url('/').'">dashboard</a> then.';
     }
 
     /**
@@ -135,7 +135,8 @@ class InventoryController extends Controller
                 'user_id' => Auth::user()->id,
                 'action'  => 'Adjusted an inventory information with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
                                 target="blank">Lot #'.$inventory->lot_number.'</a>'
-                                .' and change quantity from '.$old_qty.' to '.$input['new_quantity'],
+                                .' and change quantity from '.$old_qty.' to '.$input['new_quantity']
+                                .'. <br/><code>Reason:</code> '.$input['reason'],
                 'table' => 'inventories'
             ]);
 
