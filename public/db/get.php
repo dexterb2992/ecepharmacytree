@@ -230,11 +230,11 @@ switch ($request) {
         $json = file_get_contents($tmp_url); // this WILL do an http request for you
         $data = json_decode($json);
         
-        foreach($as = $data->rows->elements){
-            array_push($storage, $as->distance->value);
-        }
-        pre($storage);
-        echo $storage;
+        // foreach($as = $data->rows->elements){
+        //     array_push($storage, $as->distance->value);
+        // }
+        pre($data->rows);
+        // echo $storage;
 
 
         exit(0);
