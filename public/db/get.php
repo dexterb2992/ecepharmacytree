@@ -229,8 +229,14 @@ switch ($request) {
         // echo $tmp_url;
         $json = file_get_contents($tmp_url); // this WILL do an http request for you
         $data = json_decode($json);
-        pre($data);
-        // echo $data;1
+        
+        foreach($as = $data->rows->elements){
+            array_push($storage, $as->distance->value);
+        }
+        pre($storage);
+        // echo $data;
+
+
         exit(0);
     break;
 
