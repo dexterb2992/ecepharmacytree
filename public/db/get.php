@@ -234,9 +234,9 @@ switch ($request) {
         //     array_push($storage, $as->distance->value);
         // }
         $row = $data['rows'];
-        $element = json_decode($row, true);
+        // $element = json_decode($row, true);
 
-        pre($element);
+        pre($row);
         // echo $storage;
 
 
