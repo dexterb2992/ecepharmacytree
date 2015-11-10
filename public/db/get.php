@@ -233,7 +233,7 @@ switch ($request) {
         // foreach($as = $data->rows->elements){
         //     array_push($storage, $as->distance->value);
         // }
-        pre($data->rows);
+        pre($data->rows->elements);
         // echo $storage;
 
 
