@@ -234,7 +234,7 @@ switch ($request) {
             array_push($storage, $as->distance->value);
         }
         pre($storage);
-        // echo $data;
+        echo $storage;
 
 
         exit(0);
