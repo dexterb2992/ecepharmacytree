@@ -228,7 +228,7 @@ switch ($request) {
 
         // echo $tmp_url;
         $json = file_get_contents('https://www.google.com.ph/'); // this WILL do an http request for you
-        
+        $data = json_decode($json);
         echo $data;
         exit(0);
     break;
