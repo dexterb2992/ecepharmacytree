@@ -236,7 +236,7 @@ switch ($request) {
         $row = $data['rows'];
         // $element = json_decode($row, true);
 
-        pre($row);
+        pre($row[0]);
         // echo $storage;
 
 
