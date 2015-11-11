@@ -4,9 +4,8 @@ namespace ECEPharmacyTree\Http\Controllers;
 
 use Input;
 use Validator;
+use Request;
 
-use Illuminate\Http\Request;
-use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 
 use ECEPharmacyTree\Product;
@@ -47,19 +46,34 @@ class ProductGroupController extends Controller
     public function store()
     {
         $input = Input::all();
-        dd($input);
-        $group = new ProductGroup;
-        $group->name = $input['name'];
-        $group->points = $input['points'];
-        if( $group->save() )
+
+        if( $this->validator($input)->passes() ){
+
+            $group = new ProductGroup;
+            $group->name = $input['name'];
+            $group->points = $input['points'];
+            if( $group->save() )
+                if( isset($input['products_involved']) && count($input['products_involved']) > 0 ){
+                    foreach ($input['products_involved'] as $key => $value) {
+                        $product = Product::find($value);
+                        $product->product_group_id = $group->id;
+                        $product->save();
+                    }
+                }
+
+                return redirect()->back()->withFlash_message([
+                    'msg' => 'New product group has been added successfully.',
+                    'type' => 'info'
+                ]);
+
             return redirect()->back()->withFlash_message([
-                'msg' => 'New product group has been added successfully.',
-                'type' => 'info'
+                'msg' => 'Sorry, we can\'t process your request right now. Please try again later.',
+                'type' => 'danger'
             ]);
-        return redirect()->back()->withFlash_message([
-            'msg' => 'Sorry, we can\'t process your request right now. Please try again later.',
-            'type' => 'danger'
-        ]);
+        }
+
+        return redirect()->back()->withInput()->withErrors();
+        
     }
 
     public function validator(array $data){
@@ -68,7 +82,7 @@ class ProductGroupController extends Controller
             'points' => 'required',
         ];
 
-        return Validator::make($data, $rules, $messages);
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -79,18 +93,14 @@ class ProductGroupController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        if( Request::ajax() ){
+            $product_group = ProductGroup::findOrFail($id);
+            $product_group->products_involved = $product_group->products;
+            return $product_group;
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later." ) );
+
     }
 
     /**
@@ -100,9 +110,41 @@ class ProductGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update()
     {
-        //
+        $input = Input::all();
+        if( $this->validator($input)->passes() ){
+            $group = ProductGroup::findOrFail($input['id']);
+            $group->name = $input['name'];
+            $group->points = $input['points'];
+            if( $group->save() )
+                if( isset($input['products_involved']) && count($input['products_involved']) > 0 ){
+                    // make sure to remove the products which are removed from this group
+                    $o_prods = $group->products;
+
+                    foreach ($o_prods as $prod) {
+                       Product::where('product_group_id', $prod->product_group_id)->update(['product_group_id' => 0]);
+                    }
+
+                    foreach ($input['products_involved'] as $key => $value) {
+                        $product = Product::find($value);
+                        $product->product_group_id = $group->id;
+                        $product->save();
+                    }
+                }
+
+                return redirect()->back()->withFlash_message([
+                    'msg' => 'New product group has been added successfully.',
+                    'type' => 'info'
+                ]);
+
+            return redirect()->back()->withFlash_message([
+                'msg' => 'Sorry, we can\'t process your request right now. Please try again later.',
+                'type' => 'danger'
+            ]);
+        }
+
+        return redirect()->back()->withInput()->withErrors();
     }
 
     /**
@@ -111,8 +153,17 @@ class ProductGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        $id = Input::get("id");
+        $group = ProductGroup::findOrFail($id);
+        if( $group->delete() ){
+            Product::where('product_group_id', $id)->update([
+                'product_group_id' => 0
+            ]);
+
+            return json_encode( array("status" => "success") );
+        }
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

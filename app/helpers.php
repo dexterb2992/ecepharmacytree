@@ -364,3 +364,7 @@ function combine_additional_address(array $addresses){
     return implode(', ', $addresses);
 }
 
+function peso(){
+	return '&#x20B1;';
+}
+
