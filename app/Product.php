@@ -30,4 +30,8 @@ class Product extends Model
     public function galleries(){
         return $this->hasMany('ECEPharmacyTree\ProductsGallery');
     }
+
+    public function group(){
+        return $this->belongsTo('ECEPharmacyTree\ProductGroup');
+    }
 }

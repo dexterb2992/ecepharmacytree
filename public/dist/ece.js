@@ -715,4 +715,16 @@ $(document).ready(function (){
         if( $.trim( $(this).find('div.label-danger').html() ) != "" )
             return false;
     });
+
+    $('.btn-adjustment').click(function (){
+        $.ajax({
+            url : '/inventory/'+$(this).data('id'),
+            type: 'get',
+            dataType: 'json'
+        }).done(function (data){
+            $('#old_quantity').val(data.quantity);
+            $('#modal-add-adjustments').find('#sid').val(data.id);
+        });
+    });
+
 });

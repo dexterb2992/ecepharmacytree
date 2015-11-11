@@ -44,12 +44,13 @@
                     <i class="fa fa-users"></i> <span>Employees</span>
                 </a>
             </li>
-            @endif
+
             <li class="treeview">
-                <a href="{{ route('Products::index') }}">
+                <a href="{{ route('groups') }}">
                     <i class="fa-bar-chart fa"></i> <span>Product Groups</span>
                 </a>
             </li>
+            @endif
 
             <li class="treeview">
                 <a href="{{ route('Products::index') }}">

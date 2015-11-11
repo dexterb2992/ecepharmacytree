@@ -12,7 +12,7 @@
                 <li><a href="#tab_category" data-toggle="tab">Product Category</a></li>
                 <li><a href="#tab_subcategory" data-toggle="tab">Product Subcategory</a></li>
                 <li class="pull-right">
-                    <label class="sort-by-label">Sort by Category</label>
+                    <code class="text-black">Sort by Category</code>
                     <select class="sort-by">
                         <option value=""></option>
                         @foreach($categories as $category)
@@ -22,7 +22,7 @@
                 </li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active" id="tab_products">
+                <div class="tab-pane fade in active" id="tab_products">
                     <div class="box box-success">
                         <div class="box-header">
                             <h4 class="box-title">Products Master List</h4><br/>
@@ -51,7 +51,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {!! $product->prescription_required == 1 ? '<span class="rx" data-toggle="tooltip" data-original-title="This product requires a prescription">&#8478;</span>' : '' !!}
+                                                {!! $product->prescription_required == 1 ? '<span class="rx" data-toggle="tooltip" data-placement="right" data-original-title="This product requires a prescription">&#8478;</span>' : '' !!}
                                                 <span>{{ ucfirst($product->name) }}</span>
                                             </td>
                                             <td>{{ $product->generic_name }}</td>
@@ -86,7 +86,7 @@
 
                    
                 </div>
-                <div class="tab-pane" id="tab_category">
+                <div class="tab-pane fade" id="tab_category">
                     <div class="box box-success">
                         <div class="box-header">
                             <h3 class="box-title">Product Categories</h3><br/>
@@ -160,7 +160,7 @@
                         </div><!-- /.modal-dialog -->
                     </div><!-- /.modal -->
                 </div><!-- /.tab-pane -->
-                <div class="tab-pane" id="tab_subcategory">
+                <div class="tab-pane fade" id="tab_subcategory">
                     <div class="box box-success">
                         <div class="box-header">
                             <h3 class="box-title">Product Subcategories</h3><br/>

@@ -92,7 +92,7 @@
 															 data-id="{{ $inventory->id }}" title="Remove" data-toggle="tooltip" data-original-title="Remove">
 															 <i class="fa fa-trash-o"></i>
 														</span>
-														<span class="btn-default btn btn-sm pull-right" data-id="{{ $inventory->id }}" data-toggle="modal" data-target="#modal-add-adjustments">
+														<span class="btn-default btn btn-sm pull-right btn-adjustment" data-id="{{ $inventory->id }}" data-toggle="modal" data-target="#modal-add-adjustments">
 															<i class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-original-title="Stock Adjustment"></i>
 														</span>
 														<span class="btn btn-default btn-sm add-edit-btn pull-right" data-action="edit" data-modal-target="#modal-add-edit-inventory" 
@@ -203,13 +203,15 @@
 	        <div class="modal" id="modal-add-adjustments">
 	        	<div class="modal-dialog">
 	        		<div class="modal-content">
-	        			<form method="post" action="/inventory/update">
+	        			<form method="post" action="/inventory/adjustment">
+	        			{!! Form::open(['method' => 'post', 'action' => 'InventoryController@add_adjustments']) !!}
 		        			<div class="modal-header">
 		        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	                            <h4 class="modal-title">Add adjustments</h4>
 		        			</div>
 		        			<div class="modal-body">
 		        				{!! Form::token() !!}
+		        				<input type="hidden" id="sid" name="id">
 		        				<div class="form-group">
 	                            	<label for="old_quantity">Old Quantity</label>
 	                            	<input class="form-control number" type="text" name="old_quantity" id="old_quantity" value="" readonly>
@@ -227,7 +229,7 @@
 	                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
 	                            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
 		        			</div>
-	        			</form>
+	        			{!! Form::close() !!}
 	        		</div>	
 	        	</div>
 	        </div>
