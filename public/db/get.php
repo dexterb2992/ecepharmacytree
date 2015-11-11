@@ -207,6 +207,14 @@ switch ($request) {
 
     case 'google_distance_matrix':
     $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&destinations=";
+    $reverse_geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
+    $json_reverse_geocode = file_get_contents($reverse_geocode_url); // this WILL do an http request for you
+    $data_reverse_geocode = json_decode($json_reverse_geocode);
+    $address_components_reverse_geocode = $data_reverse_geocode->results[0]->formatted_address;
+    pre($address_components_reverse_geocode);
+    exit(0);
+
+
     $str = "";
     $distance = array();
     $storage = array();
