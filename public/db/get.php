@@ -201,8 +201,8 @@ switch ($request) {
     $tbl = "clinic_patients";
     break;
 
-    case 'get_medical_records':
-    $result = mysql_query("SELECT * from clinic_patients as cp inner join medical_records_requests as mrr on cp.id = mrr.clinic_patients_id where username = '".$_GET['username']."' and password = '".$_GET['password']."'") or returnError(mysql_error());
+    case 'get_clinic_records':
+    $result = mysql_query("SELECT cpd.*, cpr.*, ct.* from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id inner join clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where cpd.username = '".$_GET['username']."' and cpd.password = '".$_GET['password']."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$_GET['patient_id']." ) ") or returnError(mysql_error());
     break;
 
     case 'google_distance_matrix':
