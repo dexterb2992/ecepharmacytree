@@ -83,7 +83,7 @@ if ($request == 'register') {
 } else if ($request == 'login') {
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-	$sql      = "SELECT * FROM patients WHERE username = '$username' and password = '$password'";
+	$sql = "SELECT pt.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM patients as pt inner join barangays as bg on pt.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE pt.username = '$username' and pt.password = '$password'";
 	$result_fetch_patient = mysql_query($sql) or die(mysql_error());
     // check for empty result
 	$response["patient"] = array();
