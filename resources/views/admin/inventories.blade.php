@@ -84,18 +84,18 @@
 												<td>
 													<div class="btn-group pull-right">
 														{!! $is_critical ? 
-															'<span class="btn-sm btn-default btn action-icon pull-right" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}">
+															'<span class="btn-xs btn-primary btn action-icon pull-right" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}">
 															<i class="fa-refresh fa"></i></span>' 
 															: '' 
 														!!}
-														<span class="btn btn-default btn-sm action-icon remove-product pull-right" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
+														<span class="btn btn-danger btn-xs action-icon remove-product pull-right" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
 															 data-id="{{ $inventory->id }}" title="Remove" data-toggle="tooltip" data-original-title="Remove">
 															 <i class="fa fa-trash-o"></i>
 														</span>
-														<span class="btn-default btn btn-sm pull-right btn-adjustment" data-id="{{ $inventory->id }}" data-toggle="modal" data-target="#modal-add-adjustments">
+														<span class="btn-warning btn btn-xs pull-right btn-adjustment" data-id="{{ $inventory->id }}" data-toggle="modal" data-target="#modal-add-adjustments">
 															<i class="glyphicon glyphicon-list-alt" data-toggle="tooltip" data-original-title="Stock Adjustment"></i>
 														</span>
-														<span class="btn btn-default btn-sm add-edit-btn pull-right" data-action="edit" data-modal-target="#modal-add-edit-inventory" 
+														<span class="btn btn-info btn-xs add-edit-btn pull-right" data-action="edit" data-modal-target="#modal-add-edit-inventory" 
 															data-title="inventory" data-target="#form_edit_inventory" data-id="{{ $inventory->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
 				                                            <i class="fa fa-edit"></i>
 				                                        </span>

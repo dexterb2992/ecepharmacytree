@@ -6,7 +6,7 @@
     <div class="col-xs-12">  
         <div class="box box-success">
             <div class="box-header">
-                <h4 class="box-title">Products Master List</h4><br/>
+                <h4 class="box-title">Product Groups</h4><br/>
                 <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-product-groups" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
             </div><!-- /.box-header -->
             <div class="box-body">
@@ -19,22 +19,33 @@
                                     Points
                                 </span>
                             </th>
+                            <th>Products</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($product_groups as $group)
-                            <tr data-id="{{ $product->id }}">
+                            <tr data-id="{{ $group->id }}">
                                 <td>{{ ucfirst($group->name) }}</td>
+                                <td>{{ $group->points }}</td>
                                 <td>
-                                    <div class="btn-group pull-right">
-                                        <span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="product" 
-                                            data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Remove">
+                                    @if(count($group->products) > 0)
+                                        @foreach($group->products as $product)
+                                            <a href="{{ route('Products::index').'?q='.$product->name }}" data-toggle="tooltip" data-original-title="{{ $product->name }}" target="_blank" class="btn btn-xs btn-success">{{ $product->name }}</a>
+                                        @endforeach
+                                    @else
+                                        <span class="label label-default">No product is associated with this group</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
+                                            data-urlmain="/product-groups/" data-id="{{ $group->id }}" data-toggle="tooltip" data-original-title="Remove">
                                             <i class="fa fa-trash-o"></i>
                                         </span>
-                                        <span class="btn btn-default btn-sm add-edit-btn" data-action="edit"
-                                            data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
-                                            data-id="{{ $product->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
+                                        <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
+                                            data-modal-target="#modal-product-groups" data-title="product group info" data-target="#form_edit_product_groups" 
+                                            data-id="{{ $group->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
                                             <i class="fa fa-edit"></i>
                                         </span>
                                     </div>
@@ -53,7 +64,7 @@
 <div class="modal fade" id="modal-product-groups" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            {!! Form::open(['method' => 'post', 'action' => 'ProductGroupController@store']) !!}
+            {!! Form::open(['method' => 'post', 'action' => 'ProductGroupController@store', 'id' => 'form_edit_product_groups', 'data-urlmain' => '/product-groups/']) !!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">
@@ -61,19 +72,23 @@
                     </h4>
                 </div>
                 <div class="modal-body">
-                    
+                    <small>Note: Fields with <b>(<red>*</red>)</b> on its label is <span class="red">required</span></small>
                     <div class="form-group">
-                        {!! Form::label('Name') !!}
+                        <label>Name<red>*</red></label>
                         {!! Form::text('name', '', ['class' => 'form-control', 'placeholder' => 'Name']) !!}
                     </div>
                     <div class="form-group">
-                        {!! Form::label('Points') !!}
+                        <label>
+                            Points
+                            <small><i>(How much points a member will earn for every {{ peso() }}100.00 for this group of products?)</i></small>
+                            <red>*</red>
+                        </label>
                         {!! Form::text('points', '', ['class' => 'form-control number', 'placeholder' => 'Points']) !!}
                     </div>
 
                     <div class="form-group">    
                         {!! Form::label("Products Involved") !!}
-                        <select class="form-control select2" name="products_involved" multiple>
+                        <select class="form-control select2" name="products_involved[]" multiple>
                             @foreach($products as $product)
                                 <option value="{{ $product->id }}">{{ $product->name }}</option>
                             @endforeach

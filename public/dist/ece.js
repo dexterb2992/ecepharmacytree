@@ -138,6 +138,9 @@ $(document).ready(function (){
 
                     form.find("input[name='"+i+"']").val(row);
                     form.find("textarea[name='"+i+"']").val(newRow);
+
+                    
+
                     if(row == "") {
                         form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
                     } else {
@@ -164,6 +167,26 @@ $(document).ready(function (){
                     });
                     
                 });
+
+                $.each(data, function (i, row){
+                    // search for select dropdown with array names ex. names[]
+                    form.find("input[name='"+i+"[]']").val(row); 
+                    var does_it_exists = form.find("select[name='"+i+"[]']");
+
+                    if( does_it_exists.length > 0 ){
+                        $.each(row, function (a, b){
+                            var lets_check = form.find("select[name='"+i+"[]'] option[value='"+b.id+"']");
+                            if( lets_check.length > 0 ){
+                                $(lets_check).attr("selected", "selected");
+                            }
+                        });
+
+                        if( does_it_exists.hasClass('select2') ){
+                            does_it_exists.select2();
+                        }
+                    }
+                });
+                    
 
                 form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing");
                 form.find('#inventories_product_id').attr("disabled", "disabled");

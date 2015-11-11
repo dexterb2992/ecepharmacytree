@@ -75,6 +75,25 @@ class LocationController extends Controller
 
     }
 
+    public function search($get_location, $location_name){
+        if( $get_location == "regions" )
+            $response =  Region::all()->toArray();
+
+        else if( $get_location == "provinces")
+            
+            $response =  Province::where('name', $location_name)->get()->toArray(); 
+
+        else if( $get_location == "municipalities")
+
+            $response =  Municipality::where('name', $location_name)->get()->toArray(); 
+
+        else if( $get_location == "barangays" )
+            
+            $response = Barangay::where('name', $location_name)->get()->toArray(); 
+
+        return $response = decode_utf8($response);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

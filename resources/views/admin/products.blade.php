@@ -66,11 +66,11 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group pull-right">
-                                                    <span class="btn btn-default btn-sm action-icon remove-product" data-action="remove" data-title="product" 
+                                                    <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
                                                     data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Remove">
                                                         <i class="fa fa-trash-o"></i>
                                                     </span>
-                                                    <span class="btn btn-default btn-sm add-edit-btn" data-action="edit"
+                                                    <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
                                                      data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
                                                      data-id="{{ $product->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
                                                         <i class="fa fa-edit"></i>

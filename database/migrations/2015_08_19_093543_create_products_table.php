@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->integer('qty_per_packing');
             $table->string('sku');
             $table->integer('critical_stock')->nullable();
+            $table->integer('product_group_id')->default(0); // optional, foreign to product_groups
             $table->timestamps();
             $table->softDeletes();
         });

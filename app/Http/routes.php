@@ -45,6 +45,7 @@ Route::get('home', function(){
 });
 
 Route::get('try', function(){
+
 	return view('emails.register')->withRole('Branch Manager')
 		->withEmail('dexterb2992@gmail.com')->withPassword(generateRandomString(6))
 		->withBranch_name("ECE Marketing - Davao");
@@ -102,8 +103,11 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('gallery/change-primary/{id}', ['as' => 'gallery_change_primary', 'uses' => 'ProductsGalleryController@change_primary']);
 });
 
-Route::get('product-groups', ['as' => 'groups', 'uses' => 'ProductGroupController@index']);
-Route::post('product-groups', ['as' => 'groups', 'uses' => 'ProductGroupController@store']);
+Route::get('product-groups', ['as' => 'groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@index']);
+Route::get('product-groups/{id}', ['as' => 'show_group', 'middleware' => 'auth', 'uses' => 'ProductGroupController@show']);
+Route::post('product-groups', ['as' => 'groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@store']);
+Route::post('product-groups/edit', ['as' => 'edit_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@update']);
+Route::post('product-groups/delete', ['as' => 'delete_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@destroy']);
 
 Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'middleware' => 'auth'], function (){
 	/**
@@ -245,6 +249,7 @@ Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
  */
 Route::get('locations/get/regions/', 'LocationController@show');
 Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
+Route::get('locations/search/{get_location}/{location_name}', 'LocationController@search');
 
 Route::get('api/generate/{what}', function ($what){
 	if( $what == "sku" )

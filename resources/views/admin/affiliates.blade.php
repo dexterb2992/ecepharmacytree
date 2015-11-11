@@ -46,7 +46,12 @@ use Illuminate\Support\Str;
 									<td>{{ $doctor->referral_id }}</td>
 									<td>{{ get_patient_referrals($doctor) }}</td>
 									<td>{{ $doctor->points }}</td>
-									<td>{{ Carbon::parse($doctor->created_at)->diffForHumans() }}</td>
+									<td>
+										<span class="label-primary label">
+											<i class="fa fa-clock-o"></i>
+											{{ Carbon::parse($doctor->created_at)->diffForHumans() }}
+										</span>
+									</td>
 								</tr>
 							@endforeach
 							@foreach($patients as $patient)
@@ -68,8 +73,13 @@ use Illuminate\Support\Str;
 									</td>
 									<td>{{ $patient->referral_id }}</td>
 									<td>{{ get_patient_referrals($patient) }}</td>
-									<td>{{ $doctor->points }}</td>
-									<td>{{ Carbon::parse($patient->created_at)->diffForHumans() }}</td>
+									<td>{{ $patient->points }}</td>
+									<td>
+										<span class="label-primary label">
+											<i class="fa fa-clock-o"></i>
+											{{ Carbon::parse($patient->created_at)->diffForHumans() }}
+										</span>
+									</td>
 								</tr>
 							@endforeach
 						</tbody>
