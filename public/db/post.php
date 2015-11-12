@@ -249,6 +249,7 @@ if ($request == 'register') {
     	} else {
     		$response['success'] = 0;
     		$response['message'] = "error =".mysql_error();
+    		$response['sql_query'] = $sql;
     	}
 
     } else if ($action == "update") {
