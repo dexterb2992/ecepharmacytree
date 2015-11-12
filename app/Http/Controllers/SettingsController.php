@@ -56,7 +56,10 @@ class SettingsController extends Controller
         $setting->delivery_minimum = _clean_number($input["delivery_minimum"]);
         $settings->nearest_location_distance = $input["nearest_location_distance"];
         
-                "msg" => "Your changes have been successfully saved!", "type" => "success"]);
+        if( $settings->save() )
+            return Redirect::to( route('Settings::index') )->withFlash_message([
+                "msg" => "Your changes have been successfully saved!", "type" => "success"
+            ]);
         return Redirect::to( route('Settings::index') )
             ->withFlash_message(["msg" => "Sorry, we can't process your request right now. Please try again later.", "warning"]);
     }

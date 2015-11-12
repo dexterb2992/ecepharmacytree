@@ -39,14 +39,15 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
-                                            data-urlmain="/product-groups/" data-id="{{ $group->id }}" data-toggle="tooltip" data-original-title="Remove">
-                                            <i class="fa fa-trash-o"></i>
-                                        </span>
                                         <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
                                             data-modal-target="#modal-product-groups" data-title="product group info" data-target="#form_edit_product_groups" 
                                             data-id="{{ $group->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
                                             <i class="fa fa-edit"></i>
+                                        </span>
+
+                                        <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
+                                            data-urlmain="/product-groups/" data-id="{{ $group->id }}" data-toggle="tooltip" data-original-title="Remove">
+                                            <i class="fa fa-trash-o"></i>
                                         </span>
                                     </div>
                                 </td>
