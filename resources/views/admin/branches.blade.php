@@ -4,8 +4,6 @@ use ECEPharmacyTree\Branch;
 ?>
 @extends('admin.layouts.template')
 @section('content')
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8&callback=initMap"> </script>
-
 
 <div class="row">
     <div class="col-xs-12">
@@ -132,18 +130,22 @@ use ECEPharmacyTree\Branch;
                     </form><!-- /form -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-            <script type="text/javascript">
 
-                var map;
-                function initMap() {
-                  map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: -34.397, lng: 150.644},
-                    zoom: 8
-                });
-              }
 
-          </script>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+    @stop
 
-      </div><!-- /.col -->
-  </div><!-- /.row -->
+    @section('scripts')
+    <script type="text/javascript">
+
+        var map;
+        function initMap() {
+          map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+        });
+      }
+
+  </script>
   @stop
