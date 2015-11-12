@@ -248,7 +248,7 @@ if ($request == 'register') {
     		$response['message'] = "relax, you're doing fine";
     	} else {
     		$response['success'] = 0;
-    		$response['message'] = 'sumthing is wrong love'; 
+    		$response['message'] = "error =".mysql_error();
     	}
 
     } else if ($action == "update") {
