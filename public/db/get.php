@@ -201,12 +201,20 @@ switch ($request) {
     $tbl = "clinic_patients";
     break;
 
-    case 'get_medical_records':
-    $result = mysql_query("SELECT * from clinic_patients as cp inner join medical_records_requests as mrr on cp.id = mrr.clinic_patients_id where username = '".$_GET['username']."' and password = '".$_GET['password']."'") or returnError(mysql_error());
+    case 'get_clinic_records':
+    $result = mysql_query("SELECT cpd.*, cpr.*, ct.* from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id inner join clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where cpd.username = '".$_GET['username']."' and cpd.password = '".$_GET['password']."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$_GET['patient_id']." ) ") or returnError(mysql_error());
     break;
 
     case 'google_distance_matrix':
     $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&destinations=";
+    $reverse_geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
+    $json_reverse_geocode = file_get_contents($reverse_geocode_url); // this WILL do an http request for you
+    $data_reverse_geocode = json_decode($json_reverse_geocode);
+    $address_components_reverse_geocode = $data_reverse_geocode->results[0]->formatted_address;
+    pre($address_components_reverse_geocode);
+    exit(0);
+
+
     $str = "";
     $distance = array();
     $storage = array();

@@ -21,6 +21,7 @@ class CreateSettingsTable extends Migration
             $table->double('commission_variation'); // % deduction per level
             $table->double('delivery_charge');
             $table->double('delivery_minimum');
+            $table->double('nearest_location_distance');
             $table->timestamps();
             $table->softDeletes();
         });

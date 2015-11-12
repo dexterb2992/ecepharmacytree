@@ -75,6 +75,14 @@
 
 
 						<div class="form-group">
+							<label>Nearest Distance Location <small><i>(Measured in Kilometer, this is to identify the farthest/maximum distance between user location and ECE branch.)</i></small></label>
+							<div class="input-group">
+								<input type="text" name="nearest_location_distance" class="number form-control" value="{{ $settings->nearest_location_distance }}">
+								<span class="input-group-addon">km</span>
+							</div>
+						</div>
+
+						<div class="form-group">
 							<button class="btn btn-flat btn-primary pull-right" type="submit">Save Changes</button>
 						</div>
 							
