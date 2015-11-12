@@ -4,6 +4,8 @@ use ECEPharmacyTree\Branch;
 ?>
 @extends('admin.layouts.template')
 @section('content')
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8&callback=initMap"> </script>
+
 
 <div class="row">
     <div class="col-xs-12">
@@ -119,8 +121,8 @@ use ECEPharmacyTree\Branch;
                                 <input type="text" class="form-control" id="additional_address" placeholder="Street" name="additional_address" required>
                             </div>
                             <div class="form-group">
-                            <label for="additional_address">Set the place</label>
-                                <div id="map"></div>
+                                <label for="additional_address">Set the place</label>
+                                <div id="map">fuck yoaus</div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -130,8 +132,6 @@ use ECEPharmacyTree\Branch;
                     </form><!-- /form -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-
-            
             <script type="text/javascript">
 
                 var map;
@@ -143,10 +143,7 @@ use ECEPharmacyTree\Branch;
               }
 
           </script>
-          <script async defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8&callback=initMap">
-      </script>
 
-  </div><!-- /.col -->
-</div><!-- /.row -->
-@stop
+      </div><!-- /.col -->
+  </div><!-- /.row -->
+  @stop
