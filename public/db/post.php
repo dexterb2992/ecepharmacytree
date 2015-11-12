@@ -221,24 +221,22 @@ if ($request == 'register') {
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
     } else if($action == "multiple_insert") {
-    	$sql    = "INSERT INTO " . $_POST['table'] . "(created_at," . $cols . ") VALUES('" . $datenow . "'," . $values . ")";
     	$cols   = "";
     	$values = "";
     	$count = 0;
     	$json_collection = json_decode($_POST['jsarray']);
 
-    	$str = "INSERT INTO ".$_POST['table']." () VALUES";
-
+    	$response["json"] = $json;
     	foreach ($json as $json_row) {
-    			// $str_values = "(".
+    		$response["json"+$count] = $json_row;
     		$cols   = "";
-
     		foreach ($json_row as $key => $value) {	
     			$cols .= $key . ",";
     			$values .= "'" . $value . "',";
     		}
 
     		$str_values = "('".$datenow."',".$values."),";
+    		$count += 1;
     	}
 
     	$sql = "INSERT INTO ".$_POST['table']." (created_at,".$cols.") VALUES".substr($str_values, strlen($str_values) - 1);
