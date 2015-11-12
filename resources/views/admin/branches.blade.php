@@ -118,6 +118,10 @@ use ECEPharmacyTree\Branch;
                                 <label for="additional_address">Additional address (<i>Be more specific with the address as you can as possible</i>)</label>
                                 <input type="text" class="form-control" id="additional_address" placeholder="Street" name="additional_address" required>
                             </div>
+                            <div class="form-group">
+                            <label for="additional_address">Set the place</label>
+                                <div id="map"></div>
+                            </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
@@ -127,7 +131,7 @@ use ECEPharmacyTree\Branch;
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
 
-            <div id="map"></div>
+            
             <script type="text/javascript">
 
                 var map;
