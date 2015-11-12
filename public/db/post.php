@@ -7,7 +7,7 @@ require_once __DIR__ . '/db_connect.php';
 $db       = new DB_CONNECT();
 $response = array();
 
-$request  = $_POST['request'];
+$request  = $_GET['request'];
 date_default_timezone_set('Asia/Manila');
 $datenow = date("Y-m-d H:i:s", time());
 $oldQty  = 0;
@@ -196,7 +196,7 @@ if ($request == 'register') {
 
     // if( $_POST['table'] == "basket" )
 
-    $action = $_POST['action'];
+    $action = $_GET['action'];
     $lent   = count($_POST);
     $x      = 0;
     if ($action == "insert") {
@@ -224,8 +224,8 @@ if ($request == 'register') {
     	$cols   = "";
     	$values = "";
     	$count = 0;
-    	$json_collection = json_decode($_POST['jsobj']);
-    	$response['hash'] = $_POST;
+    	$json_collection = json_decode($_GET['jsobj']);
+    	$response['hash'] = $_GET;
     	$response["json_collection"] = $json_collection;
     	foreach ($json_collection as $json_row) {
     		$response["json_row"+$count] = $json_row;
@@ -238,6 +238,9 @@ if ($request == 'register') {
     		$str_values = "('".$datenow."',".$values."),";
     		$count += 1;
     	}
+    	pre($_GET['jsobj']);
+    	echo json_encode($response);
+    	exit(0);
 
     	$sql = "INSERT INTO ".$_POST['table']." (created_at,".$cols.") VALUES".substr($str_values, strlen($str_values) - 1);
 
