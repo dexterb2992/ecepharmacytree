@@ -1,6 +1,6 @@
 <?php 
-    use Carbon\Carbon; 
-    use ECEPharmacyTree\Branch;
+use Carbon\Carbon; 
+use ECEPharmacyTree\Branch;
 ?>
 @extends('admin.layouts.template')
 @section('content')
@@ -25,39 +25,39 @@
                     </thead>
                     <tbody>
                         @foreach($branches as $branch)
-                            <tr data-id="{{ $branch->id }}" class="{{ $branch->status == 1? '' : 'warning' }}">
-                                <td>
-                                    <span>{{ $branch->name }}</span>
-                                </td>
-                                <td>
-                                    <span>{{ $branch->full_address() }}</span>
-                                </td>
-                                <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
-                                <td>
-                                    <span class="label-primary label"><i class="fa-clock-o fa"></i>
-                                        {{ Carbon::parse($branch->created_at)->diffForHumans() }}
+                        <tr data-id="{{ $branch->id }}" class="{{ $branch->status == 1? '' : 'warning' }}">
+                            <td>
+                                <span>{{ $branch->name }}</span>
+                            </td>
+                            <td>
+                                <span>{{ $branch->full_address() }}</span>
+                            </td>
+                            <td>{!! $branch->status == 1? '<span class="label label-info">Active</span>' : '<span class="label label-warning">Inactive</span>' !!}</td>
+                            <td>
+                                <span class="label-primary label"><i class="fa-clock-o fa"></i>
+                                    {{ Carbon::parse($branch->created_at)->diffForHumans() }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="tools">
+                                    <a href="javascript:void(0);" class="add-edit-btn btn btn-xs btn-info" data-toggle="tooltip" data-original-title="Edit" data-action="edit" data-modal-target="#modal-add-edit-branch" data-title="branch info" data-target="#form_edit_branch" data-id="{{ $branch->id }}" title="Edit">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    @if($branch->status == 1)
+                                    <span class="action-icon deactivate-branch btn btn-xs btn-warning" data-toggle="tooltip" data-original-title="Deactivate" data-title="branch" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}">
+                                        <i class="fa fa-warning"></i>
+                                    </span> 
+                                    @else
+                                    <span class="action-icon reactivate-branch btn btn-xs btn-purple" data-toggle="tooltip" data-original-title="Reactivate"  btn btn-xs btn-warningdata-title="branch" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}">
+                                        <i class="fa fa-check-square-o"></i>
                                     </span>
-                                </td>
-                                <td>
-                                    <div class="tools">
-                                        <a href="javascript:void(0);" class="add-edit-btn btn btn-xs btn-info" data-toggle="tooltip" data-original-title="Edit" data-action="edit" data-modal-target="#modal-add-edit-branch" data-title="branch info" data-target="#form_edit_branch" data-id="{{ $branch->id }}" title="Edit">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        @if($branch->status == 1)
-                                            <span class="action-icon deactivate-branch btn btn-xs btn-warning" data-toggle="tooltip" data-original-title="Deactivate" data-title="branch" data-urlmain="/branches/" data-action="deactivate" data-id="{{ $branch->id }}">
-                                                <i class="fa fa-warning"></i>
-                                            </span> 
-                                        @else
-                                            <span class="action-icon reactivate-branch btn btn-xs btn-purple" data-toggle="tooltip" data-original-title="Reactivate"  btn btn-xs btn-warningdata-title="branch" data-urlmain="/branches/" data-action="reactivate" data-id="{{ $branch->id }}">
-                                                <i class="fa fa-check-square-o"></i>
-                                            </span>
-                                        @endif
-                                        <span class="action-icon remove-branch btn btn-xs btn-danger" data-toggle="tooltip" data-original-title="Remove" data-action="remove" data-title="branch" data-urlmain="/branches/" data-id="{{ $branch->id }}">
-                                            <i class="fa fa-trash-o"></i>
-                                        </span>
-                                    </div>
-                                </td>
-                            </tr>
+                                    @endif
+                                    <span class="action-icon remove-branch btn btn-xs btn-danger" data-toggle="tooltip" data-original-title="Remove" data-action="remove" data-title="branch" data-urlmain="/branches/" data-id="{{ $branch->id }}">
+                                        <i class="fa fa-trash-o"></i>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -127,8 +127,22 @@
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
 
-            
+            <div id="map"></div>
+            <script type="text/javascript">
 
-        </div><!-- /.col -->
-    </div><!-- /.row -->
-    @stop
+                var map;
+                function initMap() {
+                  map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: -34.397, lng: 150.644},
+                    zoom: 8
+                });
+              }
+
+          </script>
+          <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8&callback=initMap">
+      </script>
+
+  </div><!-- /.col -->
+</div><!-- /.row -->
+@stop

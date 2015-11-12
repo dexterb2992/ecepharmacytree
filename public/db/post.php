@@ -189,20 +189,6 @@ if ($request == 'register') {
 		exit(0);
 	}
 
-} else if( $request == "insert_medical_record" ) {
-	$check_clinic_patients = mysql_query("SELECT * from clinic_patients where username = '".$_POST['username']."' and password ='".$_POST['password']."'");
-	if(mysql_num_rows($check_clinic_patients) > 0) {
-		$clinic_patients_rows = mysql_fetch_assoc($check_clinic_patients);
-
-		if(mysql_query("INSERT into medical_records_requests(patient_id, clinic_patients_id, created_at)  VALUES (".$_POST['patient_id'].", ".$clinic_patients_rows['id'].", '".$datenow."')"))
-		{
-			$response["success"] = 1;
-		}
-	} else {
-		$response["success"] = 0;
-		$response["message"] = "no match username and password for clinic_patients";
-	}
-
 } else if ($request == "crud") {
     /**    
     * @param table: asks for table name to insert    
@@ -234,6 +220,37 @@ if ($request == 'register') {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
+    } else if($action == "multiple_insert") {
+    	$sql    = "INSERT INTO " . $_POST['table'] . "(created_at," . $cols . ") VALUES('" . $datenow . "'," . $values . ")";
+    	$cols   = "";
+    	$values = "";
+    	$count = 0;
+    	$json_collection = json_decode($_POST['jsarray']);
+
+    	$str = "INSERT INTO ".$_POST['table']." () VALUES";
+
+    	foreach ($json as $json_row) {
+    			// $str_values = "(".
+    		$cols   = "";
+
+    		foreach ($json_row as $key => $value) {	
+    			$cols .= $key . ",";
+    			$values .= "'" . $value . "',";
+    		}
+
+    		$str_values = "('".$datenow."',".$values."),";
+    	}
+
+    	$sql = "INSERT INTO ".$_POST['table']." (created_at,".$cols.") VALUES".substr($str_values, strlen($str_values) - 1);
+
+    	if(mysql_query($sql)) {
+    		$response['success'] = 1;
+    		$response['message'] = "relax, you're doing fine";
+    	} else {
+    		$response['success'] = 0;
+    		$response['message'] = 'sumthing is wrong love'; 
+    	}
+
     } else if ($action == "update") {
     	$settings = "";
     	foreach ($_POST as $key => $value) {
