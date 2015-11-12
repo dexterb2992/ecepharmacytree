@@ -238,7 +238,8 @@ if ($request == 'register') {
     		$str_values = "('".$datenow."',".$values."),";
     		$count += 1;
     	}
-    	pre($_GET['jsobj']);
+    	$fuck = $_GET['jsobj'];
+    	pre($fuck[0]);
     	echo json_encode($response);
     	exit(0);
 
