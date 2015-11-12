@@ -224,7 +224,7 @@ if ($request == 'register') {
     	$cols   = "";
     	$values = "";
     	$count = 0;
-    	$json_collection = json_decode($_POST['jsarray']);
+    	$json_collection = json_decode($_POST['jsobj']);
     	$response['hash'] = $_POST;
     	$response["json_collection"] = $json_collection;
     	foreach ($json_collection as $json_row) {
