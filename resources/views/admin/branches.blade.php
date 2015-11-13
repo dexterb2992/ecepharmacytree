@@ -151,7 +151,18 @@ use ECEPharmacyTree\Branch;
 
                 region = region.substring(0, (region.indexOf("(", 0) != -1) ? region.indexOf("(", 0) : region.length());
 
-                    console.log(region);
+                province = province.substring(0, (province.indexOf("(", 0) != -1) ? province.indexOf("(", 0) : province.length());
+
+                municipality = municipality.substring(0, (municipality.indexOf("(", 0) != -1) ? municipality.indexOf("(", 0) : municipality.length());
+
+                barangay = barangay.substring(0, (barangay.indexOf("(", 0) != -1) ? barangay.indexOf("(", 0) : barangay.length());
+
+                console.log(region);
+                console.log(province);
+                console.log(municipality);
+                console.log(barangay);
+                console.log(additional_address);
+                
 
                 $.ajax({
                     url: 'https://maps.googleapis.com/maps/api/geocode/json?&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8',
