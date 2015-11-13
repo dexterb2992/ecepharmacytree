@@ -138,33 +138,36 @@ use ECEPharmacyTree\Branch;
 
     @section('scripts')
     <script type="text/javascript">
+        function initMap() {
 
-        var map;
-        function asdas() {
-           var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 8
-        });
+            if($('#additional_address').val() == "" && $('#address_barangay').val() == "0") 
+                $('#map').text('Fill up the address first');
+            else {
+             var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -34.397, lng: 150.644},
+                zoom: 8
+            });
 
-           var marker = new google.maps.Marker({
-            position: {lat: -34.397, lng: 150.644},
-            map: map,
-            draggable: true,
-            title: 'Click to zoom'
-        });
-
-
-           marker.addListener('dragend', function(e) {
-            placeMarkerAndPanTo(e.latLng, map, marker);
-        });
+             var marker = new google.maps.Marker({
+                position: {lat: -34.397, lng: 150.644},
+                map: map,
+                draggable: true,
+                title: 'Click to zoom'
+            });
 
 
-           map.addListener('click', function(e) {
-            placeMarkerAndPanTo(e.latLng, map, marker);
-        });
-       }
+             marker.addListener('dragend', function(e) {
+                placeMarkerAndPanTo(e.latLng, map, marker);
+            });
 
-       function placeMarkerAndPanTo(latLng, map, marker) {
+
+             map.addListener('click', function(e) {
+                placeMarkerAndPanTo(e.latLng, map, marker);
+            });
+         }
+     }
+
+     function placeMarkerAndPanTo(latLng, map, marker) {
         marker.setPosition(latLng);
         map.panTo(latLng);
     }

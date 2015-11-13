@@ -546,6 +546,13 @@ $(document).ready(function (){
         }
     });
 
+    $('#additional_address').change(function(){
+        if($(this).val() != "" && $("#address_barangay").val() != '0')
+            initMap();
+        else
+            $('#map').text("Please fill up the address first");
+    });
+
     $(".products-gallery-toggler").click(function (){
         var productId = $(this).parent("td").parent("tr").data("id");
         var targetModal = $(this).data("target");
