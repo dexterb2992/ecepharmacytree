@@ -141,11 +141,23 @@ use ECEPharmacyTree\Branch;
 
         var map;
         function initMap() {
-          map = new google.maps.Map(document.getElementById('map'), {
+         var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -34.397, lng: 150.644},
             zoom: 8
         });
-      }
 
-  </script>
-  @stop
+         var marker = new google.maps.Marker({
+            position: {lat: -34.397, lng: 150.644},
+            map: map,
+            title: 'Click to zoom'
+        });
+
+         marker.addListener('click', function() {
+            alert('fuck you');
+            map.setZoom(8);
+            map.setCenter(marker.getPosition());
+        });
+     }
+
+ </script>
+ @stop
