@@ -140,7 +140,7 @@ use ECEPharmacyTree\Branch;
     <script type="text/javascript">
 
         var map;
-        function initMap() {
+        function asdas() {
            var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: -34.397, lng: 150.644},
             zoom: 8
@@ -154,7 +154,7 @@ use ECEPharmacyTree\Branch;
         });
 
 
-         marker.addListener('dragend', function(e) {
+           marker.addListener('dragend', function(e) {
             placeMarkerAndPanTo(e.latLng, map, marker);
         });
 
@@ -162,24 +162,12 @@ use ECEPharmacyTree\Branch;
            map.addListener('click', function(e) {
             placeMarkerAndPanTo(e.latLng, map, marker);
         });
+       }
 
-
-        //  marker.addListener('click', function() {
-        //     alert('fuck you');
-        //     map.setZoom(8);
-        //     map.setCenter(marker.getPosition());
-        // });
-}
-
-function placeMarkerAndPanTo(latLng, map, marker) {
-    //   var marker = new google.maps.Marker({
-    //     position: latLng,
-    //     map: map
-    // });
-marker.setPosition(latLng);
-map.panTo(latLng);
-alert("buang ka");
-}
+       function placeMarkerAndPanTo(latLng, map, marker) {
+        marker.setPosition(latLng);
+        map.panTo(latLng);
+    }
 
 </script>
 @stop
