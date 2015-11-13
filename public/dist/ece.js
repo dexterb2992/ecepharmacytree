@@ -125,7 +125,7 @@ $(document).ready(function (){
                 var start_date = "", end_date;
 
                 $.each(data, function (i, row){
-                    
+
                     if( i == "description" ){
                         var str = row+"";
                         // var reg = /\\r\\n|\\n|\\r/g;
@@ -159,13 +159,13 @@ form.find("input#date_range").val(start_date+" - "  +end_date);
 form.find('select').find('option:selected').removeAttr("selected");
 $.each(form.find('select'), function (i, row){
     var name = $(row).attr("name");
-    
+
     $.each(data, function (i, col){
         if( i == name ){
             $(row).find('option[value="'+col+'"]').attr("selected", "selected");
         }
     });
-    
+
 });
 
 $.each(data, function (i, row){
@@ -197,12 +197,12 @@ updateInventoryProductQty();
     $('#image_holder').attr('src', img_source);               
     console.log(img_source); 
     $(modal).modal('show');
-    
+
 } else if(action == "fulfill_items") {
 
 }else{
     title = "Add new "+dataTitle;
-    
+
     _clear_form_data(form);
     form.find('#inventories_product_id').removeAttr("disabled");
     updateInventoryProductQty();
@@ -339,7 +339,7 @@ $("#inventory_quantity").keyup(function (){
 });
 
 $("select.sort-by").change(function (){
- $("input[type='search']:visible").val( $(this).val() ).trigger("keyup");
+   $("input[type='search']:visible").val( $(this).val() ).trigger("keyup");
 })
 
 $("#date_range").change(function (){
@@ -492,7 +492,7 @@ $('select#address_region').change(function(){
         }).done(function (data){
             console.log(typeof(data));
             if( typeof(data) == 'object' ){
-                
+
                 $("#address_city_municipality").html('<option value="0">- Select Municipality -</option>');
 
                 $.each(data, function (i, row){
@@ -546,12 +546,12 @@ $('select#address_city_municipality').change(function (){
     }
 });
 
-// $('#additional_address').change(function(){
-//     if($(this).val() != "" && $("#address_barangay").val() != '0')
-//         initMap();
-//     else
-//         $('#map').text("Please fill up the address first");
-// });
+$('#address_brangay, #address_city_municipality, #address_province, #address_region').change(function(){
+    if($(this).val() != "" && $("#address_barangay").val() != '0')
+        initMap();
+    else
+        $('#map').text("Please fill up the address first"); 
+});
 
 $("#additional_address").on('input', function(){
     if($(this).val() != "" && $("#address_barangay").val() != '0')
@@ -636,7 +636,7 @@ $("#add_gallery").click(function (){
     });
 
     obj.on('drop', function (e) {
-       
+
         $(this).css('border', '2px dotted #0B85A1');
         e.preventDefault();
         var files = e.originalEvent.dataTransfer.files;
@@ -747,7 +747,7 @@ $("#add_gallery").click(function (){
             _clear_form_errors($("#form_edit_inventory"));
         }
     });
-    
+
     $("#form_edit_inventory").submit(function (){
         if( $.trim( $(this).find('div.label-danger').html() ) != "" )
             return false;
