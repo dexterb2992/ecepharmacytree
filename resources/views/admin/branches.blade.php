@@ -143,7 +143,7 @@ use ECEPharmacyTree\Branch;
             if($('#additional_address').val() == "" && $('#address_barangay').val() == "0") 
                 $('#map').text('Fill up the address first');
             else {
-                var region = $("#address_region option:selected").text());
+                var region = $("#address_region option:selected").text();
                 var province = $("#address_province option:selected").text();
                 var municipality = $("#address_city_municipality option:selected").text();
                 var barangay = $("#address_barangay option:selected").text();
