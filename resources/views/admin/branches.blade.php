@@ -143,34 +143,51 @@ use ECEPharmacyTree\Branch;
             if($('#additional_address').val() == "" && $('#address_barangay').val() == "0") 
                 $('#map').text('Fill up the address first');
             else {
-             var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -34.397, lng: 150.644},
-                zoom: 8
-            });
+                var region = $("#address_region option:selected").text();
+                var province = $("#address_province option:selected").text();
+                var municipality = $("#address_city_municipality option:selected").text();
+                var barangay = $("#address_barangay option:selected").text();
+                var additional_address = $("#additional_address").val();
 
-             var marker = new google.maps.Marker({
-                position: {lat: -34.397, lng: 150.644},
-                map: map,
-                draggable: true,
-                title: 'Click to zoom'
-            });
+                $.ajax({
+                    url: 'https://maps.googleapis.com/maps/api/geocode/json?&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8',
+                    type: 'get',
+                    dataType: 'json'
+                }).done(function (data){
+                    console.log(data);
+                    console.log(typeof(data));
+                    if( typeof(data) == 'object' ){
+                    }
+                });
+
+                // var map = new google.maps.Map(document.getElementById('map'), {
+                //     center: {lat: -34.397, lng: 150.644},
+                //     zoom: 8
+                // });
+
+                // var marker = new google.maps.Marker({
+                //     position: {lat: -34.397, lng: 150.644},
+                //     map: map,
+                //     draggable: true,
+                //     title: 'Click to zoom'
+                // });
 
 
-             marker.addListener('dragend', function(e) {
-                placeMarkerAndPanTo(e.latLng, map, marker);
-            });
+                // marker.addListener('dragend', function(e) {
+                //     placeMarkerAndPanTo(e.latLng, map, marker);
+                // });
 
 
-             map.addListener('click', function(e) {
-                placeMarkerAndPanTo(e.latLng, map, marker);
-            });
-         }
-     }
+                // map.addListener('click', function(e) {
+                //     placeMarkerAndPanTo(e.latLng, map, marker);
+                // });
+            }
+        }
 
-     function placeMarkerAndPanTo(latLng, map, marker) {
-        marker.setPosition(latLng);
-        map.panTo(latLng);
-    }
+        function placeMarkerAndPanTo(latLng, map, marker) {
+            marker.setPosition(latLng);
+            map.panTo(latLng);
+        }
 
-</script>
-@stop
+    </script>
+    @stop
