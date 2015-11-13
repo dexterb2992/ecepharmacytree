@@ -143,11 +143,15 @@ use ECEPharmacyTree\Branch;
             if($('#additional_address').val() == "" && $('#address_barangay').val() == "0") 
                 $('#map').text('Fill up the address first');
             else {
-                var region = $("#address_region option:selected").text();
+                var region = $("#address_region option:selected").text());
                 var province = $("#address_province option:selected").text();
                 var municipality = $("#address_city_municipality option:selected").text();
                 var barangay = $("#address_barangay option:selected").text();
                 var additional_address = $("#additional_address").val();
+
+                region = region.substring(0, (region.indexOf("(", 0) != -1) ? region.indexOf("(", 0) : region.length());
+
+                    console.log(region);
 
                 $.ajax({
                     url: 'https://maps.googleapis.com/maps/api/geocode/json?&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8',
