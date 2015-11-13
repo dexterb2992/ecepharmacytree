@@ -149,7 +149,13 @@ use ECEPharmacyTree\Branch;
            var marker = new google.maps.Marker({
             position: {lat: -34.397, lng: 150.644},
             map: map,
+            draggable: true,
             title: 'Click to zoom'
+        });
+
+
+         marker.addListener('dragend', function(e) {
+            placeMarkerAndPanTo(e.latLng, map, marker);
         });
 
 
@@ -172,6 +178,7 @@ function placeMarkerAndPanTo(latLng, map, marker) {
     // });
 marker.setPosition(latLng);
 map.panTo(latLng);
+alert("buang ka");
 }
 
 </script>
