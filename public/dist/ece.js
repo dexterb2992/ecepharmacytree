@@ -10,16 +10,16 @@ $(document).ready(function (){
             element: 'revenue-chart',
             resize: true,
             data: [
-                {y: '2011 Q1', item1: 2666, item2: 2666},
-                {y: '2011 Q2', item1: 2778, item2: 2294},
-                {y: '2011 Q3', item1: 4912, item2: 1969},
-                {y: '2011 Q4', item1: 3767, item2: 3597},
-                {y: '2012 Q1', item1: 6810, item2: 1914},
-                {y: '2012 Q2', item1: 5670, item2: 4293},
-                {y: '2012 Q3', item1: 4820, item2: 3795},
-                {y: '2012 Q4', item1: 15073, item2: 5967},
-                {y: '2013 Q1', item1: 10687, item2: 4460},
-                {y: '2013 Q2', item1: 8432, item2: 5713}
+            {y: '2011 Q1', item1: 2666, item2: 2666},
+            {y: '2011 Q2', item1: 2778, item2: 2294},
+            {y: '2011 Q3', item1: 4912, item2: 1969},
+            {y: '2011 Q4', item1: 3767, item2: 3597},
+            {y: '2012 Q1', item1: 6810, item2: 1914},
+            {y: '2012 Q2', item1: 5670, item2: 4293},
+            {y: '2012 Q3', item1: 4820, item2: 3795},
+            {y: '2012 Q4', item1: 15073, item2: 5967},
+            {y: '2013 Q1', item1: 10687, item2: 4460},
+            {y: '2013 Q2', item1: 8432, item2: 5713}
             ],
             xkey: 'y',
             ykeys: ['item1', 'item2'],
@@ -38,9 +38,9 @@ $(document).ready(function (){
             resize: true,
             colors: ["#3c8dbc", "#f56954", "#00a65a"],
             data: [
-                {label: "Download Sales", value: 12},
-                {label: "In-Store Sales", value: 30},
-                {label: "Mail-Order Sales", value: 20}
+            {label: "Download Sales", value: 12},
+            {label: "In-Store Sales", value: 30},
+            {label: "Mail-Order Sales", value: 20}
             ],
             hideHover: 'auto'
         });
@@ -54,7 +54,7 @@ $(document).ready(function (){
         donut.redraw();
     });
 
-	$('.datatable:not(.table-referrals)').DataTable({
+    $('.datatable:not(.table-referrals)').DataTable({
         "paging": true,
         "lengthChange": false,
         "searching": true,
@@ -154,21 +154,21 @@ $(document).ready(function (){
                         end_date = row;
                 });
 
-                form.find("input#date_range").val(start_date+" - "  +end_date);
+form.find("input#date_range").val(start_date+" - "  +end_date);
 
-                form.find('select').find('option:selected').removeAttr("selected");
-                $.each(form.find('select'), function (i, row){
-                    var name = $(row).attr("name");
-                    
-                    $.each(data, function (i, col){
-                        if( i == name ){
-                            $(row).find('option[value="'+col+'"]').attr("selected", "selected");
-                        }
-                    });
-                    
-                });
+form.find('select').find('option:selected').removeAttr("selected");
+$.each(form.find('select'), function (i, row){
+    var name = $(row).attr("name");
+    
+    $.each(data, function (i, col){
+        if( i == name ){
+            $(row).find('option[value="'+col+'"]').attr("selected", "selected");
+        }
+    });
+    
+});
 
-                $.each(data, function (i, row){
+$.each(data, function (i, row){
                     // search for select dropdown with array names ex. names[]
                     form.find("input[name='"+i+"[]']").val(row); 
                     var does_it_exists = form.find("select[name='"+i+"[]']");
@@ -186,41 +186,41 @@ $(document).ready(function (){
                         }
                     }
                 });
-                    
-
-                form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing");
-                form.find('#inventories_product_id').attr("disabled", "disabled");
-                updateInventoryProductQty();
-            });
-        } else if(action == "preview_image"){
-            var img_source = $(this).children('img').attr('src');
-            $('#image_holder').attr('src', img_source);               
-            console.log(img_source); 
-            $(modal).modal('show');
-            
-        } else if(action == "fulfill_items") {
-
-        }else{
-            title = "Add new "+dataTitle;
-            
-            _clear_form_data(form);
-            form.find('#inventories_product_id').removeAttr("disabled");
-            updateInventoryProductQty();
-        }
-
-        form.attr("data-mode", action);
-        form.attr("action", mainurl+action);
-
-        form.find(".modal-title").html(title);
-        
-        $(modal).modal('show');
-    });
 
 
-    $(document).on("click", ".btn-custom-alert", function (){
-        customAlertResponse = $(this).data("value");
+form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing");
+form.find('#inventories_product_id').attr("disabled", "disabled");
+updateInventoryProductQty();
+});
+} else if(action == "preview_image"){
+    var img_source = $(this).children('img').attr('src');
+    $('#image_holder').attr('src', img_source);               
+    console.log(img_source); 
+    $(modal).modal('show');
+    
+} else if(action == "fulfill_items") {
 
-    });
+}else{
+    title = "Add new "+dataTitle;
+    
+    _clear_form_data(form);
+    form.find('#inventories_product_id').removeAttr("disabled");
+    updateInventoryProductQty();
+}
+
+form.attr("data-mode", action);
+form.attr("action", mainurl+action);
+
+form.find(".modal-title").html(title);
+
+$(modal).modal('show');
+});
+
+
+$(document).on("click", ".btn-custom-alert", function (){
+    customAlertResponse = $(this).data("value");
+
+});
 
     /**
      * For alert/confirmation dialogs
@@ -230,10 +230,10 @@ $(document).ready(function (){
      * 3. data-action => the type of the alert dialog
      * 4. data-urlmain => the url where the next functions should take place (ex.: http://mydomain.com/products/)
      */
-    $(document).on("click", ".action-icon", function (){
+     $(document).on("click", ".action-icon", function (){
         var $this = $(this), url = "", alertType = "";
         var id = $this.data("id"), action = $this.data('action'), mainurl = $this.data('urlmain'), 
-            dataTitle = $this.data('title');
+        dataTitle = $this.data('title');
 
         if( action == "deactivate" ){
             alertType = "warning";
@@ -295,128 +295,128 @@ $(document).ready(function (){
         $(document).find(".btn-custom-alert[data-value='true']").attr("data-redirect", url).attr("data-id", id);
     });
 
-    /** Add your forms here */
-    $("#form_edit_branch, #form_edit_product_category, #form_edit_product_subcategory, #form_edit_inventory").submit(function (){
-        var mode = $(this).data("mode"), mainurl = $(this).data('urlmain');
-        $(this).attr("action", mainurl+mode);
-        $(this).find("select[disabled='disabled']").removeAttr("disabled");
-    });
+/** Add your forms here */
+$("#form_edit_branch, #form_edit_product_category, #form_edit_product_subcategory, #form_edit_inventory").submit(function (){
+    var mode = $(this).data("mode"), mainurl = $(this).data('urlmain');
+    $(this).attr("action", mainurl+mode);
+    $(this).find("select[disabled='disabled']").removeAttr("disabled");
+});
 
-    $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
-        var $this = $(this);
-        var redirectUrl = $this.data("redirect"), id = $this.data("id");
-        console.log("redirectUrl: "+redirectUrl+" id: "+id);
-        if( redirectUrl !== "" ){
-            $.ajax({
-                url : redirectUrl,
-                type : 'post',
-                dataType : 'json',
-                data : { id : id, _token :  $("input[name='_token']").val() }
-            }).done(function (data){
-                console.log(data);
-                if( data.status == "success" ){
-                    $(".modal-alert").modal('hide');
+$(document).on("click", ".btn-custom-alert[data-value='true']", function (){
+    var $this = $(this);
+    var redirectUrl = $this.data("redirect"), id = $this.data("id");
+    console.log("redirectUrl: "+redirectUrl+" id: "+id);
+    if( redirectUrl !== "" ){
+        $.ajax({
+            url : redirectUrl,
+            type : 'post',
+            dataType : 'json',
+            data : { id : id, _token :  $("input[name='_token']").val() }
+        }).done(function (data){
+            console.log(data);
+            if( data.status == "success" ){
+                $(".modal-alert").modal('hide');
                     window.location = window.location; // reload page
                 }
             });
-        }
+    }
+});
+
+$("#inventories_product_id").change(function (){
+    var packing = $(this).children('option:selected').attr("data-packing");
+    $(document).find("#outer_packing").html(packing);
+    $(document).find(".add-on-product-packing").html( str_plural(packing) );
+    console.log("packing: "+packing);
+});
+
+
+$("#inventory_quantity").change(function (){
+    updateInventoryProductQty();
+});
+
+$("#inventory_quantity").keyup(function (){
+    updateInventoryProductQty();
+});
+
+$("select.sort-by").change(function (){
+ $("input[type='search']:visible").val( $(this).val() ).trigger("keyup");
+})
+
+$("#date_range").change(function (){
+    var dates = $(this).val();
+    console.log(dates);
+    $("input[name='start_date']").val( $("input[name='daterangepicker_start']").val() );
+    $("input[name='end_date']").val( $("input[name='daterangepicker_end']").val() );
+});
+
+$(document).on("click", ".show-downlines", function(){
+    $(".table-referrals tr").removeClass("selected");
+    $(".show-downlines").removeClass("selected");
+    $(this).addClass("selected");
+    $(this).parent("td").parent("tr").addClass("selected");
+
+    $('html, body').animate({
+        scrollTop: $(".referral-chart-row").offset().top
+    }, 1500);
+
+    $("#chart").html("");
+    $("ul.referral-chart[data-id='"+$(this).data("id")+"']").jOrgChart({
+        chartElement : '#chart',
+        dragAndDrop  : false
     });
+    $(".scroll-to-top").fadeIn();
+});
 
-    $("#inventories_product_id").change(function (){
-        var packing = $(this).children('option:selected').attr("data-packing");
-        $(document).find("#outer_packing").html(packing);
-        $(document).find(".add-on-product-packing").html( str_plural(packing) );
-        console.log("packing: "+packing);
-    });
+$(".scroll-to-top").click(function (){
+    $('html, body').animate({
+        scrollTop: $(".content-header").offset().top
+    }, 500);
+});
 
+$("#browse_photo").change(function (){
+    readURL(this, $('#user_photo'));
+    var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+    $("#photo_filename").attr("title", filename).html(limitStr(filename, 35)+'<span id="cancel_update_photo" class="cancel-update-photo" data-toggle="tooltip" data-original-title="Cancel"><i class="fa fa-close"></i></span>').show();
+});
 
-    $("#inventory_quantity").change(function (){
-        updateInventoryProductQty();
-    });
+$(document).on("click", "#cancel_update_photo", function(){
+    $("#photo_filename").slideUp(function(){ $(this).html(""); });
+    $("#user_photo").attr("src", old_photo_src);
+    var browse = $("#browse_photo");
+    browse.replaceWith( browse = browse.clone( true ) );
+});
 
-    $("#inventory_quantity").keyup(function (){
-        updateInventoryProductQty();
-    });
+$("#btn_submit_form_update_password").click(function (){
+    var form = $("#form_update_password");
+    var data = {
+        old_password: formfinder(form, 'old_password', 'input'),
+        new_password: formfinder(form, 'new_password', 'input'),
+        new_password_confirmation: formfinder(form, 'new_password_confirmation', 'input'),
+        _token: formfinder(form, '_token', 'input')
+    };
 
-    $("select.sort-by").change(function (){
-       $("input[type='search']:visible").val( $(this).val() ).trigger("keyup");
-    })
+    var $this = $(this);
+    $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
 
-    $("#date_range").change(function (){
-        var dates = $(this).val();
-        console.log(dates);
-        $("input[name='start_date']").val( $("input[name='daterangepicker_start']").val() );
-        $("input[name='end_date']").val( $("input[name='daterangepicker_end']").val() );
-    });
-
-    $(document).on("click", ".show-downlines", function(){
-        $(".table-referrals tr").removeClass("selected");
-        $(".show-downlines").removeClass("selected");
-        $(this).addClass("selected");
-        $(this).parent("td").parent("tr").addClass("selected");
-
-        $('html, body').animate({
-            scrollTop: $(".referral-chart-row").offset().top
-        }, 1500);
-
-        $("#chart").html("");
-        $("ul.referral-chart[data-id='"+$(this).data("id")+"']").jOrgChart({
-            chartElement : '#chart',
-            dragAndDrop  : false
-        });
-        $(".scroll-to-top").fadeIn();
-    });
-
-    $(".scroll-to-top").click(function (){
-        $('html, body').animate({
-            scrollTop: $(".content-header").offset().top
-        }, 500);
-    });
-
-    $("#browse_photo").change(function (){
-        readURL(this, $('#user_photo'));
-        var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
-        $("#photo_filename").attr("title", filename).html(limitStr(filename, 35)+'<span id="cancel_update_photo" class="cancel-update-photo" data-toggle="tooltip" data-original-title="Cancel"><i class="fa fa-close"></i></span>').show();
-    });
-        
-    $(document).on("click", "#cancel_update_photo", function(){
-        $("#photo_filename").slideUp(function(){ $(this).html(""); });
-        $("#user_photo").attr("src", old_photo_src);
-        var browse = $("#browse_photo");
-        browse.replaceWith( browse = browse.clone( true ) );
-    });
-
-    $("#btn_submit_form_update_password").click(function (){
-        var form = $("#form_update_password");
-        var data = {
+    $.ajax({
+        url: '/admin/update-password',
+        type: 'post',
+        dataType: 'json',    
+        data: {
             old_password: formfinder(form, 'old_password', 'input'),
             new_password: formfinder(form, 'new_password', 'input'),
             new_password_confirmation: formfinder(form, 'new_password_confirmation', 'input'),
             _token: formfinder(form, '_token', 'input')
-        };
+        }
+    }).done(function(data){
+        $this.removeClass("disabled").removeAttr("disabled").html("Update password");
 
-        var $this = $(this);
-        $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
+        _clear_form_errors(form);
+        _clear_form_data(form);
 
-        $.ajax({
-            url: '/admin/update-password',
-            type: 'post',
-            dataType: 'json',    
-            data: {
-                old_password: formfinder(form, 'old_password', 'input'),
-                new_password: formfinder(form, 'new_password', 'input'),
-                new_password_confirmation: formfinder(form, 'new_password_confirmation', 'input'),
-                _token: formfinder(form, '_token', 'input')
-            }
-        }).done(function(data){
-            $this.removeClass("disabled").removeAttr("disabled").html("Update password");
-
-            _clear_form_errors(form);
-            _clear_form_data(form);
-
-            $.each(data.errors, function (i, row){
-                _error($('input[name="'+i+'"]'), row[0]);
-            });
+        $.each(data.errors, function (i, row){
+            _error($('input[name="'+i+'"]'), row[0]);
+        });
 
             // if successful, hide the modal
             if( data.status_code == "200" ){
@@ -429,230 +429,237 @@ $(document).ready(function (){
         });
     });
 
-    $('#btn_update_info').click(function (){
-        var form = $("#form_update_info");
-        var $this = $(this);
+$('#btn_update_info').click(function (){
+    var form = $("#form_update_info");
+    var $this = $(this);
 
-        $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
+    $this.attr("disabled", "disabled").addClass("disabled").html("Please wait...");
 
-        var formdata = {
-            fname: formfinder(form, 'fname', 'input'),
-            mname: formfinder(form, 'mname', 'input'),
-            lname: formfinder(form, 'lname', 'input'),
-            email: formfinder(form, 'email', 'input'),
-            _token: formfinder(form, '_token', 'input')
-        };
+    var formdata = {
+        fname: formfinder(form, 'fname', 'input'),
+        mname: formfinder(form, 'mname', 'input'),
+        lname: formfinder(form, 'lname', 'input'),
+        email: formfinder(form, 'email', 'input'),
+        _token: formfinder(form, '_token', 'input')
+    };
 
-        $.ajax({
-            url: '/profile/update',
-            type: 'post',
-            dataType: 'json',
-            data: formdata
-        }).done(function (data){
-            console.log(data);
-            _clear_form_errors(form);
+    $.ajax({
+        url: '/profile/update',
+        type: 'post',
+        dataType: 'json',
+        data: formdata
+    }).done(function (data){
+        console.log(data);
+        _clear_form_errors(form);
 
-            $.each(data.errors, function (i, row){
-                _error($('input[name="'+i+'"]'), row[0]);
-            });
-
-
-            if( data.status_code == '200' ){
-                showAlert("Password notification", "Your profile has been updated.", 'info', 'notify');
-
-                $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
-
-                $.each(formdata, function (i, row){
-                    if( i !== "_token" ){
-                        form.find('input[name="'+i+'"]').val(row);
-                    }
-                });
-                $("div.user-panel .info p, li.user.user-menu a.dropdown-toggle span").html(formdata.fname+" "+formdata.lname);
-            }else{
-
-            }
-
-            $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
-
-        }).fail(function(data){
-            console.log(data);
-            $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
+        $.each(data.errors, function (i, row){
+            _error($('input[name="'+i+'"]'), row[0]);
         });
-    });
 
-    $('select#address_region').change(function(){
-        var provinces = '<option value="0">- Select Province -</option>';
-        $("#address_province").html(provinces).select2();
 
-        if( $(this).val() !='0' ){
-            $.ajax({
-                url: '/locations/get/provinces/where-regions/'+$(this).val(),
-                type: 'get',
-                dataType: 'json'
-            }).done(function (data){
-                console.log(typeof(data));
-                if( typeof(data) == 'object' ){
-                    
-                    $("#address_city_municipality").html('<option value="0">- Select Municipality -</option>');
+        if( data.status_code == '200' ){
+            showAlert("Password notification", "Your profile has been updated.", 'info', 'notify');
 
-                    $.each(data, function (i, row){
-                        provinces += '<option value="'+row.id+'">'+row.name+'</option>';
-                    });
+            $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
 
-                    $("#address_province").html(provinces).select2();
-                    $('#address_city_municipality').select2();
+            $.each(formdata, function (i, row){
+                if( i !== "_token" ){
+                    form.find('input[name="'+i+'"]').val(row);
                 }
             });
+            $("div.user-panel .info p, li.user.user-menu a.dropdown-toggle span").html(formdata.fname+" "+formdata.lname);
+        }else{
+
         }
+
+        $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
+
+    }).fail(function(data){
+        console.log(data);
+        $this.removeClass("disabled").removeAttr("disabled").html("Update Info");
     });
+});
 
-    $('select#address_province').change(function(){
-        if( $(this).val() !='0' ){
-            $.ajax({
-                url: '/locations/get/municipalities/where-provinces/'+$(this).val(),
-                type: 'get',
-                dataType: 'json'
-            }).done(function (data){
-                console.log(typeof(data));
-                if( typeof(data) == 'object' ){
-                    var municipalities = '<option value="0">- Select Municipality -</option>';
-                    $.each(data, function (i, row){
-                        municipalities += '<option value="'+row.id+'">'+row.name+'</option>';
-                    });
+$('select#address_region').change(function(){
+    var provinces = '<option value="0">- Select Province -</option>';
+    $("#address_province").html(provinces).select2();
 
-                    $("#address_city_municipality").html(municipalities).select2();
-                }
-            });
-        }
-    });
-
-    $('select#address_city_municipality').change(function (){
-        if( $(this).val() != '0' ){
-            $.ajax({
-                url: '/locations/get/barangays/where-municipalities/'+$(this).val(),
-                type: 'get',
-                dataType: 'json'
-            }).done(function (data){
-                console.log(typeof(data));
-                if( typeof(data) == 'object' ){
-                    var barangays = '<option value="0">- Select Barangay -</option>';
-                    $.each(data, function (i, row){
-                        barangays += '<option value="'+row.id+'">'+row.name+'</option>';
-                    });
-
-                    $("#address_barangay").html(barangays).select2();
-                }
-            });
-        }
-    });
-
-    $('#additional_address').change(function(){
-        if($(this).val() != "" && $("#address_barangay").val() != '0')
-            initMap();
-        else
-            $('#map').text("Please fill up the address first");
-    });
-
-    $(".products-gallery-toggler").click(function (){
-        var productId = $(this).parent("td").parent("tr").data("id");
-        var targetModal = $(this).data("target");
-        $("#droppable_div").attr("data-id", productId);
+    if( $(this).val() !='0' ){
         $.ajax({
-            url: '/products/gallery/'+productId,
+            url: '/locations/get/provinces/where-regions/'+$(this).val(),
             type: 'get',
             dataType: 'json'
         }).done(function (data){
-            console.log(data);
-            console.log("length: "+data.length);
-            if( data.length > 0 ){
-                $(".gallery-empty").html("");
-                $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
-                $('#product-gallery-carousel').show();
-                $(".add-new-gallery-outer").hide();
+            console.log(typeof(data));
+            if( typeof(data) == 'object' ){
+                
+                $("#address_city_municipality").html('<option value="0">- Select Municipality -</option>');
 
-                $('#product-gallery-carousel .carousel-indicators, #product-gallery-carousel .carousel-inner').html("");
-                var isActive = "active";
                 $.each(data, function (i, row){
-                    if( i != 0 ) isActive = '';
-                    $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"  data-id="'+row.id+'"></li>')
-                    $('#product-gallery-carousel .carousel-inner').append('<div class="item '+isActive+'">'+
-                        '<img src="/images/original/'+row.filename+'" class="product-gallery-item" data-product_id="'+productId+'" data-id="'+row.id+'">'+
-                    '</div>');
+                    provinces += '<option value="'+row.id+'">'+row.name+'</option>';
                 });
-                $(".carousel-inner").removeClass("disable-contextmenu");
-                $('#product-gallery-carousel').carousel();
-            }else{
-                $('#product-gallery-carousel').carousel('pause').html(getOriginalCarouselItems()).carousel();
-                $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
-                $('#product-gallery-carousel').hide();
-                $(".add-new-gallery-outer").removeClass("hidden").show();
-                $(".gallery-empty").html('<code> No available photo for this product yet. Drop some photos here.</code>');
-                $(".carousel-inner").addClass("disable-contextmenu");
+
+                $("#address_province").html(provinces).select2();
+                $('#address_city_municipality').select2();
             }
-
-            $(targetModal).modal('show');
         });
-    });
+    }
+});
 
-    $("#add_gallery").click(function (){
-        $("#status1").html("");
-
-        if( $(this).html() == "Add new" ){
-            $("#product-gallery-carousel").fadeOut(function (){
-                $(".add-new-gallery-outer").fadeIn(function(){
-                    $(this).removeClass('hidden').show(function(){
-                        $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
-                    });
+$('select#address_province').change(function(){
+    if( $(this).val() !='0' ){
+        $.ajax({
+            url: '/locations/get/municipalities/where-provinces/'+$(this).val(),
+            type: 'get',
+            dataType: 'json'
+        }).done(function (data){
+            console.log(typeof(data));
+            if( typeof(data) == 'object' ){
+                var municipalities = '<option value="0">- Select Municipality -</option>';
+                $.each(data, function (i, row){
+                    municipalities += '<option value="'+row.id+'">'+row.name+'</option>';
                 });
+
+                $("#address_city_municipality").html(municipalities).select2();
+            }
+        });
+    }
+});
+
+$('select#address_city_municipality').change(function (){
+    if( $(this).val() != '0' ){
+        $.ajax({
+            url: '/locations/get/barangays/where-municipalities/'+$(this).val(),
+            type: 'get',
+            dataType: 'json'
+        }).done(function (data){
+            console.log(typeof(data));
+            if( typeof(data) == 'object' ){
+                var barangays = '<option value="0">- Select Barangay -</option>';
+                $.each(data, function (i, row){
+                    barangays += '<option value="'+row.id+'">'+row.name+'</option>';
+                });
+
+                $("#address_barangay").html(barangays).select2();
+            }
+        });
+    }
+});
+
+// $('#additional_address').change(function(){
+//     if($(this).val() != "" && $("#address_barangay").val() != '0')
+//         initMap();
+//     else
+//         $('#map').text("Please fill up the address first");
+// });
+
+$("#additional_address").on('input', function(){
+    if($(this).val() != "" && $("#address_barangay").val() != '0')
+        initMap();
+    else
+        $('#map').text("Please fill up the address first");     
+});
+
+$(".products-gallery-toggler").click(function (){
+    var productId = $(this).parent("td").parent("tr").data("id");
+    var targetModal = $(this).data("target");
+    $("#droppable_div").attr("data-id", productId);
+    $.ajax({
+        url: '/products/gallery/'+productId,
+        type: 'get',
+        dataType: 'json'
+    }).done(function (data){
+        console.log(data);
+        console.log("length: "+data.length);
+        if( data.length > 0 ){
+            $(".gallery-empty").html("");
+            $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
+            $('#product-gallery-carousel').show();
+            $(".add-new-gallery-outer").hide();
+
+            $('#product-gallery-carousel .carousel-indicators, #product-gallery-carousel .carousel-inner').html("");
+            var isActive = "active";
+            $.each(data, function (i, row){
+                if( i != 0 ) isActive = '';
+                $('#product-gallery-carousel .carousel-indicators').append('<li data-target="#product-gallery-carousel" data-slide-to="'+i+'" class="'+isActive+'"  data-id="'+row.id+'"></li>')
+                $('#product-gallery-carousel .carousel-inner').append('<div class="item '+isActive+'">'+
+                    '<img src="/images/original/'+row.filename+'" class="product-gallery-item" data-product_id="'+productId+'" data-id="'+row.id+'">'+
+                    '</div>');
             });
+            $(".carousel-inner").removeClass("disable-contextmenu");
+            $('#product-gallery-carousel').carousel();
         }else{
+            $('#product-gallery-carousel').carousel('pause').html(getOriginalCarouselItems()).carousel();
+            $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
+            $('#product-gallery-carousel').hide();
+            $(".add-new-gallery-outer").removeClass("hidden").show();
+            $(".gallery-empty").html('<code> No available photo for this product yet. Drop some photos here.</code>');
+            $(".carousel-inner").addClass("disable-contextmenu");
+        }
 
-            $(".add-new-gallery-outer").fadeOut(function (){
-                $("#product-gallery-carousel").fadeIn(function(){
-                    $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
-                    $("#droppable_div").next(".statusbar").remove();
+        $(targetModal).modal('show');
+    });
+});
+
+$("#add_gallery").click(function (){
+    $("#status1").html("");
+
+    if( $(this).html() == "Add new" ){
+        $("#product-gallery-carousel").fadeOut(function (){
+            $(".add-new-gallery-outer").fadeIn(function(){
+                $(this).removeClass('hidden').show(function(){
+                    $("#add_gallery").html("Cancel").removeClass("btn-info").addClass("btn-warning");
                 });
             });
-        }
-    });
-	
-    // let's create our drag and drop file uploader
-        var obj = $("#droppable_div");
-        obj.on('dragenter', function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            $(this).css('border', '2px solid #0B85A1');
         });
-        obj.on('dragover', function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-        });
+    }else{
 
-        obj.on('drop', function (e) {
-         
-            $(this).css('border', '2px dotted #0B85A1');
-            e.preventDefault();
-            var files = e.originalEvent.dataTransfer.files;
+        $(".add-new-gallery-outer").fadeOut(function (){
+            $("#product-gallery-carousel").fadeIn(function(){
+                $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
+                $("#droppable_div").next(".statusbar").remove();
+            });
+        });
+    }
+});
+
+    // let's create our drag and drop file uploader
+    var obj = $("#droppable_div");
+    obj.on('dragenter', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $(this).css('border', '2px solid #0B85A1');
+    });
+    obj.on('dragover', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    });
+
+    obj.on('drop', function (e) {
+       
+        $(this).css('border', '2px dotted #0B85A1');
+        e.preventDefault();
+        var files = e.originalEvent.dataTransfer.files;
 
             //We need to send dropped files to Server
             handleFileUpload(files,obj);
         });
 
-        $(document).on('dragenter', function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-        });
+    $(document).on('dragenter', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    });
 
-        $(document).on('dragover', function (e) {
-          e.stopPropagation();
-          e.preventDefault();
-          obj.css('border', '2px dotted #0B85A1');
-        });
+    $(document).on('dragover', function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      obj.css('border', '2px dotted #0B85A1');
+  });
 
-        $(document).on('drop', function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-        });
+    $(document).on('drop', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    });
 
 
     // Let's enable the right click context menu to delete product photo
@@ -660,75 +667,75 @@ $(document).ready(function (){
         if(e.which == 3 ){  // if mouse's right button is clicked
             $("#product-gallery-carousel").carousel("pause").removeData();
 
-            var activeItem = $(this).children("div.item.active");
-            var pid = activeItem.children("img").data("id");
-            var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
-            var product_id = activeItem.children("img").data("product_id");
-            console.log("activeIndicator: ");
-            console.log(activeIndicator);
+        var activeItem = $(this).children("div.item.active");
+        var pid = activeItem.children("img").data("id");
+        var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
+        var product_id = activeItem.children("img").data("product_id");
+        console.log("activeIndicator: ");
+        console.log(activeIndicator);
 
-            console.log("activeItem: ");
-            console.log(activeItem);
+        console.log("activeItem: ");
+        console.log(activeItem);
 
-            var $this = $(this);
+        var $this = $(this);
 
-            if( !$this.is(":focus") && !$("div.context-menu").parent("td").parent("tr").parent("tbody")
-                .parent("table").is(":focus") ){
-                $(document).find("div.context-menu").parent("td").parent("tr").parent("tbody").parent("table").remove();
-                $(document).find('div.context-menu-shadow').remove();
-            }
+        if( !$this.is(":focus") && !$("div.context-menu").parent("td").parent("tr").parent("tbody")
+            .parent("table").is(":focus") ){
+            $(document).find("div.context-menu").parent("td").parent("tr").parent("tbody").parent("table").remove();
+        $(document).find('div.context-menu-shadow').remove();
+    }
 
-            var menu = [
-                {
-                    'Make Primary': function(menuItem, menu){
-                        $.ajax({
-                            url: '/products/gallery/change-primary/'+pid,
-                            type: "post",
-                            dataType: "json",
-                            data: { _token: $('input[name="_token"]').val() }
-                        }).done(function (data){
-                            console.log(data);
-                            if( data.status_code == "200" ){
-                                refreshProductPrimaryPhoto(product_id);
-                                $("#modal-products-gallery").modal('hide');
-                            }
-                        });
-                    }
-                },
-                {
-                    'Delete': function(menuItem, menu) { 
-                        $.ajax({
-                            url: '/products/gallery/delete/'+pid,
-                            type: "post",
-                            dataType: "json",
-                            data: { _token: $('input[name="_token"]').val() },
-                            beforeSend: function(){
-                                activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
-                            }
-                        }).done(function (data){
-                            console.log(data);
-                            $(".deleting-photo").remove();
-
-                            if( data.status_code == "200" ){
-                                $("#product-gallery-carousel").carousel("next");
-                                activeItem.removeClass("item").addClass("hidden");
-                                activeIndicator.remove();
-                                $(".carousel-indicators li").removeClass("active");
-                                $(".carousel-indicators li:first").addClass("active");
-
-                                $("#product-gallery-carousel").carousel();
-                                refreshProductPrimaryPhoto(product_id);
-                            }else{
-                                alert(data.msg);
-                            }
-                        }); 
-                } 
-            }];
-
-            $('.carousel-inner').contextMenu(menu,{theme:'vista'});
-
+    var menu = [
+    {
+        'Make Primary': function(menuItem, menu){
+            $.ajax({
+                url: '/products/gallery/change-primary/'+pid,
+                type: "post",
+                dataType: "json",
+                data: { _token: $('input[name="_token"]').val() }
+            }).done(function (data){
+                console.log(data);
+                if( data.status_code == "200" ){
+                    refreshProductPrimaryPhoto(product_id);
+                    $("#modal-products-gallery").modal('hide');
+                }
+            });
         }
-    });
+    },
+    {
+        'Delete': function(menuItem, menu) { 
+            $.ajax({
+                url: '/products/gallery/delete/'+pid,
+                type: "post",
+                dataType: "json",
+                data: { _token: $('input[name="_token"]').val() },
+                beforeSend: function(){
+                    activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
+                }
+            }).done(function (data){
+                console.log(data);
+                $(".deleting-photo").remove();
+
+                if( data.status_code == "200" ){
+                    $("#product-gallery-carousel").carousel("next");
+                    activeItem.removeClass("item").addClass("hidden");
+                    activeIndicator.remove();
+                    $(".carousel-indicators li").removeClass("active");
+                    $(".carousel-indicators li:first").addClass("active");
+
+                    $("#product-gallery-carousel").carousel();
+                    refreshProductPrimaryPhoto(product_id);
+                }else{
+                    alert(data.msg);
+                }
+            }); 
+        } 
+    }];
+
+    $('.carousel-inner').contextMenu(menu,{theme:'vista'});
+
+}
+});
 
     // let's validate the expiration date set on adding an inventory
     $("input[name='expiration_date']").change(function (){
@@ -740,7 +747,7 @@ $(document).ready(function (){
             _clear_form_errors($("#form_edit_inventory"));
         }
     });
-        
+    
     $("#form_edit_inventory").submit(function (){
         if( $.trim( $(this).find('div.label-danger').html() ) != "" )
             return false;
