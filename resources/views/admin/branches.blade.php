@@ -86,7 +86,7 @@ use ECEPharmacyTree\Branch;
                                 <div class="col-xs-4">
                                   <div class="form-group">
                                     <label for="telephone_numbers">Telephone Number/s</label>
-                                    <input type="text" class="form-control" id="telephone_numbers" placeholder="Branch telephone number/s" name="telephone_numbers">
+                                    <input type="text" class="form-control" id="telephone_numbers" placeholder="Branch telephone #" name="telephone_numbers">
                                 </div>  
                             </div>
                             <div class="col-xs-4">
@@ -98,7 +98,7 @@ use ECEPharmacyTree\Branch;
                             <div class="col-xs-4">
                                   <div class="form-group">
                                     <label for="mobile_numbers">Mobile Number/s</label>
-                                    <input type="text" class="form-control" id="mobile_numbers" placeholder="Mobile number/s" name="mobile_numbers">
+                                    <input type="text" class="form-control" id="mobile_numbers" placeholder="Mobile #" name="mobile_numbers">
                                 </div>  
                             </div>
                         </div>
