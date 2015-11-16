@@ -149,13 +149,13 @@ use ECEPharmacyTree\Branch;
                 var barangay = $("#address_barangay option:selected").text();
                 var additional_address = $("#additional_address").val();
 
-                region = region.substring(0, (region.indexOf("(", 0) != -1) ? region.indexOf("(", 0) : region);
+                region = region.substring(0, (region.indexOf("(", 0) != -1) ? region.indexOf("(", 0) : region.length);
 
-                province = province.substring(0, (province.indexOf("(", 0) != -1) ? province.indexOf("(", 0) : province);
+                province = province.substring(0, (province.indexOf("(", 0) != -1) ? province.indexOf("(", 0) : province.length);
 
-                municipality = municipality.substring(0, (municipality.indexOf("(", 0) != -1) ? municipality.indexOf("(", 0) : municipality);
+                municipality = municipality.substring(0, (municipality.indexOf("(", 0) != -1) ? municipality.indexOf("(", 0) : municipality.length);
 
-                barangay = barangay.substring(0, (barangay.indexOf("(", 0) != -1) ? barangay.indexOf("(", 0) : barangay);
+                barangay = barangay.substring(0, (barangay.indexOf("(", 0) != -1) ? barangay.indexOf("(", 0) : barangay.length);
 
                 console.log(region);
                 console.log(province);
