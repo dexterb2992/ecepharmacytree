@@ -175,7 +175,8 @@ use ECEPharmacyTree\Branch;
                     console.log(data);
                     console.log(typeof(data));
                     if( typeof(data) == 'object' ){
-                        console.log("arr"+data.results[0].geometry.location);
+                        console.log("lat"+data.results[0].geometry.location.lat);
+                        console.log("lng"+data.results[0].geometry.location.lng);
                     }
                 });
 
