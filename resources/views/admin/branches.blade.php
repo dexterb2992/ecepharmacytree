@@ -163,11 +163,12 @@ use ECEPharmacyTree\Branch;
                 console.log(barangay);
                 console.log(additional_address);
                 
-                var url_geocode = 'https://maps.googleapis.com/maps/api/geocode/json?'+additional_address+", "+barangay+", "+municipality+", "+province+", "+region+'&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8';
+                var url_geocode = 'https://maps.googleapis.com/maps/api/geocode/json?address='+additional_address+", "+barangay+", "+municipality+", "+province+", "+region+'&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8';
+                
                 console.log(url_geocode);
 
                 $.ajax({
-                    url: 'https://maps.googleapis.com/maps/api/geocode/json?&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8',
+                    url: url_geocode,
                     type: 'get',
                     dataType: 'json'
                 }).done(function (data){
