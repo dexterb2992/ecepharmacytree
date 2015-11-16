@@ -175,8 +175,16 @@ use ECEPharmacyTree\Branch;
                     console.log(data);
                     console.log(typeof(data));
                     if( typeof(data) == 'object' ){
-                        console.log("lat"+data.results[0].geometry.location.lat);
-                        console.log("lng"+data.results[0].geometry.location.lng);
+
+                        var data_lat = data.results[0].geometry.location.lat;
+                        var data_lng = data.results[0].geometry.location.lng;
+
+                        var marker = new google.maps.Marker({
+                            position: {lat: data_lat, lng: data_lang},
+                            map: map,
+                            draggable: true,
+                            title: 'Please set the marker on the location of the store'
+                        });
                     }
                 });
 
