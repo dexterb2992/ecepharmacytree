@@ -119,8 +119,10 @@ use ECEPharmacyTree\Branch;
                                 <input type="text" class="form-control" id="additional_address" placeholder="Street" name="additional_address" required>
                             </div>
                             <div class="form-group">
-                                <label for="additional_address">Set the place</label>
+                                <label for="additional_address">Set the place (Please drag the marker to the appropriate location of the branch)</label>
                                 <div id="map" style="height:300px;width:100%;">Google Map</div>
+                                <input type="hidden" name="google_lat" id="google_lat">
+                                <input type="hidden" name="google_lng" id="google_lng">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -156,28 +158,24 @@ use ECEPharmacyTree\Branch;
                 municipality = municipality.substring(0, (municipality.indexOf("(", 0) != -1) ? municipality.indexOf("(", 0) : municipality.length);
 
                 barangay = barangay.substring(0, (barangay.indexOf("(", 0) != -1) ? barangay.indexOf("(", 0) : barangay.length);
-
-                console.log(region);
-                console.log(province);
-                console.log(municipality);
-                console.log(barangay);
-                console.log(additional_address);
                 
                 var url_geocode = 'https://maps.googleapis.com/maps/api/geocode/json?address='+additional_address+", "+barangay+", "+municipality+", "+province+", "+region+'&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8';
-
-                console.log(url_geocode);
 
                 $.ajax({
                     url: url_geocode,
                     type: 'get',
                     dataType: 'json'
                 }).done(function (data){
-                    console.log(data);
                     console.log(typeof(data));
                     if( typeof(data) == 'object' ){
 
                         var data_lat = data.results[0].geometry.location.lat;
                         var data_lng = data.results[0].geometry.location.lng;
+
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                        center: {lat: data_lat, lng: data_lng},
+                        zoom: 15
+                        });
 
                         var marker = new google.maps.Marker({
                             position: {lat: data_lat, lng: data_lng},
@@ -185,36 +183,21 @@ use ECEPharmacyTree\Branch;
                             draggable: true,
                             title: 'Please set the marker on the location of the store'
                         });
+
+                        marker.addListener('dragend', function(e) {
+                            placeMarkerAndPanTo(e.latLng, map, marker);
+                        });
                     }
                 });
-
-                // var map = new google.maps.Map(document.getElementById('map'), {
-                //     center: {lat: -34.397, lng: 150.644},
-                //     zoom: 8
-                // });
-
-                // var marker = new google.maps.Marker({
-                //     position: {lat: -34.397, lng: 150.644},
-                //     map: map,
-                //     draggable: true,
-                //     title: 'Click to zoom'
-                // });
-
-
-                // marker.addListener('dragend', function(e) {
-                //     placeMarkerAndPanTo(e.latLng, map, marker);
-                // });
-
-
-                // map.addListener('click', function(e) {
-                //     placeMarkerAndPanTo(e.latLng, map, marker);
-                // });
             }
         }
 
         function placeMarkerAndPanTo(latLng, map, marker) {
             marker.setPosition(latLng);
             map.panTo(latLng);
+
+            $('#google_lat').val(latLng.lat);
+            $('#google_lng').val(latLng.lng);
         }
 
     </script>
