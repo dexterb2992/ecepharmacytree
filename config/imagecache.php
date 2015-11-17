@@ -37,7 +37,8 @@ return array(
         public_path('dist/img'),
         public_path('dist/img/credit'),
         public_path('images/profile-pictures'),
-        public_path('images/product-photo-gallery')
+        public_path('images/product-photo-gallery'),
+        public_path('db/uploads')
     ),
 
     /*
