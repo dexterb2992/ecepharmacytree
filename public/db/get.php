@@ -206,11 +206,20 @@ switch ($request) {
     $password = $_GET['password'];
     $patient_id = $_GET['patient_id'];
 
-    $result = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.* from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id inner join clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or returnError(mysql_error());
-    $tbl = "records";
+    $result = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id inner join clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or returnError(mysql_error());
 
+    $tbl = "records";
         // echo count($result);
     if (count($result) != 0) {
+        $row_cp = mysql_fetch_object($result);
+        $sql_cp = mysql_query("SELECT * FROM patient_records where clinic_patient_record_id = ".$row_cp->cpr_id);
+        
+        if(mysql_num_rows($sql_cp)){
+            $response['has_record'] = 1;
+        } else {
+            $response['has_record'] = 0;
+        }
+
         $update_row = "UPDATE clinic_patient_doctor SET patient_id = $patient_id WHERE username = '".$username."' and password = '".$password."' and patient_id = 0";
         if(mysql_query($update_row)) {
             $response['success_update'] = 1;
@@ -275,37 +284,37 @@ switch ($request) {
     }
 
     if ($pre_response["success"] == 0) {
-       echo json_encode($pre_response);
-       exit(0);
-   }
+     echo json_encode($pre_response);
+     exit(0);
+ }
 
-   if ($result != 0)
-       $db_result = mysql_num_rows($result);
+ if ($result != 0)
+     $db_result = mysql_num_rows($result);
 // check for empty result
-   if ($db_result > 0) {
-       $response[$tbl] = array();
-       while ($row = mysql_fetch_assoc($result)) {
+ if ($db_result > 0) {
+     $response[$tbl] = array();
+     while ($row = mysql_fetch_assoc($result)) {
         // push single row into final response array
-          foreach ($row as $key => $value) {
+      foreach ($row as $key => $value) {
             // let's remove some special characters as it causes to return null when converted to json
-             $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
-         }
-         array_push($response[$tbl], $row);
-     }
+       $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+   }
+   array_push($response[$tbl], $row);
+}
     //get the original time from server
-     date_default_timezone_set('Asia/Manila');
-     $server_timestamp             = date('Y-m-d H:i:s', time());
+date_default_timezone_set('Asia/Manila');
+$server_timestamp             = date('Y-m-d H:i:s', time());
 
-     $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
+$result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
 
-     if(mysql_num_rows($result_latest_updated_at) > 0){
-        $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
-        $latest_updated_at = $result_latest_updated_at_array['updated_at'];
-    }
+if(mysql_num_rows($result_latest_updated_at) > 0){
+    $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
+    $latest_updated_at = $result_latest_updated_at_array['updated_at'];
+}
 
-    $response["success"]          = 1;
-    $response["server_timestamp"] = "$server_timestamp";
-    $response["latest_updated_at"] = "$latest_updated_at";
+$response["success"]          = 1;
+$response["server_timestamp"] = "$server_timestamp";
+$response["latest_updated_at"] = "$latest_updated_at";
 } else {
     // no products found
     $response["success"] = 0;
