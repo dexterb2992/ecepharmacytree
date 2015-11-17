@@ -58,6 +58,11 @@ class BranchController extends Controller
 
         $branch->additional_address =  $input["additional_address"];
         $branch->barangay_id = $input['barangay_id'];
+        $branch->latitude = $input['google_lat'];
+        $branch->longitude = $input['google_lng'];
+        $branch->telephone_numbers = $input['telephone_numbers'];
+        $branch->telefax = $input['telefax'];
+        $branch->mobile_numbers = $input['mobile_numbers'];
 
         if( $branch->save() )
             session()->flash("flash_message", array("msg" => "New branch has been added successfully.", "type" => "success"));

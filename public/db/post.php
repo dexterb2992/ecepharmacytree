@@ -189,20 +189,6 @@ if ($request == 'register') {
 		exit(0);
 	}
 
-} else if( $request == "insert_medical_record" ) {
-	$check_clinic_patients = mysql_query("SELECT * from clinic_patients where username = '".$_POST['username']."' and password ='".$_POST['password']."'");
-	if(mysql_num_rows($check_clinic_patients) > 0) {
-		$clinic_patients_rows = mysql_fetch_assoc($check_clinic_patients);
-
-		if(mysql_query("INSERT into medical_records_requests(patient_id, clinic_patients_id, created_at)  VALUES (".$_POST['patient_id'].", ".$clinic_patients_rows['id'].", '".$datenow."')"))
-		{
-			$response["success"] = 1;
-		}
-	} else {
-		$response["success"] = 0;
-		$response["message"] = "no match username and password for clinic_patients";
-	}
-
 } else if ($request == "crud") {
     /**    
     * @param table: asks for table name to insert    
@@ -234,6 +220,38 @@ if ($request == 'register') {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
+    } else if($action == "multiple_insert") {
+    	$collection = json_decode(stripslashes($_POST['jsobj']));
+
+    	$str_values = "";
+
+    	foreach($collection->json_treatments as $col)
+    	{
+    		$cols   = "";
+    		$values = "";
+    		foreach($col as $key => $val)
+    		{
+    		// echo $key . ': ' . $val;
+    		// echo '<br>';
+    			$cols .= $key . ",";
+    			$values .= "'" . $val . "',";
+    		}
+    		$cols = substr($cols, 0, strlen($cols) -1);
+    		$values = substr($values, 0, strlen($values) - 1);
+    		$str_values .= "('".$datenow."',".$values."),";
+    	}
+
+    	$sql = "INSERT INTO ".$_POST['table']." (created_at,".$cols.") VALUES ".substr($str_values, 0, strlen($str_values) - 1);
+
+    	if(mysql_query($sql)) {
+    		$response['success'] = 1;
+    		$response['message'] = "relax, you're doing fine";
+    	} else {
+    		$response['success'] = 0;
+    		$response['message'] = "error =".mysql_error();
+    		$response['sql_query'] = $sql;
+    	}
+
     } else if ($action == "update") {
     	$settings = "";
     	foreach ($_POST as $key => $value) {
@@ -261,7 +279,7 @@ if ($request == 'register') {
     	}
     } else if ($action == "delete_prescription") {
     	$result = mysql_query("SELECT * from baskets where prescription_id = ".$_POST['id']." union SELECT * from baskets where prescription_id = ".$_POST['id']) or returnError(mysql_error());
-    	
+
     	if(mysql_num_rows($result) < 1) {
     		$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
 
@@ -276,7 +294,7 @@ if ($request == 'register') {
     		$response["success"] = 2;
     		$response["message"] = "Cannot delete a prescription that is submitted for an order." . mysql_error();
     	}
-    	
+
     } else if ($action == 'multiple_delete') {
     	$sql = "DELETE FROM ".$_POST['table']." WHERE id IN (".$_POST['serverID'].")";
 
