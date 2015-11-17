@@ -30,15 +30,6 @@ class PromoController extends Controller
         // return view('admin.promo');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,10 +40,19 @@ class PromoController extends Controller
     public function store()
     {
         $input = Input::all();
+        dd($input);
         $promo = new Promo;
         $promo->name = $input["name"];
         $promo->start_date = $input["start_date"];
         $promo->end_date = $input["end_date"];
+
+        $promo->name = $input["name"];
+        $promo->start_date = $input["start_date"];
+        $promo->end_date = $input["end_date"];
+        $promo->product_applicability = $input["product_applicability"];
+        $promo->minimum_purchase_amount = $input["minimum_purchase_amount"];
+        $promo->offer_type = $input["offer_type"];
+        $promo->generic_redemption_code = $input["generic_redemption_code"];
 
         if( $promo->save() ){
             session()->flash("flash_message", ["msg" => "New promo has been added successfully.", "type" => "success"]);
@@ -77,17 +77,6 @@ class PromoController extends Controller
         if( isset( $promo->id ) )
             return $promo->toJson();
         
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

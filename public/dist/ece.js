@@ -667,75 +667,74 @@ $("#add_gallery").click(function (){
         if(e.which == 3 ){  // if mouse's right button is clicked
             $("#product-gallery-carousel").carousel("pause").removeData();
 
-        var activeItem = $(this).children("div.item.active");
-        var pid = activeItem.children("img").data("id");
-        var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
-        var product_id = activeItem.children("img").data("product_id");
-        console.log("activeIndicator: ");
-        console.log(activeIndicator);
+                var activeItem = $(this).children("div.item.active");
+                var pid = activeItem.children("img").data("id");
+                var activeIndicator = $('#product-gallery-carousel .carousel-indicators li[data-id="'+pid+'"]');
+                var product_id = activeItem.children("img").data("product_id");
+                console.log("activeIndicator: ");
+                console.log(activeIndicator);
 
-        console.log("activeItem: ");
-        console.log(activeItem);
+                console.log("activeItem: ");
+                console.log(activeItem);
 
-        var $this = $(this);
+                var $this = $(this);
 
-        if( !$this.is(":focus") && !$("div.context-menu").parent("td").parent("tr").parent("tbody")
-            .parent("table").is(":focus") ){
-            $(document).find("div.context-menu").parent("td").parent("tr").parent("tbody").parent("table").remove();
-        $(document).find('div.context-menu-shadow').remove();
-    }
+                if( !$this.is(":focus") && !$("div.context-menu").parent("td").parent("tr").parent("tbody")
+                    .parent("table").is(":focus") ){
+                    $(document).find("div.context-menu").parent("td").parent("tr").parent("tbody").parent("table").remove();
+                $(document).find('div.context-menu-shadow').remove();
+            }
 
-    var menu = [
-    {
-        'Make Primary': function(menuItem, menu){
-            $.ajax({
-                url: '/products/gallery/change-primary/'+pid,
-                type: "post",
-                dataType: "json",
-                data: { _token: $('input[name="_token"]').val() }
-            }).done(function (data){
-                console.log(data);
-                if( data.status_code == "200" ){
-                    refreshProductPrimaryPhoto(product_id);
-                    $("#modal-products-gallery").modal('hide');
+            var menu = [
+            {
+                'Make Primary': function(menuItem, menu){
+                    $.ajax({
+                        url: '/products/gallery/change-primary/'+pid,
+                        type: "post",
+                        dataType: "json",
+                        data: { _token: $('input[name="_token"]').val() }
+                    }).done(function (data){
+                        console.log(data);
+                        if( data.status_code == "200" ){
+                            refreshProductPrimaryPhoto(product_id);
+                            $("#modal-products-gallery").modal('hide');
+                        }
+                    });
                 }
-            });
+            },
+            {
+                'Delete': function(menuItem, menu) { 
+                    $.ajax({
+                        url: '/products/gallery/delete/'+pid,
+                        type: "post",
+                        dataType: "json",
+                        data: { _token: $('input[name="_token"]').val() },
+                        beforeSend: function(){
+                            activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
+                        }
+                    }).done(function (data){
+                        console.log(data);
+                        $(".deleting-photo").remove();
+
+                        if( data.status_code == "200" ){
+                            $("#product-gallery-carousel").carousel("next");
+                            activeItem.removeClass("item").addClass("hidden");
+                            activeIndicator.remove();
+                            $(".carousel-indicators li").removeClass("active");
+                            $(".carousel-indicators li:first").addClass("active");
+
+                            $("#product-gallery-carousel").carousel();
+                            refreshProductPrimaryPhoto(product_id);
+                        }else{
+                            alert(data.msg);
+                        }
+                    }); 
+                } 
+            }];
+
+            $('.carousel-inner').contextMenu(menu,{theme:'vista'});
         }
-    },
-    {
-        'Delete': function(menuItem, menu) { 
-            $.ajax({
-                url: '/products/gallery/delete/'+pid,
-                type: "post",
-                dataType: "json",
-                data: { _token: $('input[name="_token"]').val() },
-                beforeSend: function(){
-                    activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
-                }
-            }).done(function (data){
-                console.log(data);
-                $(".deleting-photo").remove();
-
-                if( data.status_code == "200" ){
-                    $("#product-gallery-carousel").carousel("next");
-                    activeItem.removeClass("item").addClass("hidden");
-                    activeIndicator.remove();
-                    $(".carousel-indicators li").removeClass("active");
-                    $(".carousel-indicators li:first").addClass("active");
-
-                    $("#product-gallery-carousel").carousel();
-                    refreshProductPrimaryPhoto(product_id);
-                }else{
-                    alert(data.msg);
-                }
-            }); 
-        } 
-    }];
-
-    $('.carousel-inner').contextMenu(menu,{theme:'vista'});
-
-}
-});
+    });
 
     // let's validate the expiration date set on adding an inventory
     $("input[name='expiration_date']").change(function (){
@@ -762,6 +761,30 @@ $("#add_gallery").click(function (){
             $('#old_quantity').val(data.quantity);
             $('#modal-add-adjustments').find('#sid').val(data.id);
         });
+    });
+
+
+    // jQuery events used on promos & discounts page
+    $("select[name='offer_type']").change(function (){
+        var nextDiv = $(this).parent("div.form-group").next("div.form-group");
+        if( $(this).val() == "GENERIC_CODE" ){
+            nextDiv.fadeIn();
+            nextDiv.find('input').attr("required", "required");
+        }else{
+            nextDiv.fadeOut();
+            nextDiv.find('input').removeAttr("required");
+        }
+    });
+
+    $("select[name='product_applicability']").change(function (){
+        var nextDiv = $(this).parent("div.form-group").next("div.form-group");
+        if( $(this).val() == "SPECIFIC_PRODUCTS" ){
+            nextDiv.fadeIn();
+            nextDiv.find('select').attr("required", "required");
+        }else{
+            nextDiv.fadeOut();
+            nextDiv.find('select').removeAttr("required");
+        }
     });
 
 });

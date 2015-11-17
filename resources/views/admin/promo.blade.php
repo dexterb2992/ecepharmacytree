@@ -72,15 +72,15 @@
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="form-group">
                             	<label>Promo title <red>*</red></label>
-                            	<input class="form-control" type="text" name="name">
+                            	<input class="form-control" type="text" name="name" required>
                             </div>
                             <div class="form-group">
-								<label>Validity<red>*</red></label>
+								<label>Validity<red>*</red><small><i>(Date range on which this promo is valid)</i></small></label>
 								<div class="input-group">
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input type="text" class="form-control pull-right daterange" id="date_range" />
+									<input type="text" class="form-control pull-right daterange" id="date_range" required/>
 									<input type="hidden" name="start_date">
 									<input type="hidden" name="end_date">
 								</div><!-- /.input group -->
@@ -88,14 +88,14 @@
 
                             <div class="form-group">
                                 <label>Product Applicability<red>*</red>(<small><i>Whether the promotion is applicable to all products or only specific products.</i></small>)</label>
-                                <select class="form-control" name="product_applicability">
+                                <select class="form-control" name="product_applicability" required>
                                     <option value="ALL_PRODUCTS">All Products</option>
                                     <option value="SPECIFIC_PRODUCTS">Specific Products</option>
                                 </select>
                             </div>
 
-                            <div class="form-group">
-                                <label>Products<red>*</red>(<small><i>Whether the promotion is applicable to all products or only specific products.</i></small>)</label>
+                            <div class="form-group" style="display:none;">
+                                <label>Products<red>*</red>(<small><i>Select those products that will be applied with this promo.</i></small>)</label>
                                 <select class="form-control select2" name="product_id[]" multiple>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -116,12 +116,12 @@
                             <div class="form-group">
                                 <label>Offer Type<red>*</red> (<small><i>This attribute indicates whether or not a coupon code is required for users to redeem the offer.</i></small>)</label>
                                 <select class="form-control" name="offer_type">
-                                    <option value="GENERIC_CODE">GENERIC CODE</option>
                                     <option value="NO_CODE">NO CODE</option>
+                                    <option value="GENERIC_CODE">GENERIC CODE</option>
                                 </select>
                             </div>
                             
-                            <div class="form-group">
+                            <div class="form-group" style="display:none;">
                                 <label>Generic Redemption Code (<small><i>The text code that customers can use online to redeem the promotion.</i></small>)</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
