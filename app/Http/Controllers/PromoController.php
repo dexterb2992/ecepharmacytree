@@ -2,14 +2,15 @@
 
 namespace ECEPharmacyTree\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use ECEPharmacyTree\Http\Requests;
-use ECEPharmacyTree\Http\Controllers\Controller;
-use ECEPharmacyTree\Promo;
 use Carbon\Carbon;
 use Input;
 use Redirect;
+use Request;
+
+use ECEPharmacyTree\Http\Controllers\Controller;
+use ECEPharmacyTree\Promo;
+use ECEPharmacyTree\Product;
+
 
 class PromoController extends Controller
 {
@@ -22,8 +23,10 @@ class PromoController extends Controller
     {
 
         $promos = Promo::all();
+        $products = Product::all();
 
-        return view('admin.promo')->withPromos($promos)->withTitle('Promotions and Discounts');
+        return view('admin.promo')->withPromos($promos)->withTitle('Promotions and Discounts')
+            ->withProducts($products);
         // return view('admin.promo');
     }
 
