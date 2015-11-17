@@ -214,7 +214,7 @@ switch ($request) {
         $row_cp = mysql_fetch_object($result);
         $sql_cp = mysql_query("SELECT * FROM patient_records where clinic_patient_record_id = ".$row_cp->cpr_id);
         
-        if(mysql_num_rows($sql_cp)){
+        if(mysql_num_rows($sql_cp) > 0){
             $response['has_record'] = 1;
         } else {
             $response['has_record'] = 0;
