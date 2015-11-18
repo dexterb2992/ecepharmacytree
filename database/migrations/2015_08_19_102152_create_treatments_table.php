@@ -12,19 +12,13 @@ class CreateTreatmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('treatments', function(Blueprint $table) {
+        Schema::create('patient_treatments', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('patient_record_id')->unsigned();
-            $table->foreign('patient_record_id')->references('id')->on('patient_records')->onDelete('cascade');
-            $table->integer('medicine_id')->unsigned();
-            $table->foreign('medicine_id')->references('id')->on('clinic_medicines')->onDelete('cascade');
-            $table->integer('no_generics')->default(1);
-            $table->integer('quantity');
-            $table->string('route');
-            $table->string('frequency');
-            $table->integer('refills')->default(0);
-            $table->integer('duration')->default(0);
-            $table->integer('duration_type');
+            $table->integer('patient_records_id')->unsigned();
+            $table->foreign('patient_records_id')->references('id')->on('patient_records')->onDelete('cascade');
+            $table->string('medicine_name');
+            $table->string('generic_name');
+            $table->string('dosage');
             $table->timestamps();
             $table->softDeletes();
         });
