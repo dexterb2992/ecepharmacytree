@@ -246,6 +246,8 @@ if ($request == 'register') {
     	if(mysql_query($sql)) {
     		$response['success'] = 1;
     		$response['message'] = "relax, you're doing fine";
+    		$response['last_inserted_id'] = mysql_insert_id();
+    		$response['affected_rows'] = mysql_affected_rows(); 
     	} else {
     		$response['success'] = 0;
     		$response['message'] = "error =".mysql_error();

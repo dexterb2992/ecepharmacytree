@@ -16,10 +16,8 @@ class CreatePatientRecordsTable extends Migration
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->integer('doctor_id')->unsigned();
-            $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
-            $table->integer('clinic_id')->unsigned();
-            $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
+            $table->integer('doctor_id')->default(0);
+            $table->integer('clinic_id')->default(0);
             $table->string('doctor_name');
             $table->string('clinic_name');
             $table->longText('complaints');
