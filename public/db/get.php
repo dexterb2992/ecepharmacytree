@@ -93,7 +93,7 @@ switch ($request) {
     }
     break;
     case 'get_patient_records':
-    $result = mysql_query("SELECT * FROM patient_records WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $result = mysql_query("SELECT * FROM patient_records WHERE patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "patient_records";
     break;
     case 'get_treatments':
