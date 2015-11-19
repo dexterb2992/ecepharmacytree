@@ -31,10 +31,6 @@ switch ($request) {
     $username = $_GET['username'];
     $result = mysql_query("SELECT * FROM patients WHERE username = '" . $username . "' WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "patients";
-    case 'get_dosages':
-        // get all products from products table
-    $result = mysql_query("SELECT * FROM dosage_format_and_strength WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-    $tbl = "dosage_format_and_strength";
     break;
     case 'get_products':
         // get all products from products table
@@ -101,8 +97,8 @@ switch ($request) {
     $tbl = "patient_records";
     break;
     case 'get_treatments':
-    $result = mysql_query("SELECT * FROM treatments WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-    $tbl = "treatments";
+    $result = mysql_query("SELECT * FROM patient_treatments WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $tbl = "patient_treatments";
     break;
 
     case 'get_promo' :
