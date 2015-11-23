@@ -32,6 +32,6 @@ class CreateOrderPreferenceTable extends Migration
      */
     public function down()
     {
-        Schema::drop('patient_records');
+        Schema::drop('order_preference');
     }
 }
