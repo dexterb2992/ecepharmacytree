@@ -261,8 +261,8 @@ Route::get('api/generate/{what}', function ($what){
 		return generate_lot_number();
 });
 
-Route::get('api/{what}', function ($what){
-	return $_GET.' what= '.$what;
+Route::get('api', function(){
+	// return $_GET.' what= '.$what;
 	// $to_be_returned;
 
 	// if($what == 'get_product_subcategories')
@@ -270,5 +270,5 @@ Route::get('api/{what}', function ($what){
 	// 		if($_GET['cat'] != "all")
 	// 			reutrn DB::select('call ');
 	// else
-	// return DB::select('call '.$what.'()');
+	return DB::select('call '.$_GET['q'].'()');
 });
