@@ -34,7 +34,7 @@ switch ($request) {
     break;
     case 'get_products':
         // get all products from products table
-    $result = mysql_query("CALL ".$_GET['q']."() fuck you" ) or returnError(mysql_error());
+    $result = mysql_query("CALL ".$_GET['q']."()" ) or returnError(mysql_error());
     $tbl = "products";
     break;
     case 'get_doctors':
