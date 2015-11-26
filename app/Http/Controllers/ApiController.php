@@ -18,4 +18,3 @@ class ApiController extends Controller
 		return DB::select('call '.$input['q'].'()');
     }
 }
-1z
