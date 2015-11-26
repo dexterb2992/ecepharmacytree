@@ -262,13 +262,13 @@ Route::get('api/generate/{what}', function ($what){
 });
 
 Route::get('api/{what}', function ($what){
-	return $_GET;
+	return $_GET.' what= '.$what;
 	// $to_be_returned;
 
 	// if($what == 'get_product_subcategories')
 	// 	if(isset($_GET['cat']) && $_GET['cat'] != "")
 	// 		if($_GET['cat'] != "all")
-	// 			$to_be_returned = DB::select();
+	// 			reutrn DB::select('call ');
 	// else
 	// return DB::select('call '.$what.'()');
 });
