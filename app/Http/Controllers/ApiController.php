@@ -7,6 +7,7 @@ use Request;
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use Input;
+use DB;
 
 class ApiController extends Controller
 {
@@ -17,3 +18,4 @@ class ApiController extends Controller
 		return DB::select('call '.$input['q'].'()');
     }
 }
+1z
