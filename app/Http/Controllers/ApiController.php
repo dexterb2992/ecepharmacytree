@@ -11,7 +11,7 @@ use DB;
 use Carbon\Carbon;
 
 $datenow = Carbon::now('Asia/Manila');
-	die_dump($datenow);
+	die($datenow);
 	$pre_response = array(
 		"success" => 1,
 		"message" => ""
