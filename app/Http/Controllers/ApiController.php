@@ -22,7 +22,7 @@ class ApiController extends Controller
 				try {
 					return DB::select('call '.$request.'()');
 				} catch(\Exception $e) {
-					return "Something is wrong with your request, are you sure you've entered the right keyword ? \n Please don't let me remind you about your stupidity";
+					return "<h1>Something is wrong with your request, are you sure you've entered the right keyword ? \n Please don't let me remind you about your stupidity, just saying.</h1>";
 				}
 			else
 				return 'wiggle wiggle little fish. we need some modifiations here because the query will require parameter and stuff and the call must be singular';
