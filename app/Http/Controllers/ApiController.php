@@ -11,7 +11,7 @@ use DB;
 use Carbon\Carbon;
 
 $datenow = Carbon::now('Asia/Manila');
-	die($datenow);
+	// die($datenow);
 	$pre_response = array(
 		"success" => 1,
 		"message" => ""
@@ -19,10 +19,6 @@ $datenow = Carbon::now('Asia/Manila');
 
 class ApiController extends Controller
 {
-	// date_default_timezone_set('Asia/Manila');
-	// $datenow = date("Y-m-d H:i:s", time());
-
-
 	public function process()
 	{
 		$input = Input::all();
