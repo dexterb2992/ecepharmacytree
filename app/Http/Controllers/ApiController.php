@@ -15,10 +15,15 @@ class ApiController extends Controller
 	public function process()
 	{
 		$input = Input::all();
-		// $request = $input['q'];
 
-		return count($input);
-
+		if(count($input) > 0) {
+			$request = $input['q'];
+			if(count($input) == 1)
+				return DB::select('call '.$request.'()');
+			else
+				return 'wiggle wiggle little fish. we need some modifiations here because the query will require parameter and stuff and the call must be singular';
+		} else
+			return '<h1>What the hell do you want ? Include a "q" parameter in your request/link, you Moron.</h1>';
 		// $result;
 
 		// if($request == "get_product_subcategories"){
