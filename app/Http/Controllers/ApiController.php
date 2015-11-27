@@ -19,7 +19,11 @@ class ApiController extends Controller
 		if(count($input) > 0) {
 			$request = $input['q'];
 			if(count($input) == 1)
-				return DB::select('call '.$request.'()');
+				try {
+					return DB::select('call '.$request.'()');
+				} catch(\Exception $e) {
+					return "Something is wrong with your request, are you sure you've entered the right keyword ? \n Please don't let me remind you about your stupidity";
+				}
 			else
 				return 'wiggle wiggle little fish. we need some modifiations here because the query will require parameter and stuff and the call must be singular';
 		} else
