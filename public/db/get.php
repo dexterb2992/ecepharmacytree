@@ -124,6 +124,11 @@ switch ($request) {
         $tbl = "baskets";
     }
     break;
+
+    case 'get_basket_details':
+    $result = mysql_query("Select p.*, b.id as basket_id, b.quantity, b.prescription_id from baskets as b inner join products as p on p.id = b.product_id where b.patient_id=".$_GET['patient_id']);
+    $tbl = "baskets"
+    break;
     case 'get_patient_records':
     $result = mysql_query("SELECT * FROM patient_records WHERE patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "patient_records";
