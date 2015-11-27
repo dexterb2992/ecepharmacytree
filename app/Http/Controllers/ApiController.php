@@ -8,11 +8,14 @@ use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use Input;
 use DB;
+use Carbon\Carbon;
 
 class ApiController extends Controller
 {
-	date_default_timezone_set('Asia/Manila');
-	$datenow = date("Y-m-d H:i:s", time());
+	// date_default_timezone_set('Asia/Manila');
+	// $datenow = date("Y-m-d H:i:s", time());
+	$datenow = Carbon::now('Asia/Manila');
+	die_dump($datenow);
 	$pre_response = array(
 		"success" => 1,
 		"message" => ""
