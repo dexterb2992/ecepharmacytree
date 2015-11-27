@@ -26,12 +26,7 @@ $pre_response = array(
     "message" => ""
     );
 switch ($request) {
-    case 'check_if_username_exist':
-        //this option is currently unused
-    $username = $_GET['username'];
-    $result = mysql_query("SELECT * FROM patients WHERE username = '" . $username . "' WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-    $tbl = "patients";
-    break;
+    /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
     $result = mysql_query("CALL ".$_GET['q']."()" ) or returnError(mysql_error());
@@ -65,6 +60,43 @@ switch ($request) {
     $result = mysql_query("SELECT * FROM product_categories WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "product_categories";
     break;
+
+    case 'get_treatments':
+    $result = mysql_query("SELECT * FROM patient_treatments WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $tbl = "patient_treatments";
+    break;
+
+      case 'get_branches' : 
+    $result = mysql_query("SELECT br.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM branches as br inner join barangays as bg on br.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id") or returnError(mysql_error());
+    $tbl = "branches";
+    break;
+
+    case 'get_settings' :
+    $result = mysql_query("SELECT * FROM settings") or returnError(mysql_error());
+    $tbl = "settings";
+    break;
+
+    case 'get_regions':
+    $result = mysql_query("SELECT * FROM regions") or returnError(mysql_error());
+    $tbl = "regions";
+    break;
+    
+
+    /* Requires Parameters */
+
+    case 'get_promo' :
+    $sql = "SELECT *  FROM promo WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND start_date <= '".$datenow."' AND end_date >= '".$datenow."'";
+    $result = mysql_query($sql) or returnError(mysql_error()); 
+    $tbl = "promo";
+    break;
+
+    case 'check_if_username_exist':
+        //this option is currently unused
+    $username = $_GET['username'];
+    $result = mysql_query("SELECT * FROM patients WHERE username = '" . $username . "' WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $tbl = "patients";
+    break;
+    
     case 'get_product_subcategories':
     if (isset($_GET['cat']) && $_GET['cat'] != "") {
         if ($_GET['cat'] == "all") {
@@ -96,16 +128,7 @@ switch ($request) {
     $result = mysql_query("SELECT * FROM patient_records WHERE patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "patient_records";
     break;
-    case 'get_treatments':
-    $result = mysql_query("SELECT * FROM patient_treatments WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-    $tbl = "patient_treatments";
-    break;
-
-    case 'get_promo' :
-    $sql = "SELECT *  FROM promo WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND start_date <= '".$datenow."' AND end_date >= '".$datenow."'";
-    $result = mysql_query($sql) or returnError(mysql_error()); 
-    $tbl = "promo";
-    break;
+    
 
     case 'get_discounts_free_products' :
     $sql = "SELECT dfp.*  FROM discounts_free_products as dfp inner join promo as p on p.id = dfp.promo_id 
@@ -132,10 +155,7 @@ switch ($request) {
     $tbl = "patient_prescriptions";
     break;
 
-    case 'get_branches' : 
-    $result = mysql_query("SELECT br.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM branches as br inner join barangays as bg on br.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id") or returnError(mysql_error());
-    $tbl = "branches";
-    break;
+  
 
     case 'get_orders' : 
     $result = mysql_query("SELECT * FROM orders where patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
@@ -162,20 +182,11 @@ switch ($request) {
     $tbl = "consultations";
     break;
 
-    case 'get_settings' :
-    $result = mysql_query("SELECT * FROM settings") or returnError(mysql_error());
-    $tbl = "settings";
-    break;
-
     case 'get_messages_by_user' :
     $result = mysql_query("SELECT * FROM messages WHERE patient_id = ".$_GET['patient_id']." order by created_at DESC") or returnError(mysql_error());
     $tbl = "messages";
     break;
 
-    case 'get_regions':
-    $result = mysql_query("SELECT * FROM regions") or returnError(mysql_error());
-    $tbl = "regions";
-    break;
 
     case 'get_provinces':
     $result = mysql_query("SELECT * FROM provinces WHERE region_id =".$_GET['region_id']) or returnError(mysql_error());
