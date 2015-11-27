@@ -17,7 +17,7 @@ class ApiController extends Controller
 		$input = Input::all();
 		// $request = $input['q'];
 
-		return echo count($input);
+		return count($input);
 
 		// $result;
 
