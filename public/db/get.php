@@ -29,7 +29,7 @@ switch ($request) {
     /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
-    $result = mysql_query("CALL ".$_GET['q']."()" ) or returnError(mysql_error());
+    $result = mysql_query("SELECT * FROM products WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')" ) or returnError(mysql_error());
     $tbl = "products";
     break;
     case 'get_doctors':
