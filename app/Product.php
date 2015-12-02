@@ -34,4 +34,13 @@ class Product extends Model
     public function group(){
         return $this->belongsTo('ECEPharmacyTree\ProductGroup');
     }
+
+    public function discount_free_product(){
+        return $this->hasMany('ECEPharmacyTree\DiscountsFreeProduct');
+    }
+
+    public function free_product(){
+        return $this->hasMany('ECEPharmacyTree\FreeProduct');
+    }
+
 }

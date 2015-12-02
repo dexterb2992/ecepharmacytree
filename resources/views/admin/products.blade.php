@@ -327,8 +327,7 @@
                     Gallery
                     <small>
                         <i>
-                            ( <i class="fa-info-circle fa"></i>
-                            <i> Right click image for more options </i> )
+                            (Right click image for more options)
                         </i>
                     </small>
                 </h4>

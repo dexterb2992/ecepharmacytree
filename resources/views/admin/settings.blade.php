@@ -53,6 +53,23 @@
 							<h3 class="box-title" style="margin-left: -10px;">Inventory Settings</h3>
 						</div>
 
+						<div class="form-group">
+							<label>Promo Auto Suggest  
+								<small><i>
+									(How many weeks/months before a stock's expiration should the system will suggest to add that stock for promotion?)
+								</i></small>
+							</label>
+							<div class="input-group">
+								<input type="text" name="weeks_to_suggest_promo" placeholder="Enter number of weeks/months" class="number form-control" value="{{ $settings->weeks_to_suggest_promo }}">
+								<span class="input-group-addon input-group-addon-select">
+									<select>
+										<option>weeks</option>
+										<option>months</option>
+									</select>
+								</span>
+							</div>
+						</div>
+
 						<div class="box-header with-border">
 							<h3 class="box-title" style="margin-left: -10px;">Delivery</h3>
 						</div>
@@ -72,7 +89,6 @@
 								<input type="text" name="delivery_minimum" class="number form-control" value="{{ to_money($settings->delivery_minimum, 2) }}">
 							</div>
 						</div>
-
 
 						<div class="form-group">
 							<label>Nearest Distance Location <small><i>(Measured in Kilometer, this is to identify the farthest/maximum distance between user location and ECE branch.)</i></small></label>

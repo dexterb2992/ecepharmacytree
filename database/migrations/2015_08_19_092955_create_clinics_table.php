@@ -23,11 +23,13 @@ class CreateClinicsTable extends Migration
             $table->integer('phase_no')->nullable();
             $table->integer('address_house_no')->nullable();
             $table->string('address_street')->nullable();
-            $table->string('address_barangay');
-            $table->string('address_city_municipality');
-            $table->string('address_province');
-            $table->string('address_region');
-            $table->string('address_zip');
+            $table->integer('barangay_id')->unsigned();
+            $table->foreign('barangay_id')->references('id')->on('barangays')->onDelete('cascade');
+            // $table->string('address_barangay');
+            // $table->string('address_city_municipality');
+            // $table->string('address_province');
+            // $table->string('address_region');
+            // $table->string('address_zip');
             $table->timestamps();
             $table->softDeletes();
         });

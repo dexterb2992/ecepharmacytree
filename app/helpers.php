@@ -110,7 +110,7 @@ function str_auto_plural($str, $quantity){
 		$lname = ucfirst($person->lname);
         if( $reversed )
             return $lname.", ".$fname.$mname;
-        return $lname." ".$mname.$fname;
+        return $fname." ".$mname." ".$lname;
     
 	}
 
@@ -368,3 +368,10 @@ function peso(){
 	return '&#x20B1;';
 }
 
+function clean($str){
+	return str_replace('_', " ", $str);
+}
+
+function check_stock_expiration(){
+	//<i class="glyphicon glyphicon-tags"></i>
+}

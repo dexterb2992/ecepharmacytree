@@ -28,7 +28,7 @@ class InventoryController extends Controller
         $inventories = Inventory::where('quantity', '>', '0')
             ->where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
-        $logs = Log::where('table', 'inventories')->get();
+        $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
         return view('admin.inventories')->withInventories($inventories)
             ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs);
     }
@@ -44,10 +44,8 @@ class InventoryController extends Controller
     {
 
         /**
-         *  Note: the quantity that will be saved will be per product unit
-         *        so, if per packing there are 12 units and the quantity
-         *        we received is 6, therefore, the quantity that will be saved 
-         *        to database is 72
+         *  Note: the quantity that will be saved will be 
+         *        per product packing
          */
         $input = Input::all();
         $inventory = new Inventory;
@@ -57,6 +55,7 @@ class InventoryController extends Controller
         $quantity = $product->qty_per_packing * $input["quantity"];
 
         $inventory->quantity = $quantity;
+        $inventory->available_quantity = $quantity;
         $inventory->expiration_date = $input["expiration_date"];
         $inventory->lot_number = generate_lot_number();
         $inventory->branch_id = session()->get('selected_branch');
