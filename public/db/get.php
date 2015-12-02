@@ -26,19 +26,10 @@ $pre_response = array(
     "message" => ""
     );
 switch ($request) {
-    case 'check_if_username_exist':
-        //this option is currently unused
-    $username = $_GET['username'];
-    $result = mysql_query("SELECT * FROM patients WHERE username = '" . $username . "' WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-    $tbl = "patients";
-    case 'get_dosages':
-        // get all products from products table
-    $result = mysql_query("SELECT * FROM dosage_format_and_strength WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-    $tbl = "dosage_format_and_strength";
-    break;
+    /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
-    $result = mysql_query("SELECT * FROM products WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $result = mysql_query("SELECT * FROM products WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')" ) or returnError(mysql_error());
     $tbl = "products";
     break;
     case 'get_doctors':
@@ -69,6 +60,43 @@ switch ($request) {
     $result = mysql_query("SELECT * FROM product_categories WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "product_categories";
     break;
+
+    case 'get_treatments':
+    $result = mysql_query("SELECT * FROM patient_treatments WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $tbl = "patient_treatments";
+    break;
+
+      case 'get_branches' : 
+    $result = mysql_query("SELECT br.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM branches as br inner join barangays as bg on br.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id") or returnError(mysql_error());
+    $tbl = "branches";
+    break;
+
+    case 'get_settings' :
+    $result = mysql_query("SELECT * FROM settings") or returnError(mysql_error());
+    $tbl = "settings";
+    break;
+
+    case 'get_regions':
+    $result = mysql_query("SELECT * FROM regions") or returnError(mysql_error());
+    $tbl = "regions";
+    break;
+    
+
+    /* Requires Parameters */
+
+    case 'get_promo' :
+    $sql = "SELECT *  FROM promo WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND start_date <= '".$datenow."' AND end_date >= '".$datenow."'";
+    $result = mysql_query($sql) or returnError(mysql_error()); 
+    $tbl = "promo";
+    break;
+
+    case 'check_if_username_exist':
+        //this option is currently unused
+    $username = $_GET['username'];
+    $result = mysql_query("SELECT * FROM patients WHERE username = '" . $username . "' WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $tbl = "patients";
+    break;
+    
     case 'get_product_subcategories':
     if (isset($_GET['cat']) && $_GET['cat'] != "") {
         if ($_GET['cat'] == "all") {
@@ -96,20 +124,17 @@ switch ($request) {
         $tbl = "baskets";
     }
     break;
+
+    case 'get_basket_details':
+    $result = mysql_query("Select p.*, b.id as basket_id, b.quantity, b.prescription_id from baskets as b inner join products as p on p.id = b.product_id where b.patient_id=".$_GET['patient_id']);
+    $tbl = "baskets";
+    
+    break;
     case 'get_patient_records':
-    $result = mysql_query("SELECT * FROM patient_records WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $result = mysql_query("SELECT * FROM patient_records WHERE patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "patient_records";
     break;
-    case 'get_treatments':
-    $result = mysql_query("SELECT * FROM treatments WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
-    $tbl = "treatments";
-    break;
-
-    case 'get_promo' :
-    $sql = "SELECT *  FROM promo WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND start_date <= '".$datenow."' AND end_date >= '".$datenow."'";
-    $result = mysql_query($sql) or returnError(mysql_error()); 
-    $tbl = "promo";
-    break;
+    
 
     case 'get_discounts_free_products' :
     $sql = "SELECT dfp.*  FROM discounts_free_products as dfp inner join promo as p on p.id = dfp.promo_id 
@@ -136,10 +161,7 @@ switch ($request) {
     $tbl = "patient_prescriptions";
     break;
 
-    case 'get_branches' : 
-    $result = mysql_query("SELECT br.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM branches as br inner join barangays as bg on br.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id") or returnError(mysql_error());
-    $tbl = "branches";
-    break;
+  
 
     case 'get_orders' : 
     $result = mysql_query("SELECT * FROM orders where patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
@@ -166,20 +188,11 @@ switch ($request) {
     $tbl = "consultations";
     break;
 
-    case 'get_settings' :
-    $result = mysql_query("SELECT * FROM settings") or returnError(mysql_error());
-    $tbl = "settings";
-    break;
-
     case 'get_messages_by_user' :
     $result = mysql_query("SELECT * FROM messages WHERE patient_id = ".$_GET['patient_id']." order by created_at DESC") or returnError(mysql_error());
     $tbl = "messages";
     break;
 
-    case 'get_regions':
-    $result = mysql_query("SELECT * FROM regions") or returnError(mysql_error());
-    $tbl = "regions";
-    break;
 
     case 'get_provinces':
     $result = mysql_query("SELECT * FROM provinces WHERE region_id =".$_GET['region_id']) or returnError(mysql_error());
@@ -201,16 +214,30 @@ switch ($request) {
     $tbl = "clinic_patients";
     break;
 
+    case 'get_products_gallery':
+     $result = mysql_query("SELECT * FROM products_gallery WHERE product_id = ".$_GET['product_id']."'") or returnError(mysql_error());  
+    $tbl = "products_gallery";
+    break;
+
     case 'get_clinic_records':
     $username = $_GET['username'];
     $password = $_GET['password'];
     $patient_id = $_GET['patient_id'];
 
-    $result = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.* from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id inner join clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or returnError(mysql_error());
-    $tbl = "records";
+    $result = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id inner join clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or returnError(mysql_error());
 
+    $tbl = "records";
         // echo count($result);
     if (count($result) != 0) {
+        $row_cp = mysql_fetch_object($result);
+        $sql_cp = mysql_query("SELECT * FROM patient_records where clinic_patient_record_id = ".$row_cp->cpr_id);
+        
+        if(mysql_num_rows($sql_cp) > 0){
+            $response['has_record'] = 1;
+        } else {
+            $response['has_record'] = 0;
+        }
+
         $update_row = "UPDATE clinic_patient_doctor SET patient_id = $patient_id WHERE username = '".$username."' and password = '".$password."' and patient_id = 0";
         if(mysql_query($update_row)) {
             $response['success_update'] = 1;
@@ -275,37 +302,37 @@ switch ($request) {
     }
 
     if ($pre_response["success"] == 0) {
-       echo json_encode($pre_response);
-       exit(0);
-   }
+     echo json_encode($pre_response);
+     exit(0);
+ }
 
-   if ($result != 0)
-       $db_result = mysql_num_rows($result);
+ if ($result != 0)
+     $db_result = mysql_num_rows($result);
 // check for empty result
-   if ($db_result > 0) {
-       $response[$tbl] = array();
-       while ($row = mysql_fetch_assoc($result)) {
+ if ($db_result > 0) {
+     $response[$tbl] = array();
+     while ($row = mysql_fetch_assoc($result)) {
         // push single row into final response array
-          foreach ($row as $key => $value) {
+      foreach ($row as $key => $value) {
             // let's remove some special characters as it causes to return null when converted to json
-             $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
-         }
-         array_push($response[$tbl], $row);
-     }
+       $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+   }
+   array_push($response[$tbl], $row);
+}
     //get the original time from server
-     date_default_timezone_set('Asia/Manila');
-     $server_timestamp             = date('Y-m-d H:i:s', time());
+date_default_timezone_set('Asia/Manila');
+$server_timestamp             = date('Y-m-d H:i:s', time());
 
-     $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
+$result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
 
-     if(mysql_num_rows($result_latest_updated_at) > 0){
-        $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
-        $latest_updated_at = $result_latest_updated_at_array['updated_at'];
-    }
+if(mysql_num_rows($result_latest_updated_at) > 0){
+    $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
+    $latest_updated_at = $result_latest_updated_at_array['updated_at'];
+}
 
-    $response["success"]          = 1;
-    $response["server_timestamp"] = "$server_timestamp";
-    $response["latest_updated_at"] = "$latest_updated_at";
+$response["success"]          = 1;
+$response["server_timestamp"] = "$server_timestamp";
+$response["latest_updated_at"] = "$latest_updated_at";
 } else {
     // no products found
     $response["success"] = 0;

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatientRecordsTable extends Migration
+class CreateOrderPreferenceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +12,14 @@ class CreatePatientRecordsTable extends Migration
      */
     public function up()
     {
-        Schema::create('patient_records', function(Blueprint $table) {
+        Schema::create('order_preference', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->integer('doctor_id')->default(0);
-            $table->integer('clinic_id')->default(0);
-            $table->string('doctor_name');
-            $table->string('clinic_name');
-            $table->longText('complaints');
-            $table->longText('findings');
-            $table->string('record_date');
-            $table->string('created_by')->default('user'); // change value to doctor, if created by doctor
+            $table->string('order_receiving_option');
+            $table->string('address_for_delivery');
+            $table->string('recipient_for_delivery');
+            $table->string('payment_method');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,6 +32,6 @@ class CreatePatientRecordsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('patient_records');
+        Schema::drop('order_preference');
     }
 }

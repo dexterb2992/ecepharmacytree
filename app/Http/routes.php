@@ -265,3 +265,5 @@ Route::get('api/generate/{what}', function ($what){
 	if( $what == "lot_number" )
 		return generate_lot_number();
 });
+
+Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
