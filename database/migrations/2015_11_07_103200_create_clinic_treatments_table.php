@@ -14,7 +14,7 @@ class CreateClinicTreatmentsTable extends Migration
     {
         Schema::create('clinic_treatments', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('clinic_patients_record_id')->unsigned()
+            $table->integer('clinic_patients_record_id')->unsigned();
             $table->foreign('clinic_patients_record_id')->references('id')
                 ->on('clinic_patients_records')->onDelete('cascade');
             $table->integer('medicine_id')->unsigned();
