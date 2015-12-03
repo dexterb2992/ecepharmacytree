@@ -396,7 +396,7 @@ table td .btn-group .btn {
 .input-group-addon-select{
     padding: 0;
 }
-    .input-group-addon-select{
+    .input-group-addon-select select{
         height: 100%;
         border: none;
     }

@@ -25,8 +25,16 @@ class InventoryController extends Controller
     public function index()
     {
 
-        $inventories = Inventory::where('quantity', '>', '0')
+        $inventories = Inventory::where('available_quantity', '>', '0')
             ->where('branch_id', session()->get('selected_branch'))->get();
+        $products = Product::all();
+        $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
+        return view('admin.inventories')->withInventories($inventories)
+            ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs);
+    }
+
+    public function show_all(){
+        $inventories = Inventory::where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
         $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
         return view('admin.inventories')->withInventories($inventories)
@@ -56,7 +64,7 @@ class InventoryController extends Controller
 
         $inventory->quantity = $quantity;
         $inventory->available_quantity = $quantity;
-        $inventory->expiration_date = $input["expiration_date"];
+        $inventory->expiration_date = $input["expiration_date"] != "" ? $input["expiration_date"] : null;
         $inventory->lot_number = generate_lot_number();
         $inventory->branch_id = session()->get('selected_branch');
         if( $inventory->save() ){
@@ -99,7 +107,16 @@ class InventoryController extends Controller
         $input = Input::all();
         $inventory = Inventory::findOrFail( $input["id"] );
         $inventory->product_id = $input["product_id"];
-        $inventory->quantity = $input["quantity"];
+        
+        $inventory->quantity = $input["quantity"]; // q1 = 4, av = 2, update: q2 = 5;
+                                                   // def = q2-q1 = 1, av += def
+        $def_q = $input["quantity"] - $inventory->quantity;
+        $old_av = $inventory->available_quantity;
+        
+        $new_av = $old_av + $def_q;
+
+        $inventory->available_quantity = $new_av >= 1 ? $new_av : 0;
+
         $inventory->expiration_date = $input["expiration_date"];
         if( $inventory->save() ){
             Log::create([
@@ -119,12 +136,22 @@ class InventoryController extends Controller
         $input = Input::all();
         $inventory = Inventory::findOrFail( $input['id'] );
         $old_qty = $inventory->quantity;
+        
+        $def_q = $input["new_quantity"] - $inventory->quantity;
+        $old_av = $inventory->available_quantity;
+        
+        $new_av = $old_av + $def_q;
+
+        $inventory->available_quantity = $new_av >= 1 ? $new_av : 0;
         $inventory->quantity = $input['new_quantity'];
 
 
         $adjustment = new InventoryAdjustment;
         $adjustment->old_quantity = $old_qty;
         $adjustment->new_quantity = $input['new_quantity'];
+
+
+
         $adjustment->inventory_id = $inventory->id;
         $adjustment->user_id = Auth::user()->id;
         $adjustment->reason = $input['reason'];

@@ -65,9 +65,9 @@
 												</td>
 												<td>
 													<?php 
-														$total = $inventory->quantity * $inventory->product->qty_per_packing; 
+														$total = $inventory->available_quantity * $inventory->product->qty_per_packing; 
 													?>
-													{!! '<b>'.$inventory->quantity." ".str_auto_plural($inventory->product->packing, $inventory->quantity)."</b> "
+													{!! '<b>'.$inventory->available_quantity." ".str_auto_plural($inventory->product->packing, $inventory->available_quantity)."</b> "
 														."( ".$total." ".str_auto_plural($inventory->product->unit, $total)." )" !!}
 												
 												</td>
@@ -178,7 +178,9 @@
 	                            	</select>
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received (<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</label>
+	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received 
+	                            		<small>(<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</small>
+	                            	</label>
 	                            	<div class="input-group">
 		                            	<input type="text" id="inventory_quantity" name="quantity" class="number form-control" title="Add quantity by product's packing" required>
 		                            	<div class="input-group-addon">
@@ -188,12 +190,12 @@
 	                            	<span id="total_quantity_in_unit"></span>
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="expiration">Expiration Date</label>
+	                            	<label for="expiration">Expiration Date <small><i>(Leave empty if this stock doesn't have an expiration)</i></small></label>
 	                            	<div class="input-group">
 	                            		<div class="input-group-addon">
 											<i class="fa fa-calendar"></i>
 										</div>
-										<input type="text" name="expiration_date" class="form-control datemask3" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required/>
+										<input type="text" name="expiration_date" class="form-control datemask3" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask/>
 		                            </div>
 	                            </div>
 	                        </div>

@@ -1,10 +1,14 @@
 <?php
-
+header("Access-Control-Allow-Origin: *");
 require_once __DIR__ . '/db_connect.php';
 
 $db = new DB_CONNECT();
 
 // Path to move uploaded files
+if( isset($_POST) ){
+	$_GET = $_POST;
+}
+
 $id = $_GET['patient_id'];
 
 $target_path = "uploads/";

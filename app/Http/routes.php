@@ -145,6 +145,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'Inventory::', 'middleware' => 'a
 	 * Routes for inventories
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'InventoryController@index']);
+	Route::get('all', ['as' => 'index', 'uses' => 'InventoryController@show_all']);
 	Route::post('adjustment', ['as' => 'adjustment', 'uses' => 'InventoryController@add_adjustments']);
 	Route::get('{id}', ['get', 'uses' => 'InventoryController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'InventoryController@store']);

@@ -198,7 +198,7 @@ function check_for_critical_stock(){
 	try {
 		$settings = ECEPharmacyTree\Setting::first();
 
-		$critical_stock_products = ECEPharmacyTree\Inventory::where("quantity", "<=", $settings->critical_stock)->get();
+		$critical_stock_products = ECEPharmacyTree\Inventory::where("available_quantity", "<=", $settings->critical_stock)->get();
 		return $critical_stock_products;
 	} catch (Exception $e) {
 		pre($e);
