@@ -45,6 +45,8 @@ Route::get('home', function(){
 });
 
 Route::get('try', function(){
+	$today = Carbon\Carbon::today('Asia/Manila')->addHours(23 );
+	return ECEPharmacyTree\Promo::where('end_date', '>=', $today)->get();
 
 	return view('emails.register')->withRole('Branch Manager')
 		->withEmail('dexterb2992@gmail.com')->withPassword(generateRandomString(6))
@@ -84,7 +86,6 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'aut
 });
 
 Route::get('change-branch', 'BranchController@get_which_branch');
-
 
 Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products::'], function (){
 	/**
@@ -144,6 +145,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'Inventory::', 'middleware' => 'a
 	 * Routes for inventories
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'InventoryController@index']);
+	Route::get('all', ['as' => 'index', 'uses' => 'InventoryController@show_all']);
 	Route::post('adjustment', ['as' => 'adjustment', 'uses' => 'InventoryController@add_adjustments']);
 	Route::get('{id}', ['get', 'uses' => 'InventoryController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'InventoryController@store']);
@@ -188,6 +190,10 @@ Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'auth'], 
 	 */
 	Route::get("/", ["as" => "index", 'uses' => 'PromoController@index']);
 	Route::get("{id}", ['as' => 'get', 'uses' => 'PromoController@show']);
+	Route::get('details/{id}', ['as' => 'details', 'uses' => 'PromoController@details']);
+	Route::post('details/edit', ['as' => 'edit_details', 'uses' => 'PromoController@update_details']);
+
+	Route::post('details/gifts', ['as' => 'gifts', 'uses' => 'PromoController@gifts']);
 
 	Route::post('create', ['as' => 'create', 'uses' => 'PromoController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'PromoController@update']);

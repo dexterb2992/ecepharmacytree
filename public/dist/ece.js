@@ -1,7 +1,8 @@
 $(document).ready(function (){
     var old_photo_src = $('#user_photo').attr('src');
     getActiveSidebarMenu();
-
+    window.global_free_gift_product_ids = [];
+    window.global_free_gift_quantities = []; // quantities from database
 
     /* Morris.js Charts */
     // Sales chart
@@ -71,6 +72,23 @@ $(document).ready(function (){
     $('.btn').addClass("btn-flat");
 
     $('.select2').select2();
+    $('.icheck').iCheck({
+        checkboxClass: 'icheckbox_square-red',
+        radioClass: 'iradio_square-red',
+        increaseArea: '20%' // optional
+    });
+
+    $('.icheck').on('ifChecked', function(event){
+        var cbox = $(this);
+        cbox.val( cbox.attr('data-check-value') ).trigger('change');
+    }).on('ifUnchecked', function(event){
+        var cbox = $(this);
+        cbox.val( cbox.attr('data-uncheck-value') ).trigger('change');
+    });
+
+
+
+
     $(".datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
     //Datemask2 mm/dd/yyyy
     $(".datemask2").inputmask("mm-dd-yyyy", {"placeholder": "mm-dd-yyyy"});
@@ -93,23 +111,40 @@ $(document).ready(function (){
     }
 
     // filter input to numeric characters only
-    allowNumericOnly( $('.number'));
+    allowNumericOnly( $('.number') );
 
+
+    /**
+      to use: add "add-edit-btn" class to element
+        - define the modal by adding an attribute "data-modal-target" (use the modal id for its value)
+        - define the form by adding an attribute "data-target" (use the form id for its value)
+        - define what action if it's add or edit by adding an attribute "data-action" (add/edit)
+        - define the modal title by adding "data-title" attribute (any title you want to appear on modal's header)
+        - define the id by adding "data-id" attribute (only if data-action is edit)
+
+      note: make sure to add a "data-urlmain" attribute to the target form
+
+      to display a div when a specific option is selected on a dropdown, add a "data-show-target"
+        attribute to your dropdown element where its value is the id/class of the div to show. ex: #show_this_div
+      
+      P.S. Add your own codes below to achieve the results you wanted
+    */
     $(document).on("click", ".add-edit-btn", function (){
     	var $this = $(this), 
-        target = $(this).attr("data-target");
+            target = $this.attr("data-target");
         var form = $(target), 
-        id = $(this).attr('data-id'), 
-        modal = $(this).data('modal-target');
+            id = $this.attr('data-id'), 
+            modal = $this.data('modal-target');
         var title = "", 
-        action = $this.data("action"), 
-        url = "", 
-        mainurl = form.attr('data-urlmain'), 
-        dataTitle = $this.data('title');
+            action = $this.data("action"), 
+            url = "", 
+            mainurl = form.attr('data-urlmain'), 
+            dataTitle = $this.data('title');
 
         console.log('target: '+target+" id: "+target+" mainurl: "+mainurl);
         _clear_form_data(form);
         url = mainurl+action;
+
         if( action == "edit" ){
             title = "Edit "+dataTitle;
             url = $this.data("url");
@@ -120,107 +155,186 @@ $(document).ready(function (){
             }).done(function (data){
                 console.log(data);
 
-                form.append('<input type="hidden" name="id" value="'+data.id+'">');
-
-                var start_date = "", end_date;
-
-                $.each(data, function (i, row){
-
-                    if( i == "description" ){
-                        var str = row+"";
-                        // var reg = /\\r\\n|\\n|\\r/g;
-                        var reg = /\\r?\\n/g;
-                        // var newRow = str.replace(reg, '&#13;&#10;');
-                        var newRow = str.replace(reg, '\n');
-                        console.log("row: "+String(row));
-                        console.log("newRow: "+newRow);
+                try{
+                    if( form.find("input[name='id']").length < 1 ){
+                        form.append('<input type="hidden" name="id" value="'+data.id+'">');
+                    }else{
+                        form.find("input[name='id']").val(data.id);
                     }
 
-                    form.find("input[name='"+i+"']").val(row);
-                    form.find("textarea[name='"+i+"']").val(newRow);
+                    var start_date = "", end_date;
 
-                    
+                    $.each(data, function (i, row){ // loop through all object elements 
+                        // just add your custom conditions here 
+                        if( i == "description" ){
+                            var str = row+"";
+                            var reg = /\\r?\\n/g; // remove extra slashes
+                            var newRow = str.replace(reg, '\n');
+                        }
 
-                    if(row == "") {
-                        form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
-                    } else {
-                        form.find("img[name='"+i+"']").attr('src', 'db/uploads/user_'+data.id+'/'+row);
-                    }
 
-                    if( i == "start_date" ) 
-                        start_date = row;
+                        form.find("input[name='"+i+"']").val(row);
+                        form.find("textarea[name='"+i+"']").val(newRow);
+                        var cbox = form.find('input[name="'+i+'"][type="checkbox"]');
+                        if( cbox.length > 0 ){
+                            if( row == 1 ){
+                                cbox.attr("checked", "checked");
+                                cbox.iCheck('uncheck');
+                                cbox.iCheck('check');
+                            }else{
+                                cbox.removeAttr("checked");
+                                cbox.iCheck('check');
+                                cbox.iCheck('uncheck');
+                            }
+                        }
 
-                    if( i == "end_date" )
-                        end_date = row;
-                });
+                        if(row == "") {
+                            form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
+                        } else {
+                            form.find("img[name='"+i+"']").attr('src', 'db/uploads/user_'+data.id+'/'+row);
+                        }
 
-form.find("input#date_range").val(start_date+" - "  +end_date);
+                        if( i == "start_date" ) 
+                            start_date = row;
 
-form.find('select').find('option:selected').removeAttr("selected");
-$.each(form.find('select'), function (i, row){
-    var name = $(row).attr("name");
+                        if( i == "end_date" )
+                            end_date = row;
+                    });
 
-    $.each(data, function (i, col){
-        if( i == name ){
-            $(row).find('option[value="'+col+'"]').attr("selected", "selected");
-        }
-    });
+                    form.find("input#date_range").val(start_date+" - "  +end_date);
 
-});
+                    form.find('select').find('option:selected').removeAttr("selected");
+                    $.each(form.find('select'), function (i, row){
+                        var name = $(row).attr("name");
 
-$.each(data, function (i, row){
-                    // search for select dropdown with array names ex. names[]
-                    form.find("input[name='"+i+"[]']").val(row); 
-                    var does_it_exists = form.find("select[name='"+i+"[]']");
+                        $.each(data, function (i, col){
+                            if( i == name ){
+                                $(row).find('option[value="'+col+'"]').attr("selected", "selected");
 
-                    if( does_it_exists.length > 0 ){
-                        $.each(row, function (a, b){
-                            var lets_check = form.find("select[name='"+i+"[]'] option[value='"+b.id+"']");
-                            if( lets_check.length > 0 ){
-                                $(lets_check).attr("selected", "selected");
+                                dataShowTarget(row, col);
                             }
                         });
 
-                        if( does_it_exists.hasClass('select2') ){
-                            does_it_exists.select2();
+                    });
+
+                    // search for select dropdown with array names ex. names[]
+                    $.each(data, function (i, row){
+                        form.find("input[name='"+i+"[]']").val(row); 
+                        var does_array_select_exists = form.find("select[name='"+i+"[]']");
+
+                        if( does_array_select_exists.length > 0 ){
+                            $.each(row, function (a, b){
+                                var lets_check = form.find("select[name='"+i+"[]'] option[value='"+b.id+"']");
+                                if( lets_check.length > 0 ){
+                                    $(lets_check).attr("selected", "selected");
+                                }
+                            });
+
+                            if( does_array_select_exists.hasClass('select2') ){
+                                does_array_select_exists.select2();
+                            }
                         }
+                    });
+                }catch(Exception){
+                    console.log(Exception);
+                }
+
+
+                form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing");
+                form.find('#inventories_product_id').attr("disabled", "disabled");
+                updateInventoryProductQty();
+
+                // add your conditions & magic codes here when form fields has been filled 
+
+
+                if( $this.hasClass('promo-product-details') ){
+                    window.global_free_gift_product_ids = [];
+                    window.global_free_gift_quantities = [];
+
+                    console.log("promo details");
+                    if( data.has_free_gifts == 1 ){
+                        console.log("fetch for free gifts now.");
+                        $.ajax({
+                            url: '/promos/details/gifts',
+                            type: 'post',
+                            dataType: 'json',
+                            data: { id: data.id, _token: $("input[name='_token']").val() }
+                        }).done(function (data){
+                            console.log(data);
+                            var products_list = $("#promo_details_gifts");
+                            var htmls = "";
+                            $.each(data, function (i, row){
+                                $("#promo_details_gifts option[value='"+row.product.id+"']").attr("selected", "selected");
+                                htmls+= generate_gift_qty_form(row.product.id, row.product.name, row.quantity_free);
+                                window.global_free_gift_product_ids.push(row.product.id);
+                                window.global_free_gift_quantities.push({"id" : row.product.id, "quantity" : row.quantity_free});
+                            });
+                            $(".selected-products-qty-div").html(htmls);
+                            $("#promo_details_gifts").select2();
+                        });
                     }
-                });
+
+                    // var promoDetailsType = $(document).find("#promo_details_type option:selected").val();
+                    // var discountsDiv = $("#promo_details_discount").parent("div").parent("div");
+                    // var giftsDiv = $("#promo_details_gifts").parent("div");
+
+                    // console.log("promoDetailsType: "+promoDetailsType);
+
+                    // if( promoDetailsType == "2" ){
+                    //     // if type is free gifts
+                    //     discountsDiv.fadeOut(function (){
+                    //         // $.ajax({
+                    //         //     url: '/promos/details/gifts',
+                    //         //     type: 'post',
+                    //         //     dataType: 'json',
+                    //         //     data: { id: id, _token: $("input[name='_token']").val() }
+                    //         // }).done(function (data){
+                    //         //     console.log(data);
+                    //         // });
+                    //         giftsDiv.fadeIn();
+                    //     });
+                    // }else if( promoDetailsType == "0" || promoDetailsType == "1" ){
+                    //     giftsDiv.fadeOut(function (){
+                    //         discountsDiv.fadeIn();
+                    //     });
+                    // }else{
+                    //     discountsDiv.fadeOut();
+                    //     giftsDiv.fadeOut();
+                    // }
+
+                }
 
 
-form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing");
-form.find('#inventories_product_id').attr("disabled", "disabled");
-updateInventoryProductQty();
-});
-} else if(action == "preview_image"){
-    var img_source = $(this).children('img').attr('src');
-    $('#image_holder').attr('src', img_source);               
-    console.log(img_source); 
-    $(modal).modal('show');
+            });
+        } else if(action == "preview_image"){
+            var img_source = $(this).children('img').attr('src');
+            $('#image_holder').attr('src', img_source);               
+            console.log(img_source); 
+            $(modal).modal('show');
 
-} else if(action == "fulfill_items") {
+        } else if(action == "fulfill_items") {
 
-}else{
-    title = "Add new "+dataTitle;
+        }else{
+            title = "Add new "+dataTitle;
 
-    _clear_form_data(form);
-    form.find('#inventories_product_id').removeAttr("disabled");
-    updateInventoryProductQty();
-}
+            _clear_form_data(form);
+            form.find('#inventories_product_id').removeAttr("disabled");
+            updateInventoryProductQty();
+        }
 
-form.attr("data-mode", action);
-form.attr("action", mainurl+action);
+        form.attr("data-mode", action);
+        form.attr("action", mainurl+action);
 
-form.find(".modal-title").html(title);
+        form.find(".modal-title").html(title);
 
-$(modal).modal('show');
-});
+        $(modal).modal('show');
+    });
 
 
-$(document).on("click", ".btn-custom-alert", function (){
-    customAlertResponse = $(this).data("value");
+    $(document).on("click", ".btn-custom-alert", function (){
+        customAlertResponse = $(this).data("value");
 
-});
+    });
 
     /**
      * For alert/confirmation dialogs
@@ -785,6 +899,141 @@ $("#add_gallery").click(function (){
             nextDiv.fadeOut();
             nextDiv.find('select').removeAttr("required");
         }
+    });
+
+    $(document).on("click", '.show-hide-more-products', function (){
+        var target = $(this).data("target");
+        if( $(target).is(":visible") ){
+            $(this).attr("data-original-title", "Expand to show more products")
+                .removeClass("bg-maroon").addClass("bg-purple")
+                .find('i').removeClass("fa-eye-slash").addClass("fa-eye");
+            $(target).fadeOut();
+        }else{
+            $(this).attr("data-original-title", "Compress to minimize view")
+                .addClass("bg-maroon").removeClass("bg-purple")
+                .find('i').removeClass("fa-eye").addClass("fa-eye-slash");
+            $(target).fadeIn();
+        }
+    });
+
+    // $(document).on("click", ".promo-product-details", function (){
+    //     var $this = $(this);
+    //     var pname = $.trim($this.html());
+
+    //     $.ajax({
+    //         url : '/promos/details',
+    //         type: 'post',
+    //         dataType: 'json',
+    //         data: {did: $this.data("did"), _token: $('input[name="_token"]').val()}
+    //     }).done(function (data){
+    //         console.log(data);
+    //     });
+
+    //     $("#modal_product_name").html(pname).attr("href", "/products?q="+pname);
+    //     $("#modal-promo-product-info").modal('show');
+    // });
+
+    $('.btn-gencode').click(function (){
+        var code = generate_random_string(6).toUpperCase();
+        $(this).parent('div').prev('input[name="generic_redemption_code"]').val(code);
+    });
+
+    $('#promo_details_type').change(function (){
+        var productsDiv = $("#promo_details_gifts").parent("div");
+        var discountsDiv = $("#promo_details_discount").parent("div").parent("div");
+        var detailsDiscount = $("#promo_details_discount");
+        var val = $(this).val();
+
+        if( val == 0 ){
+            detailsDiscount.prev("span.input-group-addon").fadeOut(function (){
+                detailsDiscount.next("span.input-group-addon").fadeIn();
+            });
+            productsDiv.fadeOut(function(){
+                discountsDiv.fadeIn();
+            });
+            
+        }else if( val == 1 ){
+            detailsDiscount.next("span.input-group-addon").fadeOut(function (){
+                detailsDiscount.prev("span.input-group-addon").fadeIn();
+            });
+            productsDiv.fadeOut(function (){
+                discountsDiv.fadeIn();
+            });
+            
+        }else if( val == 2 ){
+            discountsDiv.fadeOut(function (){
+                productsDiv.fadeIn();
+            });
+            
+        }else{
+            productsDiv.fadeOut();
+            discountsDiv.fadeOut();
+        }
+    });
+
+    $('#promo_details_gifts').change(function (){
+        var $this = $(this);
+        var htmls = "";
+        var dropdown_values = $this.val();
+        
+        if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
+            $.each(dropdown_values, function (i, row){
+                dropdown_values[i] = parseInt(row);
+            });
+
+            $.each(dropdown_values, function (i, row){
+                if( $.inArray( row, window.global_free_gift_product_ids) === -1 ){
+                    window.global_free_gift_product_ids.push(row);
+
+                    var check = getArrayIndexForKey(window.global_free_gift_quantities, "id", row);
+                    if( check === -1 ){ // make sure the product doesn't exist yet
+                        window.global_free_gift_quantities.push({"id" : row, "quantity" : 0});
+                    }
+
+                    // htmls+= generate_gift_qty_form(row, $this.children("option[value='"+row+"']").text());
+                }
+
+            });
+        }
+
+        // if wala sa select tas naa sa global_free_gift_qty, remove
+        $.each(window.global_free_gift_product_ids, function (i, row){
+            if( $.inArray(row, dropdown_values) === -1 ){ // means value is found in global_free_gift_qty and not in select
+                console.log("means value is found in global_free_gift_qty and not in select");
+                console.log("global_free_gift_quantities:");
+                console.log(global_free_gift_product_ids);
+                console.log("dropdown_values:");
+                console.log(dropdown_values);
+                var index =  window.global_free_gift_product_ids.indexOf(row);
+                console.log("index: "+index+" row: "+row);
+                if (index > -1) {
+                    window.global_free_gift_product_ids.splice(index, 1); // 
+                }
+            }
+        });
+
+
+        $.each(window.global_free_gift_quantities, function (i, row){
+            if( $.inArray(row.id, global_free_gift_product_ids) !== -1 ){
+                htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity);
+            }
+        
+        });
+
+        $(".selected-products-qty-div").html(htmls);
+        allowNumericOnly( $('.number') );
+    });
+
+    // $(document).on("click", 'input[type="checkbox"]', function (){
+    //     if( $(this).is(":checked") ){
+    //         $(this).val( $(this).attr('data-check-value') );
+    //     }else{
+    //         $(this).val( $(this).attr('data-check-value') );
+    //     }
+    // });
+
+    $('.data-show').change(function (){
+        dataShowTarget($(this), $(this).val());
     });
 
 });

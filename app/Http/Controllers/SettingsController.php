@@ -54,9 +54,10 @@ class SettingsController extends Controller
         $setting->commission_variation = $input["commission_variation"];
         $setting->delivery_charge = _clean_number($input["delivery_charge"]);
         $setting->delivery_minimum = _clean_number($input["delivery_minimum"]);
-        $settings->nearest_location_distance = $input["nearest_location_distance"];
+        $setting->nearest_location_distance = $input["nearest_location_distance"] != "" ? $input["nearest_location_distance"] : 1;
+        $setting->weeks_to_suggest_promo = $input['weeks_to_suggest_promo'];
         
-        if( $settings->save() )
+        if( $setting->save() )
             return Redirect::to( route('Settings::index') )->withFlash_message([
                 "msg" => "Your changes have been successfully saved!", "type" => "success"
             ]);

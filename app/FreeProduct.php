@@ -12,4 +12,8 @@ class FreeProduct extends Model
     public function dfp(){
     	return $this->belongsTo('ECEPharmacyTree\DiscountsFreeProducts', 'dfp_id');
     }
+
+    public function product(){
+    	return $this->belongsTo('ECEPharmacyTree\Product');
+    }
 }

@@ -13,6 +13,6 @@ class Promo extends Model
     protected $dates = ['dob'];
 
     public function discounts(){
-    	return $this->hasMany('ECEPharmacyTree\DiscountsFreeProducts');
+    	return $this->hasMany('ECEPharmacyTree\DiscountsFreeProduct');
     }
 }

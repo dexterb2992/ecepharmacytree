@@ -83,22 +83,10 @@
             </li>
 
             <li class="treeview">
-                <a href="#/sales">
-                    <i class="fa fa-pie-chart"></i> <span>Sales</span>
-                </a>
-            </li>
-
-            <li class="treeview">
                 <a href="#/payments">
                     <i class="fa fa-money"></i> <span>Payments</span>
                 </a>
-            </li>
-
-            <li class="treeview">
-                <a href="#/manage-delivery">
-                    <i class="fa fa-truck"></i> <span>Manage Delivery</span>
-                </a>
-            </li>
+            </li>w
 
             @if(Auth::user()->isAdmin())
             <li class="treeview">

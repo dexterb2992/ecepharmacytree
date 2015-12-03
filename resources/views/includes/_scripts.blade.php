@@ -62,6 +62,9 @@
 {!! HTML::script('plugins/jOrgChart/jquery.jOrgChart.js') !!}
 {!! HTML::script('plugins/jOrgChart/prettify.js') !!}
 
+<!-- iCheck 1.0.1 -->
+{!! HTML::script('plugins/iCheck/icheck.min.js') !!}
+
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 {!! HTML::script('dist/js/pages/dashboard.js') !!}
 
@@ -76,5 +79,3 @@
 {!! HTML::script('dist/ece.js') !!}
 <?php //include(public_path('dist').'/ece.js.php'); ?>
 
-<!-- Google map scripts -->
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8&callback=initMap"> </script>

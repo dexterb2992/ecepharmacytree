@@ -384,3 +384,19 @@ red{
 table td .btn-group .btn {
     margin-right: 4px;
 }
+
+.selected-products-qty-div.form-horizontal {
+    margin-top: 12px;
+}
+
+.btn-stock-return {
+    margin-right: 4px;
+}
+
+.input-group-addon-select{
+    padding: 0;
+}
+    .input-group-addon-select select{
+        height: 100%;
+        border: none;
+    }
