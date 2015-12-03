@@ -215,7 +215,7 @@ switch ($request) {
     break;
 
     case 'get_products_gallery':
-     $result = mysql_query("SELECT * FROM products_gallery WHERE product_id = ".$_GET['product_id']."'") or returnError(mysql_error());  
+     $result = mysql_query("SELECT * FROM products_gallery WHERE product_id = ".$_GET['product_id']) or returnError(mysql_error());  
     $tbl = "products_gallery";
     break;
 
