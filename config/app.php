@@ -139,6 +139,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Illuminate\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        // Vinkla\Pusher\PusherServiceProvider::class,
 
 
         /*
@@ -198,6 +199,7 @@ return [
         'Form'      => Illuminate\Html\FormFacade::class, 
         'HTML'      => Illuminate\Html\HtmlFacade::class,
         'Image'     => Intervention\Image\Facades\Image::class,
+        // 'Pusher'    => Vinkla\Pusher\Facades\Pusher::class,
     ],
 
 ];

@@ -23,6 +23,9 @@
 <!-- iCheck -->
 {!! HTML::style('plugins/iCheck/flat/blue.css') !!}
 
+<!-- iCheck for checkboxes and radio inputs -->
+{!! HTML::style('plugins/iCheck/all.css') !!}
+
 <!-- Morris chart -->
 {!! HTML::style('plugins/morris/morris.css') !!}
 

@@ -16,9 +16,10 @@ class CreateInventoriesTable extends Migration
             $table->increments('id');
             $table->integer('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->integer('quantity');
+            $table->integer('quantity'); // actual quantity received
+            $table->integer('available_quantity');
             $table->integer('lot_number');
-            $table->date('expiration_date')->unique();
+            $table->date('expiration_date')->nullable();
             $table->integer('branch_id')->unsigned();
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->timestamps();

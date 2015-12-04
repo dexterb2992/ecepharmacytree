@@ -57,10 +57,8 @@ var customAlertResponse = false;
  	}
 
  	var modal = $(".modal-alert");
- 	modal.removeClass('modal-info')
- 	.removeClass('modal-danger')
- 	.removeClass('modal-success')
- 	.removeClass('modal-warning').addClass("modal-"+type).addClass('fade');
+ 	modal.removeClass('modal-info').removeClass('modal-danger').removeClass('modal-success')
+     	.removeClass('modal-warning').addClass("modal-"+type).addClass('fade');
  	modal.find(".modal-title").html(title);
  	modal.find(".modal-body").html(msg);
  	modal.find(".modal-footer").html(buttons);
@@ -199,6 +197,7 @@ function sendFileToServer(formData,status){
     	},
 	    url: uploadURL,
 	    type: "POST",
+        dataType: 'json',
 	    contentType:false,
 	    processData: false,
 	        cache: false,
@@ -304,13 +303,64 @@ function getOriginalCarouselItems(){
     '</a>';
 }
 
-// get $_GET param values
-$.getUrlParam  = function (name){
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+// Note that we have a static variables for promo's offer type
+// @param int type 
+function get_promo_offer_type(type){
+    switch(type){
+        case 0: 
+            return "Percentage base discount";
+        case 1: 
+            return "Peso value discount";
+        case 2: 
+            return "Free Gift";
+        case 3: 
+            return "Free Delivery";
+    }
 }
 
+//
+function generate_gift_qty_form(productId, productName, quantity){
+    console.log("i am generating gift div now");
+    quantity = (typeof quantity === 'undefined') ? 0 : quantity;
 
+    return '<div class="form-group">'+
+        '<div class="control-label col-sm-8 selected-product-qty-label">'+
+            '<label>'+productName+'</label>'+
+        '</div>'+
+        '<div class="col-sm-4">'+
+            '<input type="text" class="form-control number" name="gift_quantities['+productId+']" value="'+quantity+'" placeholder="Quantity">'+
+        '</div>'+
+    '</div>';
+}
+
+function dataShowTarget(dropdown, showWhen){
+    // let's check if this dropdown has a data-show-target attribute
+    var showTarget = $(dropdown).attr('data-show-target');
+
+    // For some browsers, `showTarget` is undefined; for others,
+    // `showTarget` is false.  Check for both.
+    if (typeof showTarget !== typeof undefined && showTarget !== false) {
+        var showTargetWhen = $(dropdown).attr("data-show-target-when");
+
+        if (typeof showTargetWhen !== typeof undefined && showTargetWhen !== false) {
+            if( showWhen == $(dropdown).attr("data-show-target-when") ){
+                $(showTarget).fadeIn();
+            }else{
+                $(showTarget).fadeOut();
+            }
+        }else{
+            // By default, if we didn't find a "data-show-target-when" attribute,
+            // we automatically show the showTarget
+            $(showTarget).fadeIn();
+        }
+    }
+}
+
+function getArrayIndexForKey(arr, key, val){
+    for(var i = 0; i < arr.length; i++){
+        if(arr[i][key] == val)
+            return i;
+    }
+    return -1;
+}
  

@@ -139,6 +139,9 @@ use ECEPharmacyTree\Branch;
     @stop
 
     @section('scripts')
+    <!-- Google map scripts -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8&callback=initMap"></script>
+
     <script type="text/javascript">
         function initMap() {
 

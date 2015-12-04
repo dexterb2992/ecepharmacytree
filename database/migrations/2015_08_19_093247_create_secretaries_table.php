@@ -19,11 +19,13 @@ class CreateSecretariesTable extends Migration
             $table->string('lname');
             $table->string('address_house_no', 10)->nullable();
             $table->string('address_street');
-            $table->string('address_barangay');
-            $table->string('address_city_municipality');
-            $table->string('address_province');
-            $table->string('address_region');
-            $table->string('address_zip', 10);
+            // $table->string('address_barangay');
+            // $table->string('address_city_municipality');
+            // $table->string('address_province');
+            // $table->string('address_region');
+            // $table->string('address_zip', 10);
+            $table->integer('barangay_id')->unsigned();
+            $table->foreign('barangay_id')->references('id')->on('barangays')->onDelete('cascade');
             $table->string('cell_no', 15)->nullable();
             $table->string('tel_no', 8)->nullable();
             $table->string('email');

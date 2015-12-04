@@ -24,7 +24,14 @@
 						<div class="box box-success">
 							<div class="box-header">
 								<h4>Stock Items List</h4> <br/>
-				                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-inventory" data-target="#form_edit_inventory" data-action="create" data-title="inventory"><i class="fa-plus fa"></i> Add New</button>
+				                <button class="btn-info btn pull-right add-edit-btn" data-toggle="modal" data-target="#modal-add-edit-inventory" 
+				                	data-target="#form_edit_inventory" data-action="create" data-title="inventory">
+				                	<i class="fa-plus fa"></i> Add New
+				                </button>
+
+				                <button class="btn-success btn pull-right btn-stock-return" data-target="#modal-stock-return" data-toggle="modal">
+				                	<i class="fa-refresh fa"></i> Stock Return
+				                </button>
 							</div>
 							<div class="box-body">
 								<table class="table table-bordered table-hover datatable">
@@ -58,9 +65,9 @@
 												</td>
 												<td>
 													<?php 
-														$total = $inventory->quantity * $inventory->product->qty_per_packing; 
+														$total = $inventory->available_quantity * $inventory->product->qty_per_packing; 
 													?>
-													{!! '<b>'.$inventory->quantity." ".str_auto_plural($inventory->product->packing, $inventory->quantity)."</b> "
+													{!! '<b>'.$inventory->available_quantity." ".str_auto_plural($inventory->product->packing, $inventory->available_quantity)."</b> "
 														."( ".$total." ".str_auto_plural($inventory->product->unit, $total)." )" !!}
 												
 												</td>
@@ -129,7 +136,7 @@
 												<td>{{ get_person_fullname($log->user) }}</td>
 												<td>{!! $log->action !!}</td>
 												<td>
-													<?php $date_added = Carbon::parse($inventory->created_at); ?>
+													<?php $date_added = Carbon::parse($log->created_at); ?>
 													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->formatLocalized('%A %d %B %Y') }}">
 														<i class="fa-clock-o fa"></i> 
 														{{ $date_added->diffForHumans() }}
@@ -171,7 +178,9 @@
 	                            	</select>
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="quantity" title="Add quantity by product's packing">Quantity (<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</label>
+	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received 
+	                            		<small>(<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</small>
+	                            	</label>
 	                            	<div class="input-group">
 		                            	<input type="text" id="inventory_quantity" name="quantity" class="number form-control" title="Add quantity by product's packing" required>
 		                            	<div class="input-group-addon">
@@ -181,12 +190,12 @@
 	                            	<span id="total_quantity_in_unit"></span>
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="expiration">Expiration Date</label>
+	                            	<label for="expiration">Expiration Date <small><i>(Leave empty if this stock doesn't have an expiration)</i></small></label>
 	                            	<div class="input-group">
 	                            		<div class="input-group-addon">
 											<i class="fa fa-calendar"></i>
 										</div>
-										<input type="text" name="expiration_date" class="form-control datemask3" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required/>
+										<input type="text" name="expiration_date" class="form-control datemask3" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask/>
 		                            </div>
 	                            </div>
 	                        </div>
@@ -213,11 +222,11 @@
 		        				{!! Form::token() !!}
 		        				<input type="hidden" id="sid" name="id">
 		        				<div class="form-group">
-	                            	<label for="old_quantity">Old Quantity</label>
+	                            	<label for="old_quantity">Old Quantity Received</label>
 	                            	<input class="form-control number" type="text" name="old_quantity" id="old_quantity" value="" readonly>
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="new_quantity">New Quantity</label>
+	                            	<label for="new_quantity">New Quantity Received</label>
 	                            	<input class="form-control number" type="text" name="new_quantity" id="new_quantity">
 	                            </div>
 	                            <div class="form-group">
@@ -233,6 +242,22 @@
 	        		</div>	
 	        	</div>
 	        </div>
+
+	        <!-- Modal for Stock Return -->
+	        <div class="modal" id="modal-stock-return">
+	        	<div class="modal-dialog">
+	        		<div class="modal-content">
+	        			<div class="modal-heade">
+	        				
+	        			</div>
+	        			<div class="modat-body">
+	        			
+		        		</div>
+		        		<div class="modal-footer"></div>
+	        		</div>
+	        	</div>
+	        </div>
+
 		</div><!-- /.col -->
 	</div><!-- /.row -->
 @stop

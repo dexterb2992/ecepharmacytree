@@ -61,6 +61,7 @@ return array(
         'small' => 'Intervention\Image\Templates\Small',
         'medium' => 'Intervention\Image\Templates\Medium',
         'large' => 'Intervention\Image\Templates\Large',
+        '240x240' => 'Intervention\Image\Templates\Size240x240',
         '160x160' => 'Intervention\Image\Templates\Size160x160',
         '128x128' => 'Intervention\Image\Templates\Size128x128',
         '50x50' => 'Intervention\Image\Templates\Size50x50',
