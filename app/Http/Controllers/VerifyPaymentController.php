@@ -20,7 +20,7 @@ use ECEPharmacyTree\Inventory;
 use ECEPharmacyTree\Setting;
 use ECEPharmacyTree\Patient;
 
-class ApiController extends Controller
+class VerifyPaymentController extends Controller
 {
 	private $apicontext;
 	private $payment;
