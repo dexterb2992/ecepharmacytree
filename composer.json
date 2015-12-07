@@ -11,7 +11,8 @@
         "guzzlehttp/guzzle": "4.0",
         "intervention/image": "^2.3",
         "intervention/imagecache": "^2.3",
-        "vinkla/pusher": "^2.2"
+        "vinkla/pusher": "^2.2",
+        "paypal/rest-api-sdk-php": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -57,5 +58,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "minimum-stability": "dev"
 }
