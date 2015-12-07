@@ -26,6 +26,7 @@ class CreatePromosTable extends Migration
 
             $table->date('start_date');
             $table->date('end_date');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

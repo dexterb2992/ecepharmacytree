@@ -25,6 +25,7 @@ class CreateClinicsTable extends Migration
             $table->string('address_street')->nullable();
             $table->integer('barangay_id')->unsigned();
             $table->foreign('barangay_id')->references('id')->on('barangays')->onDelete('cascade');
+            $table->integer('is_new')->default(1);
             // $table->string('address_barangay');
             // $table->string('address_city_municipality');
             // $table->string('address_province');

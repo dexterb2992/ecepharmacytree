@@ -24,6 +24,7 @@ class CreateOrdersTable extends Migration
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->string('modeOfDelivery');
             $table->string('status')->default('open');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -21,6 +21,7 @@ class CreateBasketsTable extends Migration
             $table->double('quantity');
             $table->integer('prescription_id')->default(0);
             $table->integer('is_approved')->default(1);
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -27,6 +27,7 @@ class CreateClinicTreatmentsTable extends Migration
             $table->integer('refills')->default(0);
             $table->integer('duration')->default(0);
             $table->integer('duration_type');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -29,7 +29,7 @@ $file_upload_url = 'http://192.168.10.1/db/' . $target_path;
 date_default_timezone_set('Asia/Manila');
 $datenow = date("Y-m-d H:i:s", time());
 
-function generateRandomString($length = 10) {
+function generate_random_string($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -41,7 +41,7 @@ function generateRandomString($length = 10) {
 
 if (isset($_FILES['image']['name'])) {
 	// $filename = basename($_FILES['image']['name']);
-	$filename = generateRandomString().'.jpg';
+	$filename = generate_random_string().'.jpg';
 
 	$target_path = $target_path . $filename;
 

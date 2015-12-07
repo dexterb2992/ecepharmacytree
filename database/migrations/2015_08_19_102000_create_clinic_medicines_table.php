@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClinicMedicinesTable1 extends Migration
+class CreateClinicMedicinesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,6 +17,7 @@ class CreateClinicMedicinesTable1 extends Migration
             $table->integer('clinic_id')->unsigned();
             $table->foreign('clinic_id')->references('id')->on('clinics');
             $table->string('med_name');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
         });
     }

@@ -80,7 +80,9 @@ class VerifyPaymentController extends Controller
 			$order_saved = false;
 			$billing_saved = false;
 			$prescription_id = 0;
-			dd('are you fucking kidding me ?');
+
+			dd(count($results));
+			
 			foreach($results as $result) {
 				$quantity = $result->quantity;
 				$product_id = $result->product_id;
@@ -107,7 +109,6 @@ class VerifyPaymentController extends Controller
 
 				}
 
-				$counter += 1;
 
 				if($order_saved) {
 					$order_detail = new OrderDetail;
@@ -143,52 +144,57 @@ class VerifyPaymentController extends Controller
 						}
 					}
 				}
+
+
+				if(count($results) == $counter) {
+
+					$billing = new Billing;
+					$billing->order_id = $order_id;
+					$billing->gross_total = $totalAmount;
+					$billing->total = $totalAmount;
+					$billing->payment_status = $payment_status;
+					$billing->payment_method = $payment_method;
+
+					if($billing->save()) {
+						$billing_id = $billing->id;
+						$response['billing_message'] = "order saved on database";
+						$response['billing_id'] = $billing_id;
+						$billing_saved = true;
+					} else
+					$response["billing_message"] = "Sorry, we can't process your request right now.";
+
+
+					$payment = new InServerPayment;
+					$payment->billing_id = $billing_id;
+					$payment->txn_id = $_payment->id;
+					$payment->or_no = 'official_receipt_number';
+
+					if($payment->save())
+						$response['payment_message'] = "payment saved on database";
+					else
+						$response['payment_message'] = "error saving payment";
+
+
+					if(Basket::where('patient_id', '=', $user_id)->delete()) 
+						$response['basket_message'] = "basket/s deleted on database";
+					else 
+						$response['basket_message'] = "basket/s not deleted on database";
+
+
+					$setting = Setting::first();
+
+					$earned_points = round(($setting->points/100) * $totalAmount, 2);
+					$patient = Patient::findOrFail($user_id);
+					$patient->points = $earned_points;
+
+					if($patient->save())
+						$response['points_update_message'] = "points updated";
+					else 
+						$response['points_update_message'] = "points not updated";
+				}
+
+				$counter += 1;
 			}
-
-			// $billing = new Billing;
-			// $billing->order_id = $order_id;
-			// $billing->gross_total = $totalAmount;
-			// $billing->total = $totalAmount;
-			// $billing->payment_status = $payment_status;
-			// $billing->payment_method = $payment_method;
-
-			// if($billing->save()) {
-			// 	$billing_id = $billing->id;
-			// 	$response['billing_message'] = "order saved on database";
-			// 	$response['billing_id'] = $billing_id;
-			// 	$billing_saved = true;
-			// } else
-			// $response["billing_message"] = "Sorry, we can't process your request right now.";
-
-
-			// $payment = new InServerPayment;
-			// $payment->billing_id = $billing_id;
-			// $payment->txn_id = $_payment->id;
-			// $payment->or_no = 'official_receipt_number';
-
-			// if($payment->save())
-			// 	$response['payment_message'] = "payment saved on database";
-			// else
-			// 	$response['payment_message'] = "error saving payment";
-
-
-			// if(Basket::where('patient_id', '=', $user_id)->delete()) 
-			// 	$response['basket_message'] = "basket/s deleted on database";
-			// else 
-			// 	$response['basket_message'] = "basket/s not deleted on database";
-
-
-			// $setting = Setting::first();
-
-			// $earned_points = round(($setting->points/100) * $totalAmount, 2);
-			// $patient = Patient::findOrFail($user_id);
-			// $patient->points = $earned_points;
-
-			// if($patient->save())
-			// 	$response['points_update_message'] = "points updated";
-			// else 
-			// 	$response['points_update_message'] = "points not updated";
-
 
                 // Verifying the amount
 			if ($amount_server != $amount_client) {
