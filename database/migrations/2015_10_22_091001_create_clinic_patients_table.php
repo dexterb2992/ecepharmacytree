@@ -38,6 +38,7 @@ class CreateClinicPatientsTable extends Migration
             $table->string('address_street');
             $table->integer('address_barangay_id')->unsigned()->nullable();
             $table->foreign('address_barangay_id')->references('id')->on('barangays');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

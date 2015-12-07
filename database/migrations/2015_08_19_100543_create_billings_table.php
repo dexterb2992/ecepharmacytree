@@ -20,6 +20,7 @@ class CreateBillingsTable extends Migration
             $table->double('total');
             $table->string('payment_status')->default('pending');
             $table->string('payment_method');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

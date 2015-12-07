@@ -18,6 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->foreign('billing_id')->references('id')->on('billings')->onDelete('cascade');
             $table->string('txn_id')->nullable();
             $table->string('or_no')->nullable();
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

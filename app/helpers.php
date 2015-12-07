@@ -14,7 +14,7 @@ function pre($str){
  *			2 = letters only
  */
 
-function generateRandomString($length = 10, $is_number = 0, $is_sku = false) {
+function generate_random_string($length = 10, $is_number = 0, $is_sku = false) {
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	if( $is_number  == 1) {
 		$characters = '0123456789';
@@ -42,17 +42,17 @@ function strbefore($string, $substring) {
 		return(substr($string, 0, $pos));
 }
 
-function generateSku(){
-	$sku = strtoupper( generateRandomString(3, 2, true).generateRandomString(3, 1, true) );
+function generate_sku(){
+	$sku = strtoupper( generate_random_string(3, 2, true).generate_random_string(3, 1, true) );
 
 	$check = ECEPharmacyTree\Product::where('sku', '=', $sku)->first();
 	if( $check === null )
 		return $sku;
-	generateSku();
+	generate_sku();
 }
 
 function generate_referral_id(){
-	$referral_id = strtoupper( generateRandomString(3, 2, true).generateRandomString(3, 1, true) );
+	$referral_id = strtoupper( generate_random_string(3, 2, true).generate_random_string(3, 1, true) );
 	$check = ECEPharmacyTree\Patient::where('referral_id', '=', $referral_id)->first();
 	$check2 = ECEPharmacyTree\Doctor::where('referral_id', '=', $referral_id)->first();
 	if( $check === null && $check2 === null)
@@ -81,55 +81,47 @@ function generate_lot_number(){
 
 function str_auto_plural($str, $quantity){
 	$pos = strpos($str, "(");
-		$suf = "";
+	$suf = "";
 
-		if( $pos !== false ){
-			$str = trim( substr($str, 0, $pos) );
-			$suf = trim( substr($str, $pos) );
-		}
-
-		if( $quantity > 1 )	
-			return str_plural($str)." ".$suf;
-
-		return str_singular($str)." ".$suf;
+	if( $pos !== false ){
+		$str = trim( substr($str, 0, $pos) );
+		$suf = trim( substr($str, $pos) );
 	}
 
-	function rn2br($str){
-		$newLineArray = array('\r\n','\n\r','\n','\r');
-		return str_replace($newLineArray,'<br/>', nl2br($str));
-	}
+	if( $quantity > 1 )	
+		return str_plural($str)." ".$suf;
 
-	function safety_stock(){
-		$p = Product::all();
-		return $p->toJson();
-	}
+	return str_singular($str)." ".$suf;
+}
 
-	function get_person_fullname($person, $reversed = false){
-		$mname = !empty($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : '';
-		$fname = ucfirst($person->fname)." ";
-		$lname = ucfirst($person->lname);
-        if( $reversed )
-            return $lname.", ".$fname.$mname;
-        return $fname." ".$mname." ".$lname;
-    
-	}
+function rn2br($str){
+	$newLineArray = array('\r\n','\n\r','\n','\r');
+	return str_replace($newLineArray,'<br/>', nl2br($str));
+}
 
-	function get_patient_full_address($patient){
-		return ucfirst($patient->address_street).', '.ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
-	}
+function get_person_fullname($person, $reversed = false){
+	$mname = !empty($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : '';
+	$fname = ucfirst($person->fname)." ";
+	$lname = ucfirst($person->lname);
+    if( $reversed )
+        return $lname.", ".$fname.$mname;
+    return $fname." ".$mname." ".$lname;
 
-	function get_patient_referrals($patient){
-		$count1 = 0;
-		$count2 = 0;
-		
-		$count1 = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $patient->referral_id)->count();
-		$count2 = ECEPharmacyTree\Patient::where('referred_byUser', '=', $patient->referral_id)->count();
+}
 
-		return $count1 + $count2;
-	}
 
-	function get_all_downlines($referral_id){
-		$settings = ECEPharmacyTree\Setting::first();
+function get_patient_referrals($patient){
+	$count1 = 0;
+	$count2 = 0;
+	
+	$count1 = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $patient->referral_id)->count();
+	$count2 = ECEPharmacyTree\Patient::where('referred_byUser', '=', $patient->referral_id)->count();
+
+	return $count1 + $count2;
+}
+
+function get_all_downlines($referral_id){
+	$settings = ECEPharmacyTree\Setting::first();
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
 
 	if( empty($patients) )

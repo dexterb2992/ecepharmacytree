@@ -24,6 +24,7 @@ class CreatePatientRecordsTable extends Migration
             $table->longText('findings');
             $table->string('record_date');
             $table->string('created_by')->default('user'); // change value to doctor, if created by doctor
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

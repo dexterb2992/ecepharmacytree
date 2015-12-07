@@ -18,6 +18,7 @@ class CreatePatientPrescriptionsTable extends Migration
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->longText('filename');
             $table->integer('is_approved')->default(0);
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

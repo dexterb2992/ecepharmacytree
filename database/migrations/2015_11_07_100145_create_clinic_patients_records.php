@@ -24,6 +24,7 @@ class CreateClinicPatientsRecords extends Migration
             $table->longtext('findings');
             $table->string('record_date');
             $table->longtext('note');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

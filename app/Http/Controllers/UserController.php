@@ -64,7 +64,7 @@ class UserController extends Controller
         }
 
         $email = $input['email'];
-        $password = generateRandomString(6);
+        $password = generate_random_string(6);
         $role = get_role($input['access_level']);
         $branch = Branch::findOrFail($input['branch_id']);
         $branch_name = $branch->name;

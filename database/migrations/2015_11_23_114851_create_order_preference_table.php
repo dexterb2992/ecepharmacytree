@@ -20,6 +20,7 @@ class CreateOrderPreferenceTable extends Migration
             $table->string('address_for_delivery');
             $table->string('recipient_for_delivery');
             $table->string('payment_method');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

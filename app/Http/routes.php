@@ -12,8 +12,8 @@
 */
 
 
-View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-View::share('branches', ECEPharmacyTree\Branch::all());
+// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+// View::share('branches', ECEPharmacyTree\Branch::all());
 
 
 Route::get('showschema', function(){
@@ -49,7 +49,7 @@ Route::get('try', function(){
 	return ECEPharmacyTree\Promo::where('end_date', '>=', $today)->get();
 
 	return view('emails.register')->withRole('Branch Manager')
-		->withEmail('dexterb2992@gmail.com')->withPassword(generateRandomString(6))
+		->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
 		->withBranch_name("ECE Marketing - Davao");
 });
 
@@ -259,7 +259,7 @@ Route::get('locations/search/{get_location}/{location_name}', 'LocationControlle
 
 Route::get('api/generate/{what}', function ($what){
 	if( $what == "sku" )
-		return generateSku();
+		return generate_sku();
 	if( $what == "referral_id" )
 		return generate_referral_id();
 
