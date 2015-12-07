@@ -173,29 +173,29 @@ define('DEFAULT_CURRENCY', 'PHP');
                         } else {
                             $response['points_update_message'] = "points not updated";
                         }
-            
-} else {
-                    // $response['message'] = "payment unsaved on database";
-    $response["message"] = "Sorry, we can't process your request right now. ".mysql_error();
-}
 
-}
+                    } else {
+                    // $response['message'] = "payment unsaved on database";
+                        $response["message"] = "Sorry, we can't process your request right now. ".mysql_error();
+                    }
+
+                }
 
                 // Verifying the amount
-if ($amount_server != $amount_client) {
-    $response["error"] = true;
-    $response["message"] = "Payment amount doesn't matched.";
-    echoResponse(200, $response);
-    return;
-}
+                if ($amount_server != $amount_client) {
+                    $response["error"] = true;
+                    $response["message"] = "Payment amount doesn't matched.";
+                    echoResponse(200, $response);
+                    return;
+                }
 
                 // Verifying the currency
-if ($currency_server != $currency_client) {
-    $response["error"] = true;
-    $response["message"] = "Payment currency doesn't matched.";
-    echoResponse(200, $response);
-    return;
-}
+                if ($currency_server != $currency_client) {
+                    $response["error"] = true;
+                    $response["message"] = "Payment currency doesn't matched.";
+                    echoResponse(200, $response);
+                    return;
+                }
 
                 // Verifying the sale state
                 // if ($sale_state != 'completed') {
@@ -208,33 +208,26 @@ if ($currency_server != $currency_client) {
                 // storing the saled items
                 // insertItemSales($payment_id_in_db, $transaction, $sale_state);
 
-echoResponse(200, $response);
-} catch (\PayPal\Exception\PayPalConnectionException $exc) {
-    if ($exc->getCode() == 404) {
-        $response["error"] = true;
-        $response["message"] = "Payment not found!";
-        echoResponse(404, $response);
-    } else {
-        $response["error"] = true;
-        $response["message"] = "Unknown error occurred!" . $exc->getMessage();
-        echoResponse(500, $response);
-    }
-} catch (Exception $exc) {
-    $response["error"] = true;
-    $response["message"] = "Unknown error occurred!" . $exc->getMessage();
-    echoResponse(500, $response);
-}
+                echoResponse(200, $response);
+            } catch (\PayPal\Exception\PayPalConnectionException $exc) {
+                if ($exc->getCode() == 404) {
+                    $response["error"] = true;
+                    $response["message"] = "Payment not found!";
+                    echoResponse(404, $response);
+                } else {
+                    $response["error"] = true;
+                    $response["message"] = "Unknown error occurred!" . $exc->getMessage();
+                    echoResponse(500, $response);
+                }
+            } catch (Exception $exc) {
+                $response["error"] = true;
+                $response["message"] = "Unknown error occurred!" . $exc->getMessage();
+                echoResponse(500, $response);
+            }
 
-function echoResponse($status_code, $response) {
-   // $app = \Slim\Slim::getInstance();
-    // Http response code
-   // $app->status($status_code);
-
-    // setting response content type to json
-    //$app->contentType('application/json');
-
-    echo json_encode($response);
-}
+            function echoResponse($status_code, $response) {
+                echo json_encode($response);
+            }
 
 
-?>      
+            ?>      
