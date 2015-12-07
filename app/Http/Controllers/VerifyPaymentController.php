@@ -22,20 +22,27 @@ use ECEPharmacyTree\Patient;
 
 class VerifyPaymentController extends Controller
 {
-	private $apicontext;
-	private $payment;
+	// private $apicontext;
+	// private $payment;
 
 
-	function __construct(){
-		$this->apicontext = new ApiContext(
+	// function __construct(){
+	// 	$this->apicontext = new ApiContext(
+	// 		new OAuthTokenCredential(
+ //                        'AcCQ4PKc6AtjThCsPPkGSH01nPPe7yJKB1oRT39hpgpUGrFkORy9gmuY5_OF4loXc45RaNrUq4h94PP1', // ClientID
+ //                        'EH7LOgghxkz-pebLoT1dXSuDo0GiyPI3s1kKaMkp7fKQ25ezZovq5PGQqwVfAAjUpPFcPrAZYA33DcTC'      // ClientSecret
+ //                        )
+	// 		);
+	// }
+
+	function verification() {
+
+		$apiContext = new ApiContext(
 			new OAuthTokenCredential(
                         'AcCQ4PKc6AtjThCsPPkGSH01nPPe7yJKB1oRT39hpgpUGrFkORy9gmuY5_OF4loXc45RaNrUq4h94PP1', // ClientID
                         'EH7LOgghxkz-pebLoT1dXSuDo0GiyPI3s1kKaMkp7fKQ25ezZovq5PGQqwVfAAjUpPFcPrAZYA33DcTC'      // ClientSecret
                         )
 			);
-	}
-
-	function verification() {
 		$input = Input::all();
 		try {
 			$paymentId = $input['paymentId'];
@@ -51,7 +58,7 @@ class VerifyPaymentController extends Controller
 			$status = $input['status'];
 
                 // Gettin payment details by making call to paypal rest api
-			$_payment = Payment::get($paymentId, $this->apiContext);
+			$_payment = Payment::get($paymentId, $apiContext);
 
                 // Verifying the state approved
 			if ($_payment->getState() != 'approved') {
