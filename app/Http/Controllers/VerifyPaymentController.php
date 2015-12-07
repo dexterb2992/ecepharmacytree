@@ -118,13 +118,12 @@ class VerifyPaymentController extends Controller
 				$counter += 1;
 
 				if($order_saved) {
-					$sql_order_details_save = "INSERT INTO order_details VALUES ('', $order_id, $product_id, $prescription_id, $quantity, 'type', 0, '$server_timestamp', '', '')";
 					$order_detail = new OrderDetail;
 					$order_detail->order_id = $order_id;
 					$order_detail->product_id = $product_id;
 					$order_detail->prescription_id = $prescription_id;
 					$order_detail->quantity = $quantity;
-					$order_detail->type = $type;
+					$order_detail->type = 'type';
 
 					if($order_detail->save())
 						$response['order_details_message_'.$counter] = "order detail saved on database";
