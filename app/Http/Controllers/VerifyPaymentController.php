@@ -19,6 +19,7 @@ use ECEPharmacyTree\Basket;
 use ECEPharmacyTree\Inventory;
 use ECEPharmacyTree\Setting;
 use ECEPharmacyTree\Patient;
+use ECEPharmacyTree\Payment as InServerPayment;
 
 class VerifyPaymentController extends Controller
 {
@@ -169,7 +170,7 @@ class VerifyPaymentController extends Controller
 			$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
-			$payment = new Payment;
+			$payment = new InServerPayment;
 			$payment->billing_id = $billing_id;
 			$payment->txn_id = $_payment->id;
 			$payment->or_no = 'official_receipt_number';
