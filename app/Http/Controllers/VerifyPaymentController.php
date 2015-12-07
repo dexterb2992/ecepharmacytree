@@ -81,15 +81,15 @@ class VerifyPaymentController extends Controller
 			$billing_saved = false;
 			$prescription_id = 0;
 
-			dd(count($results));
-			
 			foreach($results as $result) {
+				$counter += 1;
+
 				$quantity = $result->quantity;
 				$product_id = $result->product_id;
 				$prescription_id = $result->prescription_id;
 				$totalAmount += $quantity * $result->price;
 
-				if($counter == 0) {
+				if($counter == 1) {
 					$order = new Order;
 					$order->patient_id = $user_id;
 					$order->recipient_name = $recipient_name;
@@ -101,7 +101,6 @@ class VerifyPaymentController extends Controller
 
 					if($order->save()){
 						$order_id = $order->id; 
-						dd("did you ever change ? = ".$order_id);
 						$response['order_message'] = "order saved on database";
 						$order_saved = true;
 					} else 
@@ -192,8 +191,6 @@ class VerifyPaymentController extends Controller
 					else 
 						$response['points_update_message'] = "points not updated";
 				}
-
-				$counter += 1;
 			}
 
                 // Verifying the amount
