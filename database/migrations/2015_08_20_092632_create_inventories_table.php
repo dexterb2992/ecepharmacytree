@@ -22,6 +22,7 @@ class CreateInventoriesTable extends Migration
             $table->date('expiration_date')->nullable();
             $table->integer('branch_id')->unsigned();
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

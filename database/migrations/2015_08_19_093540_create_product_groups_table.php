@@ -17,6 +17,7 @@ class CreateProductGroupsTable extends Migration
             $table->string('name');
             $table->double('points');
             $table->double('delivery_charge');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

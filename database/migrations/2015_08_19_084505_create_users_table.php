@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->integer('access_level')->default(2);
             $table->string('photo')->nullable();
+            $table->integer('is_new')->default(1);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

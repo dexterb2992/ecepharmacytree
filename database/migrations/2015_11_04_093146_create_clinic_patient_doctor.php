@@ -23,6 +23,7 @@ class CreateClinicPatientDoctor extends Migration
             $table->integer('patient_id')->default(0);
             $table->string('username')->unique();
             $table->string('password');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
         });
     }

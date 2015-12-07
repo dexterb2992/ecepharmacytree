@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInventoryAdjustmentsTable extends Migration
+class CreateOrderLotNumbersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,13 @@ class CreateInventoryAdjustmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventory_adjustments', function(Blueprint $table) {
+        Schema::create('order_lot_numbers', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('order_id')->unsigned();
+            $table->foreign('order_id')->references('id')->on('orders');
             $table->integer('inventory_id')->unsigned();
             $table->foreign('inventory_id')->references('id')->on('inventories');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->string('reason');
-            $table->double('old_quantity');
-            $table->double('new_quantity');
-            $table->integer('is_new')->default(1);
+            $table->double('quantity');
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ class CreateInventoryAdjustmentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('inventory_adjustments');
+        Schema::drop('order_lot_numbers');
     }
 }

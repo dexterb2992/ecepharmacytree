@@ -69,7 +69,7 @@ class ProductController extends Controller
         $product->packing = $input['packing'];
         $product->qty_per_packing = $input['qty_per_packing'];
         $product->subcategory_id = $input['subcategory_id'];
-        $product->sku = generateSku();
+        $product->sku = generate_sku();
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
 
         if( $product->save() )
@@ -122,7 +122,7 @@ class ProductController extends Controller
         $product->packing = $input['packing'];
         $product->qty_per_packing = $input['qty_per_packing'];
         $product->subcategory_id = $input['subcategory_id'];
-        $product->sku = generateSku();
+        $product->sku = generate_sku();
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
 
         if( $product->save() )

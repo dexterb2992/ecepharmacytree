@@ -24,6 +24,7 @@ class CreateBranchesTable extends Migration
             $table->string('telefax')->nullable();
             $table->string('mobile_numbers')->nullable();
             $table->integer('status')->default(1);
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

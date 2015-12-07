@@ -27,7 +27,7 @@ class ProductsGalleryController extends Controller
         if( Input::file() ){
             $image = Input::file('file');
 
-            $filename  = generateRandomString(6).time() . '.' . $image->getClientOriginalExtension();
+            $filename  = generate_random_string(6).time() . '.' . $image->getClientOriginalExtension();
 
             $path = public_path('images/product-photo-gallery/');
 

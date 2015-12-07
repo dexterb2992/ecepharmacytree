@@ -19,6 +19,7 @@ class CreateTreatmentsTable extends Migration
             $table->string('medicine_name');
             $table->string('generic_name');
             $table->string('dosage');
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

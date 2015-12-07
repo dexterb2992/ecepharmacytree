@@ -30,6 +30,7 @@ class CreateSecretariesTable extends Migration
             $table->string('tel_no', 8)->nullable();
             $table->string('email');
             $table->longText('photo')->nullable();
+            $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
