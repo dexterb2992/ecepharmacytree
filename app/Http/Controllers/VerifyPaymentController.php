@@ -96,7 +96,7 @@ class VerifyPaymentController extends Controller
 				$quantity = $result->quantity;
 				$product_id = $result->product_id;
 				$prescription_id = $result->prescription_id;
-				$totalAmount += $quantity * $result->price;
+				$this->totalAmount += $quantity * $result->price;
 
 				if($counter == 0) {
 					$order = new Order;
@@ -109,7 +109,7 @@ class VerifyPaymentController extends Controller
 					$order->status = 'pending';
 
 					if($order->save()){
-						$order_id = $order->id; 
+						$this->order_id = $order->id; 
 						$response['order_message'] = "order saved on database";
 						$order_saved = true;
 					} else 
@@ -121,7 +121,7 @@ class VerifyPaymentController extends Controller
 
 				if($order_saved) {
 					$order_detail = new OrderDetail;
-					$order_detail->order_id = $order_id;
+					$order_detail->order_id = $this->order_id;
 					$order_detail->product_id = $product_id;
 					$order_detail->prescription_id = $prescription_id;
 					$order_detail->quantity = $quantity;
@@ -156,9 +156,9 @@ class VerifyPaymentController extends Controller
 			}
 
 			$billing = new Billing;
-			$billing->order_id = $order_id;
-			$billing->gross_total = $totalAmount;
-			$billing->total = $totalAmount;
+			$billing->order_id = $this->order_id;
+			$billing->gross_total = $this->totalAmount;
+			$billing->total = $this->totalAmount;
 			$billing->payment_status = $payment_status;
 			$billing->payment_method = $payment_method;
 
