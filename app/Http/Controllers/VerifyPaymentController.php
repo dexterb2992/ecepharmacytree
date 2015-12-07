@@ -99,7 +99,7 @@ class VerifyPaymentController extends Controller
 
 					if($order->save()){
 						$order_id = $order->id; 
-						return "did you ever change ? = ".$order_id;
+						dd("did you ever change ? = ".$order_id);
 						$response['order_message'] = "order saved on database";
 						$order_saved = true;
 					} else 
