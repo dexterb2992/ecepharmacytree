@@ -87,8 +87,8 @@ class VerifyPaymentController extends Controller
 			$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
 			$counter = 0;
-			static $totalAmount = 0;
-			static $order_id = 0;
+			$totalAmount = 0;
+			$order_id = 0;
 			$order_saved = false;
 			$billing_saved = false;
 			$prescription_id = 0;
@@ -134,26 +134,26 @@ class VerifyPaymentController extends Controller
 						$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ";
 				}
 
-				if($order_saved) {
-					$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
-					$_quantity = $quantity;
-					$remains = 0;
+				// if($order_saved) {
+				// 	$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
+				// 	$_quantity = $quantity;
+				// 	$remains = 0;
 
-					foreach ($inventories as $inventory) {
-						if($remains > 0)
-							$_quantity = $remains;
+				// 	foreach ($inventories as $inventory) {
+				// 		if($remains > 0)
+				// 			$_quantity = $remains;
 
-						if($_quantity  > $inventory->available_quantity){
-							$remains = $_quantity - $inventory->available_quantity;
-							$inventory->available_quantity = 0;
-							$inventory->save();
-						} else {
-							$inventory->available_quantity = $inventory->available_quantity - $_quantity;
-							$inventory->save();
-							break;
-						}
-					}
-				}
+				// 		if($_quantity  > $inventory->available_quantity){
+				// 			$remains = $_quantity - $inventory->available_quantity;
+				// 			$inventory->available_quantity = 0;
+				// 			$inventory->save();
+				// 		} else {
+				// 			$inventory->available_quantity = $inventory->available_quantity - $_quantity;
+				// 			$inventory->save();
+				// 			break;
+				// 		}
+				// 	}
+				// }
 			}
 
 			$billing = new Billing;
