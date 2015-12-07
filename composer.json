@@ -11,7 +11,6 @@
         "guzzlehttp/guzzle": "4.0",
         "intervention/image": "^2.3",
         "intervention/imagecache": "^2.3",
-        "paypal/rest-api-sdk-php": "*",
         "vinkla/pusher": "^2.2"
     },
     "require-dev": {
