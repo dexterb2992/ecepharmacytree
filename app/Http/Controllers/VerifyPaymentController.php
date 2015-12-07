@@ -80,7 +80,7 @@ class VerifyPaymentController extends Controller
 			$order_saved = false;
 			$billing_saved = false;
 			$prescription_id = 0;
-
+			dd('are you fucking kidding me ?');
 			foreach($results as $result) {
 				$quantity = $result->quantity;
 				$product_id = $result->product_id;
