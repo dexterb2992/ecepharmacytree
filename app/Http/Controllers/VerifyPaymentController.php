@@ -23,21 +23,6 @@ use ECEPharmacyTree\Payment as InServerPayment;
 
 class VerifyPaymentController extends Controller
 {
-	// private $apicontext;
-	// private $payment;
-	private static $order_id = 0;
-	private static $totalAmount = 0;
-
-
-	// function __construct(){
-	// 	$this->apicontext = new ApiContext(
-	// 		new OAuthTokenCredential(
- //                        'AcCQ4PKc6AtjThCsPPkGSH01nPPe7yJKB1oRT39hpgpUGrFkORy9gmuY5_OF4loXc45RaNrUq4h94PP1', // ClientID
- //                        'EH7LOgghxkz-pebLoT1dXSuDo0GiyPI3s1kKaMkp7fKQ25ezZovq5PGQqwVfAAjUpPFcPrAZYA33DcTC'      // ClientSecret
- //                        )
-	// 		);
-	// }
-
 	function verification() {
 
 		$apiContext = new ApiContext(
@@ -89,8 +74,8 @@ class VerifyPaymentController extends Controller
 			$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
 			$counter = 0;
-			// $totalAmount = 0;
-			// $order_id = 0;
+			$totalAmount = 0;
+			$order_id = 0;
 			$order_saved = false;
 			$billing_saved = false;
 			$prescription_id = 0;
@@ -99,7 +84,7 @@ class VerifyPaymentController extends Controller
 				$quantity = $result->quantity;
 				$product_id = $result->product_id;
 				$prescription_id = $result->prescription_id;
-				$this->totalAmount += $quantity * $result->price;
+				$totalAmount += $quantity * $result->price;
 
 				if($counter == 0) {
 					$order = new Order;
@@ -112,7 +97,7 @@ class VerifyPaymentController extends Controller
 					$order->status = 'pending';
 
 					if($order->save()){
-						$this->order_id = $order->id; 
+						$order_id = $order->id; 
 						$response['order_message'] = "order saved on database";
 						$order_saved = true;
 					} else 
@@ -124,7 +109,7 @@ class VerifyPaymentController extends Controller
 
 				if($order_saved) {
 					$order_detail = new OrderDetail;
-					$order_detail->order_id = $this->order_id;
+					$order_detail->order_id = $order_id;
 					$order_detail->product_id = $product_id;
 					$order_detail->prescription_id = $prescription_id;
 					$order_detail->quantity = $quantity;
@@ -136,71 +121,71 @@ class VerifyPaymentController extends Controller
 						$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ";
 				}
 
-				// if($order_saved) {
-				// 	$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
-				// 	$_quantity = $quantity;
-				// 	$remains = 0;
+				if($order_saved) {
+					$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
+					$_quantity = $quantity;
+					$remains = 0;
 
-				// 	foreach ($inventories as $inventory) {
-				// 		if($remains > 0)
-				// 			$_quantity = $remains;
+					foreach ($inventories as $inventory) {
+						if($remains > 0)
+							$_quantity = $remains;
 
-				// 		if($_quantity  > $inventory->available_quantity){
-				// 			$remains = $_quantity - $inventory->available_quantity;
-				// 			$inventory->available_quantity = 0;
-				// 			$inventory->save();
-				// 		} else {
-				// 			$inventory->available_quantity = $inventory->available_quantity - $_quantity;
-				// 			$inventory->save();
-				// 			break;
-				// 		}
-				// 	}
-				// }
+						if($_quantity  > $inventory->available_quantity){
+							$remains = $_quantity - $inventory->available_quantity;
+							$inventory->available_quantity = 0;
+							$inventory->save();
+						} else {
+							$inventory->available_quantity = $inventory->available_quantity - $_quantity;
+							$inventory->save();
+							break;
+						}
+					}
+				}
 			}
 
-			$billing = new Billing;
-			$billing->order_id = $this->order_id;
-			$billing->gross_total = $this->totalAmount;
-			$billing->total = $this->totalAmount;
-			$billing->payment_status = $payment_status;
-			$billing->payment_method = $payment_method;
+			// $billing = new Billing;
+			// $billing->order_id = $order_id;
+			// $billing->gross_total = $totalAmount;
+			// $billing->total = $totalAmount;
+			// $billing->payment_status = $payment_status;
+			// $billing->payment_method = $payment_method;
 
-			if($billing->save()) {
-				$billing_id = $billing->id;
-				$response['billing_message'] = "order saved on database";
-				$response['billing_id'] = $billing_id;
-				$billing_saved = true;
-			} else
-			$response["billing_message"] = "Sorry, we can't process your request right now.";
-
-
-			$payment = new InServerPayment;
-			$payment->billing_id = $billing_id;
-			$payment->txn_id = $_payment->id;
-			$payment->or_no = 'official_receipt_number';
-
-			if($payment->save())
-				$response['payment_message'] = "payment saved on database";
-			else
-				$response['payment_message'] = "error saving payment";
+			// if($billing->save()) {
+			// 	$billing_id = $billing->id;
+			// 	$response['billing_message'] = "order saved on database";
+			// 	$response['billing_id'] = $billing_id;
+			// 	$billing_saved = true;
+			// } else
+			// $response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
-			if(Basket::where('patient_id', '=', $user_id)->delete()) 
-				$response['basket_message'] = "basket/s deleted on database";
-			else 
-				$response['basket_message'] = "basket/s not deleted on database";
+			// $payment = new InServerPayment;
+			// $payment->billing_id = $billing_id;
+			// $payment->txn_id = $_payment->id;
+			// $payment->or_no = 'official_receipt_number';
+
+			// if($payment->save())
+			// 	$response['payment_message'] = "payment saved on database";
+			// else
+			// 	$response['payment_message'] = "error saving payment";
 
 
-			$setting = Setting::first();
+			// if(Basket::where('patient_id', '=', $user_id)->delete()) 
+			// 	$response['basket_message'] = "basket/s deleted on database";
+			// else 
+			// 	$response['basket_message'] = "basket/s not deleted on database";
 
-			$earned_points = round(($setting->points/100) * $totalAmount, 2);
-			$patient = Patient::findOrFail($user_id);
-			$patient->points = $earned_points;
 
-			if($patient->save())
-				$response['points_update_message'] = "points updated";
-			else 
-				$response['points_update_message'] = "points not updated";
+			// $setting = Setting::first();
+
+			// $earned_points = round(($setting->points/100) * $totalAmount, 2);
+			// $patient = Patient::findOrFail($user_id);
+			// $patient->points = $earned_points;
+
+			// if($patient->save())
+			// 	$response['points_update_message'] = "points updated";
+			// else 
+			// 	$response['points_update_message'] = "points not updated";
 
 
                 // Verifying the amount
