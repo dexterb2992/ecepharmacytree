@@ -111,7 +111,7 @@ class VerifyPaymentController extends Controller
 						$response['order_message'] = "order saved on database";
 						$order_saved = true;
 					} else 
-					$response['order_message'] = "Sorry, we can't process your request right now. ".mysql_error();
+					$response['order_message'] = "Sorry, we can't process your request right now. ";
 
 				}
 
@@ -128,7 +128,7 @@ class VerifyPaymentController extends Controller
 					if($order_detail->save())
 						$response['order_details_message_'.$counter] = "order detail saved on database";
 					else
-						$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ".mysql_error();
+						$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ";
 				}
 
 				if($order_saved) {
@@ -161,12 +161,12 @@ class VerifyPaymentController extends Controller
 			$billing->payment_method = $payment_method;
 
 			if($billing->save()) {
-				$billing_id = mysql_insert_id();
+				$billing_id = $billing->id;
 				$response['billing_message'] = "order saved on database";
 				$response['billing_id'] = $billing_id;
 				$billing_saved = true;
 			} else
-			$response["billing_message"] = "Sorry, we can't process your request right now. ".mysql_error();
+			$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
 			$payment = new Payment;
