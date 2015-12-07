@@ -45,6 +45,7 @@ class VerifyPaymentController extends Controller
                         )
 			);
 		$input = Input::all();
+
 		try {
 			$paymentId = $input['paymentId'];
 			$payment_client = json_decode($input['paymentClientJson'], true);
@@ -86,17 +87,17 @@ class VerifyPaymentController extends Controller
 			$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
 			$counter = 0;
-			$totalAmount = 0;
+			static $totalAmount = 0;
+			static $order_id = 0;
 			$order_saved = false;
 			$billing_saved = false;
 			$prescription_id = 0;
-			$order_id = 0;
 
 			foreach($results as $result) {
 				$quantity = $result->quantity;
 				$product_id = $result->product_id;
 				$prescription_id = $result->prescription_id;
-				$this->totalAmount += $quantity * $result->price;
+				$totalAmount += $quantity * $result->price;
 
 				if($counter == 0) {
 					$order = new Order;
@@ -109,7 +110,7 @@ class VerifyPaymentController extends Controller
 					$order->status = 'pending';
 
 					if($order->save()){
-						$this->order_id = $order->id; 
+						$order_id = $order->id; 
 						$response['order_message'] = "order saved on database";
 						$order_saved = true;
 					} else 
@@ -121,7 +122,7 @@ class VerifyPaymentController extends Controller
 
 				if($order_saved) {
 					$order_detail = new OrderDetail;
-					$order_detail->order_id = $this->order_id;
+					$order_detail->order_id = $order_id;
 					$order_detail->product_id = $product_id;
 					$order_detail->prescription_id = $prescription_id;
 					$order_detail->quantity = $quantity;
@@ -156,9 +157,9 @@ class VerifyPaymentController extends Controller
 			}
 
 			$billing = new Billing;
-			$billing->order_id = $this->order_id;
-			$billing->gross_total = $this->totalAmount;
-			$billing->total = $this->totalAmount;
+			$billing->order_id = $order_id;
+			$billing->gross_total = $totalAmount;
+			$billing->total = $totalAmount;
 			$billing->payment_status = $payment_status;
 			$billing->payment_method = $payment_method;
 
