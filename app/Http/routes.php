@@ -270,7 +270,7 @@ Route::get('api/generate/{what}', function ($what){
 		return generate_lot_number();
 });
 
-Route::get('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPaymentController@verification']);
+Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPaymentController@verification']);
 
 Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
