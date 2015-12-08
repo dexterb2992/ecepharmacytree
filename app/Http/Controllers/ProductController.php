@@ -91,6 +91,11 @@ class ProductController extends Controller
         // return Redirect::to( route('products') );
     }
 
+    public function show_all(){
+        $products = Product::all();
+        return $products;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

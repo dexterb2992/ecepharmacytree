@@ -14,14 +14,19 @@ class Order extends Model
     }
 
     public function patient(){
-    	return $this->belongsTo('ECEPharmacyTree\Patient', 'patient_id');
+    	return $this->belongsTo('ECEPharmacyTree\Patient');
     }
 
     public function billing(){
     	return $this->hasOne('ECEPharmacyTree\Billing', 'id');
     }
 
-    function branch() {
+    public function branch() {
         return $this->belongsTo('ECEPharmacyTree\Branch', 'branch_id');
     }
+
+    public function stock_returns(){
+        return $this->hasMany('ECEPharmacyTree\StockReturn');
+    }
+
 }

@@ -363,4 +363,31 @@ function getArrayIndexForKey(arr, key, val){
     }
     return -1;
 }
+
+var _token = $('input[name="_token"]').val();
+
+function ajaxCalls(param){
+    if( param == "orders" ){
+        return $.ajax({
+            url: '/orders/all',
+            type: 'post',
+            dataType: 'json',
+            data: {_token: _token}
+        });
+    }else if( param == "products" ){
+        return $.ajax({
+            url: '/products/all',
+            type: 'post',
+            dataType: 'json',
+            data: {_token: _token}
+        });
+    }else if( param == "stockReturnCodes" ){
+        return $.ajax({
+            url: '/stock-return-codes/all',
+            type: 'post',
+            dataType: 'json',
+            data: {_token: _token}
+        });
+    }
+}
  

@@ -60,6 +60,13 @@ class OrderController extends Controller
         return view('admin.order')->withOrder($order)->withOrderDetails($order_details)->withOrderDetailsWithPrescriptions($order_details_with_prescriptions);
     }
 
+    public function show_all(){
+        $orders = Order::all();
+        $orders->load('patient');
+        // return "gwapo ko";
+        return $orders;
+    }
+
      /**
      * Fulfill Orders
      *

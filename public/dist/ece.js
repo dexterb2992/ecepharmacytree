@@ -258,7 +258,7 @@ $(document).ready(function (){
                             url: '/promos/details/gifts',
                             type: 'post',
                             dataType: 'json',
-                            data: { id: data.id, _token: $("input[name='_token']").val() }
+                            data: { id: data.id, _token: _token }
                         }).done(function (data){
                             console.log(data);
                             var products_list = $("#promo_details_gifts");
@@ -287,7 +287,7 @@ $(document).ready(function (){
                     //         //     url: '/promos/details/gifts',
                     //         //     type: 'post',
                     //         //     dataType: 'json',
-                    //         //     data: { id: id, _token: $("input[name='_token']").val() }
+                    //         //     data: { id: id, _token: _token }
                     //         // }).done(function (data){
                     //         //     console.log(data);
                     //         // });
@@ -396,7 +396,7 @@ $(document).ready(function (){
                 url : '/branches/deactivate',
                 type : 'post',
                 dataType : 'json',
-                data : { id : id, _token : $("input[name='_token']").val() }
+                data : { id : id, _token : _token }
             }).done(function (data){
                 console.log(data);
                 if( data.status == "success" ){
@@ -425,7 +425,7 @@ $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
             url : redirectUrl,
             type : 'post',
             dataType : 'json',
-            data : { id : id, _token :  $("input[name='_token']").val() }
+            data : { id : id, _token :  _token }
         }).done(function (data){
             console.log(data);
             if( data.status == "success" ){
@@ -806,7 +806,7 @@ $("#add_gallery").click(function (){
                         url: '/products/gallery/change-primary/'+pid,
                         type: "post",
                         dataType: "json",
-                        data: { _token: $('input[name="_token"]').val() }
+                        data: { _token: _token }
                     }).done(function (data){
                         console.log(data);
                         if( data.status_code == "200" ){
@@ -822,7 +822,7 @@ $("#add_gallery").click(function (){
                         url: '/products/gallery/delete/'+pid,
                         type: "post",
                         dataType: "json",
-                        data: { _token: $('input[name="_token"]').val() },
+                        data: { _token: _token },
                         beforeSend: function(){
                             activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
                         }
@@ -924,7 +924,7 @@ $("#add_gallery").click(function (){
     //         url : '/promos/details',
     //         type: 'post',
     //         dataType: 'json',
-    //         data: {did: $this.data("did"), _token: $('input[name="_token"]').val()}
+    //         data: {did: $this.data("did"), _token: _token}
     //     }).done(function (data){
     //         console.log(data);
     //     });
@@ -1024,16 +1024,37 @@ $("#add_gallery").click(function (){
         allowNumericOnly( $('.number') );
     });
 
-    // $(document).on("click", 'input[type="checkbox"]', function (){
-    //     if( $(this).is(":checked") ){
-    //         $(this).val( $(this).attr('data-check-value') );
-    //     }else{
-    //         $(this).val( $(this).attr('data-check-value') );
-    //     }
-    // });
-
-    $('.data-show').change(function (){
+    $('.data-show').bind('change click', function(){
         dataShowTarget($(this), $(this).val());
+    });
+
+    $('.btn-stock-return').click(function (){
+        var ordersHtml = "", productsHtml = "", returnCodesHtml = "";
+        $.when(
+            ajaxCalls("orders"), ajaxCalls("products"), ajaxCalls("stockReturnCodes") 
+        ).done(function(orders, products, returnCodes){
+            $.each(orders[0], function (i, row){
+                ordersHtml+= '<option value="'+row.id+'">'+row.id+'</option>';
+            });
+
+            $.each(products[0], function (i, row){
+                productsHtml+= '<option value="'+row.id+'">'+row.name+'</option>';
+            });
+
+            $.each(returnCodes[0], function (i, row){
+                returnCodesHtml+= '<option value="'+row.id+'">'+row.name+'</option>';
+            });
+
+            $("#order_id").html(ordersHtml);
+            $("#exchange_product_id").html(productsHtml);
+            $("#return_code").html(returnCodesHtml);
+            $("#order_id, #exchange_product_id, #return_code").select2();
+        });
+        
+    });
+
+    $('#order_id').change(function (){
+        
     });
 
 });

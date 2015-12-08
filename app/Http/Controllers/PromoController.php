@@ -83,10 +83,7 @@ class PromoController extends Controller
         $promo = Promo::find($id);
         if( isset( $promo->id ) ){
             if( $promo->product_applicability == "SPECIFIC_PRODUCTS" && count($promo->discounts) >= 1){
-                foreach ($promo->discounts as $discount) {
-                    $product_id[] = $discount->product;
-                }
-                $promo->product_id = $product_id;
+                $promo->load('product');
             }
             return $promo->toJson();
         }
@@ -154,11 +151,8 @@ class PromoController extends Controller
         if( $dfp->type == "2" ){ // Free Gift
             $free_products = $dfp->free_products;
             if( count($free_products) >= 1 ){
-                foreach ($free_products as $free_product) {
-                    $product_id[] = $free_product->product;
-                }
+                $free_products->load('product');
             }
-            $dfp->product_id = $product_id;
         } 
         return $dfp;
     }
@@ -201,13 +195,8 @@ class PromoController extends Controller
         $input = Input::all();
         $dfp = DiscountsFreeProduct::find($input['id']);
 
-        $free_products_raw = $dfp->free_products;
-        // return $free_products_raw;
-        $free_products = [];
-        foreach ($free_products_raw as $free_product) {
-            $free_product["product"] = $free_product->product;
-            array_push($free_products, $free_product);
-        }
+        $free_products = $dfp->free_products;
+        $free_products->load('product');
         return $free_products;
     }
 }

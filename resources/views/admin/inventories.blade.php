@@ -247,13 +247,47 @@
 	        <div class="modal" id="modal-stock-return">
 	        	<div class="modal-dialog">
 	        		<div class="modal-content">
-	        			<div class="modal-heade">
-	        				
+	        			<div class="modal-header">
+	        				<h4>Stock RETURNS / EXCHANGE</h4>
 	        			</div>
-	        			<div class="modat-body">
-	        			
+	        			<div class="modal-body">
+	        				<div class="form-group">
+	        					<label>Order No.</label>
+								<select class="form-control select2" name="order_id" id="order_id"></select>	        					
+	        				</div>
+
+	        				<div class="form-group">
+	        					<label>Return quantity</label>
+	        					<input type="text" name="return_quantity" class="form-control number" id="return_quantity">
+	        				</div>
+
+	        				<div class="form-group">
+	        					<label>Reason</label>
+	        					<select class="form-control select2" name="return_code" id="return_code"></select>
+	        				</div>
+
+	        				<div class="form-group">
+	        					<label>Brief Explanation</label>
+	        					<textarea class="form-control" name="brief_explanation"></textarea>
+	        				</div>
+
+	        				<div class="form-group">
+	        					<label>Action</label>
+	        					<div class="stock-return-actions">
+	        						<label><input type="radio" name="action" class="icheck" data-check-value="refund" value="refund" checked> Refund </label>
+		        					<label><input type="radio" name="action" class="icheck" data-check-value="exchange"> Exchange </label>
+	        					</div>
+
+	        				</div>
+
+	        				<div id="exchange_product_list" class="form-group" style="display:none">
+	        					<label>Select a product for exchange</label>
+	        					<select class="form-control select2" name="exchange_product_id" id="exchange_product_id"></select>
+	        				</div>
 		        		</div>
-		        		<div class="modal-footer"></div>
+		        		<div class="modal-footer">
+		        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Submit</button>
+		        		</div>
 	        		</div>
 	        	</div>
 	        </div>

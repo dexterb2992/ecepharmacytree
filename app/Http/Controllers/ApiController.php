@@ -147,7 +147,7 @@ class ApiController extends Controller
 			// 				$response["server_timestamp"] = "$server_timestamp";
 			// 				$response["latest_updated_at"] = "$latest_updated_at";
 			// 			} else {
-			//     // no products found
+			//     //no products found
 			// 				$response["success"] = 0;
 			// 				$response["message"] = "No $tbl data found.";
 			// 			}

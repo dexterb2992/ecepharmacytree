@@ -19,4 +19,8 @@ class Inventory extends Model
     public function adjustments(){
     	return $this->hasMany('ECEPharmacyTree\InventoryAdjustment');
     }
+
+    public function stock_returns(){
+        return $this->hasMany('ECEPharmacyTree\StockReturn');
+    }
 }

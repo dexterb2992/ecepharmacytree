@@ -400,3 +400,12 @@ table td .btn-group .btn {
         height: 100%;
         border: none;
     }
+
+.stock-return-actions label{
+    margin-right: 14px;
+}
+
+div#status1 {
+    display: block;
+    width: 40%;
+}
