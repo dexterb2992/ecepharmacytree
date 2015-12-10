@@ -220,7 +220,7 @@ switch ($request) {
     break;
 
     case 'get_selected_product_with_image':
-    $result = mysql_query("SELECT * FROM products as p left join products_gallery as pg on p.id = pg.product_id WHERE p.id = ".$_GET['product_id']) or returnError(mysql_error());  
+    $result = mysql_query("SELECT p.*, pg.filename FROM products as p left join products_gallery as pg on p.id = pg.product_id WHERE p.id = ".$_GET['product_id']) or returnError(mysql_error());  
     $tbl = "products";
     break;
 
