@@ -29,7 +29,7 @@ switch ($request) {
     /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
-    $result = mysql_query("SELECT p.*, cat.id as category FROM products as p inner join product_subcategories as sub on p.subcategory_id = sub.id inner join product_categories as cat on sub.category_id = cat.id" ) or returnError(mysql_error());
+    $result = mysql_query("SELECT p.*, cat.id as cat_id, cat.name as cat_name FROM products as p inner join product_subcategories as sub on p.subcategory_id = sub.id inner join product_categories as cat on sub.category_id = cat.id" ) or returnError(mysql_error());
     $tbl = "products";
     break;
     case 'get_doctors':
