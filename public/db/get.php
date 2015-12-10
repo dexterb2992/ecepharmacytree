@@ -219,9 +219,9 @@ switch ($request) {
     $tbl = "clinic_patients";
     break;
 
-    case 'get_products_gallery':
-    $result = mysql_query("SELECT * FROM products_gallery WHERE product_id = ".$_GET['product_id']) or returnError(mysql_error());  
-    $tbl = "products_gallery";
+    case 'get_selected_product_with_image':
+    $result = mysql_query("SELECT * FROM products as p inner join products_gallery as pg on p.id = pg.product_id WHERE p.id = ".$_GET['product_id']) or returnError(mysql_error());  
+    $tbl = "products";
     break;
 
     case 'get_clinic_records':
