@@ -29,7 +29,7 @@ switch ($request) {
     /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
-    $result = mysql_query("SELECT p.*, cat.name as category FROM products as p inner join product_subcategories as sub on p.subcategory_id = sub.id inner join product_categories as cat on sub.category_id = cat.id" ) or returnError(mysql_error());
+    $result = mysql_query("SELECT p.*, cat.id as category FROM products as p inner join product_subcategories as sub on p.subcategory_id = sub.id inner join product_categories as cat on sub.category_id = cat.id" ) or returnError(mysql_error());
     $tbl = "products";
     break;
     case 'get_doctors':
@@ -66,7 +66,7 @@ switch ($request) {
     $tbl = "patient_treatments";
     break;
 
-      case 'get_branches' : 
+    case 'get_branches' : 
     $result = mysql_query("SELECT br.*, bg.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM branches as br inner join barangays as bg on br.barangay_id = bg.id inner join municipalities as m on bg.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id") or returnError(mysql_error());
     $tbl = "branches";
     break;
@@ -161,7 +161,7 @@ switch ($request) {
     $tbl = "patient_prescriptions";
     break;
 
-  
+
 
     case 'get_orders' : 
     $result = mysql_query("SELECT * FROM orders where patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
@@ -172,6 +172,11 @@ switch ($request) {
     $result = mysql_query("SELECT * FROM order_details as od inner join orders as o on od.order_id = o.id where o.patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "order_details";
     break;
+
+    case 'get_order_billings' : 
+    $result = mysql_query("SELECT * FROM billings as b inner join orders as o on b.order_id = o.id where o.patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
+    $tbl = "order_details";
+    break;    
 
     // case 'get_notifications' :
     // $result = mysql_query("SELECT * FROM notifications WHERE patient_id = ".$_GET['patient_ID']) or returnError(mysql_error());
@@ -215,7 +220,7 @@ switch ($request) {
     break;
 
     case 'get_products_gallery':
-     $result = mysql_query("SELECT * FROM products_gallery WHERE product_id = ".$_GET['product_id']) or returnError(mysql_error());  
+    $result = mysql_query("SELECT * FROM products_gallery WHERE product_id = ".$_GET['product_id']) or returnError(mysql_error());  
     $tbl = "products_gallery";
     break;
 
@@ -302,37 +307,37 @@ switch ($request) {
     }
 
     if ($pre_response["success"] == 0) {
-     echo json_encode($pre_response);
-     exit(0);
- }
-
- if ($result != 0)
-     $db_result = mysql_num_rows($result);
-// check for empty result
- if ($db_result > 0) {
-     $response[$tbl] = array();
-     while ($row = mysql_fetch_assoc($result)) {
-        // push single row into final response array
-      foreach ($row as $key => $value) {
-            // let's remove some special characters as it causes to return null when converted to json
-       $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+       echo json_encode($pre_response);
+       exit(0);
    }
-   array_push($response[$tbl], $row);
-}
+
+   if ($result != 0)
+       $db_result = mysql_num_rows($result);
+// check for empty result
+   if ($db_result > 0) {
+       $response[$tbl] = array();
+       while ($row = mysql_fetch_assoc($result)) {
+        // push single row into final response array
+          foreach ($row as $key => $value) {
+            // let's remove some special characters as it causes to return null when converted to json
+             $row[$key] =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+         }
+         array_push($response[$tbl], $row);
+     }
     //get the original time from server
-date_default_timezone_set('Asia/Manila');
-$server_timestamp             = date('Y-m-d H:i:s', time());
+     date_default_timezone_set('Asia/Manila');
+     $server_timestamp             = date('Y-m-d H:i:s', time());
 
-$result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
+     $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
 
-if(mysql_num_rows($result_latest_updated_at) > 0){
-    $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
-    $latest_updated_at = $result_latest_updated_at_array['updated_at'];
-}
+     if(mysql_num_rows($result_latest_updated_at) > 0){
+        $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
+        $latest_updated_at = $result_latest_updated_at_array['updated_at'];
+    }
 
-$response["success"]          = 1;
-$response["server_timestamp"] = "$server_timestamp";
-$response["latest_updated_at"] = "$latest_updated_at";
+    $response["success"]          = 1;
+    $response["server_timestamp"] = "$server_timestamp";
+    $response["latest_updated_at"] = "$latest_updated_at";
 } else {
     // no products found
     $response["success"] = 0;
