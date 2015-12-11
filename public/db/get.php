@@ -169,7 +169,7 @@ switch ($request) {
     break;
 
     case 'get_order_details' : 
-    $result = mysql_query("SELECT * FROM order_details as od inner join orders as o on od.order_id = o.id where o.patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
+    $result = mysql_query("SELECT od.* FROM order_details as od inner join orders as o on od.order_id = o.id where o.patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "order_details";
     break;
 
