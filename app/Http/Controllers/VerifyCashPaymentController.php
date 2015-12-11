@@ -157,7 +157,7 @@ class VerifyCashPaymentController extends Controller
 			}
 		}
 
-		echo Response::json($response);
+		echo json_encode($response);
 	}
 
 }
