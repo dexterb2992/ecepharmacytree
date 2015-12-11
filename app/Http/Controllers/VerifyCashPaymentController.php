@@ -128,7 +128,7 @@ class VerifyCashPaymentController extends Controller
 
 					$payment = new InServerPayment;
 					$payment->billing_id = $billing_id;
-					$payment->txn_id = $_payment->id;
+					$payment->txn_id = 'transaction_id';
 					$payment->or_no = 'official_receipt_number';
 
 					if($payment->save())
