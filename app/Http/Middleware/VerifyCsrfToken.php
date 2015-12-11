@@ -14,5 +14,6 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         //
     	'verifypayment/',
+    	'verify_cash_payment/',
     ];
 }
