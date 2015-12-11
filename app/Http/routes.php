@@ -271,4 +271,4 @@ Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPayment
 
 Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
-Route::get('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
+Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
