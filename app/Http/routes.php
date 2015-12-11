@@ -270,3 +270,5 @@ Route::get('api/generate/{what}', function ($what){
 Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPaymentController@verification']);
 
 Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
+
+Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
