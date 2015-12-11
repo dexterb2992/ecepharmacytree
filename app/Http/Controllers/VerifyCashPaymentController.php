@@ -17,6 +17,7 @@ use ECEPharmacyTree\Inventory;
 use ECEPharmacyTree\Setting;
 use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Payment as InServerPayment;
+use Response;
 
 class VerifyCashPaymentController extends Controller
 {
