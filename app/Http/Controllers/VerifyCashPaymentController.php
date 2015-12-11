@@ -9,9 +9,6 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 use Input;
 use DB;
 use Carbon\Carbon;
-use PayPal\Rest\ApiContext;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Api\Payment;
 use ECEPharmacyTree\Order;
 use ECEPharmacyTree\OrderDetail;
 use ECEPharmacyTree\Billing;
@@ -21,21 +18,12 @@ use ECEPharmacyTree\Setting;
 use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Payment as InServerPayment;
 
-class VerifyPaymentController extends Controller
+class VerifyCashPaymentController extends Controller
 {
-	// private $order_id;
 	function verification() {
-
-		$apiContext = new ApiContext(
-			new OAuthTokenCredential(
-                        'AcCQ4PKc6AtjThCsPPkGSH01nPPe7yJKB1oRT39hpgpUGrFkORy9gmuY5_OF4loXc45RaNrUq4h94PP1', // ClientID
-                        'EH7LOgghxkz-pebLoT1dXSuDo0GiyPI3s1kKaMkp7fKQ25ezZovq5PGQqwVfAAjUpPFcPrAZYA33DcTC'      // ClientSecret
-                        )
-			);
 		$input = Input::all();
 
-		try {
-			$paymentId = $input['paymentId'];
+		$paymentId = $input['paymentId'];
 			$payment_client = json_decode($input['paymentClientJson'], true);
 			$user_id = $input['user_id'];         
 			$branch_server_id = $input['branch_server_id'];
@@ -47,34 +35,9 @@ class VerifyPaymentController extends Controller
 			$payment_status = "pending";
 			$status = $input['status'];
 
-                // Gettin payment details by making call to paypal rest api
-			$_payment = Payment::get($paymentId, $apiContext);
+		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
-                // Verifying the state approved
-			if ($_payment->getState() != 'approved') {
-				$response["error"] = true;
-				$response["message"] = "Payment has not been verified. Status is " . $_payment->getState();
-				$this->echoResponse(200, $response);
-				return;
-			}
-
-			$amount_client = $payment_client["amount"];
-
-			$currency_client = $payment_client["currency_code"];
-
-			$transaction = $_payment->getTransactions()[0];
-
-			$amount_server = $transaction->getAmount()->getTotal();
-
-			$currency_server = $transaction->getAmount()->getCurrency();
-
-			$sale_state = $transaction->getRelatedResources()[0]->getSale()->getState();
-
-			$server_timestamp = Carbon::now('Asia/Manila');
-
-			$results = DB::select("call get_baskets_and_products(".$user_id.")");
-
-			$counter = 0;
+		$counter = 0;
 			$totalAmount = 0;
 			$order_id = 0;
 			$order_saved = false;
@@ -84,12 +47,11 @@ class VerifyPaymentController extends Controller
 
 			foreach($results as $result) {
 				$counter += 1;
-
+				$current_product_price = $result->price;
 				$quantity = $result->quantity;
 				$product_id = $result->product_id;
 				$prescription_id = $result->prescription_id;
 				$totalAmount += $quantity * $result->price;
-				$current_product_price = $result->price;
 
 				if($counter == 1) {
 					$order = new Order;
@@ -196,50 +158,6 @@ class VerifyPaymentController extends Controller
 				}
 			}
 
-                // Verifying the amount
-			if ($amount_server != $amount_client) {
-				$response["error"] = true;
-				$response["message"] = "Payment amount doesn't matched.";
-				$this->echoResponse(200, $response);
-				return;
-			}
-
-                // Verifying the currency
-			if ($currency_server != $currency_client) {
-				$response["error"] = true;
-				$response["message"] = "Payment currency doesn't matched.";
-				$this->echoResponse(200, $response);
-				return;
-			}
-
-                // Verifying the sale state
-			// if ($sale_state != 'completed') {
-			// 	$response["error"] = true;
-			// 	$response["message"] = "Sale not completed";
-			// 	$this->echoResponse(200, $response);
-			// 	return;
-			// }
-
-			$this->echoResponse(200, $response);
-		} catch (\PayPal\Exception\PayPalConnectionException $exc) {
-			if ($exc->getCode() == 404) {
-				$response["error"] = true;
-				$response["message"] = "Payment not found!";
-				$this->echoResponse(404, $response);
-			} else {
-				$response["error"] = true;
-				$response["message"] = "Unknown error occurred!" . $exc->getMessage();
-				$this->echoResponse(500, $response);
-			}
-		} catch (Exception $exc) {
-			$response["error"] = true;
-			$response["message"] = "Unknown error occurred!" . $exc->getMessage();
-			$this->echoResponse(500, $response);
-		}
-	}
-
-	function echoResponse($statuws_code, $response) {
-		echo json_encode($response);
 	}
 
 }
