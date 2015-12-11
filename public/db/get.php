@@ -174,8 +174,8 @@ switch ($request) {
     break;
 
     case 'get_order_billings' : 
-    $result = mysql_query("SELECT * FROM billings as b inner join orders as o on b.order_id = o.id where o.patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
-    $tbl = "order_details";
+    $result = mysql_query("SELECT b.* FROM billings as b inner join orders as o on b.order_id = o.id where o.patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
+    $tbl = "billings";
     break;    
 
     // case 'get_notifications' :
