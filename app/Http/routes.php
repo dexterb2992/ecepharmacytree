@@ -12,8 +12,8 @@
 */
 
 
-// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-// View::share('branches', ECEPharmacyTree\Branch::all());
+View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+View::share('branches', ECEPharmacyTree\Branch::all());
 
 
 Route::get('showschema', function(){
@@ -96,6 +96,8 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
+
+	Route::post('/all', ['as' => 'get_all', 'uses' => 'ProductController@show_all']);
 
 	Route::get('gallery/{product_id}', ['as' => 'gallery', 'uses' => 'ProductsGalleryController@show']);
 	Route::get('gallery/primary/{product_id}', ['as' => 'gallery_primary', 'uses' => 'ProductsGalleryController@get_primary']);
@@ -240,6 +242,7 @@ Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
 Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
 Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
 Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
+Route::post('orders/all', ['as' => 'all_orders', 'uses' => 'OrderController@show_all']);
 
 Route::get('images/{template}/', function($template){
 	return redirect(url('images/'.$template."/".config('imagecache.default_image_404')));
@@ -271,4 +274,8 @@ Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPayment
 
 Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
+Route::post('stock-return-codes/all', 'StockReturnController@stock_return_codes');
+Route::post('stock-return', 'StockReturnController@store');
+
 Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
+

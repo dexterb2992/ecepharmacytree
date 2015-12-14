@@ -53,6 +53,9 @@
 <!-- Select2 -->
 {!! HTML::script('plugins/select2/select2.full.min.js') !!}
 
+<!-- Bootstrap Typeahead -->
+{!! HTML::script('plugins/typeahead/bootstrap-typeahead.js') !!}
+
 <!-- InputMask -->
 {!! HTML::script('plugins/input-mask/jquery.inputmask.js') !!}
 {!! HTML::script('plugins/input-mask/jquery.inputmask.date.extensions.js') !!}

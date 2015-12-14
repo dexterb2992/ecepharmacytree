@@ -19,6 +19,10 @@ class CreateStockReturnsTable extends Migration
             $table->integer('inventory_id')->unsigned();
             $table->foreign('inventory_id')->references('id')->on('inventories');
             $table->integer('return_code')->nullable(); // reference on stock_return_codes table
+
+            $table->integer('return_product_id')->unsigned();   // we'll set the default value to the first product of
+            $table->foreign('return_product_id')->references('id')->on('products'); // an order if the action is "refund",
+            
             $table->double('return_quantity');
             $table->string('action'); // refund or exchange
             $table->integer('exchange_product_id')->nullable(); // the product to return to customer in exchange

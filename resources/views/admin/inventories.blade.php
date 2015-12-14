@@ -37,10 +37,10 @@
 								<table class="table table-bordered table-hover datatable">
 									<thead>
 										<tr>
+											<th>Lot #</th>
 											<th>SKU</th>
 											<th>Product name</th>
-											<th>Quantity</th>
-											<th>Lot #</th>
+											<th>Available Quantity</th>
 											<th>Stock Expiration</th>
 											<th>Date Added</th>
 											<th>Action</th>
@@ -50,6 +50,9 @@
 										@foreach($inventories as $inventory)
 											@if(!is_null($inventory->product))
 											<tr data-pid="{{ $inventory->product_id }}" data-id="{{ $inventory->id }}">
+												<td>
+													{{ $inventory->lot_number }}
+												</td>
 												<td>
 													<?php $is_critical = $inventory->quantity <= $recent_settings->critical_stock ? true : false; ?>
 													{!! $inventory->quantity <= $recent_settings->critical_stock ? 
@@ -70,9 +73,6 @@
 													{!! '<b>'.$inventory->available_quantity." ".str_auto_plural($inventory->product->packing, $inventory->available_quantity)."</b> "
 														."( ".$total." ".str_auto_plural($inventory->product->unit, $total)." )" !!}
 												
-												</td>
-												<td>
-													{{ $inventory->lot_number }}
 												</td>
 												<td>
 													<?php $expiration = Carbon::parse($inventory->expiration_date); ?>
@@ -182,7 +182,7 @@
 	                            		<small>(<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</small>
 	                            	</label>
 	                            	<div class="input-group">
-		                            	<input type="text" id="inventory_quantity" name="quantity" class="number form-control" title="Add quantity by product's packing" required>
+		                            	<input type="text" id="inventory_quantity" name="quantity" class="number form-control" placeholder="Add quantity by product's packing" title="Add quantity by product's packing" required>
 		                            	<div class="input-group-addon">
 		                            		<span class="add-on-product-packing" name="packing">{{ head( $products->toArray() )["packing"] }}</span>
 		                            	</div>
@@ -216,7 +216,11 @@
 	        			{!! Form::open(['method' => 'post', 'action' => 'InventoryController@add_adjustments']) !!}
 		        			<div class="modal-header">
 		        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	                            <h4 class="modal-title">Add adjustments</h4>
+	                            <h4 class="modal-title">
+	                            	Add adjustments
+	                            	<h5 id="inventory_adjustment_details"></h5>
+	                            </h4>
+
 		        			</div>
 		        			<div class="modal-body">
 		        				{!! Form::token() !!}
@@ -247,13 +251,78 @@
 	        <div class="modal" id="modal-stock-return">
 	        	<div class="modal-dialog">
 	        		<div class="modal-content">
-	        			<div class="modal-heade">
-	        				
-	        			</div>
-	        			<div class="modat-body">
-	        			
-		        		</div>
-		        		<div class="modal-footer"></div>
+	        			{!! Form::open(['action' => 'StockReturnController@store', 'method' => 'post']) !!}
+		        			<div class="modal-header">
+		        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        				<h4>STOCK RETURNS / EXCHANGE FORM</h4>
+		        			</div>
+		        			<div class="modal-body">
+		        				<div class="form-group">
+		        					<label>Order No.</label>
+									<select class="form-control select2" name="order_id" id="order_id"></select>	        					
+		        				</div>
+
+		        				<div class="oder-details">
+		        					<legend class="legend-15">Order Details</legend>
+		        					
+		        					<dl class="dl-vertical">
+		        						<dt>Customer: </dt>
+		        						<dd id="customer_name"></dd>
+		        					</dl>
+
+		        					<dl class="form-group">
+		        						<dt>Products: </dt>
+		        						<dd id="product_name"></dd>
+		        					</dl>
+
+		        					<dl class="dl-vertical">
+		        						<dt>Total Amount</dt>
+		        						<dd id="total_amount"></dd>
+		        					</dl>
+		        				</div><hr/>
+
+		        				<div class="form-group">
+		        					<label>Product to return</label>
+		        					<select class="form-control" name="return_product_id" id="return_product_id"></select>
+		        				</div>
+
+		        				<div class="form-group">
+		        					<label>Return quantity</label>
+		        					<input type="text" name="return_quantity" class="form-control number" id="return_quantity">
+		        				</div>
+
+		        				<div class="form-group">
+		        					<label>Reason</label>
+		        					<select class="form-control select2" name="return_code" id="return_code"></select>
+		        				</div>
+
+		        				<div class="form-group">
+		        					<label>Brief Explanation</label>
+		        					<textarea class="form-control" name="brief_explanation"></textarea>
+		        				</div>
+
+		        				<div class="form-group">
+		        					<label>Action</label>
+		        					<div class="stock-return-actions">
+		        						<label>
+		        							<input type="radio" name="action" class="icheck" data-check-value="refund" value="refund" checked> Refund 
+		        						</label>
+			        					<label>
+			        						<input type="radio" name="action" class="icheck" data-check-value="exchange"> Exchange 
+			        					</label>
+		        					</div>
+
+		        				</div>
+
+		        				<div id="exchange_product_list" class="form-group" style="display:none">
+		        					<label>Select a product for exchange</label>
+		        					<select class="form-control select2" name="exchange_product_id" id="exchange_product_id"></select>
+		        				</div>
+			        		</div>
+			        		<div class="modal-footer">
+			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Submit</button>
+			        		</div>
+			        	{!! Form::close() !!}
 	        		</div>
 	        	</div>
 	        </div>

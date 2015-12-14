@@ -400,3 +400,26 @@ table td .btn-group .btn {
         height: 100%;
         border: none;
     }
+
+.stock-return-actions label{
+    margin-right: 14px;
+}
+
+div#status1 {
+    display: block;
+    width: 40%;
+}
+
+.legend-15{
+    font-size: 15px;
+}
+
+dl.dl-vertical {
+    display: inline;
+}
+
+    dl.dl-vertical dt, .dl-vertical dd {
+        display: inline-block;
+        margin-right: 16px;
+        margin-bottom: 10px;
+    }

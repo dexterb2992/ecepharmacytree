@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Illuminate\Database\Seeder\ProductTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\SettingTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\PatientTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\ReturnCodeTableSeeder::class);
         // Model::reguard();
     }
 }

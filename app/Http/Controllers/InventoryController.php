@@ -7,12 +7,15 @@ use Redirect;
 use Input;
 use Carbon\Carbon;
 use Auth;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Inventory;
 use ECEPharmacyTree\Product;
 use ECEPharmacyTree\Log;
+use ECEPharmacyTree\Order;
+use ECEPharmacyTree\StockReturnCode;
 use ECEPharmacyTree\InventoryAdjustment;
 
 class InventoryController extends Controller
@@ -23,22 +26,34 @@ class InventoryController extends Controller
      * @return Response
      */
     public function index()
-    {
+    {   
+        // if( Auth::check() ){
+        //     dd(session()->get('selected_branch'));
+        // }  
 
         $inventories = Inventory::where('available_quantity', '>', '0')
             ->where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
         $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
+        $reason_codes = StockReturnCode::all();
+        $orders = Order::all();
+
         return view('admin.inventories')->withInventories($inventories)
-            ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs);
+            ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs)
+            ->withOrders($orders)
+            ->withReason_codes($reason_codes);
     }
 
     public function show_all(){
         $inventories = Inventory::where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
+        $orders = Order::all();
         $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
+        $reason_codes = StockReturnCode::all();
         return view('admin.inventories')->withInventories($inventories)
-            ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs);
+            ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs)
+            ->withOrders($orders)
+            ->withReason_codes($reason_codes);
     }
 
 
@@ -50,11 +65,11 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
+        // Note: the quantity that will be saved will be 
+        //  per product packing
 
-        /**
-         *  Note: the quantity that will be saved will be 
-         *        per product packing
-         */
+
+
         $input = Input::all();
         $inventory = new Inventory;
         $inventory->product_id = $input["product_id"];
@@ -90,6 +105,11 @@ class InventoryController extends Controller
     {
         if( Request::ajax() ){
             $inventory = Inventory::findOrFail($id);
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $inventory->created_at)
+                ->copy()->tz(Auth::user()->timezone)
+                ->format('g:ia \o\n l jS F Y');
+            $inventory->date_added = $date;
+            $inventory->load('product');
             return $inventory->toJson();
         }   
         return 'Whoops! It seems like you are lost. Let\'s go back to <a href="'.url('/').'">dashboard</a> then.';

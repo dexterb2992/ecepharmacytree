@@ -86,9 +86,6 @@ $(document).ready(function (){
         cbox.val( cbox.attr('data-uncheck-value') ).trigger('change');
     });
 
-
-
-
     $(".datemask").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
     //Datemask2 mm/dd/yyyy
     $(".datemask2").inputmask("mm-dd-yyyy", {"placeholder": "mm-dd-yyyy"});
@@ -235,6 +232,7 @@ $(document).ready(function (){
                             }
                         }
                     });
+
                 }catch(Exception){
                     console.log(Exception);
                 }
@@ -258,7 +256,7 @@ $(document).ready(function (){
                             url: '/promos/details/gifts',
                             type: 'post',
                             dataType: 'json',
-                            data: { id: data.id, _token: $("input[name='_token']").val() }
+                            data: { id: data.id, _token: _token }
                         }).done(function (data){
                             console.log(data);
                             var products_list = $("#promo_details_gifts");
@@ -287,7 +285,7 @@ $(document).ready(function (){
                     //         //     url: '/promos/details/gifts',
                     //         //     type: 'post',
                     //         //     dataType: 'json',
-                    //         //     data: { id: id, _token: $("input[name='_token']").val() }
+                    //         //     data: { id: id, _token: _token }
                     //         // }).done(function (data){
                     //         //     console.log(data);
                     //         // });
@@ -328,6 +326,7 @@ $(document).ready(function (){
         form.find(".modal-title").html(title);
 
         $(modal).modal('show');
+        $(form).find("select#select_subcategory_id").select2();
     });
 
 
@@ -396,7 +395,7 @@ $(document).ready(function (){
                 url : '/branches/deactivate',
                 type : 'post',
                 dataType : 'json',
-                data : { id : id, _token : $("input[name='_token']").val() }
+                data : { id : id, _token : _token }
             }).done(function (data){
                 console.log(data);
                 if( data.status == "success" ){
@@ -425,7 +424,7 @@ $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
             url : redirectUrl,
             type : 'post',
             dataType : 'json',
-            data : { id : id, _token :  $("input[name='_token']").val() }
+            data : { id : id, _token :  _token }
         }).done(function (data){
             console.log(data);
             if( data.status == "success" ){
@@ -806,7 +805,7 @@ $("#add_gallery").click(function (){
                         url: '/products/gallery/change-primary/'+pid,
                         type: "post",
                         dataType: "json",
-                        data: { _token: $('input[name="_token"]').val() }
+                        data: { _token: _token }
                     }).done(function (data){
                         console.log(data);
                         if( data.status_code == "200" ){
@@ -822,7 +821,7 @@ $("#add_gallery").click(function (){
                         url: '/products/gallery/delete/'+pid,
                         type: "post",
                         dataType: "json",
-                        data: { _token: $('input[name="_token"]').val() },
+                        data: { _token: _token },
                         beforeSend: function(){
                             activeItem.prepend('<div class="deleting-photo">We are deleting, please wait...</div>');
                         }
@@ -872,8 +871,13 @@ $("#add_gallery").click(function (){
             type: 'get',
             dataType: 'json'
         }).done(function (data){
-            $('#old_quantity').val(data.quantity);
-            $('#modal-add-adjustments').find('#sid').val(data.id);
+            if( data.hasOwnProperty('product') ){
+                $('#inventory_adjustment_details').html('Lot# '+data.lot_number+
+                    '<br/>Product:  <b><a href="/products?q='+data.product.name+'" target="_blank">'+data.product.name+'</a></b>'+
+                    '<br/><small>Date added: '+data.date_added+'</small>');
+                $('#old_quantity').val(data.quantity);
+                $('#modal-add-adjustments').find('#sid').val(data.id);
+            }
         });
     });
 
@@ -924,7 +928,7 @@ $("#add_gallery").click(function (){
     //         url : '/promos/details',
     //         type: 'post',
     //         dataType: 'json',
-    //         data: {did: $this.data("did"), _token: $('input[name="_token"]').val()}
+    //         data: {did: $this.data("did"), _token: _token}
     //     }).done(function (data){
     //         console.log(data);
     //     });
@@ -1024,16 +1028,80 @@ $("#add_gallery").click(function (){
         allowNumericOnly( $('.number') );
     });
 
-    // $(document).on("click", 'input[type="checkbox"]', function (){
-    //     if( $(this).is(":checked") ){
-    //         $(this).val( $(this).attr('data-check-value') );
-    //     }else{
-    //         $(this).val( $(this).attr('data-check-value') );
-    //     }
-    // });
-
-    $('.data-show').change(function (){
+    $('.data-show').bind('change click', function(){
         dataShowTarget($(this), $(this).val());
     });
 
+    $('.btn-stock-return').click(function (){
+        var ordersHtml = "", productsHtml = "", returnCodesHtml = "";
+        $.when(
+            ajaxCalls("orders"), ajaxCalls("products"), ajaxCalls("stockReturnCodes") 
+        ).done(function(orders, products, returnCodes){
+            window.orders = orders[0];
+            $.each(orders[0], function (i, row){
+                ordersHtml+= '<option value="'+row.id+'" data-pname="'+row.patient.fname+' '+row.patient.lname+'">#'+row.id+'</option>';
+            });
+
+            $.each(products[0], function (i, row){
+                productsHtml+= '<option value="'+row.id+'">'+row.name+'</option>';
+            });
+
+            $.each(returnCodes[0], function (i, row){
+                returnCodesHtml+= '<option value="'+row.id+'">'+row.name+'</option>';
+            });
+
+            $("#order_id").html(ordersHtml);
+            $("#exchange_product_id").html(productsHtml);
+            $("#return_code").html(returnCodesHtml);
+            $("#order_id, #exchange_product_id, #return_product_id, #return_code").select2();
+
+            if( orders[0].length == 1 ){
+                $("#order_id").trigger("change");
+            }
+        });
+        
+    });
+
+    $('#order_id').change(function (){
+        var val = $(this).val(), productsHtml = "", productNames = "";
+        window.maxReturnQty = [];
+        $.each(window.orders, function (col, row){
+            if( row.id == val ){
+                $.each(row.order_details, function (index, order_detail){
+                    var pId = order_detail.product.id;
+                    productNames+= "<i class='fa fa-caret-right'></i> ("+order_detail.quantity+" "+
+                            str_auto_plural(order_detail.product.packing, order_detail.quantity)+
+                            ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
+                            order_detail.product.name+"</a>, <br/>";
+                    productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
+                    window.maxReturnQty.push({pId: pId, qty: order_detail.quantity});
+                });
+                $("#customer_name").html(row.patient.fname+" "+row.patient.lname);
+                $("#total_amount").html(peso()+' '+row.billing.total);
+            }
+        });
+        $("#product_name").html(productNames);
+        $("#return_product_id").html(productsHtml).select2();
+    });
+
+    $('input[name="action"]').change(function (){
+        var val = $(this).val();
+        if( val == "exchange" ){
+            $("#exchange_product_list").fadeIn();
+        }else{
+            $("#exchange_product_list").fadeOut();
+        }
+    });
+
+    $("#return_quantity, #return_product_id").bind("change keyup", function (){
+        var $this = $("#return_quantity"),  selectedProduct = parseInt($("#return_product_id").val()), val = parseInt($this.val()); 
+
+        $.each(window.maxReturnQty, function (i, row){
+            if( row.pId == selectedProduct ){
+                if( val > parseInt(row.qty) ){
+                    $this.val("");
+                }
+            }
+        });
+    });
 });
