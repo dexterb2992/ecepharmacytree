@@ -4,12 +4,14 @@ namespace ECEPharmacyTree\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Input;
+use Redirect;
+
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 
 use ECEPharmacyTree\Clinic;
-use Input;
-use Redirect;
+use ECEPharmacyTree\Region;
 
 class ClinicController extends Controller
 {
@@ -25,17 +27,9 @@ class ClinicController extends Controller
     public function index()
     {
         $clinics = Clinic::all();
-        return view('admin.clinics')->withClinics($clinics);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
+        $regions = Region::all();
+        return view('admin.clinics')->withClinics($clinics)
+            ->withRegions($regions);
     }
 
     /**
@@ -50,18 +44,8 @@ class ClinicController extends Controller
         $clinic = new Clinic();
         $clinic->name = ucfirst( $input['name'] );
         $clinic->contact_no = ucfirst( $input['contact_no'] );
-        $clinic->unit_floor_room_no = ucfirst( $input['unit_floor_room_no'] );
-        $clinic->building = $input['building'];
-        $clinic->lot_no = $input['lot_no'];
-        $clinic->block_no = $input['block_no'];
-        $clinic->phase_no = $input['phase_no'];
-        $clinic->address_house_no = $input['address_house_no'];
-        $clinic->address_street = $input['address_street'];
-        $clinic->address_barangay = $input['address_barangay'];
-        $clinic->address_city_municipality = $input['address_city_municipality'];
-        $clinic->address_province = $input['address_province'];
-        $clinic->address_region = $input['address_region'];
-        $clinic->address_zip = $input['address_zip'];
+        $clinic->additional_address = ucfirst( $input['additional_address'] );
+        $clinic->barangay_id = $input['barangay_id'];
 
         if( $clinic->save() )
             session()->flash('flash_message', ["msg" => "New Clinic has been added successfully.", "type" => "success"]);
@@ -86,17 +70,6 @@ class ClinicController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
@@ -109,18 +82,8 @@ class ClinicController extends Controller
         $clinic = Clinic::findOrFail($input['id']);
         $clinic->name = ucfirst( $input['name'] );
         $clinic->contact_no = ucfirst( $input['contact_no'] );
-        $clinic->unit_floor_room_no = ucfirst( $input['unit_floor_room_no'] );
-        $clinic->building = $input['building'];
-        $clinic->lot_no = $input['lot_no'];
-        $clinic->block_no = $input['block_no'];
-        $clinic->phase_no = $input['phase_no'];
-        $clinic->address_house_no = $input['address_house_no'];
-        $clinic->address_street = $input['address_street'];
-        $clinic->address_barangay = $input['address_barangay'];
-        $clinic->address_city_municipality = $input['address_city_municipality'];
-        $clinic->address_province = $input['address_province'];
-        $clinic->address_region = $input['address_region'];
-        $clinic->address_zip = $input['address_zip'];
+        $clinic->additional_address = ucfirst( $input['additional_address'] );
+        $clinic->barangay_id = $input['barangay_id'];
 
         if( $clinic->save() )
             session()->flash("flash_message", ["msg" => "Clinic information has been updated.", "type" => "info"]);
