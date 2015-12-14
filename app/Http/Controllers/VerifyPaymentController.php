@@ -80,6 +80,7 @@ class VerifyPaymentController extends Controller
 			$order_saved = false;
 			$billing_saved = false;
 			$prescription_id = 0;
+			$current_product_price = 0;
 
 			foreach($results as $result) {
 				$counter += 1;
@@ -88,6 +89,7 @@ class VerifyPaymentController extends Controller
 				$product_id = $result->product_id;
 				$prescription_id = $result->prescription_id;
 				$totalAmount += $quantity * $result->price;
+				$current_product_price = $result->price;
 
 				if($counter == 1) {
 					$order = new Order;
@@ -115,6 +117,7 @@ class VerifyPaymentController extends Controller
 					$order_detail->product_id = $product_id;
 					$order_detail->prescription_id = $prescription_id;
 					$order_detail->quantity = $quantity;
+					$order_detail->price = $current_product_price;
 					$order_detail->type = 'type';
 
 					if($order_detail->save())
