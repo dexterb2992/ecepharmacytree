@@ -30,7 +30,6 @@ class InventoryController extends Controller
         // if( Auth::check() ){
         //     dd(session()->get('selected_branch'));
         // }  
-        
 
         $inventories = Inventory::where('available_quantity', '>', '0')
             ->where('branch_id', session()->get('selected_branch'))->get();
@@ -46,7 +45,6 @@ class InventoryController extends Controller
     }
 
     public function show_all(){
-        // dd(session()->get('selected_branch'));
         $inventories = Inventory::where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
         $orders = Order::all();
@@ -107,6 +105,11 @@ class InventoryController extends Controller
     {
         if( Request::ajax() ){
             $inventory = Inventory::findOrFail($id);
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $inventory->created_at)
+                ->copy()->tz(Auth::user()->timezone)
+                ->format('g:ia \o\n l jS F Y');
+            $inventory->date_added = $date;
+            $inventory->load('product');
             return $inventory->toJson();
         }   
         return 'Whoops! It seems like you are lost. Let\'s go back to <a href="'.url('/').'">dashboard</a> then.';

@@ -36,7 +36,7 @@
                                         <th>Name</th>
                                         <th>Generic Name</th>
                                         <th>Description</th>
-                                        <th>Selling Price/Unit</th>
+                                        <th>Selling Price/Packing</th>
                                         <th>Packing</th>
                                         <th>Category</th>
                                         <th>Action</th>
@@ -56,7 +56,7 @@
                                             </td>
                                             <td>{{ $product->generic_name }}</td>
                                             <td>{!! Str::limit(rn2br($product->description), 150) !!}</td>
-                                            <td>&#x20B1; {{ $product->price.' /'.$product->unit }}</td>
+                                            <td>&#x20B1; {{ $product->price.' /'.$product->packing }}</td>
                                             <td>
                                                 {!! $product->qty_per_packing." ".str_auto_plural($product->unit, $product->qty_per_packing)." per ".$product->packing !!}
                                             </td>
@@ -247,11 +247,11 @@
                         </div>
                         <div class="modal-body">
 
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            {!! Form::token() !!}
                             
                             <div class="form-group">
                                 <label for="subcategory_id">Category <i>*</i></label>
-                                <select class="form-control" name="subcategory_id">
+                                <select class="form-control" name="subcategory_id" id="select_subcategory_id">
                                     @foreach($categories as $category)
                                         <optgroup label="{{ $category->name }}">
                                             @foreach($category->subcategories as $subcategory)
@@ -281,7 +281,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="price">Selling Price <i>*</i></label>
+                                <label for="price">Selling Price <i>(per packing)*</i></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">&#x20B1;</span>
                                     <input type="text" class="form-control number" name="price" required>

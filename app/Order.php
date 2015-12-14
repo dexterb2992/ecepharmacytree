@@ -29,4 +29,8 @@ class Order extends Model
         return $this->hasMany('ECEPharmacyTree\StockReturn');
     }
 
+    public function lot_numbers(){
+        return $this->hasMany('ECEPharmacyTree\OrderLotNumber');
+    }
+
 }

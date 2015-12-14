@@ -73,7 +73,9 @@ class ProductController extends Controller
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
 
         if( $product->save() )
-            return Redirect::to( route('Products::index') );
+            return Redirect::to( route('Products::index') )->withFlash_message([
+                'type' => 'info', 'msg' => "New product has been added successfully."
+            ]);
         return false;
     }
 
@@ -94,17 +96,6 @@ class ProductController extends Controller
     public function show_all(){
         $products = Product::all();
         return $products;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -131,7 +122,9 @@ class ProductController extends Controller
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
 
         if( $product->save() )
-            return Redirect::to( route('Products::index') );
+            return Redirect::to( route('Products::index') )->withFlash_message([
+                'type' => 'success', 'msg' => "Changes has been saved successfully."
+            ]);
         return false;
     }
 

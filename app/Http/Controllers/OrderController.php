@@ -9,6 +9,7 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Order;
 use DB;
 use Redirect;
+use Auth;
 
 class OrderController extends Controller
 {
@@ -19,7 +20,11 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
+        if(Auth::user()->isAdmin()){
+            $orders = Order::all();
+        }else{
+            $orders = Order::where('branch_id', Auth::user()->branch->id)->get();
+        }
 
         return view('admin.orders')->withOrders($orders);
     }
@@ -63,7 +68,16 @@ class OrderController extends Controller
     public function show_all(){
         $orders = Order::all();
         $orders->load('patient');
-        // return "gwapo ko";
+        $orders->load('order_details');
+        $orders->load('billing');
+
+        foreach ($orders as $order) {
+            foreach ($order->order_details as $order_detail) {
+                $order_detail->load('product');
+            }
+            
+        }
+
         return $orders;
     }
 

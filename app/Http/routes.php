@@ -275,3 +275,4 @@ Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPayment
 Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
 Route::post('stock-return-codes/all', 'StockReturnController@stock_return_codes');
+Route::post('stock-return', 'StockReturnController@store');

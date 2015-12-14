@@ -86,7 +86,7 @@
                 <a href="#/payments">
                     <i class="fa fa-money"></i> <span>Payments</span>
                 </a>
-            </li>w
+            </li>
 
             @if(Auth::user()->isAdmin())
             <li class="treeview">
