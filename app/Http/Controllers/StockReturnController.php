@@ -42,24 +42,28 @@ class StockReturnController extends Controller
 
         $lesser_lot_number = [];
         $temp_lot_number = [];
+        // dd($lesser_lot_number);
+        foreach ($order->lot_numbers as $lot_number) {
+            $lot_number->load('inventory');
+        }
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
+
+        // dd($arr_lot_numbers);
+
         for($x = count($arr_lot_numbers)-1; $x >= 0; $x--){
             //x = 1, x-1 = 0
             if( isset($arr_lot_numbers[$x-1]) ){
-                if( $arr_lot_numbers[$x-1]['quantity'] <  $arr_lot_numbers[$x]['quantity'] ){
+                if( $arr_lot_numbers[$x-1]['inventory']['available_quantity'] <  $arr_lot_numbers[$x]['inventory']['available_quantity'] ){
                     $lesser_lot_number = $arr_lot_numbers[$x-1];
                 }else{
                     $lesser_lot_number = $arr_lot_numbers[$x];
                 }
             }
         }
+        
         // dd($lesser_lot_number);
-        foreach ($order->lot_numbers as $lot_number) {
-            $lot_number->load('inventory');
-        }
-
-        dd($stock_return); // for tomorrow: 
+        dd($order->lot_numbers->where('id', 2)); // for tomorrow: 
         // actual order qty: 5
         // if quantity_received is 149, and avaible_qty is 145
         // and stock returned is 4
