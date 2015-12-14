@@ -30,9 +30,11 @@ class StockReturnController extends Controller
         $input = Input::all();
         $stock_return = new StockReturn;
 
+        $return_quantity = $input["return_quantity"];
+
         $stock_return->order_id = $input["order_id"];
         $stock_return->return_product_id = $input["return_product_id"];
-        $stock_return->return_quantity = $input["return_quantity"];
+        $stock_return->return_quantity = $return_quantity;
         $stock_return->return_code = $input["return_code"];
         $stock_return->brief_explanation = $input["brief_explanation"];
         $stock_return->action = $input["action"];
@@ -65,7 +67,7 @@ class StockReturnController extends Controller
         // dd($lesser_lot_number);
         dd($order->lot_numbers->where('id', 2)); // for tomorrow: 
         // actual order qty: 5
-        // if quantity_received is 149, and avaible_qty is 145
+        // if quantity_received is 150, and avaible_qty is 145
         // and stock returned is 4
         // and we have 2 lot numbers on this order => L#1: quantity is 4, L#2: quantity is 1
         // from order_lot_numbers, L#2 should now have 1 available_qty, and L#1 will have 148

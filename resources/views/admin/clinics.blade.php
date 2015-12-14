@@ -63,81 +63,43 @@
                                 <input type="text" class="form-control" id="contact_no" placeholder="Contact Number" name="contact_no" required>
                             </div>
 
-                            <div class="row">
-                            <div class="col-xs-3">
-                                <label for="unit_floor_room_no">Unit/Room No.</label>
+                            
+                            <div class="form-group">
+                                <label for="address_province">Region<red>*</red></label>
+                                <select class="form-control select2" name="region_id" id="address_region">
+                                    <option value="0">- Select Region - </option>
+                                    @foreach($regions as $region)
+                                    <option value="{{ $region->id }}">{{ $region->name.' ('.$region->code.')' }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="col-xs-3">
-                                <label for="building">Building</label>
+
+                            <div class="form-group">
+                                <label for="address_province">Province<red>*</red></label>
+                                <select class="form-control select2" id="address_province" name="province_id" required>
+                                    <option value="0">- Select Province -</option>
+                                </select>
+                                <!-- <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province" required> -->
                             </div>
-                            <div class="col-xs-3">
-                                <label for="block_no">Block No.</label>
+
+                            <div class="form-group">
+                                <label for="address_city_municipality">Municipality<red>*</red></label>
+                                <select class="form-control select2" name="municipality_id" id="address_city_municipality">
+                                    <option value="0">- Select Municipality -</option>
+                                </select>
                             </div>
-                            <div class="col-xs-3"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="unit_floor_room_no" id="unit_floor_room_no" placeholder="Unit/Room No." >
+
+                            <div class="form-group">
+                                <label for="address_barangay">Barangay<red>*</red></label>
+                                <select class="form-control select2" name="barangay_id" id="address_barangay">
+                                    <option value="0">- Select Barangay -</option>
+                                </select>
                             </div>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="building" id="building" placeholder="Building" >
+
+                            <div class="form-group"> 
+                                <label for="additional_address">Additional address (<i>Be more specific with the address as you can as possible</i>)</label>
+                                <input type="text" class="form-control" id="additional_address" placeholder="Street" name="additional_address" required>
                             </div>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="block_no" id="block_no" placeholder="Block No." >
-                            </div>
-                            <div class="col-xs-3"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <label for="lot_no">Lot No.</label>
-                            </div>
-                            <div class="col-xs-3">
-                                <label for="phase_no">Phase No.</label>
-                            </div>
-                            <div class="col-xs-3">
-                                <label for="address_zip">House No.</label>
-                            </div> 
-                            <div class="col-xs-3">
-                                <label for="address_zip">ZIP Code <i>*</i></label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="lot_no" id="lot_no" placeholder="Lot No." >
-                            </div>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="phase_no" id="phase_no" placeholder="Phase No." >
-                            </div>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="address_house_no" id="address_house_no" placeholder="House Number" >
-                            </div>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="address_zip" id="address_zip" placeholder="ZIP Code" >
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>
-                            <input type="text" class="form-control" id="address_street" placeholder="Street" name="address_street"  >
-                        </div>
-                        <div class="form-group">
-                            <label for="address_barangay">Barangay<i>*</i></label>
-                            <input type="text" class="form-control" id="address_barangay" placeholder="Barangay" name="address_barangay"  >
-                        </div>
-                        <div class="form-group">
-                            <label for="address_city_municipality">Municipality<i>*</i></label>
-                            <input type="text" class="form-control" id="address_city_municipality" placeholder="Municipality" name="address_city_municipality"  >
-                        </div>
-                        <div class="form-group">
-                            <label for="address_province">Province<i>*</i></label>
-                            <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province"  >
-                        </div>
-                        <div class="form-group">
-                            <label for="address_province">Region<i>*</i></label>
-                            <select class="form-control" name="address_region"  >
-                                @foreach(get_ph_regions() as $region)
-                                <option value="{{ $region }}">{{ $region }}</option>
-                                @endforeach
-                            </select>
                         </div>
 
                         <div class="modal-footer">
