@@ -54,8 +54,9 @@
 													{{ $inventory->lot_number }}
 												</td>
 												<td>
-													<?php $is_critical = $inventory->quantity <= $recent_settings->critical_stock ? true : false; ?>
-													{!! $inventory->quantity <= $recent_settings->critical_stock ? 
+													<?php $is_critical = check_for_critical_stock($inventory->product) ?>
+													
+													{!! $is_critical ? 
 														'<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" title="" data-original-title="Critical Stock" title="Critical Stock"></i>' 
 														: '' 
 													!!}

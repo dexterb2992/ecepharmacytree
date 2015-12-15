@@ -178,7 +178,7 @@ use Illuminate\Support\Str;
                                     <input class="form-control" name="generic_redemption_code" />
                                     <div class="input-group-btn">
                                         <span class="btn btn-default btn-flat btn-gencode">
-                                            <i class="fa-tag fa"></i> Generate Code
+                                            <i class="fa-random fa"></i> Generate Code
                                         </span>
                                     </div>
                                 </div>
