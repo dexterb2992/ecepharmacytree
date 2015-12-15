@@ -20,9 +20,16 @@ use ECEPharmacyTree\Inventory;
 use ECEPharmacyTree\Setting;
 use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Payment as InServerPayment;
+use Illuminate\Mail\Mailer;
+
 
 class VerifyPaymentController extends Controller
 {
+
+	function __construct(Mailer $mailer) {
+        $this->mailer = $mailer;
+    }
+
 	// private $order_id;
 	function verification() {
 
@@ -193,6 +200,13 @@ class VerifyPaymentController extends Controller
 						$response['points_update_message'] = "points updated";
 					else 
 						$response['points_update_message'] = "points not updated";
+
+					$email = "lourdrivera123@gmail.com";
+
+				$res = $this->mailer->send( 'emails.sales_invoice', 
+                compact('email'), function ($m) use ($email) {
+                    $m->subject('Pharmacy Tree Invoice');
+                    $m->to($email);
 				}
 			}
 

@@ -280,3 +280,7 @@ Route::post('stock-return', 'StockReturnController@store');
 
 Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
 
+Route::get('emailtest', function(){
+	return view('emails.sales_invoice');
+});
+
