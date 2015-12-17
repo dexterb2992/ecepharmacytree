@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 function pre($str){
 	echo '<pre>';
@@ -100,13 +101,12 @@ function rn2br($str){
 }
 
 function get_person_fullname($person, $reversed = false){
-	$mname = !empty($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : '';
+	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : '';
 	$fname = ucfirst($person->fname)." ";
 	$lname = ucfirst($person->lname);
     if( $reversed )
         return $lname.", ".$fname.$mname;
     return $fname." ".$mname." ".$lname;
-
 }
 
 
@@ -186,15 +186,14 @@ function check_if_partially_fulfilled($order){
 	return false;
 }
 
-function check_for_critical_stock(){
-	try {
-		$settings = ECEPharmacyTree\Setting::first();
+function check_for_critical_stock($product){
+	$settings = ECEPharmacyTree\Setting::first();
+	$critical_stock = isset($product->critical_stock) ? $product->critical_stock : 5;
 
-		$critical_stock_products = ECEPharmacyTree\Inventory::where("available_quantity", "<=", $settings->critical_stock)->get();
-		return $critical_stock_products;
-	} catch (Exception $e) {
-		pre($e);
-	}
+	$total_available_stock = ECEPharmacyTree\Inventory::where('product_id', $product->id)->sum('available_quantity')	;
+	if( $total_available_stock <= $critical_stock )
+		return true;
+	return false;
 }
 
 function _error($msg, $alert_type = 'label'){
