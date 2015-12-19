@@ -49,9 +49,9 @@ Route::get('try', function(){
 	// $today = Carbon\Carbon::today('Asia/Manila')->addHours(23 );
 	// return ECEPharmacyTree\Promo::where('end_date', '>=', $today)->get();
 
-	// return view('emails.register')->withRole('Branch Manager')
-	// 	->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
-	// 	->withBranch_name("ECE Marketing - Davao");
+	return view('emails.register')->withRole('Branch Manager')
+		->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
+		->withBranch_name("ECE Marketing - Davao");
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
