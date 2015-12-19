@@ -16,6 +16,7 @@ use ECEPharmacyTree\Product;
 use ECEPharmacyTree\Log;
 use ECEPharmacyTree\Order;
 use ECEPharmacyTree\StockReturnCode;
+use ECEPharmacyTree\StockReturn;
 use ECEPharmacyTree\InventoryAdjustment;
 
 class InventoryController extends Controller
@@ -27,21 +28,24 @@ class InventoryController extends Controller
      */
     public function index()
     {   
-        // if( Auth::check() ){
-        //     dd(session()->get('selected_branch'));
-        // }  
-
         $inventories = Inventory::where('available_quantity', '>', '0')
             ->where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
         $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
         $reason_codes = StockReturnCode::all();
         $orders = Order::all();
+        $stock_returns = StockReturn::all();
+        foreach ($stock_returns as $stock_return) {
+            $stock_return->load('order');
+            $stock_return->load('inventory');
+            $stock_return->order->load('patient');
+        }
 
         return view('admin.inventories')->withInventories($inventories)
             ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs)
             ->withOrders($orders)
-            ->withReason_codes($reason_codes);
+            ->withReason_codes($reason_codes)
+            ->withStock_returns($stock_returns);
     }
 
     public function show_all(){
@@ -50,10 +54,18 @@ class InventoryController extends Controller
         $orders = Order::all();
         $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
         $reason_codes = StockReturnCode::all();
+        $stock_returns = StockReturn::all();
+        foreach ($stock_returns as $stock_return) {
+            $stock_return->load('order');
+            $stock_return->load('inventory');
+            $stock_return->order->load('patient');
+        }
+
         return view('admin.inventories')->withInventories($inventories)
             ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs)
             ->withOrders($orders)
-            ->withReason_codes($reason_codes);
+            ->withReason_codes($reason_codes)
+            ->withStock_returns($stock_returns);
     }
 
 
@@ -112,7 +124,7 @@ class InventoryController extends Controller
             $inventory->load('product');
             return $inventory->toJson();
         }   
-        return 'Whoops! It seems like you are lost. Let\'s go back to <a href="'.url('/').'">dashboard</a> then.';
+        return 'Whoops! It seems like you are lost. Let\'s go back to <a href="'.url('/').'">dashboard</a>.';
     }
 
     /**

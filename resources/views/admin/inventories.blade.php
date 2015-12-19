@@ -15,6 +15,9 @@
 						<a href="#tab_inventory" data-toggle="tab">Stocks</a>
 					</li>
 					<li>
+						<a href="#tab_stock_returns" data-toggle="tab">Stock Returns</a>
+					</li>
+					<li>
 						<a href="#tab_logs" data-toggle="tab">Logs</a>
 					</li>
 				</ul>
@@ -117,8 +120,41 @@
 							</div>
 						</div>
 					</div>
+					<div class="tab-pane fade" id="tab_stock_returns">
+						<div class="box-warning box">
+							<div class="box-header">
+								Stock Returns
+							</div>
+							<div class="box-body">
+								<table class="table table-bordered table-hover datatable" id="tbl_inventory_logs">
+									<thead>
+										<tr>
+											<th>User</th>
+											<th>Action</th>
+											<th>Date</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach($logs as $log)
+											<tr>
+												<td>{{ get_person_fullname($log->user) }}</td>
+												<td>{!! $log->action !!}</td>
+												<td>
+													<?php $date_added = Carbon::parse($log->created_at); ?>
+													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->formatLocalized('%A %d %B %Y') }}">
+														<i class="fa-clock-o fa"></i> 
+														{{ $date_added->diffForHumans() }}
+													</span>
+												</td>
+											</tr>
+										@endforeach	
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
 					<div class="tab-pane fade" id="tab_logs">
-						<div class="box box-success">
+						<div class="box box-primary">
 							<div class="box-header">
 								<h4>Stocks Activity Logs</h4> <br/>
 							</div>
@@ -308,9 +344,10 @@
 		        						<label>
 		        							<input type="radio" name="action" class="icheck" data-check-value="refund" value="refund" checked> Refund 
 		        						</label>
-			        					<label>
+			        					<!-- <label>
 			        						<input type="radio" name="action" class="icheck" data-check-value="exchange"> Exchange 
-			        					</label>
+			        					</label> -->
+			        					<label>{{ peso() }}<span id="refund_amount"></span></label>
 		        					</div>
 
 		        				</div>
