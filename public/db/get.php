@@ -84,10 +84,10 @@ switch ($request) {
 
     /* Requires Parameters */
 
-    case 'get_promo' :
-        $sql = "SELECT *  FROM promo WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND start_date <= '".$datenow."' AND end_date >= '".$datenow."'";
+    case 'get_promos' :
+        $sql = "SELECT *  FROM promos WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND start_date <= '".$datenow."' AND end_date >= '".$datenow."'";
         $result = mysql_query($sql) or returnError(mysql_error()); 
-        $tbl = "promo";
+        $tbl = "promos";
         break;
 
     case 'check_if_username_exist':
