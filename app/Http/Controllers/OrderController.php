@@ -70,8 +70,15 @@ class OrderController extends Controller
         $orders->load('patient');
         $orders->load('order_details');
         $orders->load('billing');
+        $orders->load('branch');
+        
+
 
         foreach ($orders as $order) {
+            $order->branch->load('barangay');
+            $order->branch->barangay->load('municipality');
+            $order->branch->barangay->municipality->load('province');
+            $order->branch->barangay->municipality->province->load('region');
             foreach ($order->order_details as $order_detail) {
                 $order_detail->load('product');
             }

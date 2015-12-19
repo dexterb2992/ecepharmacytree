@@ -4,20 +4,6 @@
 		<meta charset="utf-8">
 	</head>
 	<body>
-		<!-- <h2>Welcome to Pharmacy Tree</h2> -->
-
-		<!-- <div>
-			{{ Auth::user()->fname." ".Auth::user()->lname }} has added you as {{ $role }} at {{ $branch_name }}. Please login <a href="{{ url('auth/login') }}">here</a> using this credentials:<br/>
-			Email: {{ $email }}<br/>
-			Password: {{ $password }}
-			<br/>
-			<br/>
-			<b>Note: It is strictly recommended that you change your password after your first login.</b>
-			<br/>
-			<br/><hr/>
-			<i>If the link above doesn't work. Please copy and paste this url to your browser.</i><br/>
-			{{ url('auth/login') }}
-		</div> -->
 		<style type="text/css">
 			table{
 				background-size: cover;

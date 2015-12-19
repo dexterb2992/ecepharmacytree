@@ -1069,10 +1069,11 @@ $("#add_gallery").click(function (){
             if( row.id == val ){
                 $.each(row.order_details, function (index, order_detail){
                     var pId = order_detail.product.id;
-                    productNames+= "<i class='fa fa-caret-right'></i> ("+order_detail.quantity+" "+
+                    productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
+                            order_detail.quantity+" "+
                             str_auto_plural(order_detail.product.packing, order_detail.quantity)+
                             ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
-                            order_detail.product.name+"</a>, <br/>";
+                            order_detail.product.name+"</a>,<br/>";
                     productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
                     window.maxReturnQty.push({pId: pId, qty: order_detail.quantity});
                 });
