@@ -53,6 +53,9 @@ class VerifyPaymentController extends Controller
 			$payment_method = $input['payment_method'];
 			$payment_status = "pending";
 			$status = $input['status'];
+			$coupon_discount = $input['coupon_discount'];
+			$points_discount = $input['points_discount'];
+			$email = $input['email'];
 
                 // Gettin payment details by making call to paypal rest api
 			$_payment = Payment::get($paymentId, $apiContext);
@@ -83,11 +86,14 @@ class VerifyPaymentController extends Controller
 
 			$counter = 0;
 			$totalAmount = 0;
+			$gross_total = 0;
+			$totalAmount_final = 0;
 			$order_id = 0;
 			$order_saved = false;
 			$billing_saved = false;
 			$prescription_id = 0;
 			$current_product_price = 0;
+			$order_date = null;
 
 			foreach($results as $result) {
 				$counter += 1;
@@ -110,6 +116,7 @@ class VerifyPaymentController extends Controller
 
 					if($order->save()){
 						$order_id = $order->id; 
+						$order_date = $order->created_at;
 						$response['order_message'] = "order saved on database";
 						$order_saved = true;
 					} else 
@@ -156,13 +163,17 @@ class VerifyPaymentController extends Controller
 
 
 				if(count($results) == $counter) {
+					$gross_total = $totalAmount;
+					$totalAmount_final  = $totalAmount - $coupon_discount - $promo_discount;
 
 					$billing = new Billing;
 					$billing->order_id = $order_id;
-					$billing->gross_total = $totalAmount;
-					$billing->total = $totalAmount;
+					$billing->gross_total = $gross_total;
+					$billing->total = $totalAmount_final;
 					$billing->payment_status = $payment_status;
 					$billing->payment_method = $payment_method;
+					$billing->promo_discount = $promo_discount;
+					$billing->coupon_discount = $coupon_discount;
 
 					if($billing->save()) {
 						$billing_id = $billing->id;
@@ -201,10 +212,11 @@ class VerifyPaymentController extends Controller
 					else 
 						$response['points_update_message'] = "points not updated";
 
-					$email = "lourdrivera123@gmail.com";
 
-				$res = $this->mailer->send( 'emails.sales_invoice', 
-                compact('email'), function ($m) use ($email) {
+			$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
+
+				$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
+                compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'promo_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
                     $m->subject('Pharmacy Tree Invoice');
                     $m->to($email);
 				}

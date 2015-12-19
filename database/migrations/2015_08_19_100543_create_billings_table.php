@@ -16,6 +16,8 @@ class CreateBillingsTable extends Migration
             $table->increments('id');
             $table->integer('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->double('coupon_discount')->default(0);
+            $table->double('points_discount')->default(0);
             $table->double('gross_total');
             $table->double('total');
             $table->string('payment_status')->default('pending');

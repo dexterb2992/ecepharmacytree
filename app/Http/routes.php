@@ -12,8 +12,8 @@
 */
 
 
-View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-View::share('branches', ECEPharmacyTree\Branch::all());
+// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+// View::share('branches', ECEPharmacyTree\Branch::all());
 
 
 Route::get('showschema', function(){
@@ -283,4 +283,3 @@ Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'Ve
 Route::get('emailtest', function(){
 	return view('emails.sales_invoice');
 });
-
