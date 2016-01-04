@@ -277,6 +277,9 @@ class VerifyPaymentController extends Controller
 	}
 
 	function emailtestingservice(){
+		
+		$email = "lourdrivera123@gmail.com";
+
 		$res = $this->mailer->send( 'emails.email_sample', 
 			compact('email'), function ($m) use ($email) {
 				$m->subject('Pharmacy Tree Invoice');
