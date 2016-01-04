@@ -124,7 +124,7 @@ class VerifyCashPaymentController extends Controller
 
 			if(count($results) == $counter) {
 				$gross_total = $totalAmount;
-				$totalAmount_final  = $totalAmount - $coupon_discount - $promo_discount;
+				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount;
 
 				$billing = new Billing;
 				$billing->order_id = $order_id;
