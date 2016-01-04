@@ -226,6 +226,12 @@ switch ($request) {
         $tbl = "products";
         break;
 
+    case 'get_patient_points':
+        $result = mysql_query("SELECT points FROM patients where id = ".$_GET['patient_id']) or returnError(mysql_error());  
+        $row_cp = mysql_fetch_object($result);
+        return $row_cp;
+        break;
+
     case 'get_clinic_records':
         $username = $_GET['username'];
         $password = $_GET['password'];
