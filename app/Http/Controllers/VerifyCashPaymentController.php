@@ -173,19 +173,20 @@ class VerifyCashPaymentController extends Controller
 				else 
 					$response['points_update_message'] = "points not updated";
 
-				//insert invoice here
-				$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
-
-				$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
-					compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'promo_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
-						$m->subject('Pharmacy Tree Invoice');
-						$m->to($email);
-					});
+				$this->emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status);				
 
 			}
 		}
 
 		echo json_encode($response);
+	}
+
+	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){
+		$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
+			compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'points_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
+				$m->subject('Pharmacy Tree Invoice');
+				$m->to($email);
+			});
 	}
 
 }
