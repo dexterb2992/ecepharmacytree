@@ -285,24 +285,9 @@ Route::get('emailtest', function(){
 });
 
 Route::get('inc', function(){
-
-	// $collection = 	json_decode('{"jsobj":[{ "quantity" = "12", "id" : "13"},{ "quantity" = "13 ", "id" : "14"}]}');
-
-	$collection = json_decode('{
-		"jsobj":[
-		{"quantity":"12", "id":"13"},
-		{"quantity":"13", "id":"14"}
-		]}');
-	
-	$whens = "";
-	$ids = "";
-
-	foreach ($collection->jsobj as $col) {
-		$whens = $whens." when id = ".$col->id." then ".$col->quantity;
-		$ids = $ids.$col->id.",";
-	}
-
-    $ids = substr($ids, 0, strlen($ids) -1);
-	$generated = "update baskets set quantity = ( case".$whens." end ) "."where id in (".$ids.")";
-
+	Illuminate\Mail\Mailer::send( 'emails.email_sample', 
+		compact('email'), function ($m) use ($email) {
+			$m->subject('Pharmacy Tree Invoice');
+			$m->to($email);
+		});
 });
