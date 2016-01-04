@@ -213,25 +213,32 @@ class VerifyPaymentController extends Controller
 						$response['points_update_message'] = "points not updated";
 
 					//insert invoice here
+					$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
 
+					$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
+						compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'promo_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
+							$m->subject('Pharmacy Tree Invoice');
+							$m->to($email);
+						}
+
+					}
 				}
-			}
 
                 // Verifying the amount
-			if ($amount_server != $amount_client) {
-				$response["error"] = true;
-				$response["message"] = "Payment amount doesn't matched.";
-				$this->echoResponse(200, $response);
-				return;
-			}
+				if ($amount_server != $amount_client) {
+					$response["error"] = true;
+					$response["message"] = "Payment amount doesn't matched.";
+					$this->echoResponse(200, $response);
+					return;
+				}
 
                 // Verifying the currency
-			if ($currency_server != $currency_client) {
-				$response["error"] = true;
-				$response["message"] = "Payment currency doesn't matched.";
-				$this->echoResponse(200, $response);
-				return;
-			}
+				if ($currency_server != $currency_client) {
+					$response["error"] = true;
+					$response["message"] = "Payment currency doesn't matched.";
+					$this->echoResponse(200, $response);
+					return;
+				}
 
                 // Verifying the sale state
 			// if ($sale_state != 'completed') {
@@ -241,26 +248,26 @@ class VerifyPaymentController extends Controller
 			// 	return;
 			// }
 
-			$this->echoResponse(200, $response);
-		} catch (\PayPal\Exception\PayPalConnectionException $exc) {
-			if ($exc->getCode() == 404) {
-				$response["error"] = true;
-				$response["message"] = "Payment not found!";
-				$this->echoResponse(404, $response);
-			} else {
+				$this->echoResponse(200, $response);
+			} catch (\PayPal\Exception\PayPalConnectionException $exc) {
+				if ($exc->getCode() == 404) {
+					$response["error"] = true;
+					$response["message"] = "Payment not found!";
+					$this->echoResponse(404, $response);
+				} else {
+					$response["error"] = true;
+					$response["message"] = "Unknown error occurred!" . $exc->getMessage();
+					$this->echoResponse(500, $response);
+				}
+			} catch (Exception $exc) {
 				$response["error"] = true;
 				$response["message"] = "Unknown error occurred!" . $exc->getMessage();
 				$this->echoResponse(500, $response);
 			}
-		} catch (Exception $exc) {
-			$response["error"] = true;
-			$response["message"] = "Unknown error occurred!" . $exc->getMessage();
-			$this->echoResponse(500, $response);
 		}
-	}
 
-	function echoResponse($statuws_code, $response) {
-		echo json_encode($response);
-	}
+		function echoResponse($statuws_code, $response) {
+			echo json_encode($response);
+		}
 
-}
+	}
