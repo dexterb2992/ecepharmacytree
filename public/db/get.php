@@ -228,7 +228,8 @@ switch ($request) {
 
     case 'get_patient_points':
         $result = mysql_query("SELECT points FROM patients where id = ".$_GET['patient_id']) or returnError(mysql_error());  
-        var_dump($result[0]->points);
+        $row_cp = mysql_fetch_object($result);
+        echo $row_cp->points;
         break;
 
     case 'get_clinic_records':
