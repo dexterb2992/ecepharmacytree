@@ -276,17 +276,14 @@ class VerifyPaymentController extends Controller
 		echo json_encode($response);
 	}
 
-	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $promo_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){
-		
-		dd($order_details);
-
-		$email = "lourdrivera123@gmail.com";
-
-		$res = $this->mailer->send( 'emails.email_sample', 
-			compact('email'), function ($m) use ($email) {
+	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){
+		$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
+			compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'points_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
 				$m->subject('Pharmacy Tree Invoice');
 				$m->to($email);
 			});
+
+		dd($res);
 	}
 
 }
