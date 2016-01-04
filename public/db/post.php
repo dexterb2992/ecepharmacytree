@@ -324,6 +324,7 @@ if ($request == 'register') {
     	if (mysql_query($sql)) {
     		$response["success"] = 1;
     		$response["message"] = "rows updated";
+    		$response["query"] = $sql;
     	} else {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
