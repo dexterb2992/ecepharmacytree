@@ -290,15 +290,14 @@ Route::get('inc', function(){
     	{ quantity = "13 ", id: "14"}
     	]}'));
 
+	dd($collection);
+
 
     	$sql_sumthing = "( case ";
     	$sql_endthing = "end )"
 
     	foreach($collection->jsobj as $col)
     	{
-    		$cols   = "";
-    		$values = "";
-
     		$tmp_val = "";
     		$whens = "";
 
