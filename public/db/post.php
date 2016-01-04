@@ -306,6 +306,58 @@ if ($request == 'register') {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
+    } else if ($action == 'multiple_update') {
+
+    	$sql = "UPDATE ".$_POST['table']." SET ";
+
+    	$collection = json_decode(stripslashes($_POST['jsobj']));
+
+    	$str_values = "";
+
+
+
+    	$collection = 	json_decode(stripslashes('jsobj:[
+    	{ quantity = "12", id: "13",  },
+    	{ quantity = "13 ", id: "14"}
+    	]'));
+
+
+    	$sql_sumthing = "( case ";
+    	$sql_endthing = "end )"
+
+    	foreach($collection->json_treatments as $col)
+    	{
+    		$cols   = "";
+    		$values = "";
+
+    		$tmp_val = "";
+    		$whens = "";
+
+    		foreach($col as $key => $val)
+    		{
+    			if($key == "quantity"){
+    				$tmp_val = $val;
+    			}
+    			
+    			if($key == "id"){
+    				$whens = $whens."id = ".$val." then ".$tmp_val;			
+    			}
+    		}
+
+    		$generated = $sql_sumthing.$whens.$sql_endthing."where id in (13,14)";
+    		dd($generated);
+    	}
+
+
+
+    	"update baskets set quantity = (case when id = 13 then 12 when id = 14 then 13 end ) where id in (13,14)";
+
+    	UPDATE mytable SET
+    	fruit = IF(id=1,'orange','strawberry'),
+    	drink = IF(id=1,'water','wine'),
+    	food  = IF(id=1,'pizza','fish')
+    	WHERE id IN (1,2);
+
     } else if ($action == "update_with_custom_where_clause") {
     	$settings = "";
     	foreach ($_POST as $key => $value) {

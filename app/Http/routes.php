@@ -283,3 +283,37 @@ Route::get('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'Ver
 Route::get('emailtest', function(){
 	return view('emails.sales_invoice');
 });
+
+Route::get('inc', function(){
+	$collection = 	json_decode(stripslashes('{jsobj:[
+    	{ quantity = "12", id: "13",  },
+    	{ quantity = "13 ", id: "14"}
+    	]}'));
+
+
+    	$sql_sumthing = "( case ";
+    	$sql_endthing = "end )"
+
+    	foreach($collection->jsobj as $col)
+    	{
+    		$cols   = "";
+    		$values = "";
+
+    		$tmp_val = "";
+    		$whens = "";
+
+    		foreach($col as $key => $val)
+    		{
+    			if($key == "quantity"){
+    				$tmp_val = $val;
+    			}
+    			
+    			if($key == "id"){
+    				$whens = $whens."id = ".$val." then ".$tmp_val;			
+    			}
+    		}
+
+    		$generated = $sql_sumthing.$whens.$sql_endthing."where id in (13,14)";
+    		dd($generated);
+    	}
+});
