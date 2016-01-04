@@ -39,6 +39,8 @@ class VerifyCashPaymentController extends Controller
 		$payment_method = $input['payment_method'];
 		$payment_status = "pending";
 		$status = $input['status'];
+		$coupon_discount  = $input['coupon_discount'];
+		$points_discount = $input['points_discount'];
 
 		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
