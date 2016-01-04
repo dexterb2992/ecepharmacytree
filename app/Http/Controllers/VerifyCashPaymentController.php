@@ -133,6 +133,8 @@ class VerifyCashPaymentController extends Controller
 				$billing->total = $totalAmount_final;
 				$billing->payment_status = $payment_status;
 				$billing->payment_method = $payment_method;
+				$billing->points_discount = $points_discount;
+				$billing->coupon_discount = $coupon_discount;
 
 				if($billing->save()) {
 					$billing_id = $billing->id;
@@ -140,7 +142,7 @@ class VerifyCashPaymentController extends Controller
 					$response['billing_id'] = $billing_id;
 					$billing_saved = true;
 				} else
-				$response["billing_message"] = "Sorry, we can't process your request right now.";
+					$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
 				$payment = new InServerPayment;
