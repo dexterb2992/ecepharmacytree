@@ -219,7 +219,7 @@ class VerifyPaymentController extends Controller
 						compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'promo_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
 							$m->subject('Pharmacy Tree Invoice');
 							$m->to($email);
-						}
+						});
 
 					}
 				}
