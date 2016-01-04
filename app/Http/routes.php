@@ -23,19 +23,19 @@ Route::get('showschema', function(){
 	foreach($columns as $column) {
 		// $new_column = array();
 		$column->Type = strbefore($column->Type,'(');
-		$obj = (object) array('field' => $column->Field, 'type' => $column->Type);
-		array_push($final, $obj);
-	}
+			$obj = (object) array('field' => $column->Field, 'type' => $column->Type);
+			array_push($final, $obj);
+		}
 
-	$response['columns'] = $final;
+		$response['columns'] = $final;
 
-	return json_encode($response);
-});
+		return json_encode($response);
+	});
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
-]);
+	]);
 
 
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
@@ -50,27 +50,27 @@ Route::get('try', function(){
 	// return ECEPharmacyTree\Promo::where('end_date', '>=', $today)->get();
 
 	return view('emails.register')->withRole('Branch Manager')
-		->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
-		->withBranch_name("ECE Marketing - Davao");
+	->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
+	->withBranch_name("ECE Marketing - Davao");
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
 
 // Routes used for /profile
-	Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
-	Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
-	Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@show']);
-	Route::post('profile', ['as' => 'update_photo', 'middleware' => 'auth', 'uses' => 'UserController@update_photo']);
-	Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
+Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
+Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
+Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@show']);
+Route::post('profile', ['as' => 'update_photo', 'middleware' => 'auth', 'uses' => 'UserController@update_photo']);
+Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
 
-	Route::get('employees', ['as' => 'employees', 'uses' => 'UserController@index']);
-	Route::post('employees', ['as' => 'employees', 'uses' => 'UserController@create']);
-	Route::post('employees/deactivate', ['as' => 'deactivate_employee', 'middleware' => 'admin',
-		'uses' => 'UserController@destroy']);
-	Route::post('employees/reactivate', ['as' => 'reactivate_employee', 'middleware' => 'admin',
-		'uses' => 'UserController@reactivate']);
-	Route::post('employee/change/branch', ['as'=> 'update_employee_branch', 'middleware' => 'admin',
-		'uses' => 'UserController@update_branch']);
+Route::get('employees', ['as' => 'employees', 'uses' => 'UserController@index']);
+Route::post('employees', ['as' => 'employees', 'uses' => 'UserController@create']);
+Route::post('employees/deactivate', ['as' => 'deactivate_employee', 'middleware' => 'admin',
+	'uses' => 'UserController@destroy']);
+Route::post('employees/reactivate', ['as' => 'reactivate_employee', 'middleware' => 'admin',
+	'uses' => 'UserController@reactivate']);
+Route::post('employee/change/branch', ['as'=> 'update_employee_branch', 'middleware' => 'admin',
+	'uses' => 'UserController@update_branch']);
 
 
 
@@ -177,15 +177,15 @@ Route::group(['prefix' => 'doctor-specialties', 'as' => 'DoctorSpecialty::', 'mi
 /** Routes for Doctors and Doctor Specialties
  * 
  */
-	Route::get("doctors", ['as' => 'doctors', 'uses' => 'DoctorController@index']);
-	Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@show']);
+Route::get("doctors", ['as' => 'doctors', 'uses' => 'DoctorController@index']);
+Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@show']);
 
-	Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
-	Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
+Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
+Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
 
-	Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
-	Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
-	Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
+Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
+Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
+Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
 
 Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'auth'], function (){
 	/**
@@ -207,13 +207,13 @@ Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'auth'], 
 
 //Routes for Clinics
 
-	Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
-	Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
+Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
+Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
 
-	Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
+Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
 
-	Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
-	Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
+Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
+Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
 
 Route::group(['prefix' => 'settings', 'as' => 'Settings::', 'middleware' => 'admin'], function (){
 	/**
@@ -226,11 +226,11 @@ Route::group(['prefix' => 'settings', 'as' => 'Settings::', 'middleware' => 'adm
 
 
 //Routes for Prescription Approval
-	Route::get('prescription-approval/', ['as' => 'prescription_approval', 'uses' => 'PrescriptionApprovalController@index']);
+Route::get('prescription-approval/', ['as' => 'prescription_approval', 'uses' => 'PrescriptionApprovalController@index']);
 
-	Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-disapprove', 'uses' => 'PrescriptionApprovalController@disapprove']);
+Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-disapprove', 'uses' => 'PrescriptionApprovalController@disapprove']);
 
-	Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
+Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
 
 Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 'auth'], function (){
 	/**
@@ -285,34 +285,24 @@ Route::get('emailtest', function(){
 });
 
 Route::get('inc', function(){
-	$collection = 	json_decode(stripslashes('{jsobj:[
-    	{ quantity = "12", id: "13",  },
-    	{ quantity = "13 ", id: "14"}
-    	]}'));
 
-	dd($collection);
+	// $collection = 	json_decode('{"jsobj":[{ "quantity" = "12", "id" : "13"},{ "quantity" = "13 ", "id" : "14"}]}');
 
+	$collection = json_decode('{
+		"jsobj":[
+		{"quantity":"12", "id":"13"},
+		{"quantity":"13", "id":"14"}
+		]}');
+	
+	$whens = "";
+	$ids = "";
 
-    	$sql_sumthing = "( case ";
-    	$sql_endthing = "end )"
+	foreach ($collection->jsobj as $col) {
+		$whens = $whens." when id = ".$col->id." then ".$col->quantity;
+		$ids = $ids.$col->id.",";
+	}
 
-    	foreach($collection->jsobj as $col)
-    	{
-    		$tmp_val = "";
-    		$whens = "";
+    $ids = substr($ids, 0, strlen($ids) -1);
+	$generated = "update baskets set quantity = ( case".$whens." end ) "."where id in (".$ids.")";
 
-    		foreach($col as $key => $val)
-    		{
-    			if($key == "quantity"){
-    				$tmp_val = $val;
-    			}
-    			
-    			if($key == "id"){
-    				$whens = $whens."id = ".$val." then ".$tmp_val;			
-    			}
-    		}
-
-    		$generated = $sql_sumthing.$whens.$sql_endthing."where id in (13,14)";
-    		dd($generated);
-    	}
 });
