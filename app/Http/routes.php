@@ -284,10 +284,4 @@ Route::get('emailtest', function(){
 	return view('emails.sales_invoice');
 });
 
-Route::get('inc', function(){
-	Illuminate\Mail\Mailer::send( 'emails.email_sample', 
-		compact('email'), function ($m) use ($email) {
-			$m->subject('Pharmacy Tree Invoice');
-			$m->to($email);
-		});
-});
+Route::get('emailtestingservice', ['as' => 'email_testing_service', 'uses' => 'VerifyPaymentController@emailtestingservice' ]);

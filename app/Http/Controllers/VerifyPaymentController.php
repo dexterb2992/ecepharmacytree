@@ -181,7 +181,7 @@ class VerifyPaymentController extends Controller
 						$response['billing_id'] = $billing_id;
 						$billing_saved = true;
 					} else
-						$response["billing_message"] = "Sorry, we can't process your request right now.";
+					$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
 					$payment = new InServerPayment;
@@ -274,6 +274,14 @@ class VerifyPaymentController extends Controller
 
 	function echoResponse($statuws_code, $response) {
 		echo json_encode($response);
+	}
+
+	function emailtestingservice(){
+		$res = $this->mailer->send( 'emails.email_sample', 
+			compact('email'), function ($m) use ($email) {
+				$m->subject('Pharmacy Tree Invoice');
+				$m->to($email);
+			});
 	}
 
 }
