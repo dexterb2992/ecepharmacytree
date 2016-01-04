@@ -215,22 +215,23 @@ class VerifyPaymentController extends Controller
 					//insert invoice here
 
 				}
+			}
 
                 // Verifying the amount
-				if ($amount_server != $amount_client) {
-					$response["error"] = true;
-					$response["message"] = "Payment amount doesn't matched.";
-					$this->echoResponse(200, $response);
-					return;
-				}
+			if ($amount_server != $amount_client) {
+				$response["error"] = true;
+				$response["message"] = "Payment amount doesn't matched.";
+				$this->echoResponse(200, $response);
+				return;
+			}
 
                 // Verifying the currency
-				if ($currency_server != $currency_client) {
-					$response["error"] = true;
-					$response["message"] = "Payment currency doesn't matched.";
-					$this->echoResponse(200, $response);
-					return;
-				}
+			if ($currency_server != $currency_client) {
+				$response["error"] = true;
+				$response["message"] = "Payment currency doesn't matched.";
+				$this->echoResponse(200, $response);
+				return;
+			}
 
                 // Verifying the sale state
 			// if ($sale_state != 'completed') {
@@ -240,26 +241,26 @@ class VerifyPaymentController extends Controller
 			// 	return;
 			// }
 
-				$this->echoResponse(200, $response);
-			} catch (\PayPal\Exception\PayPalConnectionException $exc) {
-				if ($exc->getCode() == 404) {
-					$response["error"] = true;
-					$response["message"] = "Payment not found!";
-					$this->echoResponse(404, $response);
-				} else {
-					$response["error"] = true;
-					$response["message"] = "Unknown error occurred!" . $exc->getMessage();
-					$this->echoResponse(500, $response);
-				}
-			} catch (Exception $exc) {
+			$this->echoResponse(200, $response);
+		} catch (\PayPal\Exception\PayPalConnectionException $exc) {
+			if ($exc->getCode() == 404) {
+				$response["error"] = true;
+				$response["message"] = "Payment not found!";
+				$this->echoResponse(404, $response);
+			} else {
 				$response["error"] = true;
 				$response["message"] = "Unknown error occurred!" . $exc->getMessage();
 				$this->echoResponse(500, $response);
 			}
+		} catch (Exception $exc) {
+			$response["error"] = true;
+			$response["message"] = "Unknown error occurred!" . $exc->getMessage();
+			$this->echoResponse(500, $response);
 		}
-
-		function echoResponse($statuws_code, $response) {
-			echo json_encode($response);
-		}
-
 	}
+
+	function echoResponse($statuws_code, $response) {
+		echo json_encode($response);
+	}
+
+}
