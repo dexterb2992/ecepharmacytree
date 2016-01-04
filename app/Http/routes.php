@@ -271,14 +271,14 @@ Route::get('api/generate/{what}', function ($what){
 		return generate_lot_number();
 });
 
-Route::get('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPaymentController@verification']);
+Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPaymentController@verification']);
 
 Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
 Route::post('stock-return-codes/all', 'StockReturnController@stock_return_codes');
 Route::post('stock-return', 'StockReturnController@store');
 
-Route::get('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
+Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
 
 Route::get('emailtest', function(){
 	return view('emails.sales_invoice');
