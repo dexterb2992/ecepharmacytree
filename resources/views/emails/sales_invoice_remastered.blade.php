@@ -109,22 +109,22 @@
 								<tr><td class="full-width" colspan="2" style="width: 100%;"><hr class="hr-headline" style="border: 1px solid transparent;-moz-border-image: -moz-linear-gradient(right, lightgreen 0%, #458B74 100%);-webkit-border-image: -webkit-linear-gradient(right, lightgreen 0%, #458B74 100%);border-image: linear-gradient(to left, lightgreen 0%, #458B74 100%);border-image-slice: 1;"></td></tr>
 								<tr class="normal-tags" style="font-family: Helvetica, Arial, Sans-Serif;word-break: break-word;color: #5B9A68;font-size: 15px;">
 									<td class="content-styles" style="width: 50%;">Subtotal: </td>
-									<td class="content-styles" style="width: 50%;">&#8369 {{ $gross_total }}</td>
+									<td class="content-styles" style="width: 50%;">₱ {{ $gross_total }}</td>
 								</tr>
 								<tr><td class="full-width" colspan="2" style="width: 100%;"><hr class="hr-headline" style="border: 1px solid transparent;-moz-border-image: -moz-linear-gradient(right, lightgreen 0%, #458B74 100%);-webkit-border-image: -webkit-linear-gradient(right, lightgreen 0%, #458B74 100%);border-image: linear-gradient(to left, lightgreen 0%, #458B74 100%);border-image-slice: 1;"></td></tr>
 								<tr class="normal-tags" style="font-family: Helvetica, Arial, Sans-Serif;word-break: break-word;color: #5B9A68;font-size: 15px;">
 									<td class="content-styles" style="width: 50%;">Coupon Discount: </td>
-									<td class="content-styles" style="width: 50%;">&#8369 {{ $coupon_discount }}</td>
+									<td class="content-styles" style="width: 50%;">₱ {{ $coupon_discount }}</td>
 								</tr>
 								<tr><td class="full-width" colspan="2" style="width: 100%;"><hr class="hr-headline" style="border: 1px solid transparent;-moz-border-image: -moz-linear-gradient(right, lightgreen 0%, #458B74 100%);-webkit-border-image: -webkit-linear-gradient(right, lightgreen 0%, #458B74 100%);border-image: linear-gradient(to left, lightgreen 0%, #458B74 100%);border-image-slice: 1;"></td></tr>
 								<tr class="normal-tags" style="font-family: Helvetica, Arial, Sans-Serif;word-break: break-word;color: #5B9A68;font-size: 15px;">
 									<td class="content-styles" style="width: 50%;">Points Discount: </td>
-									<td class="content-styles" style="width: 50%;">&#8369 {{ $points_discount }}</td>
+									<td class="content-styles" style="width: 50%;">₱ {{ $points_discount }}</td>
 								</tr>
 								<tr><td class="full-width" colspan="2" style="width: 100%;"><hr class="hr-headline" style="border: 1px solid transparent;-moz-border-image: -moz-linear-gradient(right, lightgreen 0%, #458B74 100%);-webkit-border-image: -webkit-linear-gradient(right, lightgreen 0%, #458B74 100%);border-image: linear-gradient(to left, lightgreen 0%, #458B74 100%);border-image-slice: 1;"></td></tr>
 								<tr class="normal-tags" style="font-family: Helvetica, Arial, Sans-Serif;word-break: break-word;color: #5B9A68;font-size: 15px;">
 									<td class="content-styles" style="width: 50%;">Total: </td>
-									<td class="content-styles" style="width: 50%;">&#8369 {{ $totalAmount_final }}</td>
+									<td class="content-styles" style="width: 50%;">₱ {{ $totalAmount_final }}</td>
 								</tr>
 							</table>
 						</td>
@@ -142,8 +142,8 @@
 								@foreach($order_details as $order_detail)
 								<tr class="normal-tags hr-headline" style="border: 1px solid transparent;-moz-border-image: -moz-linear-gradient(right, lightgreen 0%, #458B74 100%);-webkit-border-image: -webkit-linear-gradient(right, lightgreen 0%, #458B74 100%);border-image: linear-gradient(to left, lightgreen 0%, #458B74 100%);border-image-slice: 1;font-family: Helvetica, Arial, Sans-Serif;word-break: break-word;color: #5B9A68;font-size: 15px;">
 									<td class="content-styles-full" style="width: 33%;">{{ $order_detail->product_name }} </td>
-									<td class="content-styles-full" style="width: 33%;">&#8369 {{ $order_detail->price.' X '.$order_detail->quantity }}</td>
-									<td class="content-styles-full" style="width: 33%;">&#8369 {{ $order_detail->price * $order_detail->quantity }}</td>
+									<td class="content-styles-full" style="width: 33%;">₱ {{ $order_detail->price.' X '.$order_detail->quantity }}</td>
+									<td class="content-styles-full" style="width: 33%;">₱ {{ $order_detail->price * $order_detail->quantity }}</td>
 								</tr>
 								<tr><td class="full-width" colspan="3" style="width: 100%;"><hr class="hr-headline" style="border: 1px solid transparent;-moz-border-image: -moz-linear-gradient(right, lightgreen 0%, #458B74 100%);-webkit-border-image: -webkit-linear-gradient(right, lightgreen 0%, #458B74 100%);border-image: linear-gradient(to left, lightgreen 0%, #458B74 100%);border-image-slice: 1;"></td></tr>
 								@endforeach
