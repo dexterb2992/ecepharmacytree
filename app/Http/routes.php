@@ -285,16 +285,16 @@ Route::get('emailtest', function(){
 });
 
 Route::get('inc', function(){
-	$collection = 	json_decode(stripslashes('jsobj:[
+	$collection = 	json_decode(stripslashes('{jsobj:[
     	{ quantity = "12", id: "13",  },
     	{ quantity = "13 ", id: "14"}
-    	]'));
+    	]}'));
 
 
     	$sql_sumthing = "( case ";
     	$sql_endthing = "end )"
 
-    	foreach($collection->json_treatments as $col)
+    	foreach($collection->jsobj as $col)
     	{
     		$cols   = "";
     		$values = "";
