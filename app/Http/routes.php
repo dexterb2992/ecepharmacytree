@@ -11,10 +11,10 @@
 |
 */
 
-
-// View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
-// View::share('branches', ECEPharmacyTree\Branch::all());
-
+if( Schema::hasTable('settings') && Schema::hasTable('branches') ){
+	View::share('recent_settings', ECEPharmacyTree\Setting::latest()->first());
+	View::share('branches', ECEPharmacyTree\Branch::all());
+}
 
 Route::get('showschema', function(){
 	$response = array();
@@ -45,13 +45,15 @@ Route::get('home', function(){
 });
 
 Route::get('try', function(){
-	// pre(check_for_critical_stock());
+	// pre(check_stock_availability());
 	// $today = Carbon\Carbon::today('Asia/Manila')->addHours(23 );
 	// return ECEPharmacyTree\Promo::where('end_date', '>=', $today)->get();
+	$orders = ECEPharmacyTree\Order::with('billing')->get();
+	dd($orders);
 
-	return view('emails.register')->withRole('Branch Manager')
-	->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
-	->withBranch_name("ECE Marketing - Davao");
+	// return view('emails.register')->withRole('Branch Manager')
+	// ->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
+	// ->withBranch_name("ECE Marketing - Davao");
 });
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
@@ -261,14 +263,19 @@ Route::get('locations/get/regions/', 'LocationController@show');
 Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
 Route::get('locations/search/{get_location}/{location_name}', 'LocationController@search');
 
-Route::get('api/generate/{what}', function ($what){
-	if( $what == "sku" )
-		return generate_sku();
-	if( $what == "referral_id" )
-		return generate_referral_id();
+Route::get('api/{type}/{what}', function ($type, $what){
+	if( $type == 'generate' ){
+		if( $what == "sku" )
+			return generate_sku();
+		if( $what == "referral_id" )
+			return generate_referral_id();
 
-	if( $what == "lot_number" )
-		return generate_lot_number();
+		if( $what == "lot_number" )
+			return generate_lot_number();
+	}else if( $type == 'check' ){
+		if( $what == 'sku' )
+			return does_sku_exist(Input::get('sku')) ? 'true' : 'false';
+	}
 });
 
 Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPaymentController@verification']);

@@ -57,12 +57,14 @@
 													{{ $inventory->lot_number }}
 												</td>
 												<td>
-													<?php $is_critical = check_for_critical_stock($inventory->product) ?>
-													
-													{!! $is_critical ? 
-														'<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" title="" data-original-title="Critical Stock" title="Critical Stock"></i>' 
-														: '' 
-													!!}
+													<?php 
+														$check_stock_availability = check_stock_availability($inventory->product);
+													?>
+													@if($check_stock_availability == 'out_of_stock')
+														<i class="fa-close fa" style="color:#dd4b39;" data-toggle="tooltip" data-original-title="Out of Stock"></i>
+													@elseif($check_stock_availability == 'critical')
+														<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" data-original-title="Critical Stock"></i>
+													@endif
 													<span> {{ $inventory->product->sku }}</span>
 												</td>
 												<td>
@@ -94,11 +96,10 @@
 												</td>
 												<td>
 													<div class="btn-group pull-right">
-														{!! $is_critical ? 
-															'<span class="btn-xs btn-primary btn action-icon pull-right" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}">
-															<i class="fa-refresh fa"></i></span>' 
-															: '' 
-														!!}
+														@if( $check_stock_availability == 'out_of_stock' || $check_stock_availability == 'critical')
+															<span class="btn-xs btn-primary btn action-icon pull-right" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}">
+															<i class="fa-refresh fa"></i></span>
+														@endif
 														<span class="btn btn-danger btn-xs action-icon remove-product pull-right" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
 															 data-id="{{ $inventory->id }}" title="Remove" data-toggle="tooltip" data-original-title="Remove">
 															 <i class="fa fa-trash-o"></i>
@@ -189,12 +190,7 @@
 				</div>
 			</div>
 
-
-			
-
-
-
-			<!-- Modal for Create/Edit Branch -->
+			<!-- Modal for New Inventory -->
 	        <div class="modal" id="modal-add-edit-inventory">
 	            <div class="modal-dialog">
 	                <div class="modal-content">
@@ -215,11 +211,15 @@
 	                            	</select>
 	                            </div>
 	                            <div class="form-group">
+	                            	<label for="lot_number">Lot Number</label>
+	                            	<input class="form-control" type="text" name="lot_number" required>
+	                            </div>
+	                            <div class="form-group">
 	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received 
 	                            		<small>(<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</small>
 	                            	</label>
 	                            	<div class="input-group">
-		                            	<input type="text" id="inventory_quantity" name="quantity" class="number form-control" placeholder="Add quantity by product's packing" title="Add quantity by product's packing" required>
+		                            	<input type="text" id="inventory_quantity" name="quantity" data-min="1" class="number form-control" placeholder="Add quantity by product's packing" title="Add quantity by product's packing" required>
 		                            	<div class="input-group-addon">
 		                            		<span class="add-on-product-packing" name="packing">{{ head( $products->toArray() )["packing"] }}</span>
 		                            	</div>
@@ -227,7 +227,7 @@
 	                            	<span id="total_quantity_in_unit"></span>
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="expiration">Expiration Date <small><i>(Leave empty if this stock doesn't have an expiration)</i></small></label>
+	                            	<label for="expiration">Expiration Date <small><i>(Leave empty if this product doesn't have an expiration)</i></small></label>
 	                            	<div class="input-group">
 	                            		<div class="input-group-addon">
 											<i class="fa fa-calendar"></i>
@@ -288,10 +288,10 @@
 	        <div class="modal" id="modal-stock-return">
 	        	<div class="modal-dialog">
 	        		<div class="modal-content">
-	        			{!! Form::open(['action' => 'StockReturnController@store', 'method' => 'post']) !!}
+	        			{!! Form::open(['action' => 'StockReturnController@store', 'method' => 'post', 'id' => 'form_return_n_refund']) !!}
 		        			<div class="modal-header">
 		        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        				<h4>STOCK RETURNS / EXCHANGE FORM</h4>
+		        				<h4>STOCK RETURNS / REFUND FORM</h4>
 		        			</div>
 		        			<div class="modal-body">
 		        				<div class="form-group">
@@ -313,20 +313,31 @@
 		        					</dl>
 
 		        					<dl class="dl-vertical">
-		        						<dt>Total Amount</dt>
+		        						<dt>Total amount paid:</dt>
 		        						<dd id="total_amount"></dd>
 		        					</dl>
 		        				</div><hr/>
 
-		        				<div class="form-group">
-		        					<label>Product to return</label>
-		        					<select class="form-control" name="return_product_id" id="return_product_id"></select>
+		        				<div class="form-group stock-return-actions">
+		        					<label>All products on this order are returned?</label>
+		        					<label>
+	        							<input type="radio" name="all_product_is_returned" class="icheck" 
+	        								data-check-value="1" value="1" checked> Yes 
+	        						</label>
+		        					<label>
+		        						<input type="radio" name="all_product_is_returned" class="icheck data-show" 
+			        						data-show-target="#if_only_specific_products_to_return" 
+			        						data-show-target-when="0" data-check-value="0"> No 
+		        					</label>
 		        				</div>
 
-		        				<div class="form-group">
-		        					<label>Return quantity</label>
-		        					<input type="text" name="return_quantity" class="form-control number" id="return_quantity">
-		        				</div>
+		        				<div id="if_only_specific_products_to_return" style="display:none;">
+			        				<div class="form-group">
+			        					<label>Product to return</label>
+			        					<select class="form-control" name="return_product_id[]" id="return_product_id" multiple></select>
+			        					<div class="selected-products-qty-div form-horizontal"></div>
+			        				</div>
+			        			</div>
 
 		        				<div class="form-group">
 		        					<label>Reason</label>
@@ -344,21 +355,14 @@
 		        						<label>
 		        							<input type="radio" name="action" class="icheck" data-check-value="refund" value="refund" checked> Refund 
 		        						</label>
-			        					<!-- <label>
-			        						<input type="radio" name="action" class="icheck" data-check-value="exchange"> Exchange 
-			        					</label> -->
-			        					<label>{{ peso() }}<span id="refund_amount"></span></label>
+			        					<label data-toggle="tooltip" data-original-title="Amount to be refunded">{{ peso() }}<span id="refund_amount"> - </span></label>
 		        					</div>
-
-		        				</div>
-
-		        				<div id="exchange_product_list" class="form-group" style="display:none">
-		        					<label>Select a product for exchange</label>
-		        					<select class="form-control select2" name="exchange_product_id" id="exchange_product_id"></select>
+		        					<input type="hidden" name="amount_refunded" id="amount_refunded">
 		        				</div>
 			        		</div>
+			        		
 			        		<div class="modal-footer">
-			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Submit</button>
+			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return & Refund</button>
 			        		</div>
 			        	{!! Form::close() !!}
 	        		</div>

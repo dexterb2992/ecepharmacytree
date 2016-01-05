@@ -261,18 +261,37 @@
                                     @endforeach
                                 </select>
                             </div>
+
                             <div class="form-group">
                                 <label for="name">Product name <i>*</i></label>
                                 <input type="text" class="form-control" id="name" placeholder="product name" name="name" required>
                             </div>
+
                             <div class="form-group">
                                 <label for="generic_name">Generic name</label>
                                 <textarea class="form-control" name="generic_name"></textarea>      
                             </div>
+
                             <div class="form-group">
                                 <label for="description">Description <i>*</i></label>
                                 <textarea class="form-control" name="description" required></textarea>
                             </div>
+
+                            <div class="form-group">
+                                <label data-toggle="tooltip" data-original-title="Stock Keeping Unit">SKU (<small><i>A unique product identifier that will also be used in inventory.</i></small>)</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa-tag fa"></i>
+                                    </div>
+                                    <input type="text" class="form-control" name="sku" minlength="6" required/>
+                                    <div class="input-group-btn">
+                                        <span class="btn btn-default btn-flat btn-gensku">
+                                            <i class="fa-random fa"></i> Generate SKU
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label for="prescription_required">Requires prescription? <i>*</i></label>
                                 <select class="form-control" name="prescription_required">
@@ -280,6 +299,7 @@
                                     <option value="1">Yes</option>
                                 </select>
                             </div>
+
                             <div class="form-group">
                                 <label for="price">Selling Price <i>(per packing)*</i></label>
                                 <div class="input-group">
@@ -287,18 +307,22 @@
                                     <input type="text" class="form-control number" name="price" required>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="packing">Packing <i>(Ex. box, bottle, strip, etc.)*</i></label>
                                 <input type="text" name="packing" class="form-control" placeholder="Ex. box, bottle, strip, etc." required>
                             </div>  
+
                             <div class="form-group">
                                 <label for="unit">Unit <i>(Ex. tablet, capsule, etc.)*</i></label>
                                 <input type="text" class="form-control" name="unit" placeholder="Ex. tablet, capsule, etc." required>
                             </div>
+
                             <div class="form-group">
                                 <label for="qty_per_packing">Quantity per packing <i>(How many units are there in 1 packing?) *</i></label>
                                 <input type="text" class="form-control number" name="qty_per_packing" title="How many units are there in 1 packing?" required>
                             </div>
+
                             <div class="form-group">
                                 <label>Default Critical Inventory Number <i>(Enter quantity by packing)</i>*</label>
                                 <input class="form-control number" type="text" name="critical_stock" data-default-value="10"

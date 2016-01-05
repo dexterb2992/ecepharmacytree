@@ -16,4 +16,8 @@ class StockReturn extends Model
     public function inventory(){
     	return $this->belongsTo('ECEPharmacyTree\Inventory');
     }
+
+    public function product_stock_returns(){
+    	return $this->hasMany('ECEPharmacyTree\ProductStockReturn');
+    }
 }
