@@ -13,6 +13,9 @@ use ECEPharmacyTree\StockReturnCode;
 use ECEPharmacyTree\StockReturn;
 use ECEPharmacyTree\OrderLotNumber;
 use ECEPharmacyTree\Order;
+use ECEPharmacyTree\OrderDetail;
+use ECEPharmacyTree\ProductStockReturn;
+use ECEPharmacyTree\Inventory;
 
 class StockReturnController extends Controller
 {
@@ -30,17 +33,23 @@ class StockReturnController extends Controller
         $input = Input::all();
         $stock_return = new StockReturn;
 
-        $return_quantity = $input["return_quantity"];
-
         $stock_return->order_id = $input["order_id"];
-        $stock_return->return_product_id = $input["return_product_id"];
-        $stock_return->return_quantity = $return_quantity;
         $stock_return->return_code = $input["return_code"];
         $stock_return->brief_explanation = $input["brief_explanation"];
         $stock_return->action = $input["action"];
-        $stock_return->exchange_product_id = $input["exchange_product_id"];
+        $stock_return->all_product_is_returned = $input['all_product_is_returned'];
+        $stock_return->amount_refunded = $input['amount_refunded'];
+
+        // temporary save lang sa 
+        pre($input);
+
+        $stock_return->save();
 
         $order = Order::find($input["order_id"]);
+
+
+
+        
 
         $lesser_lot_number = [];
         $temp_lot_number = [];
@@ -51,28 +60,64 @@ class StockReturnController extends Controller
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
 
-        // dd($arr_lot_numbers);
+        pre($arr_lot_numbers);
 
         for($x = count($arr_lot_numbers)-1; $x >= 0; $x--){
             //x = 1, x-1 = 0
             if( isset($arr_lot_numbers[$x-1]) ){
-                if( $arr_lot_numbers[$x-1]['inventory']['available_quantity'] <  $arr_lot_numbers[$x]['inventory']['available_quantity'] ){
-                    $lesser_lot_number = $arr_lot_numbers[$x-1];
+                if( $arr_lot_numbers[$x-1]['inventory']['available_quantity'] >  $arr_lot_numbers[$x]['inventory']['available_quantity'] ){
+                    $temp = $arr_lot_numbers[$x];
+                    // $lesser_lot_number = $arr_lot_numbers[$x-1];
+                    $arr_lot_numbers[$x] = $arr_lot_numbers[$x-1];
+                    $arr_lot_numbers[$x-1] = $temp;
                 }else{
-                    $lesser_lot_number = $arr_lot_numbers[$x];
+                    // $lesser_lot_number = $arr_lot_numbers[$x];
                 }
             }
         }
-        
-        // dd($lesser_lot_number);
-        dd($order->lot_numbers->where('id', 2)); // for tomorrow: 
-        // actual order qty: 5
-        // if quantity_received is 150, and avaible_qty is 145
-        // and stock returned is 4
-        // and we have 2 lot numbers on this order => L#1: quantity is 4, L#2: quantity is 1
-        // from order_lot_numbers, L#2 should now have 1 available_qty, and L#1 will have 148
-        // --- do this tomorrow ---
-        //
+
+        pre($arr_lot_numbers);
+
+        if( $input['all_product_is_returned'] == 1 ){
+            foreach ($arr_lot_numbers as $lot_number) {
+                $input['products_return_qtys'] = [$lot_number['inventory']['product_id'] => $lot_number['quantity']];
+            }
+        }
+        pre('products_return_qtys: ');
+        pre($input['products_return_qtys']);
+
+        foreach($input['products_return_qtys'] as $key_product_id => $input_value){
+            // $order_detail = $order->order_details()->where('product_id', $key);
+            $sr_detail = new ProductStockReturn;
+            $sr_detail->product_id = $key_product_id;
+            $sr_detail->stock_return_id = $stock_return->id;
+            $sr_detail->quantity = $input_value;
+            
+
+            $input['products_return_qtys']['remaining'] = [$key_product_id => $input_value]; // iv: 4, lq: 5(1 & 4)
+
+            foreach ($arr_lot_numbers as $lot_number) {
+                // $lot_number[quantity] = 1 , remaining = 3
+                if($lot_number['inventory']['product_id'] == $key_product_id){
+                    $inventory = Inventory::find($lot_number['inventory']['id']);
+
+                    if( $input['products_return_qtys']['remaining'][$key_product_id] > $lot_number['quantity'] ){
+                        $input['products_return_qtys']['remaining'][$key_product_id] -= $lot_number['quantity'];
+                        $returned_qty = $lot_number['quantity']; 
+                    }else if( $input['products_return_qtys']['remaining'][$key_product_id] == $lot_number['quantity'] ){
+                        $input['products_return_qtys']['remaining'][$key_product_id] = 0;
+                        $returned_qty = $input_value;
+                    }else if( $input['products_return_qtys']['remaining'][$key_product_id] < $lot_number['quantity'] ){
+                        $returned_qty = $input['products_return_qtys']['remaining'][$key_product_id];
+                    }
+
+                    $inventory->available_quantity = $inventory->available_quantity + $returned_qty;
+                    $inventory->save();
+                }
+            }
+
+            $sr_detail->save();
+        }
 
 
         if( $stock_return->save() )

@@ -71,7 +71,7 @@ class OrderController extends Controller
         $orders->load('order_details');
         $orders->load('billing');
         $orders->load('branch');
-        
+        $orders->load('stock_returns');
 
 
         foreach ($orders as $order) {
@@ -79,9 +79,20 @@ class OrderController extends Controller
             $order->branch->barangay->load('municipality');
             $order->branch->barangay->municipality->load('province');
             $order->branch->barangay->municipality->province->load('region');
+
+            foreach ($order->stock_returns as $stock_return) {
+                $stock_return->load('product_stock_returns');
+            }
+
             foreach ($order->order_details as $order_detail) {
                 $order_detail->load('product');
+                // todo tomorrow:
+                // logics here to determine the max returnable quantity when there are already stocks that had
+                // been returned by the customer
+                // 
             }
+
+            
             
         }
 

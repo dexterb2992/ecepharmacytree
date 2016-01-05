@@ -81,10 +81,13 @@ class PromoController extends Controller
     {
 
         $promo = Promo::find($id);
+        $product_ids = [];
+
         if( isset( $promo->id ) ){
-            if( $promo->product_applicability == "SPECIFIC_PRODUCTS" && count($promo->discounts) >= 1){
-                $promo->load('product');
+            foreach ($promo->discounts as $discount) {
+                $product_ids[] = ['id' => $discount->product_id];
             }
+            $promo->product_id = $product_ids;
             return $promo->toJson();
         }
         

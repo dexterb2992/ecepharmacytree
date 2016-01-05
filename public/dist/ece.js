@@ -94,6 +94,8 @@ $(document).ready(function (){
 
     $('.daterange').daterangepicker({format: 'YYYY-MM-DD'});
 
+    $('[data-toggle="popover"]').popover();   
+
     // make sure to add 'fade' class only once
     $('div.modal').removeClass('fade').addClass('fade');
 
@@ -263,43 +265,19 @@ $(document).ready(function (){
                             var htmls = "";
                             $.each(data, function (i, row){
                                 $("#promo_details_gifts option[value='"+row.product.id+"']").attr("selected", "selected");
-                                htmls+= generate_gift_qty_form(row.product.id, row.product.name, row.quantity_free);
+                                htmls+= generate_gift_qty_form(row.product.id, row.product.name, row.quantity_free, 'gift_quantities');
                                 window.global_free_gift_product_ids.push(row.product.id);
                                 window.global_free_gift_quantities.push({"id" : row.product.id, "quantity" : row.quantity_free});
                             });
                             $(".selected-products-qty-div").html(htmls);
                             $("#promo_details_gifts").select2();
+                            
+                            $("#form_promo_product_info").find('input.gift_quantities').each(function (i, row){
+                                $(row).attr("data-min", 1);
+                            });
+                            allowNumericOnly( $('.number') );
                         });
                     }
-
-                    // var promoDetailsType = $(document).find("#promo_details_type option:selected").val();
-                    // var discountsDiv = $("#promo_details_discount").parent("div").parent("div");
-                    // var giftsDiv = $("#promo_details_gifts").parent("div");
-
-                    // console.log("promoDetailsType: "+promoDetailsType);
-
-                    // if( promoDetailsType == "2" ){
-                    //     // if type is free gifts
-                    //     discountsDiv.fadeOut(function (){
-                    //         // $.ajax({
-                    //         //     url: '/promos/details/gifts',
-                    //         //     type: 'post',
-                    //         //     dataType: 'json',
-                    //         //     data: { id: id, _token: _token }
-                    //         // }).done(function (data){
-                    //         //     console.log(data);
-                    //         // });
-                    //         giftsDiv.fadeIn();
-                    //     });
-                    // }else if( promoDetailsType == "0" || promoDetailsType == "1" ){
-                    //     giftsDiv.fadeOut(function (){
-                    //         discountsDiv.fadeIn();
-                    //     });
-                    // }else{
-                    //     discountsDiv.fadeOut();
-                    //     giftsDiv.fadeOut();
-                    // }
-
                 }
 
 
@@ -726,7 +704,6 @@ $("#add_gallery").click(function (){
             });
         });
     }else{
-
         $(".add-new-gallery-outer").fadeOut(function (){
             $("#product-gallery-carousel").fadeIn(function(){
                 $("#add_gallery").html("Add new").removeClass("btn-warning").addClass("btn-info");
@@ -920,26 +897,47 @@ $("#add_gallery").click(function (){
         }
     });
 
-    // $(document).on("click", ".promo-product-details", function (){
-    //     var $this = $(this);
-    //     var pname = $.trim($this.html());
-
-    //     $.ajax({
-    //         url : '/promos/details',
-    //         type: 'post',
-    //         dataType: 'json',
-    //         data: {did: $this.data("did"), _token: _token}
-    //     }).done(function (data){
-    //         console.log(data);
-    //     });
-
-    //     $("#modal_product_name").html(pname).attr("href", "/products?q="+pname);
-    //     $("#modal-promo-product-info").modal('show');
-    // });
-
     $('.btn-gencode').click(function (){
         var code = generate_random_string(6).toUpperCase();
         $(this).parent('div').prev('input[name="generic_redemption_code"]').val(code);
+    });
+
+    $('.btn-gensku').click(function (){
+        $this = $(this);
+        $.ajax({
+            url: '/api/generate/sku',
+            type: 'get',
+            dataType: 'text'
+        }).done(function (data){
+            $this.parent('div').prev('input[name="sku"]').val(data.toUpperCase()).trigger('change');
+        });
+        
+    });
+
+    $('input[name="sku"]').bind("change keyup", function (){
+        // check if sku exists
+        var $this = $(this), sku = $this.val();
+        if( sku.length < 6 ){
+            _error($this, "SKU should be atleast 6 characters long.");
+        }else{
+            _clear_form_errors($this.parent("div.input-group"));
+            $.ajax({
+                url: '/api/check/sku/',
+                type: 'get',
+                dataType: 'text',
+                data: {sku: sku}
+            }).done(function (data){
+                if( data == 'true' ){
+                    _error($this, "Opps...that SKU already exists.");
+                }else{
+                    _clear_form_errors($this.parent("div.input-group"));
+                }
+            }); 
+        }
+    });
+
+    $('#sku_popover').on('hide.bs.tooltip', function () {
+       $('input[name="sku"]').val("");
     });
 
     $('#promo_details_type').change(function (){
@@ -1019,7 +1017,7 @@ $("#add_gallery").click(function (){
 
         $.each(window.global_free_gift_quantities, function (i, row){
             if( $.inArray(row.id, global_free_gift_product_ids) !== -1 ){
-                htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity);
+                htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'gift_quantities');
             }
         
         });
@@ -1054,6 +1052,7 @@ $("#add_gallery").click(function (){
             $("#exchange_product_id").html(productsHtml);
             $("#return_code").html(returnCodesHtml);
             $("#order_id, #exchange_product_id, #return_product_id, #return_code").select2();
+            $('.selected-products-qty-div').html('');
 
             if( orders[0].length == 1 ){
                 $("#order_id").trigger("change");
@@ -1067,6 +1066,7 @@ $("#add_gallery").click(function (){
         window.maxReturnQty = [];
         $.each(window.orders, function (col, row){
             if( row.id == val ){
+                window.selectedOrder = row;
                 $.each(row.order_details, function (index, order_detail){
                     var pId = order_detail.product.id;
                     productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
@@ -1075,34 +1075,99 @@ $("#add_gallery").click(function (){
                             ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
                             order_detail.product.name+"</a>,<br/>";
                     productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                    window.maxReturnQty.push({pId: pId, qty: order_detail.quantity});
+                    window.maxReturnQty[order_detail.product.id] = {pId: pId, qty: order_detail.quantity, name: order_detail.product.name, price: order_detail.price};
                 });
                 $("#customer_name").html(row.patient.fname+" "+row.patient.lname);
                 $("#total_amount").html(peso()+' '+row.billing.total);
+                $("#refund_amount").html(window.selectedOrder.billing.total);
+                $('#amount_refunded').val(window.selectedOrder.billing.total);
             }
         });
         $("#product_name").html(productNames);
         $("#return_product_id").html(productsHtml).select2();
     });
 
-    $('input[name="action"]').change(function (){
-        var val = $(this).val();
-        if( val == "exchange" ){
-            $("#exchange_product_list").fadeIn();
-        }else{
-            $("#exchange_product_list").fadeOut();
+    $("#return_quantity, #return_product_id").bind("change keyup", function (){
+        try{
+            if ( $("#return_product_id").val() !== null && typeof $("#return_product_id").val() != 'undefined'){
+                var $this = $("#return_quantity"),  selectedProduct = parseInt($("#return_product_id").val()), 
+                val = parseInt($this.val()); 
+
+                console.log('fucking selectedProduct: '+selectedProduct);
+            
+                // var row = window.maxReturnQty[selectedProduct];
+                // console.log(row);
+                window.maxReturnQty.each(function (i, row){
+                    if( row.pId == selectedProduct ){
+                        var refundableAmount = val * row.price;
+
+                        if( val > parseInt(row.qty) || val == 0 ){
+                            $this.val(row.qty).trigger('change');
+                        }else{
+                            $('#refund_amount').html(refundableAmount);
+                            $('#amount_refunded').val(refundableAmount).trigger('change');
+                            
+                        }
+                        
+                    }
+                });
+            }
+        }catch(Exception){
+            console.log(Exception);
+        }
+
+
+    });
+
+    $("#return_product_id").change(function (){
+        // try{
+            if( $(this).val() !== null && typeof $(this).val() != 'undefined' ){
+              console.log($(this).val());
+                var htmls = "";
+                $.each($(this).val(), function (i, row){
+                    // $.each(window.maxReturnQty,)
+                    htmls+= generate_gift_qty_form(row, window.maxReturnQty[row].name, window.maxReturnQty[row].qty, 'products_return_qtys');
+                });
+                $(".selected-products-qty-div").html(htmls);
+                allowNumericOnly( $('.number') );
+
+                // add max qty to the newly appended textviews
+                $("#form_return_n_refund").find('input.products_return_qtys').each(function (i, row){
+                    $(row).attr("data-max", window.maxReturnQty[$(row).data("id")].qty);
+                    $(row).on("keyup change", function (){
+                        calculateStockReturnAmount();
+                    });
+                });  
+            }else{
+                $(".selected-products-qty-div").html("");
+            }
+            
+
+        // }catch(Exception){
+            // console.log(Exception);
+        // }
+
+    });
+
+    // $('#return_product_id').change(function (){
+    //    calculateStockReturnAmount();
+    // });
+
+    $('#amount_refunded').change(function (){
+        if( $(this).val() == "NaN" ){
+            $(this).val(0);
         }
     });
 
-    $("#return_quantity, #return_product_id").bind("change keyup", function (){
-        var $this = $("#return_quantity"),  selectedProduct = parseInt($("#return_product_id").val()), val = parseInt($this.val()); 
-
-        $.each(window.maxReturnQty, function (i, row){
-            if( row.pId == selectedProduct ){
-                if( val > parseInt(row.qty) ){
-                    $this.val("");
-                }
-            }
-        });
+    $("input[name='all_product_is_returned']").bind("click change", function (){
+        if( $(this).val() == 1 ){
+            $("#refund_amount").html(window.selectedOrder.billing.total);
+            $('#amount_refunded').val(window.selectedOrder.billing.total);
+        }else{
+            $("#return_quantity").trigger('change');
+        }
     });
 });
+
+//   On Stock Returns tab, you can exchange the returned product there with a new the same product.
+//    if the product returned is marked as defective, this should not be added back to the inventory. 
