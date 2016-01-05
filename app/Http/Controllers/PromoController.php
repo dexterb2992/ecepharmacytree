@@ -124,7 +124,7 @@ class PromoController extends Controller
                     $dfp->save();
                 }
             }
-            session()->flash("flash_message", ["msg" => "Promo information has been updateed.", "type" => "info"]);
+            session()->flash("flash_message", ["msg" => "Promo information has been updated.", "type" => "info"]);
             return Redirect::to( route('Promo::index') );
         }
         session()->flash("flash_message", ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "warning"]);

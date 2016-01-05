@@ -39,6 +39,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if ($e instanceof \Illuminate\Session\TokenMismatchException) {
+            // return response()->view('errors.503', [], 500);
+            return response()->view('errors.500');
+
+        }else if( $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException ){
+            return response()->view('errors.404');
+        }
+
         return parent::render($request, $e);
     }
 }
