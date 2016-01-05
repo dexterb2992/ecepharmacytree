@@ -5,7 +5,7 @@ var customAlertResponse = false;
 /**
  * returns random string
  */
- function randomString(length){
+function randomString(length){
  	var text = "";
  	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -13,7 +13,14 @@ var customAlertResponse = false;
  		text += possible.charAt(Math.floor(Math.random() * possible.length));
 
  	return text;
- }
+}
+
+$.fn.hasParent = function(a) {
+    return this.filter(function() {
+        return !!$(this).closest(a).length;
+    });
+};
+
 
 /**
  * type = info, success, warning, danger (modal's background color varies depending on the value of this parameter)
@@ -88,6 +95,7 @@ var customAlertResponse = false;
 
  function allowNumericOnly(element){
  	element.keydown(function (e) {
+
 	    // Allow: backspace, delete, tab, escape, enter and .
 	    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
 	         // Allow: Ctrl+A, Command+A
@@ -96,12 +104,31 @@ var customAlertResponse = false;
 	         (e.keyCode >= 35 && e.keyCode <= 40)) {
 	             // let it happen, don't do anything
 	         return;
-	     }
+	    }
+        
 	    // Ensure that it is a number and stop the keypress
 	    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
 	    	e.preventDefault();
 	    }
 	});
+
+    element.change(function (e){
+        var val = parseFloat($(this).val());
+        var max = $(this).attr("data-max");
+        var min = $(this).attr("data-min");
+
+        if( typeof max !== 'undefined' ){
+            if( val >  parseFloat(max) ){
+                $(this).val(max);
+            }
+        }
+
+        if( typeof min !== 'undefined' ){
+            if( val <  parseFloat(min) ){
+                $(this).val(min);
+            }
+        }
+    });
 }
 
 function readURL(input, target) {
@@ -128,11 +155,21 @@ function _clear_form_data(form){
 }
 
 function _error(element, error_msg){
-	if( element.next('.label-danger').length ){
-		element.next('.label-danger').html(error_msg);
-	}else{
-		element.after('<div class="label label-danger">'+error_msg+'</label>');
-	}
+    if( element.parents('.input-group').length ){ // has parent
+        if( element.parent('.input-group').next('.label-danger').length ){
+            element.parent('.input-group').next('.label-danger').html(error_msg);
+        }else{
+            element.parent('.input-group').after('<div class="label label-danger">'+error_msg+'</label>');
+        }
+    }else{
+       if( element.next('.label-danger').length ){
+            element.next('.label-danger').html(error_msg);
+        }else{
+            element.after('<div class="label label-danger">'+error_msg+'</label>');
+        } 
+    }
+
+	
 }
 
 function formfinder(form, name, fieldType){
@@ -319,7 +356,7 @@ function get_promo_offer_type(type){
 }
 
 //
-function generate_gift_qty_form(productId, productName, quantity){
+function generate_gift_qty_form(productId, productName, quantity, inputname){
     console.log("i am generating gift div now");
     quantity = (typeof quantity === 'undefined') ? 0 : quantity;
 
@@ -328,22 +365,23 @@ function generate_gift_qty_form(productId, productName, quantity){
             '<label>'+productName+'</label>'+
         '</div>'+
         '<div class="col-sm-4">'+
-            '<input type="text" class="form-control number" name="gift_quantities['+productId+']" value="'+quantity+'" placeholder="Quantity">'+
+            // '<input type="text" class="form-control number" name="gift_quantities['+productId+']" value="'+quantity+'" placeholder="Quantity">'+
+            '<input type="text" data-id="'+productId+'" class="form-control number '+inputname+'" name="'+inputname+'['+productId+']" value="'+quantity+'" placeholder="Quantity" required>'+
         '</div>'+
     '</div>';
 }
 
-function dataShowTarget(dropdown, showWhen){
-    // let's check if this dropdown has a data-show-target attribute
-    var showTarget = $(dropdown).attr('data-show-target');
+function dataShowTarget(element, showWhen){
+    // let's check if this element has a data-show-target attribute
+    var showTarget = $(element).attr('data-show-target');
 
     // For some browsers, `showTarget` is undefined; for others,
     // `showTarget` is false.  Check for both.
     if (typeof showTarget !== typeof undefined && showTarget !== false) {
-        var showTargetWhen = $(dropdown).attr("data-show-target-when");
+        var showTargetWhen = $(element).attr("data-show-target-when");
 
         if (typeof showTargetWhen !== typeof undefined && showTargetWhen !== false) {
-            if( showWhen == $(dropdown).attr("data-show-target-when") ){
+            if( showWhen == $(element).attr("data-show-target-when") ){
                 $(showTarget).fadeIn();
             }else{
                 $(showTarget).fadeOut();
@@ -390,4 +428,14 @@ function ajaxCalls(param){
         });
     }
 }
- 
+
+function calculateStockReturnAmount(){
+    var total_amount = 0;
+    $("#form_return_n_refund").find('input.products_return_qtys').each(function (i, row){
+        total_amount+= parseFloat(window.maxReturnQty[$(row).data("id")].price) * parseFloat($(row).val());
+    });
+
+    $("#amount_refunded").val(total_amount);
+    $("#refund_amount").html(total_amount);
+}
+

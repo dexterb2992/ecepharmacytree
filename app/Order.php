@@ -18,11 +18,11 @@ class Order extends Model
     }
 
     public function billing(){
-    	return $this->hasOne('ECEPharmacyTree\Billing', 'id');
+    	return $this->hasOne('ECEPharmacyTree\Billing');
     }
 
     public function branch() {
-        return $this->belongsTo('ECEPharmacyTree\Branch', 'branch_id');
+        return $this->belongsTo('ECEPharmacyTree\Branch');
     }
 
     public function stock_returns(){

@@ -92,7 +92,7 @@ class InventoryController extends Controller
         $inventory->quantity = $quantity;
         $inventory->available_quantity = $quantity;
         $inventory->expiration_date = $input["expiration_date"] != "" ? $input["expiration_date"] : null;
-        $inventory->lot_number = generate_lot_number();
+        $inventory->lot_number = $input['lot_number'];
         $inventory->branch_id = session()->get('selected_branch');
         if( $inventory->save() ){
             Log::create([
@@ -148,6 +148,8 @@ class InventoryController extends Controller
         $new_av = $old_av + $def_q;
 
         $inventory->available_quantity = $new_av >= 1 ? $new_av : 0;
+
+        $inventory->lot_number = $input['lot_number'];
 
         $inventory->expiration_date = $input["expiration_date"];
         if( $inventory->save() ){

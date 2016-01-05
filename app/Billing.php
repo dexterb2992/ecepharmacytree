@@ -10,6 +10,6 @@ class Billing extends Model
     protected $softDelete = true;
 
     public function order(){
-    	return $this->belongsTo('ECEPharmacyTree\Order', 'order_id');
+    	return $this->belongsTo('ECEPharmacyTree\Order');
     }
 }

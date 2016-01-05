@@ -43,11 +43,17 @@ function strbefore($string, $substring) {
 		return(substr($string, 0, $pos));
 }
 
+function does_sku_exist($sku){
+	$check = ECEPharmacyTree\Product::where('sku', '=', $sku)->first();
+	if( $check === null )
+		return false;
+	return true;
+}
+
 function generate_sku(){
 	$sku = strtoupper( generate_random_string(3, 2, true).generate_random_string(3, 1, true) );
 
-	$check = ECEPharmacyTree\Product::where('sku', '=', $sku)->first();
-	if( $check === null )
+	if( !does_sku_exist($sku) )
 		return $sku;
 	generate_sku();
 }
@@ -186,14 +192,17 @@ function check_if_partially_fulfilled($order){
 	return false;
 }
 
-function check_for_critical_stock($product){
+function check_stock_availability($product){
 	$settings = ECEPharmacyTree\Setting::first();
 	$critical_stock = isset($product->critical_stock) ? $product->critical_stock : 5;
 
 	$total_available_stock = ECEPharmacyTree\Inventory::where('product_id', $product->id)->sum('available_quantity')	;
-	if( $total_available_stock <= $critical_stock )
-		return true;
-	return false;
+	if( $total_available_stock < 1 ):
+		return 'out_of_stock';
+	elseif( $total_available_stock <= $critical_stock ):
+		return 'critical';
+	endif;
+	return 'available';
 }
 
 function _error($msg, $alert_type = 'label'){
