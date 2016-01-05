@@ -31,6 +31,7 @@ class StockReturnController extends Controller
 
     public function store(){
         $input = Input::all();
+        // dd($input);
         $stock_return = new StockReturn;
 
         $stock_return->order_id = $input["order_id"];
@@ -41,7 +42,7 @@ class StockReturnController extends Controller
         $stock_return->amount_refunded = $input['amount_refunded'];
 
         // temporary save lang sa 
-        pre($input);
+        // pre($input);
 
         $stock_return->save();
 
@@ -60,7 +61,7 @@ class StockReturnController extends Controller
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
 
-        pre($arr_lot_numbers);
+        // pre($arr_lot_numbers);
 
         for($x = count($arr_lot_numbers)-1; $x >= 0; $x--){
             //x = 1, x-1 = 0
@@ -76,15 +77,15 @@ class StockReturnController extends Controller
             }
         }
 
-        pre($arr_lot_numbers);
-
+        // pre($arr_lot_numbers);
+        pre($input);
         if( $input['all_product_is_returned'] == 1 ){
             foreach ($arr_lot_numbers as $lot_number) {
                 $input['products_return_qtys'] = [$lot_number['inventory']['product_id'] => $lot_number['quantity']];
             }
         }
-        pre('products_return_qtys: ');
-        pre($input['products_return_qtys']);
+        // pre('products_return_qtys: ');
+        // pre($input['products_return_qtys']);
 
         foreach($input['products_return_qtys'] as $key_product_id => $input_value){
             // $order_detail = $order->order_details()->where('product_id', $key);
@@ -119,6 +120,10 @@ class StockReturnController extends Controller
             $sr_detail->save();
         }
 
+        if( $input['all_product_is_returned'] == 1  ){
+            $order->status = 'refunded_in_full';
+            $order->save();
+        }
 
         if( $stock_return->save() )
             return redirect('inventory/all')->withFlash_message([

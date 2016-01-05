@@ -75,6 +75,7 @@ class OrderController extends Controller
 
 
         foreach ($orders as $order) {
+
             $order->branch->load('barangay');
             $order->branch->barangay->load('municipality');
             $order->branch->barangay->municipality->load('province');

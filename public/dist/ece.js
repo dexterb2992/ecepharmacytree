@@ -1061,8 +1061,9 @@ $("#add_gallery").click(function (){
         
     });
 
-    $('#order_id').change(function (){
+    $(document).on('change', '#order_id', function (){
         var val = $(this).val(), productsHtml = "", productNames = "";
+        console.log("order_id has changed. value: "+val);
         window.maxReturnQty = [];
         $.each(window.orders, function (col, row){
             if( row.id == val ){
