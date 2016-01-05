@@ -27,8 +27,8 @@ class VerifyPaymentController extends Controller
 {
 
 	function __construct(Mailer $mailer) {
-        $this->mailer = $mailer;
-    }
+		$this->mailer = $mailer;
+	}
 
 	// private $order_id;
 	function verification() {
@@ -124,7 +124,6 @@ class VerifyPaymentController extends Controller
 
 				}
 
-
 				if($order_saved) {
 					$order_detail = new OrderDetail;
 					$order_detail->order_id = $order_id;
@@ -164,7 +163,7 @@ class VerifyPaymentController extends Controller
 
 				if(count($results) == $counter) {
 					$gross_total = $totalAmount;
-					$totalAmount_final  = $totalAmount - $coupon_discount - $promo_discount;
+					$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount;
 
 					$billing = new Billing;
 					$billing->order_id = $order_id;
@@ -172,7 +171,7 @@ class VerifyPaymentController extends Controller
 					$billing->total = $totalAmount_final;
 					$billing->payment_status = $payment_status;
 					$billing->payment_method = $payment_method;
-					$billing->promo_discount = $promo_discount;
+					$billing->points_discount = $points_discount;
 					$billing->coupon_discount = $coupon_discount;
 
 					if($billing->save()) {
@@ -212,13 +211,11 @@ class VerifyPaymentController extends Controller
 					else 
 						$response['points_update_message'] = "points not updated";
 
+					//insert invoice here
+					$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
 
-			$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
+					$this->emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status);
 
-				$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
-                compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'promo_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
-                    $m->subject('Pharmacy Tree Invoice');
-                    $m->to($email);
 				}
 			}
 
@@ -266,6 +263,14 @@ class VerifyPaymentController extends Controller
 
 	function echoResponse($statuws_code, $response) {
 		echo json_encode($response);
+	}
+
+	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){
+		$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
+			compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'points_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
+				$m->subject('Pharmacy Tree Invoice');
+				$m->to($email);
+			});
 	}
 
 }

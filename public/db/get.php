@@ -29,7 +29,7 @@ switch ($request) {
     /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
-        $result = mysql_query("SELECT p.*, cat.id as cat_id, cat.name as cat_name FROM products as p inner join product_subcategories as sub on p.subcategory_id = sub.id inner join product_categories as cat on sub.category_id = cat.id" ) or returnError(mysql_error());
+        $result = mysql_query("SELECT p . * , cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM products AS p INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id GROUP BY p.id;" ) or returnError(mysql_error());
         $tbl = "products";
         break;
     case 'get_doctors':
@@ -84,10 +84,10 @@ switch ($request) {
 
     /* Requires Parameters */
 
-    case 'get_promo' :
-        $sql = "SELECT *  FROM promo WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND start_date <= '".$datenow."' AND end_date >= '".$datenow."'";
+    case 'get_promos' :
+        $sql = "SELECT *  FROM promos WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') AND start_date <= '".$datenow."' AND end_date >= '".$datenow."'";
         $result = mysql_query($sql) or returnError(mysql_error()); 
-        $tbl = "promo";
+        $tbl = "promos";
         break;
 
     case 'check_if_username_exist':
@@ -222,8 +222,15 @@ switch ($request) {
         break;
 
     case 'get_selected_product_with_image':
-        $result = mysql_query("SELECT p.*, pg.filename FROM products as p left join products_gallery as pg on p.id = pg.product_id WHERE p.id = ".$_GET['product_id']) or returnError(mysql_error());  
+        $result = mysql_query("SELECT p.*, pg.filename, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM products as p left join products_gallery as pg on p.id = pg.product_id left join inventories as inv on p.id = inv.product_id WHERE p.id = ".$_GET['product_id']) or returnError(mysql_error());  
         $tbl = "products";
+        break;
+
+    case 'get_patient_points':
+        $result = mysql_query("SELECT points FROM patients where id = ".$_GET['patient_id']) or returnError(mysql_error());  
+        $row_cp = mysql_fetch_object($result);
+        echo $row_cp->points;
+        exit(0);
         break;
 
     case 'get_clinic_records':

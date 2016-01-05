@@ -306,6 +306,30 @@ if ($request == 'register') {
     		$response["success"] = 0;
     		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
     	}
+    } else if ($action == 'multiple_update_for_basket') {
+
+    	$collection = json_decode(stripslashes($_POST['jsobj']));
+
+    	$whens = "";
+    	$ids = "";
+
+    	foreach ($collection->jsobj as $col) {
+    		$whens = $whens." when id = ".$col->id." then ".$col->quantity;
+    		$ids = $ids.$col->id.",";
+    	}
+
+    	$ids = substr($ids, 0, strlen($ids) -1);
+    	$sql = "update baskets set quantity = ( case".$whens." end ) "."where id in (".$ids.")";
+
+    	if (mysql_query($sql)) {
+    		$response["success"] = 1;
+    		$response["message"] = "rows updated";
+    		$response["query"] = $sql;
+    	} else {
+    		$response["success"] = 0;
+    		$response["message"] = "Sorry, we can't process your request right now. " . mysql_error();
+    	}
+
     } else if ($action == "update_with_custom_where_clause") {
     	$settings = "";
     	foreach ($_POST as $key => $value) {
