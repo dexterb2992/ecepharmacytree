@@ -57,7 +57,7 @@
                     </p>
                     @endif
                     @if(Session::has("flash_message"))
-                    <div class="alert-success alert alert-{{ Session::get('flash_message')['type'] }} alert">
+                    <div class="alert alert-{{ Session::get('flash_message')['type'] }}">
                         @if(Session::get('flash_message')["type"] == "important")
                         <button class="close" data-dismiss="alert" aria-hidden="true" type="button">&times;</button>
                         @endif

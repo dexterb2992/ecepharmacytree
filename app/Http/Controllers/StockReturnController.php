@@ -41,27 +41,22 @@ class StockReturnController extends Controller
         $stock_return->all_product_is_returned = $input['all_product_is_returned'];
         $stock_return->amount_refunded = $input['amount_refunded'];
 
-        // temporary save lang sa 
-        // pre($input);
-
-        $stock_return->save();
-
         $order = Order::find($input["order_id"]);
-
-
-
-        
+        if( $order->billing->payment_status != 'paid' ){
+            return Redirect::back()->withInput()->withFlash_message([
+                'msg' => "Sorry, but order #$order->id is not yet paid. You can't return an unpaid order.",
+                'type' => 'error'
+            ]);
+        }
 
         $lesser_lot_number = [];
         $temp_lot_number = [];
-        // dd($lesser_lot_number);
+
         foreach ($order->lot_numbers as $lot_number) {
             $lot_number->load('inventory');
         }
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
-
-        // pre($arr_lot_numbers);
 
         for($x = count($arr_lot_numbers)-1; $x >= 0; $x--){
             //x = 1, x-1 = 0
@@ -77,18 +72,28 @@ class StockReturnController extends Controller
             }
         }
 
-        // pre($arr_lot_numbers);
-        pre($input);
         if( $input['all_product_is_returned'] == 1 ){
             foreach ($arr_lot_numbers as $lot_number) {
                 $input['products_return_qtys'] = [$lot_number['inventory']['product_id'] => $lot_number['quantity']];
             }
         }
-        // pre('products_return_qtys: ');
-        // pre($input['products_return_qtys']);
 
+        if( !isset($input['products_return_qtys']) ){
+            return Redirect::back()->withInput()->withFlash_message([
+                'msg' => 'Sorry, some things are missing when you submit your request. Please try again.',
+                'type' => 'error'
+            ]);
+        }
+
+        $stock_return->save();
+
+        // let's check if all the products' returned is exactly equal to the quantity in order details
+        // (this is when the admin mistakenly chosen the 'Not all products on this order are returned' radio button)
+        $order->load('order_details');
+
+
+        // continue returning items to inventory
         foreach($input['products_return_qtys'] as $key_product_id => $input_value){
-            // $order_detail = $order->order_details()->where('product_id', $key);
             $sr_detail = new ProductStockReturn;
             $sr_detail->product_id = $key_product_id;
             $sr_detail->stock_return_id = $stock_return->id;
