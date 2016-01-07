@@ -1031,6 +1031,7 @@ $("#add_gallery").click(function (){
     });
 
     $('.btn-stock-return').click(function (){
+
         var ordersHtml = "", productsHtml = "", returnCodesHtml = "";
         $.when(
             ajaxCalls("orders"), ajaxCalls("products"), ajaxCalls("stockReturnCodes") 
@@ -1054,7 +1055,7 @@ $("#add_gallery").click(function (){
             $("#order_id, #exchange_product_id, #return_product_id, #return_code").select2();
             $('.selected-products-qty-div').html('');
 
-            if( orders[0].length == 1 ){
+            if( orders[0].length > 0 ){
                 $("#order_id").trigger("change");
             }
         });
@@ -1062,26 +1063,32 @@ $("#add_gallery").click(function (){
     });
 
     $(document).on('change', '#order_id', function (){
+        $(".selected-products-qty-div").html("");
         var val = $(this).val(), productsHtml = "", productNames = "";
         console.log("order_id has changed. value: "+val);
         window.maxReturnQty = [];
         $.each(window.orders, function (col, row){
             if( row.id == val ){
                 window.selectedOrder = row;
-                $.each(row.order_details, function (index, order_detail){
-                    var pId = order_detail.product.id;
-                    productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
-                            order_detail.quantity+" "+
-                            str_auto_plural(order_detail.product.packing, order_detail.quantity)+
-                            ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
-                            order_detail.product.name+"</a>,<br/>";
-                    productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                    window.maxReturnQty[order_detail.product.id] = {pId: pId, qty: order_detail.quantity, name: order_detail.product.name, price: order_detail.price};
-                });
-                $("#customer_name").html(row.patient.fname+" "+row.patient.lname);
-                $("#total_amount").html(peso()+' '+row.billing.total);
-                $("#refund_amount").html(window.selectedOrder.billing.total);
-                $('#amount_refunded').val(window.selectedOrder.billing.total);
+
+                // make sure that the order is already paid
+                if( row.billing.payment_status == 'paid' ){
+                    $.each(row.order_details, function (index, order_detail){
+                        var pId = order_detail.product.id;
+                        productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
+                                order_detail.quantity+" "+
+                                str_auto_plural(order_detail.product.packing, order_detail.quantity)+
+                                ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
+                                order_detail.product.name+"</a>,<br/>";
+                        productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
+                        window.maxReturnQty[order_detail.product.id] = {pId: pId, qty: order_detail.quantity, name: order_detail.product.name, price: order_detail.price};
+                    });
+                    $("#customer_name").html(row.patient.fname+" "+row.patient.lname);
+                    $("#total_amount").html(peso()+' '+row.billing.total);
+                    $("#refund_amount").html(window.selectedOrder.billing.total);
+                    $('#amount_refunded').val(window.selectedOrder.billing.total);
+                }
+                
             }
         });
         $("#product_name").html(productNames);
@@ -1121,6 +1128,7 @@ $("#add_gallery").click(function (){
     });
 
     $("#return_product_id").change(function (){
+        $(".selected-products-qty-div").html("");
         // try{
             if( $(this).val() !== null && typeof $(this).val() != 'undefined' ){
               console.log($(this).val());
@@ -1150,9 +1158,9 @@ $("#add_gallery").click(function (){
 
     });
 
-    // $('#return_product_id').change(function (){
-    //    calculateStockReturnAmount();
-    // });
+    $('#return_product_id').change(function (){
+        calculateStockReturnAmount();
+    });
 
     $('#amount_refunded').change(function (){
         if( $(this).val() == "NaN" ){

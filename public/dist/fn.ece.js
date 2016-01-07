@@ -358,7 +358,7 @@ function get_promo_offer_type(type){
 //
 function generate_gift_qty_form(productId, productName, quantity, inputname){
     console.log("i am generating gift div now");
-    quantity = (typeof quantity === 'undefined') ? 0 : quantity;
+    quantity = (typeof quantity === 'undefined') ? 1 : quantity;
 
     return '<div class="form-group">'+
         '<div class="control-label col-sm-8 selected-product-qty-label">'+

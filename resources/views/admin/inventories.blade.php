@@ -313,6 +313,16 @@
 		        					</dl>
 
 		        					<dl class="dl-vertical">
+		        						<dt>Gross total:</dt>
+		        						<dd id="gross_total">₱ 44.5 </dd>
+		        					</dl>
+		        					<br/>
+		        					<dl class="dl-vertical">
+		        						<dt>Less:</dt>
+									  	<dd id="all_less"></dd>
+									</dl>
+									<br/>
+		        					<dl class="dl-vertical">
 		        						<dt>Total amount paid:</dt>
 		        						<dd id="total_amount"></dd>
 		        					</dl>
