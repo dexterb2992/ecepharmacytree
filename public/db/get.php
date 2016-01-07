@@ -30,7 +30,7 @@ switch ($request) {
     case 'get_products':
         // get all products from products table
     // select p.*, dfp.quantity_required, dfp.is_free_delivery, dfp.percentage_discount, dfp.peso_discount, dfp.has_free_gifts, pr.* from products as p left join discounts_free_products as dfp on p.id = dfp.product_id left join promos as pr on dfp.promo_id = pr.id
-        $result = mysql_query("SELECT p.*, pr.id as promo_id , cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity, dfp.quantity_required, dfp.is_free_delivery, dfp.percentage_discount, dfp.peso_discount, dfp.has_free_gifts, pr.* FROM products AS p left join discounts_free_products as dfp on p.id = dfp.product_id left join promos as pr on dfp.promo_id = pr.id INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id GROUP BY p.id;" ) or returnError(mysql_error());
+        $result = mysql_query("SELECT p.*, pr.id as promo_id, cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity, dfp.quantity_required, dfp.is_free_delivery, dfp.percentage_discount, dfp.peso_discount, dfp.has_free_gifts, pr.* FROM products AS p left join discounts_free_products as dfp on p.id = dfp.product_id left join promos as pr on dfp.promo_id = pr.id INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id GROUP BY p.id;" ) or returnError(mysql_error());
         $tbl = "products";
         break;
     case 'get_doctors':
