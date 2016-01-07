@@ -132,7 +132,7 @@ switch ($request) {
     break;
 
     case 'get_free_products':
-    $result = mysql_query("SELECT * from discounts_free_products as dfp LEFT JOIN free_products as fp on dfp.id = fp.dfp_id where dfp.promo_id = ".$_GET['promo_id']);
+    $result = mysql_query("SELECT dfp.*, fp.product_id, fp.quantity_free from discounts_free_products as dfp LEFT JOIN free_products as fp on dfp.id = fp.dfp_id where dfp.promo_id = ".$_GET['promo_id']);
     $tbl = "free_products";
     break;
 
