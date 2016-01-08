@@ -29,7 +29,8 @@ switch ($request) {
     /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
-        $result = mysql_query("SELECT p . * , cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM products AS p INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id GROUP BY p.id;" ) or returnError(mysql_error());
+    // select p.*, dfp.quantity_required, dfp.is_free_delivery, dfp.percentage_discount, dfp.peso_discount, dfp.has_free_gifts, pr.* from products as p left join discounts_free_products as dfp on p.id = dfp.product_id left join promos as pr on dfp.promo_id = pr.id
+        $result = mysql_query("SELECT p.*, pr.id as promo_id, cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity, dfp.quantity_required, dfp.is_free_delivery, dfp.percentage_discount, dfp.peso_discount, dfp.has_free_gifts FROM products AS p left join discounts_free_products as dfp on p.id = dfp.product_id left join promos as pr on dfp.promo_id = pr.id INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id GROUP BY p.id;" ) or returnError(mysql_error());
         $tbl = "products";
         break;
     case 'get_doctors':
@@ -129,34 +130,19 @@ switch ($request) {
         $result = mysql_query("Select p.*, b.id as basket_id, b.is_approved, b.quantity, b.prescription_id from baskets as b 
                 inner join products as p on p.id = b.product_id where b.patient_id=".$_GET['patient_id']);
         $tbl = "baskets";
-    
     break;
+
+    case 'get_free_products':
+    $result = mysql_query("SELECT p.*, dfp.*, fp.product_id, fp.quantity_free from promos as p LEFT JOIN discounts_free_products as dfp 
+        on p.id = dfp.promo_id LEFT JOIN free_products as fp on dfp.id = fp.dfp_id where p.id = ".$_GET['promo_id']);
+    $tbl = "free_products";
+    break;
+
     case 'get_patient_records':
         $result = mysql_query("SELECT * FROM patient_records WHERE patient_id = ".$_GET['patient_id']) 
             or returnError(mysql_error());
         $tbl = "patient_records";
     break;
-    
-
-    case 'get_discounts_free_products' :
-        $sql = "SELECT dfp.*  FROM discounts_free_products as dfp inner join promo as p on p.id = dfp.promo_id 
-        WHERE (p.deleted_at IS NULL OR p.deleted_at = '0000-00-00 00:00:00')  AND p.start_date <= '".$datenow."' AND p.end_date >= '".$datenow."'";
-        $result = mysql_query($sql) or returnError(mysql_error());
-        $tbl = "discounts_free_products";
-        break;
-
-    case 'get_free_products' :
-        $sql = "SELECT fp.* FROM free_products as fp inner join discounts_free_products as dfp on fp.dfp_id = dfp.id inner join promo as p on dfp.promo_id = p.id
-        WHERE (p.deleted_at IS NULL OR p.deleted_at = '0000-00-00 00:00:00') AND p.start_date <= '".$datenow."' AND p.end_date >= '".$datenow."'";
-        $result = mysql_query($sql) or returnError(mysql_error());
-        $tbl = "free_products";
-        break;
-
-    case 'get_referrals_by_user' :
-        $result = mysql_query("SELECT * from patients WHERE referred_by = '".$_GET['referred_by']."' ORDER BY created_at DESC") or returnError(mysql_error());
-        $tbl = "patients";
-        break;
-
 
     case 'get_prescriptions' : 
         $result = mysql_query("SELECT * FROM patient_prescriptions WHERE patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
