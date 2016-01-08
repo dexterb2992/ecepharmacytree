@@ -1038,7 +1038,12 @@ $("#add_gallery").click(function (){
         ).done(function(orders, products, returnCodes){
             window.orders = orders[0];
             $.each(orders[0], function (i, row){
-                ordersHtml+= '<option value="'+row.id+'" data-pname="'+row.patient.fname+' '+row.patient.lname+'">#'+row.id+'</option>';
+                if( row.billing.payment_status == 'paid' ){
+                    ordersHtml+= '<option value="'+row.id+'" data-pname="'+row.patient.fname+' '+row.patient.lname+'">#'+row.id+'</option>';
+                }else{
+                    ordersHtml+= '<option value="'+row.id+'" data-pname="'+row.patient.fname+' '+row.patient.lname+'">#'+row.id+'('+row.billing.payment_status+')</option>';
+
+                }
             });
 
             $.each(products[0], function (i, row){
@@ -1072,7 +1077,7 @@ $("#add_gallery").click(function (){
                 window.selectedOrder = row;
 
                 // make sure that the order is already paid
-                if( row.billing.payment_status == 'paid' ){
+                // if( row.billing.payment_status == 'paid' ){
                     $.each(row.order_details, function (index, order_detail){
                         var pId = order_detail.product.id;
                         productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
@@ -1083,11 +1088,23 @@ $("#add_gallery").click(function (){
                         productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
                         window.maxReturnQty[order_detail.product.id] = {pId: pId, qty: order_detail.quantity, name: order_detail.product.name, price: order_detail.price};
                     });
+
+                    // let's show the discounts that the user has availed
+                    var discounts_html = "";
+                    if( row.billing.coupon_discount > 0 ){
+                        discounts_html+= peso()+" "+row.billing.coupon_discount+' (Coupon discount) ';
+                    }
+
+                    if( row.billing.points_discount > 0 ){
+                        discounts_html+= '<br/>'+peso()+" "+row.billing.points_discount+' (Points discount) ';
+                    }
+
                     $("#customer_name").html(row.patient.fname+" "+row.patient.lname);
                     $("#total_amount").html(peso()+' '+row.billing.total);
+                    $("#all_less").html(discounts_html);
                     $("#refund_amount").html(window.selectedOrder.billing.total);
                     $('#amount_refunded').val(window.selectedOrder.billing.total);
-                }
+                // }
                 
             }
         });

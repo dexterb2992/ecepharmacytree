@@ -1,4 +1,5 @@
 @extends('admin.layouts.template')
+@section('title', '500 Oops! Something went wrong.')
 @section('content')
   <div class="error-page">
     <h2 class="headline text-red">500</h2>

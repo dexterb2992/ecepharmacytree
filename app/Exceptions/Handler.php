@@ -5,7 +5,7 @@ namespace ECEPharmacyTree\Exceptions;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
+use Session;
 class Handler extends ExceptionHandler
 {
     /**
@@ -39,12 +39,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof \Illuminate\Session\TokenMismatchException) {
-            // return response()->view('errors.503', [], 500);
-            return response()->view('errors.500');
+        if( $e instanceof \Illuminate\Session\TokenMismatchException ) {
+            return response()->view('errors.token_mismatch', [], 551);
 
-        }else if( $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException ){
+        }else if( $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException ||
+                    $e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
             return response()->view('errors.404');
+
+        }else if( $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException ){
+            return response()->view('errors.403',  [], 403);
         }
 
         return parent::render($request, $e);
