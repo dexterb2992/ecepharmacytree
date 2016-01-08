@@ -427,3 +427,8 @@ dl.dl-vertical {
         margin-right: 16px;
         margin-bottom: 10px;
     }
+
+dd#total_amount {
+    font-size: medium;
+    font-weight: bold;
+}

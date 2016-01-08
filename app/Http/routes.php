@@ -44,17 +44,30 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::get('try', function(){
+// Route::get('try/{referral_id}', function($referral_id){
+	// global $uplines;
+	// $uplines = array();
+	// pre(get_uplines($referral_id));
+	// pre(compute_points1($referral_id));
+	// dd($referral_id);
+	// pre(compute_points($referral_id));
+	// dd(compute_points($referral_id));
+	// $all_patients = ECEPharmacyTree\Patient::all();
+	// dd($all_patients);
+	// $patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
+	// $patient = ECEPharmacyTree\Patient::find($referral_id);
+	// dd($patient->upline());
 	// pre(check_stock_availability());
 	// $today = Carbon\Carbon::today('Asia/Manila')->addHours(23 );
 	// return ECEPharmacyTree\Promo::where('end_date', '>=', $today)->get();
 	// $orders = ECEPharmacyTree\Order::with('billing')->get();
 	// dd($orders);
-	return view('errors.500');
+	// return view('errors.500');
 	// return view('emails.register')->withRole('Branch Manager')
 	// ->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
 	// ->withBranch_name("ECE Marketing - Davao");
-});
+// });
+Route::get('compute-referral-points/{referral_id}', 'PointsController@store');
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
 
