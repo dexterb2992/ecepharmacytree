@@ -86,19 +86,19 @@ function generate_lot_number(){
 	generate_lot_number();
 }
 
-function str_auto_plural($str, $quantity){
-	$pos = strpos($str, "(");
+function str_auto_plural($singular_noun, $quantity){
+	$pos = strpos($singular_noun, "(");
 	$suf = "";
 
 	if( $pos !== false ){
-		$str = trim( substr($str, 0, $pos) );
-		$suf = trim( substr($str, $pos) );
+		$singular_noun = trim( substr($singular_noun, 0, $pos) );
+		$suf = trim( substr($singular_noun, $pos) );
 	}
 
 	if( $quantity > 1 )	
-		return str_plural($str)." ".$suf;
+		return str_plural($singular_noun)." ".$suf;
 
-	return str_singular($str)." ".$suf;
+	return str_singular($singular_noun)." ".$suf;
 }
 
 function rn2br($str){
@@ -383,40 +383,6 @@ global $x, $uplines;
 $x = 0;
 $uplines = array();
 
-/*function get_uplines($referral_id){
-	global $x, $uplines;
-	$final_uplines = array();
-
-	$user = ECEPharmacyTree\Patient::where('referral_id', '=', $referral_id)->first()->toArray();
-
-	// get the first upline
-	if( !empty($user) ){
-		$parent = [];
-		if( trim($user['referred_byDoctor']) == "" || trim($user['referred_byDoctor']) == null ){
-			$parent = ECEPharmacyTree\Patient::where('referral_id', '=', $user['referred_byUser'])->first();
-		}else{
-			$parent = ECEPharmacyTree\Doctor::where('referral_id', '=', $user['referred_byUser'])->first();
-		}	
-		
-
-		if( !empty($parent) ){
-			$parent = $parent->toArray();
-			$uplines[$x] = $parent;
-			$final_uplines = $uplines;
-			$x++;
-			// check if parent has a parent
-			if( !empty(trim($parent['referred_byDoctor'])) xor !empty(trim($parent['referred_byUser'])) ){
-				get_uplines($parent['referral_id']);
-			}else{
-				// reset the global variables
-				$x = 0;
-			}
-		}
-	}
-
-	return $uplines;
-}*/
-
 function get_uplines($referral_id){
 	global $x, $uplines;
 
@@ -449,40 +415,6 @@ function get_uplines($referral_id){
 	return $uplines;
 }
 
-function compute_points1($referral_id){
-	 $user = ECEPharmacyTree\Patient::where('referral_id', '=', $referral_id)->first();
-    
-        
-
-    if( empty($user) ) 
-        $user = ECEPharmacyTree\Doctor::where('referral_id', '=', $referral_id)->first();
-    
-    if( empty($user) )
-        return json_encode(array('msg' => "Sorry, but we can't find a user with Referral ID of $referral_id.", 'status' => 500));
-
-    $uplines = get_uplines($referral_id);
-    
-    $orders = $user->orders;
-    // dd(orders);
-    $billings = array();
-    foreach ($orders as $order) {
-        // $billing = $order->billing->where('points_computation_status', '=', 0)->get();
-        $billings[] = $order->billing;
-
-    }
-
-    $points = 0;
-    foreach ($billings as $billing) {
-        if( $billing->payment_status == 'paid' && $billing->points_computation_status == 0 ){
-            $billing->points_earned = compute_points($billing->gross_total);
-        }
-    } 
-
-    // now, start the logics on referral points
-	foreach ($uplines as $upline) {
-		# code...
-	}
-}
 
 function compute_points($sales_amount){
 	$settings = get_recent_settings();
