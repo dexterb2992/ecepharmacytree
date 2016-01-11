@@ -23,6 +23,7 @@ class CreateReferralCommissionActivityLogTable extends Migration
             $table->double('referral_points_earned'); // points earned by the referrer
             $table->double('old_upline_points');  // old points of the referrer
             $table->double('new_upline_points');  // new points of the referrer
+            $table->longtext('notes');
             $table->timestamps();
         });
     }
