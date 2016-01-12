@@ -25,7 +25,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label>Level limit</label>
+							<label>Level limit<small></label>
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 							<input class="form-control number" type="text" name="level_limit" value="{{ $settings->level_limit }}" />
 						</div>

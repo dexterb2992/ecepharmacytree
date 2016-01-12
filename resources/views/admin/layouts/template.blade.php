@@ -21,6 +21,7 @@
             <!-- jQuery 2.1.4 -->
             {!! HTML::script('plugins/jQuery/jQuery-2.1.4.min.js') !!}
             @include('admin.partials._header');
+
             @include('admin.partials._sidebar');
 
             <div class="content-wrapper">
@@ -28,12 +29,14 @@
                 <section class="content-header">
                     <h1>
                         {{ isset($title) ? $title : '' }}
-                        <small>Control panel</small>
+                        @if(Auth::check())<small>Control panel</small>@endif
                     </h1>
+                    @if(Auth::check())
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i></a></li>
                         <li class="active">{{ isset($title) ? $title : '' }}</li>
                     </ol>
+                    @endif
                 </section>
           
                 <!-- Main content -->
