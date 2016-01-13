@@ -111,6 +111,7 @@
 <form method="post" name="mark_payment" action="{{ URL::route('mark_order_as_paid') }}">
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   <input type="hidden" name="order_id" value="{{ $order->id }}">
+  <input type="hidden" name="referral_id" value ="{{ $order->billing()->first()->patient()->first()->referral_id }}">
   <div class="modal" id="modal-mark-payment">
     <div class="modal-dialog">
       <div class="modal-content">

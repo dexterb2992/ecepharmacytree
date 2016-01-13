@@ -35,8 +35,10 @@ class BillingController extends Controller
         $billing->or_txt_number = $input['or_txn_number'];
 
         if( $billing->save() ){
-            $this->points->process_points($order->billing()->first()->patient()->first()->referral_id);
-           return redirect()->route('get_order', $input['order_id']);
+            $message = $this->points->process_points($input['referral_id']);
+
+           return redirect()->route('get_order', $input['order_id'])->withFlash_message([
+                'type' => 'info', 'msg' => $message ]);
        }
 
        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
