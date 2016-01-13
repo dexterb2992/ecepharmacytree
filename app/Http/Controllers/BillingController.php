@@ -8,9 +8,18 @@ use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Billing;
 use Input;
+use ECEPharmacyTree\Repositories\PointsRepository;
 
 class BillingController extends Controller
 {
+
+    protected $points;
+
+    function __construct(PointsRepository $points)
+    {
+        $this->points = $points;
+    }
+
 
      /**
      * Mark Order as Paid
@@ -25,6 +34,7 @@ class BillingController extends Controller
         $billing->or_txt_number = $input['or_txn_number'];
 
         if( $billing->save() ){
+            $this->points->process_points($order->billing()->first()->patient()->first()->referral_id);
            return redirect()->route('get_order', $input['order_id']);
        }
 
