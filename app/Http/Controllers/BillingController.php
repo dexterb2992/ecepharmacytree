@@ -7,6 +7,7 @@ use Request;
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Billing;
+use Input;
 
 class BillingController extends Controller
 {
@@ -17,14 +18,15 @@ class BillingController extends Controller
      * @param  int  $id
      * @return Response
      */
-    function mark_order_as_paid($id){
-        $billing = Billing::where('order_id', $id)->first();
-        $billing->payment_status = "paid";
+    function mark_order_as_paid(){
+        return Input::all();
+       //  $billing = Billing::where('order_id', $id)->first();
+       //  $billing->payment_status = "paid";
 
-        if( $billing->save() ){
-           return json_encode( array("status" => "success") );
-       }
-       return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+       //  if( $billing->save() ){
+       //     return json_encode( array("status" => "success") );
+       // }
+       // return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
    }
 
     /**
