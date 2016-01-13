@@ -20,13 +20,15 @@ class BillingController extends Controller
      */
     function mark_order_as_paid(){
         return Input::all();
-       //  $billing = Billing::where('order_id', $id)->first();
-       //  $billing->payment_status = "paid";
+        $input = Input::all();
+        $billing = Billing::where('order_id', $input['order_id'])->first();
+        $billing->payment_status = "paid";
 
-       //  if( $billing->save() ){
-       //     return json_encode( array("status" => "success") );
-       // }
-       // return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+        if( $billing->save() ){
+           return redirect()->route('get_order', $input['order_id']);
+       }
+       
+       return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
    }
 
     /**

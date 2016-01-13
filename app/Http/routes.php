@@ -257,7 +257,7 @@ Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 
 Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
 Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
 // Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
-Route::post('orders/mark_as_paid/', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
+Route::post('mark_as_paid', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
 Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
 Route::post('orders/all', ['as' => 'all_orders', 'uses' => 'OrderController@show_all']);
 

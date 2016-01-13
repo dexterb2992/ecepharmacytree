@@ -108,7 +108,7 @@
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
 </form>
 
-<form method="post" name="mark_payment" action="/mark_as_paid">
+<form method="post" name="mark_payment" action="mark_as_paid">
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   <input type="hidden" name="order_id" value="{{ $order->id }}">
   <div class="modal" id="modal-mark-payment">
