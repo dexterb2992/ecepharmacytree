@@ -37,8 +37,11 @@ class BillingController extends Controller
         if( $billing->save() ){
             $message = $this->points->process_points($input['referral_id']);
 
-           return redirect()->route('get_order', $input['order_id'])->withFlash_message([
-                'type' => 'info', 'msg' => $message['msg'] ]);
+            if($message['status'] == 500)
+                return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'info', 'danger' => $message['msg'] ]);
+
+            if($message['status'] == 200)
+                return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'success', 'msg' => $message['msg'] ]);
        }
 
        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
