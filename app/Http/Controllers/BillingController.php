@@ -28,24 +28,25 @@ class BillingController extends Controller
      * @param  int  $id
      * @return Response
      */
-    function mark_order_as_paid(){
+     function mark_order_as_paid(){
         $input = Input::all();
         $billing = Billing::where('order_id', $input['order_id'])->first();
         $billing->payment_status = "paid";
         $billing->or_txt_number = $input['or_txn_number'];
 
         if( $billing->save() ){
-            $message = $this->points->process_points($input['referral_id']);
+            $message = json_decode($this->points->process_points($input['referral_id']));
 
-            if($message['status'] == 500)
-                return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'danger', 'msg' => $message['msg'] ]);
+            if($message->status == 500)
+                return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'danger', 'msg' => $message->msg ]);
 
-            if($message['status'] == 200)
-                return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'success', 'msg' => $message['msg'] ]);
-       }
+            if($message->status == 200)
+                return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'success', 'msg' => $message->msg ]);
+        }
+        
+        return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'danger', 'msg' => 'Sorry. Unable to mark payment.' ]);
 
-       return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
-   }
+    }
 
     /**
      * Display a listing of the resource.
