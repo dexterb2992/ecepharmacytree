@@ -19,7 +19,6 @@ class BillingController extends Controller
      * @return Response
      */
     function mark_order_as_paid(){
-        return Input::all();
         $input = Input::all();
         $billing = Billing::where('order_id', $input['order_id'])->first();
         $billing->payment_status = "paid";
