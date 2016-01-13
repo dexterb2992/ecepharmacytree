@@ -120,7 +120,8 @@
         </div>
         <div class="modal-body">
           Processed by <b>{{ $order->billing()->first()->payment_method }}</b>
-        <input type="text" name="or_txn_number" class="form-control">
+        <input type="text" name="or_txn_number" class="form-control" required>
+        <button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Accept Payment</button>
         </div>
       </div>
     </div>
@@ -146,7 +147,7 @@
             <tbody>
               @foreach($order_details as $order_detail)
               <tr>
-                <td>{{ $order_detail->product()->first()->name }}</td>
+                <td>{{ ucfirst($order_detail->product()->first()->name) }}</td>
                 <td>&nbsp;</td>
                 <td class="col-xs-3">
                   <div class="input-group">
