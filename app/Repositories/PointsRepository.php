@@ -153,14 +153,17 @@ class PointsRepository {
                 }
                 $billing->points_computation_status = 1;
                 if( $billing->save() )
-                    return json_encode(array('msg' => 'Points and Referral Commission has been updated.', 'status' => 200));
-                
-                return json_encode(array('msg' => 'Points and Referral Commission has not been fully updated.', 'status' => 500));
+                    // return json_encode(array('msg' => 'Points and Referral Commission has been updated.', 'status' => 200));
+                    return array('msg' => 'Points and Referral Commission has been updated.', 'status' => 200);
+
+                return array('msg' => 'Points and Referral Commission has not been fully updated.', 'status' => 500);
+                // return json_encode(array('msg' => 'Points and Referral Commission has not been fully updated.', 'status' => 500));
             }
         }    
 
         if( $billings_has_uncomputed_points === false )
-            return json_encode(array('msg' => "Sorry, but the points from all purchases made by $user->fname $user->lname has aleady been redeemed.", 'status' => 500));
+            return array('msg' => "Sorry, but the points from all purchases made by $user->fname $user->lname has aleady been redeemed.", 'status' => 500);
+            // return json_encode(array('msg' => "Sorry, but the points from all purchases made by $user->fname $user->lname has aleady been redeemed.", 'status' => 500));
 	}
 
 }
