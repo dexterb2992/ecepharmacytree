@@ -38,7 +38,7 @@ class BillingController extends Controller
             $message = $this->points->process_points($input['referral_id']);
 
             if($message['status'] == 500)
-                return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'info', 'danger' => $message['msg'] ]);
+                return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'danger', 'msg' => $message['msg'] ]);
 
             if($message['status'] == 200)
                 return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'success', 'msg' => $message['msg'] ]);
