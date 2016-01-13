@@ -30,7 +30,7 @@
           <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> Payment has been accepted.</h2></td><td></td><td></td></tr>
           @else
           <tr><td><h2 class="next-heading"><span class="fa fa-thumbs-o-up">&nbsp;</span>Accept Payment</h2></td><td></td><td>
-            <button class="btn btn-primary margin-top-10 action-icon no-margin-left" data-title="{{ ucFirst($order->billing()->first()->payment_method) }}" data-action="mark_as_paid" data-modal-target="#modal-confirmation" data-id="{{ $order->id }}" data-urlmain="{{ $order->id }}">Mark as paid</button></td></tr>
+            <button class="btn btn-primary margin-top-10 no-margin-left add-edit-btn" data-action="mark_as_paid" data-modal-target="#modal-mark-payment" data-action="fulfill_items">Mark as paid</button></td></tr>
             @endif
             @if(check_if_not_fulfilled($order))
             <tr><td><h2 class="next-heading"><span class="fa fa-truck">&nbsp;</span>Fulfill items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
@@ -103,8 +103,28 @@
     @endif
   </div>
 </div><!-- /.row -->
+
 <form method="post" name="order_form_nothing">
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
+</form>
+
+<form method="post" name="mark_payment" action="/mark_as_paid">
+  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="order_id" value="{{ $order->id }}">
+  <div class="modal" id="modal-mark-payment">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title next-heading">Mark Payment</h4>
+        </div>
+        <div class="modal-body">
+          Processed by <b>{{ $order->billing()->first()->payment_method }}</b>
+        <input type="text" name="or_txn_number" class="form-control">
+        </div>
+      </div>
+    </div>
+  </div>
 </form>
 
 <form method="post" name="fulfill_orders" action="/fulfill_orders">
