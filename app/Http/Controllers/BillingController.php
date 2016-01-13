@@ -9,6 +9,7 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Billing;
 use Input;
 use ECEPharmacyTree\Repositories\PointsRepository;
+use ECEPharmacyTree\Repositories\PointsRepository;
 
 class BillingController extends Controller
 {

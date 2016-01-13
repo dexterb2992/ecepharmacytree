@@ -1,6 +1,6 @@
 <?php  
 
-namespace ECEPharmacyTree\Repositories\PointsRepository;
+namespace ECEPharmacyTree\Repositories;
 
 use Illuminate\Http\Request;
 
