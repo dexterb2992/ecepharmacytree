@@ -155,10 +155,8 @@ switch ($request) {
     $tbl = "patient_prescriptions";
     break;
 
-
-
-    case 'get_orders' : 
-    $result = mysql_query("SELECT * FROM orders where patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
+    case 'get_orders': 
+    $result = mysql_query("SELECT o.*, pr.id as promo_id FROM orders as o inner join promos as pr on o.promo_id = pr.id where patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "orders";
     break;
 

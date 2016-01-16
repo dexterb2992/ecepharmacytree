@@ -36,12 +36,15 @@ class VerifyCashPaymentController extends Controller
 		$recipient_address = $input['recipient_address'];
 		$recipient_contactNumber = $input['recipient_contactNumber'];
 		$modeOfDelivery = $input['modeOfDelivery'];
+		$delivery_charge = $input['delivery_charge'];
 		$payment_method = $input['payment_method'];
 		$payment_status = "pending";
 		$status = $input['status'];
 		$coupon_discount  = $input['coupon_discount'];
 		$points_discount = $input['points_discount'];
 		$email = $input['email'];
+		$promo_id = $input['promo_id'];
+		$promo_type = $input['promo_type'];
 
 		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
@@ -72,7 +75,13 @@ class VerifyCashPaymentController extends Controller
 				$order->recipient_contactNumber = $recipient_contactNumber;
 				$order->branch_id = $branch_server_id;
 				$order->modeOfDelivery = $modeOfDelivery;
+				$order->delivery_charge = $delivery_charge;
 				$order->status = 'pending';
+
+				if($promo_id > 0){
+					$order->promo_id = $promo_id;
+					$order->promo_type = $promo_type;
+				}
 
 				if($order->save()){
 					$order_id = $order->id; 
@@ -142,7 +151,7 @@ class VerifyCashPaymentController extends Controller
 					$response['billing_id'] = $billing_id;
 					$billing_saved = true;
 				} else
-					$response["billing_message"] = "Sorry, we can't process your request right now.";
+				$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
 				$payment = new InServerPayment;
