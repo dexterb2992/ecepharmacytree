@@ -14,7 +14,7 @@ foreach ($_GET as $key => $value) {
 
 $_GET = array();
 $_GET = $_cleanedGET;
-
+ 
 $request      = $_GET['q'];
 $db_result    = 0;
 $result       = 0;
@@ -133,8 +133,8 @@ switch ($request) {
     break;
 
     case 'get_basket_details': 
-    $result = mysql_query("Select p.*, b.id as basket_id, b.is_approved, b.quantity, b.prescription_id from baskets as b 
-        inner join products as p on p.id = b.product_id where b.patient_id=".$_GET['patient_id']);
+    $result = mysql_query("Select p.*, b.id as basket_id, b.is_approved, b.quantity, b.prescription_id, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity from baskets as b 
+        inner join products as p on p.id = b.product_id LEFT JOIN inventories AS inv ON p.id = inv.product_id where b.patient_id=".$_GET['patient_id']." GROUP BY p.id");
     $tbl = "baskets";
     break;
 
@@ -225,6 +225,13 @@ switch ($request) {
     exit(0);
     break;
 
+    case 'check_promo_code':
+    $result = mysql_query("SELECT * FROM promos where offer_type = 'GENERIC_CODE' and generic_redemption_code = '".$_GET['promo_code']."'") or returnError(mysql_error());  
+    // $row_cp = mysql_fetch_object($result);
+    // echo $row_cp->points;
+    $tbl = "promos";
+    break;
+
     case 'get_clinic_records':
     $username = $_GET['username'];
     $password = $_GET['password'];
@@ -253,6 +260,8 @@ switch ($request) {
 
     }
     break;
+
+
 
     case 'google_distance_matrix':
     $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&destinations=";
