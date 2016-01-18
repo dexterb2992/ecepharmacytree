@@ -156,7 +156,7 @@ switch ($request) {
     break;
 
     case 'get_orders': 
-    $result = mysql_query("SELECT o.*, pr.id as promo_id FROM orders as o inner join promos as pr on o.promo_id = pr.id where patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
+    $result = mysql_query("SELECT o.*, IFNULL(pr.id, 0) as promo_id FROM orders as o left join promos as pr on o.promo_id = pr.id where patient_id =".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "orders";
     break;
 
@@ -231,7 +231,7 @@ switch ($request) {
     break;
 
     case 'get_patient_referral_commissions':
-    $result  = mysql_query("SELECT notes FROM referral_commission_activity_log WHERE to_upline_type =  'patient' AND to_upline_id = ".$_GET['patient_id']) or returnError(mysql_error());
+    $result  = mysql_query("SELECT notes, created_at FROM referral_commission_activity_log WHERE to_upline_type =  'patient' AND to_upline_id=".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "referral_commission";
     break;
 
