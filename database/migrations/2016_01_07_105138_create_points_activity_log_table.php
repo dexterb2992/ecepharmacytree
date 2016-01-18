@@ -17,7 +17,7 @@ class CreatePointsActivityLogTable extends Migration
             $table->string('user_type')->default('patient'); // patient or doctor
             $table->integer('user_id');
             $table->double('points_used');
-            $table->string('note');
+            $table->string('notes');
             $table->timestamps();
         });
     }
