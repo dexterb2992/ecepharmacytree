@@ -111,6 +111,15 @@ class PointsRepository {
                     $ref_com_log->new_upline_points = $user->points;
                     $ref_com_log->notes = $notes;
                     $ref_com_log->save();
+
+                    //log for used points
+                    $points_activity_log = new PointsActivityLog;
+                    $points_activity_log->user_type = isset($user->prc_no) ? 'doctor' : 'patient';
+                    $points_activity_log->user_id = $user->id;
+                    $points_activity_log->points_used = $billing->points_discount;
+                    $points_activity_log->note = "You used ".$billing->points_discount."for order #".$order->id;
+                    $points_activity_log->save();
+
                 }
                 // dd($uplines);
                 $counter = 0; // note that 0 is the primary upline

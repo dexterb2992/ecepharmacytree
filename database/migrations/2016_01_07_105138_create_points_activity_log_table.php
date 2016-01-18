@@ -14,12 +14,10 @@ class CreatePointsActivityLogTable extends Migration
     {
         Schema::create('points_activity_log', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('earner_id');
-            $table->string('earner_type')->default('patient'); // patient or doctor
-            $table->double('points_earned');
-            $table->double('old_points');
-            $table->double('new_points');
-            $table->string('points_origin')->default('sales'); // sales or referral
+            $table->string('user_type')->default('patient'); // patient or doctor
+            $table->integer('user_id');
+            $table->double('points_used');
+            $table->string('note');
             $table->timestamps();
         });
     }
