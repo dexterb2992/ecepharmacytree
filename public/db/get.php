@@ -236,7 +236,7 @@ switch ($request) {
     break;
 
     case 'get_used_points':
-    $result  = mysql_query("SELECT notes, created_at FROM points_activity_log WHERE user_type =  'patient' AND user_id =".$_GET['patient_id']." order by created_at ASC") or returnError(mysql_error());
+    $result  = mysql_query("SELECT note, created_at FROM points_activity_log WHERE user_type =  'patient' AND user_id =".$_GET['patient_id']." order by created_at ASC") or returnError(mysql_error());
     $tbl = "used_points";
     break;
 
