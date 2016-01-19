@@ -229,12 +229,12 @@ switch ($request) {
     break;
 
     case 'get_patient_referral_commissions':
-    $result  = mysql_query("SELECT notes, created_at FROM referral_commission_activity_log WHERE to_upline_type =  'patient' AND to_upline_id=".$_GET['patient_id']." order by created_at ASC") or returnError(mysql_error());
+    $result  = mysql_query("call get_patient_referral_commissions(".$_GET['patient_id'].")") or returnError(mysql_error());
     $tbl = "referral_commission";
     break;
 
     case 'get_used_points':
-    $result  = mysql_query("SELECT notes, created_at FROM points_activity_log WHERE user_type =  'patient' AND user_id =".$_GET['patient_id']." order by created_at ASC") or returnError(mysql_error());
+    $result  = mysql_query("call get_used_points(".$_GET['patient_id'].")") or returnError(mysql_error());
     $tbl = "used_points";
     break;
 
