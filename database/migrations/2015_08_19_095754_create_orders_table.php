@@ -22,7 +22,11 @@ class CreateOrdersTable extends Migration
             $table->date('delivery_sched');
             $table->integer('branch_id')->unsigned();
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->integer('promo_id');
+            $table->foreign('promo_id')->references('id')->on('promos')->onDelete('cascade');
+            $table->string('promo_type');
             $table->string('modeOfDelivery');
+            $table->double('delivery_charge');
             $table->string('status')->default('open');
             $table->integer('is_new')->default(1);
             $table->timestamps();

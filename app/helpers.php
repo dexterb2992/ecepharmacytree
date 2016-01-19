@@ -326,7 +326,7 @@ function combine_additional_address(array $addresses){
 }
 
 function peso(){
-	return '&#x20B1;';
+	return 'PHP';
 }
 
 function clean($str){

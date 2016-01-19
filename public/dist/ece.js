@@ -289,8 +289,8 @@ $(document).ready(function (){
             $(modal).modal('show');
 
         } else if(action == "fulfill_items") {
-
-        }else{
+            
+        } else {
             title = "Add new "+dataTitle;
 
             _clear_form_data(form);
