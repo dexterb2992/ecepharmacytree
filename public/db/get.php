@@ -134,7 +134,7 @@ switch ($request) {
 
     case 'get_basket_details': 
     $result = mysql_query("Select p.*, b.id as basket_id, b.is_approved, b.quantity, b.prescription_id, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity from baskets as b 
-        inner join products as p on p.id = b.product_id LEFT JOIN inventories AS inv ON p.id = inv.product_id where b.patient_id=".$_GET['patient_id']." GROUP BY p.id");
+        inner join products as p on p.id = b.product_id LEFT JOIN inventories AS inv ON p.id = inv.product_id AND branch_id=".$_GET['branch_id']." where b.patient_id=".$_GET['patient_id']." GROUP BY p.id");
     $tbl = "baskets";
     break;
 
