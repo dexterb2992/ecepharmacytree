@@ -117,7 +117,7 @@ class PointsRepository {
                     $points_activity_log->user_type = isset($user->prc_no) ? 'doctor' : 'patient';
                     $points_activity_log->user_id = $user->id;
                     $points_activity_log->points_used = $billing->points_discount;
-                    $points_activity_log->note = "You used ".$billing->points_discount." for order #".$order->id;
+                    $points_activity_log->notes = "You used ".$billing->points_discount." for order #".$order->id;
                     $points_activity_log->save();
 
                 }
