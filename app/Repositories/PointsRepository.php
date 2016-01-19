@@ -100,6 +100,11 @@ class PointsRepository {
                 $user_old_points = (double)$user->points; 
                 $user->points = $points_earned + $user_old_points;
 
+                // points_discount deduction
+                if( $user->points >=  $billing->points_discount ){
+                    $user->points = $user->points - $billing->points_discount;
+                }
+
                 if( $user->save() ){
                     // log for points changes
                     $ref_com_log = new ReferralCommissionActivityLog;
