@@ -25,7 +25,8 @@ chmod($target_path, 0777);
 $response = array();
 
 // final file url that is being uploaded
-$file_upload_url = 'http://192.168.10.1/db/' . $target_path;
+// $file_upload_url = 'http://192.168.10.1/db/' . $target_path;
+$file_upload_url = $target_path;
 date_default_timezone_set('Asia/Manila');
 $datenow = date("Y-m-d H:i:s", time());
 

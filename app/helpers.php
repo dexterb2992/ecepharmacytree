@@ -383,7 +383,7 @@ global $x, $uplines;
 $x = 0;
 $uplines = array();
 
-function get_uplines($referral_id){
+function get_uplines($referral_id, $is_one = false, $generate_clickable_html = false){
 	global $x, $uplines;
 
 	$user = ECEPharmacyTree\Patient::where('referral_id', '=', $referral_id)->first();
@@ -411,8 +411,27 @@ function get_uplines($referral_id){
 			}
 		}
 	}
+	// dd($uplines);
 
+	if( $is_one ){
+		if( count($uplines) > 0  ){
+			if( $generate_clickable_html ){
+				$prefix = isset($uplines[0]->specialty_id) ? '<i class="fa fa-user-md"></i>' : '';
+				$html = "<a href='javascript:void(0);' data-id='{$uplines[0]->id}' class='show-downlines'>$prefix"
+					.get_person_fullname($uplines[0]).
+				"</a>";
+				return $html;
+				
+			}
+			return $uplines[0];
+			
+		}
+		return "No referrer.";
+		
+	}
+	
 	return $uplines;
+	
 }
 
 

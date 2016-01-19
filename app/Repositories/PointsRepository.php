@@ -156,7 +156,7 @@ class PointsRepository {
                             $ref_com_log->save();
                         }
 
-                        pre("gross_total: $billing->gross_total points_earned: $points_earned variation: $variation referral_commission: ".$referral_points_earned);
+                        pre("$upline->fname $upline->lname => $gross_total: $billing->gross_total points_earned: $points_earned variation: $variation referral_commission: ".$referral_points_earned);
                         $variation = 0; 
                     }
                     $limit--;
