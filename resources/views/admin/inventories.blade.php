@@ -136,12 +136,12 @@
 										</tr>
 									</thead>
 									<tbody>
-										@foreach($logs as $log)
+										@foreach($stock_returns as $stock_return)
 											<tr>
-												<td>{{ get_person_fullname($log->user) }}</td>
-												<td>{!! $log->action !!}</td>
+												<td></td>
+												<td>{!! $stock_return->action !!}</td>
 												<td>
-													<?php $date_added = Carbon::parse($log->created_at); ?>
+													<?php $date_added = Carbon::parse($stock_return->created_at); ?>
 													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->formatLocalized('%A %d %B %Y') }}">
 														<i class="fa-clock-o fa"></i> 
 														{{ $date_added->diffForHumans() }}

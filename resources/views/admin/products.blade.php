@@ -120,13 +120,13 @@
                                     @endforeach
                                 </tbody>
                                 <tfoot>
-                                    <tr>
+                                    <!-- <tr>
                                         <td colspan="2">
                                             <span class="form-group">
                                                 <button class="btn-danger btn" disabled><i class="fa-warning fa"></i> Remove all selected</button>
                                             </span>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tfoot>
                             </table>
                         </div><!-- /.box-body -->

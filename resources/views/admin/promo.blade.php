@@ -19,10 +19,10 @@ use Illuminate\Support\Str;
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Validitiy</th>
+                                <th>Validity</th>
                                 <th>Offer Type</th>
                                 <th>Applicability</th>
-                                <th>Producs</th>
+                                <th>Products</th>
                                 <th>Min. Purchase Amount</th>
                                 <th>Action</th>
                             </tr>

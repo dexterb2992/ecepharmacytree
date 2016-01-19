@@ -304,7 +304,8 @@ $(document).ready(function (){
         form.find(".modal-title").html(title);
 
         $(modal).modal('show');
-        $(form).find("select#select_subcategory_id").select2();
+        // $(form).find("select#select_subcategory_id").select2();
+        $('select.select2').select2();
     });
 
 

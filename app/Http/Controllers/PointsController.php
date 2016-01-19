@@ -60,7 +60,6 @@ class PointsController extends Controller
                 $billings_has_uncomputed_points = true;
 
                 // points computation
-                // $points_earned = compute_points($billing->gross_total);
                 $sales_amount = $billing->gross_total;
                 $points_per_order_detail = 0;
                 
@@ -78,19 +77,9 @@ class PointsController extends Controller
                         $points_per_order_detail+= $points_earned_for_this_order_detail;
 
                         $sales_amount -= $amount;
+                    }
 
-                        // $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
-                                // ." earned from ".$order_detail->product->name." ("
-                                // .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
-                                // .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n"; 
-                    }/*else{
-                         $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
-                                ." earned from ".$order_detail->product->name." ("
-                                .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
-                                .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n"; 
-                    }*/
-
-                    $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
+                    $notes.= (string)"Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
                                 ." earned from ".$order_detail->product->name." ("
                                 .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
                                 .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
@@ -136,8 +125,8 @@ class PointsController extends Controller
                         $referral_points_earned = $points_earned * $variation;
                         $old_upline_points = $upline->points;
                         $upline->points = $old_upline_points + $referral_points_earned;
-                        $notes = "You earned ".($variation * 100)."% of $points_earned ".str_auto_plural('point', $points_earned).
-                                "earned by $user->fname $user->lname's last order on {$order_date->formatLocalized('%A %d %B %Y')}";
+                        $notes = (string)"You earned ".($variation * 100)."% of $points_earned ".str_auto_plural('point', $points_earned).
+                                "earned by $user->fname $user->lname's last order on {$order_date->formatLocalized('%A %d %B %Y')}\n\n";
                         if( $upline->save() ){
                             // save a referral commission changes log
                             $ref_com_log = new ReferralCommissionActivityLog;
