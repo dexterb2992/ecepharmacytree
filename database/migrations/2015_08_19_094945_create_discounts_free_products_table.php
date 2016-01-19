@@ -28,7 +28,7 @@ class CreateDiscountsFreeProductsTable extends Migration
                                         // less is now actually equal to 5% off, else if
                                         // type = 2 then less is 5 pesos off 
                                         // this field is not applicable to type 3 and 4
-            $table->integer('is_free_delivery')->default(0);
+            // $table->integer('is_free_delivery')->default(0);
             $table->double('percentage_discount');
             $table->double('peso_discount');
             $table->integer('has_free_gifts')->default(0);

@@ -68,6 +68,9 @@ Route::get('home', function(){
 	// ->withBranch_name("ECE Marketing - Davao");
 // });
 Route::get('compute-referral-points/{referral_id}', 'PointsController@store');
+Route::get('test/{referral_id}', function ($referral_id){
+	dd(get_uplines($referral_id, true, true));
+});
 
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
 

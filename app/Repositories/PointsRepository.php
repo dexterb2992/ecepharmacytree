@@ -32,7 +32,7 @@ class PointsRepository {
         $uplines = get_uplines($referral_id);
         
         $orders = $user->orders;
-        // dd(orders);
+        pre($uplines);
         $billings = array();
         foreach ($orders as $order) {
             $billings[] = $order->billing;
@@ -76,7 +76,8 @@ class PointsRepository {
                                 // ." earned from ".$order_detail->product->name." ("
                                 // .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
                                 // .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n"; 
-                    }/*else{
+                    }
+                    /*else{
                          $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
                                 ." earned from ".$order_detail->product->name." ("
                                 .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
@@ -155,7 +156,7 @@ class PointsRepository {
                             $ref_com_log->save();
                         }
 
-                        //pre("gross_total: $billing->gross_total points_earned: $points_earned variation: $variation referral_commission: ".$referral_points_earned);
+                        pre("$upline->fname $upline->lname => $gross_total: $billing->gross_total points_earned: $points_earned variation: $variation referral_commission: ".$referral_points_earned);
                         $variation = 0; 
                     }
                     $limit--;

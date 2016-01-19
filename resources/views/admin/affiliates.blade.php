@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 								<th>Referral ID</th>
 								<th class="sorting_asc">Referrals</th>
 								<th>Current Points</th>
+								<th>Reffered By</th>
 								<th>Date Joined</th>
 							</tr>
 						</thead>
@@ -46,6 +47,7 @@ use Illuminate\Support\Str;
 									<td>{{ $doctor->referral_id }}</td>
 									<td>{{ get_patient_referrals($doctor) }}</td>
 									<td>{{ $doctor->points }}</td>
+									<td>{!! get_uplines($doctor->referral_id, true, true) !!}</td>
 									<td>
 										<span class="label-primary label">
 											<i class="fa fa-clock-o"></i>
@@ -74,6 +76,7 @@ use Illuminate\Support\Str;
 									<td>{{ $patient->referral_id }}</td>
 									<td>{{ get_patient_referrals($patient) }}</td>
 									<td>{{ $patient->points }}</td>
+									<td>{!! get_uplines($patient->referral_id, true, true) !!}</td>
 									<td>
 										<span class="label-primary label">
 											<i class="fa fa-clock-o"></i>
