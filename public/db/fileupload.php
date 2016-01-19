@@ -16,8 +16,8 @@ $new_name = "user_".$id; // this is the new folder you'll create
 $target_path .= $new_name . '/';
 
 if (!file_exists($target_path)) {  // to make sure the path doesn't exist yet
-mkdir($target_path);
-chmod($target_path, 0777);
+	mkdir($target_path);
+	chmod($target_path, 0777);
 }
 
 

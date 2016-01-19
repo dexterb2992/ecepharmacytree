@@ -32,7 +32,7 @@ class PointsRepository {
         $uplines = get_uplines($referral_id);
         
         $orders = $user->orders;
-        pre($uplines);
+        // pre($uplines);
         $billings = array();
         foreach ($orders as $order) {
             $billings[] = $order->billing;
@@ -47,11 +47,11 @@ class PointsRepository {
         $notes = "";
 
         krsort($uplines);
-
+        //pre("# of billings: ".count($billings));
         foreach ($billings as $billing) {
             if( $billing->payment_status == 'paid' && $billing->points_computation_status == 0 ){
                 $billings_has_uncomputed_points = true;
-
+                //pre("uncomputed billing.");
                 // points computation
                 // $points_earned = compute_points($billing->gross_total);
                 $sales_amount = $billing->gross_total;
@@ -88,16 +88,22 @@ class PointsRepository {
                                 ." earned from ".$order_detail->product->name." ("
                                 .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
                                 .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
+                    
                 }
-
+                //pre($notes);
                 $points_per_one_hundred = (double)$settings->points;
                 $points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
                 
 
 
                 // add points   
-                $user_old_points = $user->points; 
-                $user->points += $points_earned;
+                $user_old_points = (double)$user->points; 
+                $user->points = $points_earned + $user_old_points;
+
+                // points_discount deduction
+                if( $user->points >=  $billing->points_discount ){
+                    $user->points = $user->points - $billing->points_discount;
+                }
 
                 if( $user->save() ){
                     // log for points changes
@@ -124,6 +130,12 @@ class PointsRepository {
                 }
                 // dd($uplines);
                 $counter = 0; // note that 0 is the primary upline
+
+                if( $limit > count($uplines) ){
+                    $limit -= (count($uplines)-1);
+                }
+
+                //pre("new limit: $limit");
 
                 foreach ($uplines as $upline) {
                     // $counter++;
@@ -156,7 +168,7 @@ class PointsRepository {
                             $ref_com_log->save();
                         }
 
-                        pre("$upline->fname $upline->lname => $gross_total: $billing->gross_total points_earned: $points_earned variation: $variation referral_commission: ".$referral_points_earned);
+                        //pre("$upline->fname $upline->lname => gross_total: $billing->gross_total points_earned: $points_earned variation: $variation referral_commission: ".$referral_points_earned);
                         $variation = 0; 
                     }
                     $limit--;

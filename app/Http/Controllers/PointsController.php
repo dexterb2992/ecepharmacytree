@@ -33,6 +33,6 @@ class PointsController extends Controller
      */
     public function store($referral_id)
     {
-        $this->points->process_points($referral_id);
+        return $this->points->process_points($referral_id);
     }
 }

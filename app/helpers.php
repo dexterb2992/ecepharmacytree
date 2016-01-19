@@ -416,8 +416,8 @@ function get_uplines($referral_id, $is_one = false, $generate_clickable_html = f
 	if( $is_one ){
 		if( count($uplines) > 0  ){
 			if( $generate_clickable_html ){
-				$prefix = isset($uplines[0]->specialty_id) ? '<i class="fa fa-user-md"></i>' : '';
-				$html = "<a href='javascript:void(0);' data-id='{$uplines[0]->id}' class='show-downlines'>$prefix"
+				$prefix = isset($uplines[0]->sub_specialty_id) ? "<i class='fa fa-user-md'></i>" : '';
+				$html = "<a href='javascript:void(0);' data-id='{$uplines[0]->id}' class='show-downlines'>$prefix "
 					.get_person_fullname($uplines[0]).
 				"</a>";
 				return $html;
