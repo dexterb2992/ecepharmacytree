@@ -241,7 +241,7 @@ switch ($request) {
     break;
 
     case 'empty_basket_to_change_branch':
-    if(mysql_query("DELETE FROM baskets where patient_id = ".$patient_id)){
+    if(mysql_query("DELETE FROM baskets where patient_id = ".$_GET['patient_id'])){
         echo "deleted";
         exit(0);
     } else {
