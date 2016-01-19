@@ -74,3 +74,4 @@
     </div>
   </nav>
 </header>
+{!! Form::token() !!}

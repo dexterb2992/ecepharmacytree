@@ -306,3 +306,7 @@ Route::get('emailtest', function(){
 });
 
 Route::get('emailtestingservice', ['as' => 'email_testing_service', 'uses' => 'VerifyPaymentController@emailtestingservice' ]);
+
+Route::post('notify', 'NotificationsController@index');
+Route::post('read-notification', 'NotificationsController@update');
+Route::get('read-notification', 'NotificationsController@update');

@@ -56,13 +56,13 @@
                                     @endforeach
                                 </tbody>
                                 <tfoot>
-                                    <tr>
+                                    <!-- <tr>
                                         <td colspan="2">
                                             <span class="form-group">
                                                 <button class="btn-danger btn" disabled><i class="fa-warning fa"></i> Remove all selected</button>
                                             </span>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tfoot>
                             </table>
                         </div><!-- /.box-body -->
@@ -155,9 +155,9 @@
                                     @foreach($specialties as $specialty)
                                     <tr>
                                         <td>
-                                            <span>
+                                            <!-- <span>
                                                 <input type="checkbox" name="specialties[]" value="{{ $specialty->id }}">   
-                                            </span>
+                                            </span> -->
                                             {{ $specialty->name }}
                                         </td>
                                         <td>
@@ -170,13 +170,13 @@
                                     @endforeach
                                 </tbody>
                                 <tfoot>
-                                    <tr>
+                                    <!-- <tr>
                                         <td colspan="2">
                                             <span class="form-group">
                                                 <button class="btn-danger btn" disabled><i class="fa-warning fa"></i> Remove all selected</button>
                                             </span>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tfoot>
                             </table>
                         </div><!-- /.box-body -->
