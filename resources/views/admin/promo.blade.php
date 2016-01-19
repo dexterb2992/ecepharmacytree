@@ -205,33 +205,23 @@ use Illuminate\Support\Str;
                             <h4 class="modal-title">Promo details for <a href="javascript:void(0);" target="_blank" id="modal_product_name">{Product name}</a></h4>
                         </div>
                         <div class="modal-body">
+                        
                             <div class="form-group">
                                 <label>Minimum Quantity</label>
                                 <input type="text" class="form-control number" name="quantity_required">
                             </div>
-                            <!-- <div class="form-group">
-                                <label>Offer</label>
-                                <select class="form-control select2" name="type" id="promo_details_type" multiple>
-                                    <option value="0">Percentage base discount</option>
-                                    <option value="1">Peso value discount</option>
-                                    <option value="2">Free Gift</option>
-                                    <option value="3">Free Delivery</option>
-                                </select>
-                            </div> -->
+
                             <div class="form-group">
                                 <label>Offers</label>
                             </div>
-                            <div class="form-group">
-                                <input type="checkbox" name="is_free_delivery" id="is_free_delivery" value="1" 
-                                    data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
-                                <label for="is_free_delivery">Free Delivery</label>
-                            </div>
+
                             <div class="form-group">
                                 <input type="checkbox" name="has_free_gifts" id="has_free_gifts" value="1" 
                                     data-check-value="1" data-uncheck-value="0" class="form-control icheck data-show" 
                                     data-show-target="#gift_products_outer_div" data-show-target-when="1"/>
                                 <label for="has_free_gifts">Has Free Gifts</label>
                             </div>
+
                             <div class="form-group" style="display:none;" id="gift_products_outer_div">
                                 <label>Select product/s to use as free gift</label>
                                 <select class="form-control select2" id="promo_details_gifts" name="product_id[]" multiple>
@@ -242,6 +232,7 @@ use Illuminate\Support\Str;
 
                                 <div class="selected-products-qty-div form-horizontal"></div>
                             </div>
+
                             <div class="form-group">
                                 <label>Peso-based Discount</label>
                                 <div class="input-group">
@@ -249,6 +240,7 @@ use Illuminate\Support\Str;
                                     <input class="form-control number" name="peso_discount" id="peso_discount" />
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label>Percentage-based Discount</label>
                                 <div class="input-group">
@@ -256,6 +248,7 @@ use Illuminate\Support\Str;
                                     <span class="input-group-addon">%</span>
                                 </div>
                             </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

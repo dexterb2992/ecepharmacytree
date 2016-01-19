@@ -12,10 +12,15 @@ use ECEPharmacyTree\Promo;
 use ECEPharmacyTree\Product;
 use ECEPharmacyTree\DiscountsFreeProduct;
 use ECEPharmacyTree\FreeProduct;
+use ECEPharmacyTree\Repositories\PromoRepository;
 
 
 class PromoController extends Controller
 {
+    function __construct(PromoRepository $promo) {
+        $this->promo = $promo;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -162,30 +167,12 @@ class PromoController extends Controller
 
     public function update_details(){
         $input = Input::all();
-        // dd($input);
-        $dfp = DiscountsFreeProduct::find($input['id']);
-        $dfp->quantity_required = $input['quantity_required'];
-        $dfp->is_free_delivery = isset($input["is_free_delivery"]) ? $input["is_free_delivery"] : 0;
-        $dfp->percentage_discount = $input["percentage_discount"];
-        $dfp->peso_discount = $input["peso_discount"];
-        $dfp->has_free_gifts = isset($input["has_free_gifts"]) ? $input["has_free_gifts"] : 0;
-
-        if( isset($input['gift_quantities']) ){
-            FreeProduct::where("dfp_id", $dfp->id)->delete();
-            foreach ($input['gift_quantities'] as $key => $value) {
-                $free_product = new FreeProduct;
-                $free_product->dfp_id = $dfp->id;
-                $free_product->product_id = $key;
-                $free_product->quantity_free = $value;
-                $free_product->save();
-            }
-        }
-        $promoID = $dfp->promo->id;
-        if( $dfp->save() )
+        
+        if( $this->promo->update_details($input) )
             return Redirect::back()->withFlash_message([
                 'type' => 'success',
-                'msg' => "Promo details has been successfully saved. PromoID: {$promoID}"
-            ])->withAffected_promo_id($promoID);
+                'msg' => "Promo details has been successfully saved."
+            ]);
 
         return Redirect::back()->withInput()->withFlash_message([
             'type' => 'danger',

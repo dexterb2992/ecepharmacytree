@@ -137,7 +137,7 @@ if (isset($_FILES['image']['name'])) {
 
 	$response['error'] = true;
 
-	$response['message'] = 'Not received any file!';
+	$response['message'] = 'No file has been received!';
 
 }
 

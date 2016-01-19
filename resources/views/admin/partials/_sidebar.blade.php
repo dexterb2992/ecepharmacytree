@@ -47,6 +47,12 @@
             </li>
 
             <li class="treeview">
+                <a href="{{ route('prescription_approval') }}">
+                    <i class="fa fa-file-text-o"></i> <span id="sidebar_employees">Prescriptions</span>
+                </a>
+            </li>
+
+            <li class="treeview">
                 <a href="{{ route('groups') }}">
                     <i class="fa-bar-chart fa"></i> <span id="sidebar_product_groups">Product Groups</span>
                 </a>
