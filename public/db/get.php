@@ -238,6 +238,11 @@ switch ($request) {
     $tbl = "used_points";
     break;
 
+    case 'get_patients_downlines':
+    $result  = mysql_query("SELECT * FROM patients where referred_byUser='".$_GET['referral_id']."'") or returnError(mysql_error());
+    $tbl = "downlines";
+    break;
+
     case 'empty_basket_to_change_branch':
     if(mysql_query("DELETE FROM baskets where patient_id = ".$_GET['patient_id'])){
         echo "deleted";
