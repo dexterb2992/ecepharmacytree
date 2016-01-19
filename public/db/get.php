@@ -240,6 +240,17 @@ switch ($request) {
     $tbl = "used_points";
     break;
 
+    case 'empty_basket_to_change_branch':
+    if(mysql_query("DELETE FROM baskets where patient_id = ".$patient_id)){
+        echo "deleted";
+        exit(0);
+    } else {
+        echo "not_deleted";
+        exit(0);
+    }
+
+    break;
+
     case 'get_clinic_records':
     $username = $_GET['username'];
     $password = $_GET['password'];
