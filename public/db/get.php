@@ -225,8 +225,6 @@ switch ($request) {
 
     case 'check_promo_code':
     $result = mysql_query("SELECT * FROM promos where offer_type = 'GENERIC_CODE' and generic_redemption_code = '".$_GET['promo_code']."'") or returnError(mysql_error());  
-    // $row_cp = mysql_fetch_object($result);
-    // echo $row_cp->points;
     $tbl = "promos";
     break;
 
@@ -248,7 +246,13 @@ switch ($request) {
         echo "not_deleted";
         exit(0);
     }
+    break;
 
+    case 'get_branch_name_from_id':
+    $result = mysql_query("SELECT name FROM branches where id = ".$_GET['branch_id']) or returnError(mysql_error());  
+    $row_cp = mysql_fetch_object($result);
+    echo $row_cp->name;
+    exit(0);
     break;
 
     case 'get_clinic_records':
