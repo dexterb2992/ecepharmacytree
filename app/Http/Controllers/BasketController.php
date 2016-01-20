@@ -34,7 +34,7 @@ class BasketController extends Controller
     $response['success'] = 1;
     $response['server_timestamp'] = date("Y-m-d H:i:s", time());
 
-    return json::encode($response);
+    return json_encode($response);
 }
 
     /**
