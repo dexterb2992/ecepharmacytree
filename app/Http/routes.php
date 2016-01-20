@@ -44,22 +44,7 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::get('check_basket', function(){
-	$results = DB::select("call check_basket(1, 20)");
-
-	foreach($results as $result){
-		if($result->quantity > $result->available_quantity) {
-			$basket = ECEPharmacyTree\Basket::findOrFail($result->id);
-			$basket->quantity = $result->available_quantity;
-			if($basket->save()){
-				$result->quantity = $result->available_quantity;					
-			}
-		}
-
-	}
-
-	return $results;
-});
+Route::get('check_basket', 'BasketController@check_basket');
 
 // Route::get('try/{referral_id}', function($referral_id){
 	// global $uplines;
