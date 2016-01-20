@@ -195,6 +195,10 @@ class VerifyCashPaymentController extends Controller
 		echo json_encode($response);
 	}
 
+	function check_if_stocks_valid(){
+		
+	}
+
 	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){
 		$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
 			compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'points_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
