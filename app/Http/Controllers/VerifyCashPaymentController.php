@@ -53,8 +53,10 @@ class VerifyCashPaymentController extends Controller
 
 		$basket_response = json_decode($this->basket->check_and_adjust_basket($user_id, $branch_server_id));
 
-		if($basket_response->basket_quantity_changed)
-			return json_encode($basket_response);	
+		if($basket_response->basket_quantity_changed){
+			echo json_encode($basket_response);	
+			exit(0);
+		}
 
 		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
