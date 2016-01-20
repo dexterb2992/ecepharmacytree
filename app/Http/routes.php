@@ -32,10 +32,10 @@ Route::get('showschema', function(){
 		return json_encode($response);
 	});
 
-// Route::controllers([
-// 	'auth' => 'Auth\AuthController',
-// 	'password' => 'Auth\PasswordController'
-// 	]);
+Route::controllers([
+	'auth' => 'Auth\AuthController',
+	'password' => 'Auth\PasswordController'
+	]);
 
 
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
@@ -45,18 +45,20 @@ Route::get('home', function(){
 });
 
 Route::get('check_basket', function(){
-	$results = DB::select("call check_basket(1, 20)");
+	// $results = DB::select("call check_basket(1, 20)");
 
-	foreach($results as $result){
-		if($result->quantity > $result->available_quantity){
-			$basket = ECEPharmacyTree\Basket::findOrFail($result->id);
-			$basket->quantity = $result->available_quantity;
-			if($basket->save()){
-				$result->quantity = $result->available_quantity;					
-			}
-		}
+	// foreach($results as $result){
+	// 	if($result->quantity > $result->available_quantity){
+	// 		$basket = ECEPharmacyTree\Basket::findOrFail($result->id);
+	// 		$basket->quantity = $result->available_quantity;
+	// 		if($basket->save()){
+	// 			$result->quantity = $result->available_quantity;					
+	// 		}
+	// 	}
 
-	}
+	// }
+
+	$results = ECEPharmacyTree\Basket::findOrFail(198);
 	return $results;
 });
 
