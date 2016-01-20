@@ -175,10 +175,10 @@ class VerifyCashPaymentController extends Controller
 					$response['payment_message'] = "error saving payment";
 
 
-				if(Basket::where('patient_id', '=', $user_id)->delete()) 
-					$response['basket_message'] = "basket/s deleted on database";
-				else 
-					$response['basket_message'] = "basket/s not deleted on database";
+				// if(Basket::where('patient_id', '=', $user_id)->delete()) 
+				// 	$response['basket_message'] = "basket/s deleted on database";
+				// else 
+				// 	$response['basket_message'] = "basket/s not deleted on database";
 
 
 				$setting = Setting::first();
