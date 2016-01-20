@@ -129,6 +129,7 @@ $(document).ready(function (){
       P.S. Add your own codes below to achieve the results you wanted
     */
     $(document).on("click", ".add-edit-btn", function (){
+        $("select.select2").select2('destroy');
     	var $this = $(this), 
             target = $this.attr("data-target");
         var form = $(target), 
@@ -302,10 +303,11 @@ $(document).ready(function (){
         form.attr("action", mainurl+action);
 
         form.find(".modal-title").html(title);
-
+        
         $(modal).modal('show');
-        // $(form).find("select#select_subcategory_id").select2();
-        $('select.select2').select2();
+        
+        $("select.select2").select2();
+
     });
 
 

@@ -199,7 +199,7 @@
                     </div><!-- /.box -->
 
                     <!-- Modal for Create/Edit SubCategory -->
-                    <div class="modal fade" id="modal-add-edit-subcategory" tabindex="-1">
+                    <div class="modal fade" id="modal-add-edit-subcategory">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- form start -->
@@ -213,7 +213,7 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <div class="form-group">
                                             <label for="category">Select Category</label>
-                                            {!! Form::select('category_id', $category_names, "null", ['class' => 'form-control']) !!}
+                                            {!! Form::select('category_id', $category_names, "null", ['class' => 'form-control select2']) !!}
                                         </div>  
                                         <div class="form-group">
                                             <label for="name">Subcategory Name <i>*</i></label>
@@ -236,7 +236,7 @@
         </div><!-- nav-tabs-custom -->
 
         <!-- Modal for Create/Edit product -->
-        <div class="modal fade" id="modal-add-edit-product" tabindex="-1">
+        <div class="modal fade" id="modal-add-edit-product">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- form start -->
@@ -251,7 +251,7 @@
                             
                             <div class="form-group">
                                 <label for="subcategory_id">Category <i>*</i></label>
-                                <select class="form-control" name="subcategory_id" id="select_subcategory_id">
+                                <select class="form-control select2" name="subcategory_id" id="select_subcategory_id">
                                     @foreach($categories as $category)
                                         <optgroup label="{{ $category->name }}">
                                             @foreach($category->subcategories as $subcategory)
@@ -342,7 +342,7 @@
 </div><!-- /.row -->
 
 <!-- Modal for Products Photo Gallery -->
-<div class="modal fade" id="modal-products-gallery" tabindex="-1">
+<div class="modal fade" id="modal-products-gallery">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

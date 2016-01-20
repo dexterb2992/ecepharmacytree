@@ -27,14 +27,17 @@
 						<div class="box box-success">
 							<div class="box-header">
 								<h4>Stock Items List</h4> <br/>
-				                <button class="btn-info btn pull-right add-edit-btn" data-toggle="modal" data-target="#modal-add-edit-inventory" 
-				                	data-target="#form_edit_inventory" data-action="create" data-title="inventory">
-				                	<i class="fa-plus fa"></i> Add New
-				                </button>
 
-				                <button class="btn-success btn pull-right btn-stock-return" data-target="#modal-stock-return" data-toggle="modal">
-				                	<i class="fa-refresh fa"></i> Stock Return
-				                </button>
+								<div class="pull-right">
+					                <button class="btn-info btn add-edit-btn" data-toggle="modal" data-target="#modal-add-edit-inventory" 
+					                	data-target="#form_edit_inventory" data-action="create" data-title="inventory">
+					                	<i class="fa-plus fa"></i> Add New
+					                </button>
+					                <button class="btn-success btn  btn-stock-return" data-target="#modal-stock-return" data-toggle="modal">
+					                	<i class="fa-refresh fa"></i> Stock Return
+					                </button>
+								</div>
+
 							</div>
 							<div class="box-body">
 								<table class="table table-bordered table-hover datatable">
@@ -43,6 +46,7 @@
 											<th>Lot #</th>
 											<th>SKU</th>
 											<th>Product name</th>
+											<th>Quantity Received</th>
 											<th>Available Quantity</th>
 											<th>Stock Expiration</th>
 											<th>Date Added</th>
@@ -71,6 +75,9 @@
 													<a href="{{ route('Products::index').'?q='.$inventory->product->name }}" target="_blank" class="show-product-info" data-id="{{ $inventory->product->id }}">
 														{{ $inventory->product->name }}
 													</a>
+												</td>
+												<td>
+													{{ $inventory->quantity }}
 												</td>
 												<td>
 													<?php 
@@ -204,7 +211,7 @@
 	                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
 	                            <div class="form-group">
 	                            	<label for="product_id">Product</label>
-	                            	<select class="form-control" name="product_id" id="inventories_product_id">
+	                            	<select class="form-control select2" name="product_id" id="inventories_product_id">
 	                            		@foreach($products as $product)
 	                            			<option value="{{ $product->id }}" data-packing="{{ $product->packing }}" data-unit="{{ $product->unit }}" data-qty-per-packing="{{ $product->qty_per_packing }}">{{ $product->name }}</option>
 	                            		@endforeach
@@ -212,7 +219,7 @@
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="lot_number">Lot Number</label>
-	                            	<input class="form-control" type="text" name="lot_number" required>
+	                            	<input class="form-control" type="text" id="inventory_lot_number" name="lot_number" required>
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received 

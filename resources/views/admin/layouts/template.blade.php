@@ -45,17 +45,17 @@
                     <p><span class="text-muted">You're logged in at Branch: </span>
                         <span class="text-aqua text-bold">
                             <?php $branches_count = Branch::all()->count(); ?>
-                            @if( Auth::check() && Auth::user()->isAdmin() && $branches_count > 1)
+                            @if( Auth::check() && Auth::user()->isSuperAdmin() && $branches_count > 1)
                                 @if( Session::has('selected_branch') )
                                     {{ Branch::find(Session::get('selected_branch'))->name }}
                                 @else
                                     {!! Session::put('selected_branch', Auth::user()->branch->id) !!}
                                     {{ Branch::find(Session::get('selected_branch'))->name }}
                                 @endif
-                            @else
-                                {{ Auth::check() ? Auth::user()->branch->name : '' }}
+                            @elseif( Auth::check() )
+                                {{ Auth::user()->branch->name }}
+                                {!! Auth::user()->isSuperAdmin() ? '<small><i>[<a href="'.url('change-branch').'">Change</a>]</i></small>' : '' !!}
                             @endif
-                            <small><i>[<a href="{{ url('change-branch') }}">Change</a>]</i></small>
                         </span>
                     </p>
                     @endif

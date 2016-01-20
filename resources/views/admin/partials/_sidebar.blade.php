@@ -39,7 +39,7 @@
                 </a>
             </li>
 
-            @if(Auth::user()->isAdmin() || Auth::user()->isBranchManager())
+            @if(Auth::user()->isSuperAdmin() || Auth::user()->isBranchAdmin())
             <li class="treeview">
                 <a href="{{ route('employees') }}">
                     <i class="fa fa-users"></i> <span id="sidebar_employees">Employees</span>
@@ -89,7 +89,7 @@
                 </a>
             </li>
 
-            @if(Auth::user()->isAdmin())
+            @if(Auth::user()->isSuperAdmin())
             <li class="treeview">
                 <a href="{{ route('Branches::index') }}">
                     <i class="fa fa-building"></i> <span id="sidebar_branches">Branches</span>

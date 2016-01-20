@@ -187,9 +187,8 @@ function validate_reminder_token($token){
  */
 function get_role($role){
 	$roles = [
-	1 => 'Administrator',
-	2 => 'Branch Manager',
-	3 => 'Pharmacist',
+	1 => 'Super Admin',
+	2 => 'Branch Admin',
 	1001 => 'Developer'
 	];
 

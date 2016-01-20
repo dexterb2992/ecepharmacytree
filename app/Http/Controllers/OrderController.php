@@ -20,11 +20,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->isAdmin()){
-            $orders = Order::all();
-        }else{
-            $orders = Order::where('branch_id', Auth::user()->branch->id)->get();
-        }
+
+        $orders = Order::where('branch_id', Auth::user()->branch->id)->orderBy('id', 'DESC')->get();
 
         return view('admin.orders')->withOrders($orders);
     }
@@ -66,7 +63,8 @@ class OrderController extends Controller
     }
 
     public function show_all(){
-        $orders = Order::all();
+        // $orders = Order::all();
+        $orders = Order::where('branch_id', Auth::user()->branch->id)->orderBy('id', 'DESC')->get();
         $orders->load('patient');
         $orders->load('order_details');
         $orders->load('billing');

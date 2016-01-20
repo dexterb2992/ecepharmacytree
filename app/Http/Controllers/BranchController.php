@@ -24,9 +24,9 @@ class BranchController extends Controller
     public function index(){
         //
         $regions = Region::all();
-        if( Auth::user()->isAdmin() ){
+        if( Auth::user()->isSuperAdmin() ){
             $branches = Branch::all();
-        }else if( Auth::user()->isBranchManager() ){
+        }else if( Auth::user()->isBranchAdmin() ){
             $branches = Branch::find( Auth::user()->branch->id );
         }else{
             abort(404);
