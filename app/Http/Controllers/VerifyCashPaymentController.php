@@ -35,8 +35,7 @@ class VerifyCashPaymentController extends Controller
 		// dd($input);
 		// exit(0);
 
-		$user_id = $input['user_id'];         
-		$input['patient_id'] = $user_id;
+		$user_id = $input['patient_id'];         
 		$branch_server_id = $input['branch_server_id'];
 		$recipient_name = $input['recipient_name'];
 		$recipient_address = $input['recipient_address'];
