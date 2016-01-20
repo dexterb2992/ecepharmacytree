@@ -20,7 +20,8 @@ class BasketController extends Controller
             $basket = Basket::findOrFail($result->id);
             $basket->quantity = $result->available_quantity;
             if($basket->save()){
-                $result->quantity = $result->available_quantity;                    
+                // $result->quantity = $result->available_quantity;                    
+                return 'tangina mo';
             }
         }
 
