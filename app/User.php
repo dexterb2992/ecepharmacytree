@@ -55,7 +55,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * Check whether the user is Admin
      */
-    public function isSuperAdmin(){
+    public function isAdmin(){
         if( $this->access_level == "1" )
             return true;
         return false;

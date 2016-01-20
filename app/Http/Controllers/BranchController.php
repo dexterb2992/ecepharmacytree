@@ -24,7 +24,7 @@ class BranchController extends Controller
     public function index(){
         //
         $regions = Region::all();
-        if( Auth::user()->isSuperAdmin() ){
+        if( Auth::user()->isAdmin() ){
             $branches = Branch::all();
         }else if( Auth::user()->isBranchAdmin() ){
             $branches = Branch::find( Auth::user()->branch->id );
@@ -53,6 +53,7 @@ class BranchController extends Controller
      */
     public function store(Request $request){
         $input = Input::all();
+        
         $branch = new Branch;
         $branch->name = $input["name"];
 
