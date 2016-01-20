@@ -35,7 +35,7 @@ class VerifyCashPaymentController extends Controller
 		// dd($input);
 		// exit(0);
 
-		$user_id = $input['patient_id'];         
+		$user_id = $input['user_id'];         
 		$branch_server_id = $input['branch_server_id'];
 		$recipient_name = $input['recipient_name'];
 		$recipient_address = $input['recipient_address'];
@@ -51,12 +51,10 @@ class VerifyCashPaymentController extends Controller
 		$promo_id = $input['promo_id'];
 		$promo_type = $input['promo_type'];
 
-		$basket_response = json_decode($this->basket->check_and_adjust_basket($input));
+		$basket_response = json_decode($this->basket->check_and_adjust_basket($user_id, $branch_server_id));
 
-		if($basket_response->basket_quantity_changed){
+		if($basket_response->basket_quantity_changed)
 			return $basket_response;	
-			exit(0);
-		}
 
 		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 

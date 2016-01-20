@@ -7,12 +7,12 @@ use ECEPharmacyTree\Basket;
 
 class BasketRepository {
 
-	function check_and_adjust_basket($input){
+	function check_and_adjust_basket($patient_id, $branch_id){
 
 		$response = array();
 		$basket_quantity_changed = false;
 
-		$results = DB::select("call check_basket(".$input['patient_id'].", ".$input['branch_id'].")");
+		$results = DB::select("call check_basket(".$patient_id.", ".$branch_id.")");
 
 		foreach($results as $result){
 			if($result->quantity > $result->available_quantity) {
