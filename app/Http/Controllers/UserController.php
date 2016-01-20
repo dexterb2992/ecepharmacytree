@@ -32,7 +32,7 @@ class UserController extends Controller
     public function index()
     {
 
-        if( Auth::user()->isBranchManager() ){
+        if( Auth::user()->isBranchAdmin() ){
             $employees = User::where('id', '!=', Auth::user()->id)
                 ->where('branch_id', '=', Auth::user()->branch->id)->get();
             $branches = Branch::where('id', '=', Auth::user()->branch->id)->get();
@@ -301,6 +301,9 @@ class UserController extends Controller
      * @return Illuminate/Http/Response
      */
     public function setBranchToLogin(){
+        if( !Auth::user()->isSuperAdmin() )
+            return view('errors.404');
+
         $input = Input::all();
         session()->put('selected_branch', $input['branch_id']); 
         if (session()->get('selected_branch') > 0)

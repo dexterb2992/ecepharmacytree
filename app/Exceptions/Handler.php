@@ -42,13 +42,13 @@ class Handler extends ExceptionHandler
         if( $e instanceof \Illuminate\Session\TokenMismatchException ) {
             return response()->view('errors.token_mismatch', [], 551);
 
-        }else if( $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException ||
+        }/*else if( $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException ||
                     $e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
             return response()->view('errors.404');
 
         }else if( $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException ){
             return response()->view('errors.403',  [], 403);
-        }
+        }*/
 
         return parent::render($request, $e);
     }

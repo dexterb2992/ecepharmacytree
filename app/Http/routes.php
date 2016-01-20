@@ -72,7 +72,8 @@ Route::get('test/{referral_id}', function ($referral_id){
 	dd(get_uplines($referral_id, true, true));
 });
 
-Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
+Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
+Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin', 'middleware' => 'admin']);
 
 // Routes used for /profile
 Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
@@ -104,7 +105,7 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'aut
 	Route::post('delete', ['as' => 'remove', 'uses' => 'BranchController@destroy']);
 });
 
-Route::get('change-branch', 'BranchController@get_which_branch');
+
 
 Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products::'], function (){
 	/**
