@@ -12,8 +12,10 @@ use DB;
 class BasketController extends Controller
 {
 
- function check_basket(){
-    $results = DB::select("call check_basket(1, 20)");
+   function check_basket(){
+    $input = Input::all();
+
+    $results = DB::select("call check_basket(".$input['patient_id'].", ".$input['branch_id'].")");
 
     foreach($results as $result){
         if($result->quantity > $result->available_quantity) {
@@ -21,7 +23,6 @@ class BasketController extends Controller
             $basket->quantity = $result->available_quantity;
             if($basket->save()){
                 $result->quantity = $result->available_quantity;                    
-                // return 'tangina mo';
             }
         }
 
