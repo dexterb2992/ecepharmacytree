@@ -15,6 +15,5 @@ class VerifyCsrfToken extends BaseVerifier
         //
     	'verifypayment/',
     	'verify_cash_payment/',
-        'check_basket/',
     ];
 }
