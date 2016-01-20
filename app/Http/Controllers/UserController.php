@@ -301,9 +301,6 @@ class UserController extends Controller
      * @return Illuminate/Http/Response
      */
     public function setBranchToLogin(){
-        if( !Auth::user()->isAdmin() )
-            return view('errors.404');
-
         $input = Input::all();
         session()->put('selected_branch', $input['branch_id']); 
         if (session()->get('selected_branch') > 0)
