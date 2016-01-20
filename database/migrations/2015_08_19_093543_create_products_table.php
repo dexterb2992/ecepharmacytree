@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->longText('generic_name');
             $table->longText('description');
             $table->integer('prescription_required');
+            $table->double('unit_cost');
             $table->double('price');  // price will be per packing
             $table->string('unit');
             $table->string('packing');

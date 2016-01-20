@@ -43,7 +43,8 @@ class ProductSubcategoryTableSeeder extends Seeder
         	'5' => array(
         			"first aid/ wound care",
 					"general use",
-					"topical antiseptics/ disinfectants"
+					"topical antiseptics/ disinfectants",
+                    "contraceptives"
         		),
         	'6' => array(
         			"personal care & protection"
