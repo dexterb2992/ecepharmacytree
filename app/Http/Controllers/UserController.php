@@ -301,7 +301,7 @@ class UserController extends Controller
      * @return Illuminate/Http/Response
      */
     public function setBranchToLogin(){
-        if( !Auth::user()->isSuperAdmin() )
+        if( !Auth::user()->isAdmin() )
             return view('errors.404');
 
         $input = Input::all();

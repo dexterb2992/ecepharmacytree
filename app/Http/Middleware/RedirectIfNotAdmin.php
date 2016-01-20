@@ -15,7 +15,7 @@ class RedirectIfNotAdmin
      */
     public function handle($request, Closure $next)
     {
-        if( !$request->user()->isSuperAdmin() ){
+        if( !$request->user()->isAdmin() ){
             return redirect("/");
         }
 
