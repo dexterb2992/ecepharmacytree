@@ -54,7 +54,7 @@ class VerifyCashPaymentController extends Controller
 		$basket_response = json_decode($this->basket->check_and_adjust_basket($input));
 
 		if($basket_response->basket_quantity_changed){
-			$basket_response;	
+			return $basket_response;	
 			exit(0);
 		}
 
