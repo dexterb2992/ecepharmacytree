@@ -12,30 +12,17 @@ use Input;
 
 class BasketController extends Controller
 {
-
-   function check_basket(){
-    $input = Input::all();
-
-    $response = array();
-
-    $results = DB::select("call check_basket(".$input['patient_id'].", ".$input['branch_id'].")");
-
-    foreach($results as $result){
-        if($result->quantity > $result->available_quantity) {
-            $basket = Basket::findOrFail($result->basket_id);
-            $basket->quantity = $result->available_quantity;
-            if($basket->save()){
-                $result->quantity = $result->available_quantity;                    
-            }
-        }
-
+    function __construct(BasketRepository $basket) {
+        $this->basket = $basket;
     }
-    $response['baskets'] = $results;
-    $response['success'] = 1;
-    $response['server_timestamp'] = date("Y-m-d H:i:s", time());
 
-    return json_encode($response);
-}
+    function check_basket(){
+        $input = Input::all();
+
+        $response = $this->basket->check_and_adjust_basket($input);
+
+        return json_encode($response);
+    }
 
     /**
      * Display a listing of the resource.

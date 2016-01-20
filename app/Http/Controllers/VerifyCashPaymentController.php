@@ -19,12 +19,14 @@ use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Payment as InServerPayment;
 use Response;
 use Illuminate\Mail\Mailer;
+use ECEPharmacyTree\Repositories\BasketRepository;
 
 class VerifyCashPaymentController extends Controller
 {
 
-	function __construct(Mailer $mailer) {
+	function __construct(Mailer $mailer, BasketRepository $basket) {
 		$this->mailer = $mailer;
+		$this->basket = $basket;
 	}
 
 	function verification() {
@@ -48,6 +50,13 @@ class VerifyCashPaymentController extends Controller
 		$email = $input['email'];
 		$promo_id = $input['promo_id'];
 		$promo_type = $input['promo_type'];
+
+		$basket_response = json_decode($this->basket->check_and_adjust_basket($input));
+
+		if($basket_response->basket_quantity_changed){
+			$basket_response;	
+			exit(0);
+		}
 
 		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
