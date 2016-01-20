@@ -45,7 +45,7 @@ Route::get('home', function(){
 });
 
 Route::get('check_basket', function(){
-		$results = DB::select("call check_basket(".1.", ".20.")");
+		$results = DB::select("call check_basket(1, 20)");
 		return $results;
 });
 
