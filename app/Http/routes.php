@@ -59,6 +59,11 @@ Route::get('check_basket', function(){
 	// }
 
 	$results = ECEPharmacyTree\Basket::findOrFail(198);
+	$results->quantity = 5;
+	if($results->save())
+		echo "fuck you";
+	else 
+		echo "shit";
 	return $results;
 });
 
