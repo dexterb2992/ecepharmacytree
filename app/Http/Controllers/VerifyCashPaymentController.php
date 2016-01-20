@@ -30,6 +30,9 @@ class VerifyCashPaymentController extends Controller
 	function verification() {
 		$input = Input::all();
 
+		dd($input);
+		exit(0);
+
 		$user_id = $input['user_id'];         
 		$branch_server_id = $input['branch_server_id'];
 		$recipient_name = $input['recipient_name'];
