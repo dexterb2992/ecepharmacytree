@@ -86,13 +86,11 @@ switch ($request) {
     /* Requires Parameters */
 
     case 'get_nocode_promos':
-    $sql = "SELECT pr.id as pr_promo_id, pr.product_applicability, pr.minimum_purchase_amount, pr.quantity_required as pr_qty_required, pr.is_free_delivery as pr_free_delivery, pr.percentage_discount as pr_percentage, pr.peso_discount as pr_peso, dfp.* FROM promos as pr left join discounts_free_products as dfp on pr.id = dfp.promo_id where offer_type = 'NO_CODE' AND pr.deleted_at IS NULL AND '".$dateonly."' >= pr.start_date AND '".$dateonly."' <= pr.end_date";
-    $result = mysql_query($sql) or returnError(mysql_error()); 
-    $tbl = "promos";
-    break;
-
-    case 'get_promos':
-    $sql = "SELECT *  FROM promos WHERE start_date <= '".$dateonly."' AND end_date >= '".$dateonly."'";
+    $sql = "SELECT pr.id as pr_promo_id, pr.product_applicability, pr.minimum_purchase_amount, pr.quantity_required as pr_qty_required, 
+    pr.is_free_delivery as pr_free_delivery, pr.percentage_discount as pr_percentage, pr.peso_discount as pr_peso, pr.long_title, pr.start_date, pr.end_date, 
+    dfp.* FROM promos as pr left join discounts_free_products as dfp on pr.id = dfp.promo_id where offer_type = 'NO_CODE' AND pr.deleted_at IS NULL 
+    AND '".$dateonly."' >= pr.start_date AND '".$dateonly."' <= pr.end_date";
+   
     $result = mysql_query($sql) or returnError(mysql_error()); 
     $tbl = "promos";
     break;
