@@ -16,6 +16,8 @@ class BasketController extends Controller
    function check_basket(){
     $input = Input::all();
 
+    $response = array();
+
     $results = DB::select("call check_basket(".$input['patient_id'].", ".$input['branch_id'].")");
 
     foreach($results as $result){
@@ -28,8 +30,11 @@ class BasketController extends Controller
         }
 
     }
+    $response['baskets'] = $results;
+    $response['success'] = 1;
+    $response['server_timestamp'] = date("Y-m-d H:i:s", time());
 
-    return $results;
+    return json::encode($response);
 }
 
     /**
