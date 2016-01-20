@@ -8,6 +8,7 @@ use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Basket;
 use DB;
+use Input;
 
 class BasketController extends Controller
 {
