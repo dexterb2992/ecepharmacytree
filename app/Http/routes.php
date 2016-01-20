@@ -46,6 +46,13 @@ Route::get('home', function(){
 
 Route::get('check_basket', function(){
 		$results = DB::select("call check_basket(1, 20)");
+
+		foreach($results as $result){
+			if($result->quantity > $result->available_quantity)
+				$result->quantity = $result->available_quantity;
+				if($result->save())
+					return 'updated basket quantity based on available quantity';
+		}
 		return $results;
 });
 
