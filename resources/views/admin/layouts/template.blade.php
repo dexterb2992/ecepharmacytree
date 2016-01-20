@@ -55,7 +55,7 @@
                             @elseif( Auth::check() )
                                 {{ Auth::user()->branch->name }}
                                 @if( Auth::user()->isSuperAdmin() )
-                                    <small><i>[<a href="'.url('change-branch').'">Change</a>]</i></small>
+                                    <small><i>[<a href="{{ url('change-branch') }}">Change</a>]</i></small>
                                 @endif
                             @endif
                         </span>
