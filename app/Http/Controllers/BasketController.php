@@ -17,11 +17,11 @@ class BasketController extends Controller
 
     foreach($results as $result){
         if($result->quantity > $result->available_quantity) {
-            $basket = Basket::findOrFail($result->id);
+            $basket = Basket::findOrFail($result->basket_id);
             $basket->quantity = $result->available_quantity;
             if($basket->save()){
-                // $result->quantity = $result->available_quantity;                    
-                return 'tangina mo';
+                $result->quantity = $result->available_quantity;                    
+                // return 'tangina mo';
             }
         }
 
