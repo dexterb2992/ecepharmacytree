@@ -20,7 +20,7 @@ class BasketController extends Controller
     function check_basket(){
         $input = Input::all();
 
-        $response = $this->basket->check_and_adjust_basket($input);
+        $response = json_decode($this->basket->check_and_adjust_basket($input));
 
         return json_encode($response);
     }
