@@ -153,7 +153,8 @@
                 <td>&nbsp;</td>
                 <td class="col-xs-3">
                   @if($order_detail->available_quantity == 0)
-                  <i>Out of Stock</i>
+                  <i>Out of Stock</i><br/>
+                  <b>Items to be fulfilled ( {{ $order_detail->quantity }} )</b>
                   @else
                   <div class="input-group">
                     <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" max="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" min="0">
