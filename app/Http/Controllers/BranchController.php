@@ -53,7 +53,7 @@ class BranchController extends Controller
      */
     public function store(Request $request){
         $input = Input::all();
-        
+
         $branch = new Branch;
         $branch->name = $input["name"];
 
@@ -165,5 +165,18 @@ class BranchController extends Controller
     public function get_which_branch(){
         $branches = Branch::all();
         return view('auth.choosebranch')->withBranches($branches);
+    }
+
+    public function show_selected_branch(){
+        if( Request::ajax() ){
+            if( session()->get('selected_branch') != 0 ){
+                $branch = Branch::find( session()->get('selected_branch') );
+                return $branch;
+            }
+
+            return 'No selected branch.';
+        }
+        
+        return 'Invalid request';
     }
 }

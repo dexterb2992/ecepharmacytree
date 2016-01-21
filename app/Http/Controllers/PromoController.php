@@ -29,8 +29,25 @@ class PromoController extends Controller
     public function index()
     {
         $today =  Carbon::today('Asia/Manila')->addHours(23 );
-        $promos = Promo::where('end_date', '>=', $today)->get();
+        // $promos = Promo::where('end_date', '>=', $today)->get();
         $products = Product::all();
+
+        $promos = Promo::where('end_date', '>=', $today)
+            ->with([
+                'discounts' => function($query) {
+                    $query->where('deleted_at', '=', null)->with([
+                        'product' => function($query){
+                            $query->where('deleted_at', '=', null);
+                        }
+                    ]);
+                }
+            ])->get();
+       
+        if( isset($promo->discounts) && !empty($promo->discounts) ){
+            foreach ($promo->discounts as $discount) {
+                $discount->load('product');
+            }
+        }
 
         return view('admin.promo')->withPromos($promos)->withTitle('Promotions and Discounts')
             ->withProducts($products);
@@ -47,30 +64,13 @@ class PromoController extends Controller
     public function store()
     {
         $input = Input::all();
-        $promo = new Promo;
-        // dd($input);
-        $promo->long_title = $input["long_title"];
-        $promo->start_date = $input["start_date"];
-        $promo->end_date = $input["end_date"];
-        $promo->product_applicability = $input["product_applicability"];
-        $promo->minimum_purchase_amount = $input["minimum_purchase_amount"]; // optional
-        $promo->offer_type = $input["offer_type"];
-        $promo->generic_redemption_code = $input["generic_redemption_code"];
+        $response = $this->promo->save($input);
 
-        if( $promo->save() ){
-            if( isset($input['product_id']) && count($input['product_id']) > 0 ){
-                foreach ($input['product_id'] as $key => $value) {
-                    $dfp = new DiscountsFreeProduct;
-                    $dfp->promo_id = $promo->id;
-                    $dfp->product_id = $value;
-                    $dfp->save();
-                }
-            }
-
+        if( $response ){
             session()->flash("flash_message", ["msg" => "New promo has been added successfully.", "type" => "success"]);
             return Redirect::to( route('Promo::index') );
         }
-
+        
         session()->flash("flash_message", ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "warning"]);
         return Redirect::to( route('Promo::index') );
 
@@ -155,13 +155,20 @@ class PromoController extends Controller
     }
 
     public function details($id){
-        $dfp = DiscountsFreeProduct::find($id);
-        if( $dfp->type == "2" ){ // Free Gift
+        $dfp = DiscountsFreeProduct::findOrFail($id);
+        if( $dfp->has_free_gifts == 1 ){ // get Free Gifts
             $free_products = $dfp->free_products;
             if( count($free_products) >= 1 ){
                 $free_products->load('product');
             }
+
         } 
+
+        if( $dfp->minimum_purchase != 0 && $dfp->quantity_required == 0 ){
+            $dfp->discount_detail_minimum_type = 'minimum_purchase';
+        }else{
+            $dfp->discount_detail_minimum_type = 'quantity_required';
+        }
         return $dfp;
     }
 

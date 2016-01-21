@@ -74,6 +74,8 @@ Route::get('test/{referral_id}', function ($referral_id){
 	dd(get_uplines($referral_id, true, true));
 });
 
+Route::post("get-selected-branch", 'BranchController@show_selected_branch');
+
 Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin', 'middleware' => 'admin']);
 
@@ -114,12 +116,13 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	 * Routes for Products and Product Categories & SubCategories
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'ProductController@index']);
+	Route::get('deleted', ['as' => 'all', 'uses' => 'ProductController@all_include_deleted']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'ProductController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
-
 	Route::post('/all', ['as' => 'get_all', 'uses' => 'ProductController@show_all']);
+
 
 	Route::get('gallery/{product_id}', ['as' => 'gallery', 'uses' => 'ProductsGalleryController@show']);
 	Route::get('gallery/primary/{product_id}', ['as' => 'gallery_primary', 'uses' => 'ProductsGalleryController@get_primary']);
@@ -295,6 +298,8 @@ Route::get('api/{type}/{what}', function ($type, $what){
 	}else if( $type == 'check' ){
 		if( $what == 'sku' )
 			return does_sku_exist(Input::get('sku')) ? 'true' : 'false';
+	}else if( $type == 'str_singular' ){
+		return str_singular($what);
 	}
 });
 

@@ -29,6 +29,8 @@ class CreateConsultationsTable extends Migration
             $table->string('comment_doctor');
             $table->integer('patient_is_approved')->default(0);
             $table->string('comment_patient');
+            $table->integer('patient_record_id')->default(0);
+            $table->integer('is_done')->default(0);
             $table->integer('is_deleted')->default(0);
             $table->integer('is_new')->default(1);
             $table->timestamps();

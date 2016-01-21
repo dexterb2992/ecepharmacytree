@@ -76,16 +76,17 @@ $.fn.hasParent = function(a) {
  function updateInventoryProductQty(){
  	var unit = "", packing = "", qtyPerPacking = 1, totalQty = 0, qty = 0;
  	var el = $("#inventory_quantity");
- 	var selectedOption = $("#inventories_product_id").children('option:selected');
+    // var selectedOption = $("#inventories_product_id").children('option:selected');
+ 	var selectedOption = $("#inventories_product_id option:selected");
  	
  	qty = el.val() == "" ? 0 : el.val();
 
- 	qtyPerPacking = selectedOption.data("qty-per-packing");
+ 	qtyPerPacking = selectedOption.attr("data-qty-per-packing");
 
  	totalQty = qty*qtyPerPacking;
 
- 	unit = str_auto_plural( selectedOption.data("unit"), totalQty );
- 	packing = str_auto_plural( selectedOption.data("packing"),  qty);
+ 	unit = str_auto_plural( selectedOption.attr("data-unit"), totalQty );
+ 	packing = str_auto_plural( selectedOption.attr("data-packing"),  qty);
 
  	$("#total_quantity_in_unit").html( totalQty+" "+unit+" ( "+qty+" "+packing+" )" );
  	$(".add-on-product-packing").html(packing);
@@ -155,7 +156,8 @@ function _clear_form_data(form){
 }
 
 function _error(element, error_msg){
-    if( element.parents('.input-group').length ){ // has parent
+    console.log(element);
+    if( element.parent('.input-group').length ){ // has parent
         if( element.parent('.input-group').next('.label-danger').length ){
             element.parent('.input-group').next('.label-danger').html(error_msg);
         }else{
@@ -169,7 +171,7 @@ function _error(element, error_msg){
         } 
     }
 
-	
+	element.next('div.label-danger').fadeIn().delay(5000).fadeOut(400);
 }
 
 function formfinder(form, name, fieldType){

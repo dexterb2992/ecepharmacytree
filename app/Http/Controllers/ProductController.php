@@ -40,14 +40,19 @@ class ProductController extends Controller
             ->withCategory_names($category_names)->withTitle('Products');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
+    public function all_include_deleted(){
+        $products = Product::withTrashed()->get();
+        $categories = ProductCategory::orderBy('name')->get();
+        $subcategories = ProductSubcategory::orderBy('name')->get();
+        $category_names = array();
+        foreach ($categories as $category) {
+            $category_names[$category->id] = $category->name;
+        }
+
+        return view('admin.products')->withProducts($products)
+            ->withCategories($categories)->withSubcategories($subcategories)
+            ->withCategory_names($category_names)->withTitle('Products');
+        return Redirect::to('/products')->withProducts($products);
     }
 
     /**
@@ -64,6 +69,7 @@ class ProductController extends Controller
         $product->generic_name = ucfirst( $input['generic_name'] );
         $product->description = ucfirst( $input['description'] );
         $product->prescription_required = $input['prescription_required'];
+        $product->unit_cost = $input['unit_cost'];
         $product->price = $input['price'];
         $product->unit = str_singular( $input['unit'] );
         $product->packing = $input['packing'];
@@ -90,6 +96,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         if( isset( $product->id ) )
             return $product->toJson();
+        return [];
         // return Redirect::to( route('products') );
     }
 
@@ -97,6 +104,8 @@ class ProductController extends Controller
         $products = Product::all();
         return $products;
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -113,6 +122,7 @@ class ProductController extends Controller
         $product->generic_name = ucfirst( $input['generic_name'] );
         $product->description = ucfirst( $input['description'] );
         $product->prescription_required = $input['prescription_required'];
+        $product->unit_cost = $input['unit_cost'];
         $product->price = $input['price'];
         $product->unit = str_singular( $input['unit'] );
         $product->packing = $input['packing'];

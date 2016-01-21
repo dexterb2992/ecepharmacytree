@@ -29,6 +29,7 @@
                             <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-product" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
                         </div><!-- /.box-header -->
                         <div class="box-body">
+                            <small class=""><a href="{{ route('Products::all') }}">Show Deleted Products</a></small>
                             <table class="table table-bordered table-hover datatable products-table">
                                 <thead>
                                     <tr>
@@ -36,6 +37,7 @@
                                         <th>Name</th>
                                         <th>Generic Name</th>
                                         <th>Description</th>
+                                        <th>Unit Cost</th>
                                         <th>Selling Price/Packing</th>
                                         <th>Packing</th>
                                         <th>Category</th>
@@ -56,6 +58,7 @@
                                             </td>
                                             <td>{{ $product->generic_name }}</td>
                                             <td>{!! Str::limit(rn2br($product->description), 150) !!}</td>
+                                            <td>&#x20B1; {{ $product->unit_cost.' /'.$product->packing }}</td>
                                             <td>&#x20B1; {{ $product->price.' /'.$product->packing }}</td>
                                             <td>
                                                 {!! $product->qty_per_packing." ".str_auto_plural($product->unit, $product->qty_per_packing)." per ".$product->packing !!}
@@ -66,15 +69,24 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group pull-right">
-                                                    <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
-                                                    data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Remove">
-                                                        <i class="fa fa-trash-o"></i>
-                                                    </span>
-                                                    <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
-                                                     data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
-                                                     data-id="{{ $product->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
-                                                        <i class="fa fa-edit"></i>
-                                                    </span>
+                                                    @if(is_null($product->deleted_at))
+                                                        <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
+                                                        data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Remove">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </span>
+
+                                                        <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
+                                                         data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
+                                                         data-id="{{ $product->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
+                                                            <i class="fa fa-edit"></i>
+                                                        </span>
+                                                    @else
+                                                        <span class="btn btn-primary btn-xs action-icon restore-product" data-action="reactivate" data-title="Restore product" 
+                                                        data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Restore">
+                                                            <i class="fa fa-refresh"></i>
+                                                        </span>
+                                                    @endif
+                                                    
                                                 </div>
                                             </td>
                                         </tr>
@@ -298,6 +310,14 @@
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price">Unit Cost <i>(per packing)*</i></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">&#x20B1;</span>
+                                    <input type="text" class="form-control number" name="unit_cost" required>
+                                </div>
                             </div>
 
                             <div class="form-group">

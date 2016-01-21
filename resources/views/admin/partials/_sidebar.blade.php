@@ -65,11 +65,7 @@
                 </a>
             </li>
 
-            <li class="treeview">
-                <a href="{{ route('doctors') }}">
-                    <i class="fa-user-md fa"></i><span id="sidebar_doctors">Doctors</span>
-                </a>
-            </li>
+           
 
             <li class="treeview">
                 <a href="{{ route('Promo::index') }}">
@@ -90,6 +86,12 @@
             </li>
 
             @if(Auth::user()->isAdmin())
+            <li class="treeview">
+                <a href="{{ route('doctors') }}">
+                    <i class="fa-user-md fa"></i><span id="sidebar_doctors">Doctors</span>
+                </a>
+            </li>
+            
             <li class="treeview">
                 <a href="{{ route('Branches::index') }}">
                     <i class="fa fa-building"></i> <span id="sidebar_branches">Branches</span>

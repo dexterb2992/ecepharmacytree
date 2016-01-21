@@ -39,7 +39,9 @@ class NotificationsController extends Controller
         $orders = Order::where('is_new', '=', 1)->count();
         $branches = Branch::where('is_new', '=', 1)->count();
 
-        return json_encode(array(
+        $unseen_notifications = [];
+
+        $sources = array(
             "sidebar_members"  => $patients,
             "sidebar_employees" => $users,
             "sidebar_product_groups"    => $product_groups,
@@ -50,7 +52,15 @@ class NotificationsController extends Controller
             "sidebar_stock_returns" => $stock_returns,
             "sidebar_orders"    => $orders,
             "sidebar_branches"  => $branches
-        ));
+        );
+
+        foreach ($sources as $key => $value) {
+            if( $value > 0 ){
+                $unseen_notifications[$key] = $value;
+            }
+        }
+
+        return json_encode($unseen_notifications);
     }
 
     public function update(){
@@ -72,8 +82,11 @@ class NotificationsController extends Controller
         foreach ($sources as $key => $value) {
             if( $key == $input['source'] ){
                 $value::where('is_new', '=', 1)->update(['is_new'=> 0]);
+                return json_encode(['status' => 200]);
             }
-         } 
+        } 
+
+        return json_encode(['status' => 500]);
         
     }
 }

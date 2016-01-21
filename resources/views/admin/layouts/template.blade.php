@@ -47,15 +47,10 @@
                             <?php $branches_count = Branch::all()->count(); ?>
                             
                             @if( Auth::check() && Auth::user()->isAdmin() && $branches_count > 1)
-                                @if( Session::has('selected_branch') )
-                                    {{ Branch::find(Session::get('selected_branch'))->first()->name }}
-                                @else
-                                    {!! Session::put('selected_branch', Auth::user()->branch->id) !!}
-                                    {{ Branch::find(Session::get('selected_branch'))->first()->name }}
-                                @endif
+                                <span id="session_branch_name"></span>                                
                                 <small><i>[<a href="{{ url('change-branch') }}">Change</a>]</i></small>
                             @elseif( Auth::check() && !Auth::user()->isAdmin())
-                                {{ Auth::user()->branch->name }}
+                                <span id="session_branch_name">{{ Auth::user()->branch->name }}</span> 
                             @endif
                         </span>
                     </p>

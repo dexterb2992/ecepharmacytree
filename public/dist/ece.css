@@ -432,3 +432,8 @@ dd#total_amount {
     font-size: medium;
     font-weight: bold;
 }
+
+label[for="product_applicability"], label[for="discount_type"], label[for="has_free_gifts"], label[for="is_every"], 
+    label[for="discount_detail_minimum_type"], label[for="per_transaction_has_free_gifts"] {
+    margin-right: 20px;
+}
