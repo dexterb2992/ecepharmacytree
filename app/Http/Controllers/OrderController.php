@@ -61,7 +61,7 @@ class OrderController extends Controller
 
         // $this->addAvailableQuantityToArrayObj($order_details, $order->branch_id);
 
-        $order_details = DB::select("call get_baskets_and_products(".$user_id.")");
+        $order_details = DB::select("call get_order_details_with_availablestocks(".$order->branch_id.", ".$order->id.")");
         echo 'order_details_here ='.$order_details.'\n order_details here2='.$norder_details;
 exit(0);
 
