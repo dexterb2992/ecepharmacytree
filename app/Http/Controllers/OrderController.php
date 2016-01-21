@@ -27,8 +27,15 @@ class OrderController extends Controller
 
         $orders = Order::where('branch_id', session()->get('selected_branch'))->orderBy('id', 'DESC')->get();
 
+        // $this->firstOrderFirstServeSort($orders);
+
         return view('admin.orders')->withOrders($orders);
     }
+
+    // function firstOrderFirstServeSort($orders)
+    // {
+    //     $ordersFulfilled = 
+    // }
 
     /**
      * Show the form for creating a new resource.

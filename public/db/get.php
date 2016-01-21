@@ -30,7 +30,7 @@ switch ($request) {
     /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
-    $result = mysql_query("SELECT p.*, cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(inv.available_quantity), 0) as available_quantity FROM products AS p INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id AND inv.branch_id = ".$_GET['branch_id']." GROUP BY p.id;") or returnError(mysql_error());
+    $result = mysql_query("call get_products(".$_GET['branch_id'].",".$_GET['patient_id'].")") or returnError(mysql_error());
     $tbl = "products";
     break;
     case 'get_doctors':
