@@ -6,9 +6,25 @@ use Request;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
+use ECEPharmacyTree\Basket;
+use DB;
+use Input;
+use ECEPharmacyTree\Repositories\BasketRepository;
 
 class BasketController extends Controller
 {
+    function __construct(BasketRepository $basket) {
+        $this->basket = $basket;
+    }
+
+    function check_basket(){
+        $input = Input::all();
+
+        $response = json_decode($this->basket->check_and_adjust_basket($input['patient_id'], $input['branch_id']));
+
+        return json_encode($response);
+    }
+
     /**
      * Display a listing of the resource.
      *

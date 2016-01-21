@@ -44,6 +44,8 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
+Route::get('check_basket', 'BasketController@check_basket');
+
 // Route::get('try/{referral_id}', function($referral_id){
 	// global $uplines;
 	// $uplines = array();

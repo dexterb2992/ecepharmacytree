@@ -19,12 +19,14 @@ use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Payment as InServerPayment;
 use Response;
 use Illuminate\Mail\Mailer;
+use ECEPharmacyTree\Repositories\BasketRepository;
 
 class VerifyCashPaymentController extends Controller
 {
 
-	function __construct(Mailer $mailer) {
+	function __construct(Mailer $mailer, BasketRepository $basket) {
 		$this->mailer = $mailer;
+		$this->basket = $basket;
 	}
 
 	function verification() {
@@ -48,6 +50,13 @@ class VerifyCashPaymentController extends Controller
 		$email = $input['email'];
 		$promo_id = $input['promo_id'];
 		$promo_type = $input['promo_type'];
+
+		$basket_response = json_decode($this->basket->check_and_adjust_basket($user_id, $branch_server_id));
+
+		if($basket_response->basket_quantity_changed){
+			echo json_encode($basket_response);	
+			exit(0);
+		}
 
 		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
@@ -168,10 +177,10 @@ class VerifyCashPaymentController extends Controller
 					$response['payment_message'] = "error saving payment";
 
 
-				if(Basket::where('patient_id', '=', $user_id)->delete()) 
-					$response['basket_message'] = "basket/s deleted on database";
-				else 
-					$response['basket_message'] = "basket/s not deleted on database";
+				// if(Basket::where('patient_id', '=', $user_id)->delete()) 
+				// 	$response['basket_message'] = "basket/s deleted on database";
+				// else 
+				// 	$response['basket_message'] = "basket/s not deleted on database";
 
 
 				$setting = Setting::first();
@@ -193,6 +202,10 @@ class VerifyCashPaymentController extends Controller
 		}
 
 		echo json_encode($response);
+	}
+
+	function check_if_stocks_valid(){
+		
 	}
 
 	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){

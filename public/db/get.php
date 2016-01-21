@@ -86,13 +86,11 @@ switch ($request) {
     /* Requires Parameters */
 
     case 'get_nocode_promos':
-    $sql = "SELECT pr.id as pr_promo_id, pr.product_applicability, pr.minimum_purchase_amount, pr.quantity_required as pr_qty_required, pr.is_free_delivery as pr_free_delivery, pr.percentage_discount as pr_percentage, pr.peso_discount as pr_peso, dfp.* FROM promos as pr left join discounts_free_products as dfp on pr.id = dfp.promo_id where offer_type = 'NO_CODE' AND pr.deleted_at IS NULL AND '".$dateonly."' >= pr.start_date AND '".$dateonly."' <= pr.end_date";
-    $result = mysql_query($sql) or returnError(mysql_error()); 
-    $tbl = "promos";
-    break;
-
-    case 'get_promos':
-    $sql = "SELECT *  FROM promos WHERE start_date <= '".$dateonly."' AND end_date >= '".$dateonly."'";
+    $sql = "SELECT pr.id as pr_promo_id, pr.product_applicability, pr.minimum_purchase_amount, 
+    pr.is_free_delivery as pr_free_delivery, pr.percentage_discount as pr_percentage, pr.peso_discount as pr_peso, pr.long_title, pr.start_date, pr.end_date, 
+    dfp.* FROM promos as pr left join discounts_free_products as dfp on pr.id = dfp.promo_id where offer_type = 'NO_CODE' AND pr.deleted_at IS NULL 
+    AND '".$dateonly."' >= pr.start_date AND '".$dateonly."' <= pr.end_date";
+ 
     $result = mysql_query($sql) or returnError(mysql_error()); 
     $tbl = "promos";
     break;
@@ -133,8 +131,7 @@ switch ($request) {
     break;
 
     case 'get_basket_details': 
-    $result = mysql_query("Select p.*, b.id as basket_id, b.is_approved, b.quantity, b.prescription_id, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity from baskets as b 
-        inner join products as p on p.id = b.product_id LEFT JOIN inventories AS inv ON p.id = inv.product_id AND branch_id=".$_GET['branch_id']." where b.patient_id=".$_GET['patient_id']." GROUP BY p.id");
+    $result = mysql_query("call check_basket(".$_GET['patient_id'].", ".$_GET['branch_id'].")");
     $tbl = "baskets";
     break;
 
