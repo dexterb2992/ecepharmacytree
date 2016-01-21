@@ -162,6 +162,7 @@
                       of  <strong>{{ $order_detail->quantity - $order_detail->qty_fulfilled }}</strong>
                     </div>
                   </div>
+                  <b>Limited Stocks</b>
                   @else
                   <div class="input-group">
                     <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" max="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" min="0">
