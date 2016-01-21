@@ -10,6 +10,7 @@ use ECEPharmacyTree\Order;
 use DB;
 use Redirect;
 use Auth;
+use ECEPharmacyTree\Inventory;
 
 class OrderController extends Controller
 {
@@ -110,10 +111,12 @@ class OrderController extends Controller
         $where_ids = "";
 
         foreach($_POST['order_fulfillment_qty'] as $key => $value) {
-            echo "key = ".$key." value=".$value;
             $when_and_thens .= " WHEN " . $key . " THEN qty_fulfilled+".$value;
             $where_ids .= $key . ",";
+
+            $this->deductInventory($key, $value);
         }
+
         $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
 
         $sql = "UPDATE order_details SET qty_fulfilled = CASE id ".$when_and_thens." END WHERE id IN (".$where_ids.")";
@@ -122,27 +125,31 @@ class OrderController extends Controller
 
         //move this code to fulfill items on admin
         // if($order_saved) {
-        //     $inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
-        //     $_quantity = $quantity;
-        //     $remains = 0;
-
-        //     foreach ($inventories as $inventory) {
-        //         if($remains > 0)
-        //             $_quantity = $remains;
-
-        //         if($_quantity  > $inventory->available_quantity){
-        //             $remains = $_quantity - $inventory->available_quantity;
-        //             $inventory->available_quantity = 0;
-        //             $inventory->save();
-        //         } else {
-        //             $inventory->available_quantity = $inventory->available_quantity - $_quantity;
-        //             $inventory->save();
-        //             break;
-        //         }
-        //     }
+            
         // }
 
         return Redirect::back();
+    }
+
+    function deductInventory($product_id, $quantity){
+        $inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
+        $_quantity = $quantity;
+        $remains = 0;
+
+        foreach ($inventories as $inventory) {
+            if($remains > 0)
+                $_quantity = $remains;
+
+            if($_quantity  > $inventory->available_quantity){
+                $remains = $_quantity - $inventory->available_quantity;
+                $inventory->available_quantity = 0;
+                $inventory->save();
+            } else {
+                $inventory->available_quantity = $inventory->available_quantity - $_quantity;
+                $inventory->save();
+                break;
+            }
+        }
     }
 
     /**
