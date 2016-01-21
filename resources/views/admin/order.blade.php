@@ -152,7 +152,7 @@
                 <td>&nbsp;</td>
                 <td class="col-xs-3">
                   <div class="input-group">
-                    <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" max="{{ $order_detail->quantity }}" min="0">
+                    <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" max="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" min="0">
                     <div class="input-group-addon">
                       of  <strong>{{ $order_detail->quantity - $order_detail->qty_fulfilled }}</strong>
                     </div>
