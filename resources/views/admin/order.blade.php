@@ -121,8 +121,8 @@
         </div>
         <div class="modal-body">
           Processed by <b>{{ $order->billing()->first()->payment_method }}</b>
-        <input type="text" name="or_txn_number" class="form-control" required>
-        <button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Accept Payment</button>
+          <input type="text" name="or_txn_number" class="form-control" required>
+          <button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Accept Payment</button>
         </div>
       </div>
     </div>
@@ -152,12 +152,17 @@
                 <td>{{ ucfirst($order_detail->pname) }}</td>
                 <td>&nbsp;</td>
                 <td class="col-xs-3">
+                  @if($order_detail->available_quantity == 0)
+                  <i>Out of Stock</i>
+                  @else
                   <div class="input-group">
                     <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" max="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" min="0">
                     <div class="input-group-addon">
                       of  <strong>{{ $order_detail->quantity - $order_detail->qty_fulfilled }}</strong>
                     </div>
                   </div>
+                  @endif
+                  
                 </td>
               </tr>
               @endforeach
@@ -171,22 +176,22 @@
 </form>
 
 <!-- Modal for Create/Edit product -->
-  <div class="modal" id="modal-view-prescription">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- <form role="form" id="form_view_member" data-urlmain="/members/"> -->
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">View Prescription</h4>
+<div class="modal" id="modal-view-prescription">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- <form role="form" id="form_view_member" data-urlmain="/members/"> -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">View Prescription</h4>
+      </div>
+      <div class="modal-body">
+        <div class="ytp-thumbnail-overlay ytp-cued-thumbnail-overlay">
+          <img id="image_holder" class="img-responsive primary-photo" src="">
         </div>
-        <div class="modal-body">
-          <div class="ytp-thumbnail-overlay ytp-cued-thumbnail-overlay">
-            <img id="image_holder" class="img-responsive primary-photo" src="">
-          </div>
-        </div>
-        <!-- </form> -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  </div><!-- /.col -->
+      </div>
+      <!-- </form> -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</div><!-- /.col -->
 @stop
 
