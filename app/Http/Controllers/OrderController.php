@@ -139,9 +139,9 @@ class OrderController extends Controller
 
     function deductInventory($product_id, $quantity, $branch_id){
         $inventories = Inventory::where('product_id', $product_id)->where('branch_id', $branch_id)->orderBy('expiration_date', 'ASC')->get();
-        
+        echo "pid=".$product_id." qty=".$quantity." brnch_id=".$branch_id;
         dd($inventories);
-        
+
         $_quantity = $quantity;
         $remains = 0;
 
