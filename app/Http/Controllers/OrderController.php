@@ -57,25 +57,12 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::findOrFail($id);
-        $norder_details = $order->order_details()->get();
-
-        // $this->addAvailableQuantityToArrayObj($order_details, $order->branch_id);
-
         $order_details = DB::select("call get_order_details_with_availablestocks(".$order->branch_id.", ".$order->id.")");
-        dd($order_details);
-        dd($norder_details);
-
-        //ang gusto nako maachieve kay mag push ug isa ka object sa array object nga available_quantity na gikan inventory sa each order details.
-
         $order_details_with_prescriptions = $order->order_details()->whereRaw('prescription_id > 0')->get();
 
         return view('admin.order')->withOrder($order)->withOrderDetails($order_details)->withOrderDetailsWithPrescriptions($order_details_with_prescriptions);
     }
 
-    // function addAvailableQuantityToArrayObj($order_details, $branch_id){
-    //     // foreach($order_details as $order
-    //         SELECT od.*, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM order_details AS od LEFT JOIN inventories AS inv ON od.product_id = inv.product_id AND inv.branch_id = ".$order->branch_id." GROUP BY od.id;
-    // }
 
     public function show_all(){
         // $orders = Order::all();
