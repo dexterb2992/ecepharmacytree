@@ -57,11 +57,24 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::findOrFail($id);
-        $order_details = $order->order_details()->get();
+        $norder_details = $order->order_details()->get();
+
+        $this->addAvailableQuantityToArrayObj($order_details, $order->branch_id);
+
+        $order_details = DB::select("call get_baskets_and_products(".$user_id.")");
+        dd('order_details_here ='.$order_details.'\n order_details here2='.$norder_details);
+
+        //ang gusto nako maachieve kay mag push ug isa ka object sa array object nga available_quantity na gikan inventory sa each order details.
+
         $order_details_with_prescriptions = $order->order_details()->whereRaw('prescription_id > 0')->get();
 
         return view('admin.order')->withOrder($order)->withOrderDetails($order_details)->withOrderDetailsWithPrescriptions($order_details_with_prescriptions);
     }
+
+    // function addAvailableQuantityToArrayObj($order_details, $branch_id){
+    //     // foreach($order_details as $order
+    //         SELECT od.*, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM order_details AS od LEFT JOIN inventories AS inv ON od.product_id = inv.product_id AND inv.branch_id = ".$order->branch_id." GROUP BY od.id;
+    // }
 
     public function show_all(){
         // $orders = Order::all();
@@ -106,15 +119,16 @@ class OrderController extends Controller
      * @return Response
      */
      function fulfill_orders() {
-        
+        $input = Input::all();
+
         $when_and_thens = "";
         $where_ids = "";
 
-        foreach($_POST['order_fulfillment_qty'] as $key => $value) {
+        foreach($input['order_fulfillment_qty'] as $key => $value) {
             $when_and_thens .= " WHEN " . $key . " THEN qty_fulfilled+".$value;
             $where_ids .= $key . ",";
 
-            $this->deductInventory($key, $value);
+            $this->deductInventory($key, $value, $input['branch_id']);
         }
 
         $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
@@ -131,8 +145,8 @@ class OrderController extends Controller
         return Redirect::back();
     }
 
-    function deductInventory($product_id, $quantity){
-        $inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
+    function deductInventory($product_id, $quantity, $branch_id){
+        $inventories = Inventory::where('product_id', $product_id)->where('branch_id', $branch_id)->orderBy('expiration_date', 'ASC')->get();
         $_quantity = $quantity;
         $remains = 0;
 
