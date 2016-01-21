@@ -32,7 +32,7 @@ class CreateDiscountsFreeProductsTable extends Migration
             $table->double('percentage_discount');
             $table->double('peso_discount');
             $table->integer('has_free_gifts')->default(0);
-            $table->integer('is_every')->default(1);
+            $table->integer('is_every')->default(0);
 
             $table->timestamps();
             $table->softDeletes();

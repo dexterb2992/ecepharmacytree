@@ -1,8 +1,14 @@
 /* Add your custom javascript functions here */
       
   function str_singular(str){
-    var res = '<?php echo str_singular("'+str+'");?>';
-    return res;
+    $.ajax({
+      url: '/api/str_singular/'+str,
+      type: 'get'
+    }).done(function(data){
+      if( data != "" ){
+        return data;
+      }
+    });
   }
 
   function str_plural(str){
@@ -61,8 +67,9 @@
 
       if( quantity > 1 ){
         return str_plural( str )+suf;
+      }else{
+        return str_singular( str )+suf;
       }
-      return str_singular( str )+suf;
     }catch(Exception){
       console.log(Exception);
     }

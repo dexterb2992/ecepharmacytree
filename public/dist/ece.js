@@ -4,6 +4,9 @@ $(document).ready(function (){
     window.global_free_gift_product_ids = [];
     window.global_free_gift_quantities = []; // quantities from database
 
+    window.global_per_transaction_free_gift_product_ids = [];
+    window.global_per_transaction_quantities = [];
+
     /* Morris.js Charts */
     // Sales chart
     try{
@@ -129,7 +132,6 @@ $(document).ready(function (){
       P.S. Add your own codes below to achieve the results you wanted
     */
     $(document).on("click", ".add-edit-btn", function (){
-        $("select.select2").select2('destroy');
     	var $this = $(this), 
             target = $this.attr("data-target");
         var form = $(target), 
@@ -166,39 +168,47 @@ $(document).ready(function (){
 
                     $.each(data, function (i, row){ // loop through all object elements 
                         // just add your custom conditions here 
-                        if( i == "description" ){
-                            var str = row+"";
-                            var reg = /\\r?\\n/g; // remove extra slashes
-                            var newRow = str.replace(reg, '\n');
-                        }
-
-
-                        form.find("input[name='"+i+"']").val(row);
-                        form.find("textarea[name='"+i+"']").val(newRow);
-                        var cbox = form.find('input[name="'+i+'"][type="checkbox"]');
-                        if( cbox.length > 0 ){
-                            if( row == 1 ){
-                                cbox.attr("checked", "checked");
-                                cbox.iCheck('uncheck');
-                                cbox.iCheck('check');
-                            }else{
-                                cbox.removeAttr("checked");
-                                cbox.iCheck('check');
-                                cbox.iCheck('uncheck');
+                            if( i == "description" ){
+                                var str = row+"";
+                                var reg = /\\r?\\n/g; // remove extra slashes
+                                var newRow = str.replace(reg, '\n');
                             }
-                        }
 
-                        if(row == "") {
-                            form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
-                        } else {
-                            form.find("img[name='"+i+"']").attr('src', 'db/uploads/user_'+data.id+'/'+row);
-                        }
 
-                        if( i == "start_date" ) 
-                            start_date = row;
+                            form.find("input[name='"+i+"']").val(row);
+                            form.find("textarea[name='"+i+"']").val(newRow);
+                            var cbox = form.find('input[name="'+i+'"][type="checkbox"]');
+                            if( cbox.length > 0 ){
+                                if( row == 1 ){
+                                    cbox.attr("checked", "checked");
+                                    cbox.iCheck('uncheck');
+                                    cbox.iCheck('check');
+                                }else{
+                                    cbox.removeAttr("checked");
+                                    cbox.iCheck('check');
+                                    cbox.iCheck('uncheck');
+                                }
+                            }
 
-                        if( i == "end_date" )
-                            end_date = row;
+                            var radio = form.find('input[name="'+i+'"][type="radio"][data-check-value="'+row+'"]');
+                            if( radio.length > 0 ){
+                                radio.attr("checked", "checked");
+                                radio.iCheck('uncheck');
+                                radio.iCheck('check');
+                                
+                            }
+
+                            if(row == "") {
+                                form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
+                            } else {
+                                form.find("img[name='"+i+"']").attr('src', 'db/uploads/user_'+data.id+'/'+row);
+                            }
+
+                            if( i == "start_date" ) 
+                                start_date = row;
+
+                            if( i == "end_date" )
+                                end_date = row;
                     });
 
                     form.find("input#date_range").val(start_date+" - "  +end_date);
@@ -218,23 +228,23 @@ $(document).ready(function (){
                     });
 
                     // search for select dropdown with array names ex. names[]
-                    $.each(data, function (i, row){
-                        form.find("input[name='"+i+"[]']").val(row); 
-                        var does_array_select_exists = form.find("select[name='"+i+"[]']");
+                        $.each(data, function (i, row){
+                            form.find("input[name='"+i+"[]']").val(row); 
+                            var does_array_select_exists = form.find("select[name='"+i+"[]']");
 
-                        if( does_array_select_exists.length > 0 ){
-                            $.each(row, function (a, b){
-                                var lets_check = form.find("select[name='"+i+"[]'] option[value='"+b.id+"']");
-                                if( lets_check.length > 0 ){
-                                    $(lets_check).attr("selected", "selected");
+                            if( does_array_select_exists.length > 0 ){
+                                $.each(row, function (a, b){
+                                    var lets_check = form.find("select[name='"+i+"[]'] option[value='"+b.id+"']");
+                                    if( lets_check.length > 0 ){
+                                        $(lets_check).attr("selected", "selected");
+                                    }
+                                });
+
+                                if( does_array_select_exists.hasClass('select2') ){
+                                    does_array_select_exists.select2();
                                 }
-                            });
-
-                            if( does_array_select_exists.hasClass('select2') ){
-                                does_array_select_exists.select2();
                             }
-                        }
-                    });
+                        });
 
                 }catch(Exception){
                     console.log(Exception);
@@ -247,39 +257,38 @@ $(document).ready(function (){
 
                 // add your conditions & magic codes here when form fields has been filled 
 
+                    if( $this.hasClass('promo-product-details') ){
+                        window.global_free_gift_product_ids = [];
+                        window.global_free_gift_quantities = [];
 
-                if( $this.hasClass('promo-product-details') ){
-                    window.global_free_gift_product_ids = [];
-                    window.global_free_gift_quantities = [];
-
-                    console.log("promo details");
-                    if( data.has_free_gifts == 1 ){
-                        console.log("fetch for free gifts now.");
-                        $.ajax({
-                            url: '/promos/details/gifts',
-                            type: 'post',
-                            dataType: 'json',
-                            data: { id: data.id, _token: _token }
-                        }).done(function (data){
-                            console.log(data);
-                            var products_list = $("#promo_details_gifts");
-                            var htmls = "";
-                            $.each(data, function (i, row){
-                                $("#promo_details_gifts option[value='"+row.product.id+"']").attr("selected", "selected");
-                                htmls+= generate_gift_qty_form(row.product.id, row.product.name, row.quantity_free, 'gift_quantities');
-                                window.global_free_gift_product_ids.push(row.product.id);
-                                window.global_free_gift_quantities.push({"id" : row.product.id, "quantity" : row.quantity_free});
+                        console.log("promo details");
+                        if( data.has_free_gifts == 1 ){
+                            console.log("fetch for free gifts now.");
+                            $.ajax({
+                                url: '/promos/details/gifts',
+                                type: 'post',
+                                dataType: 'json',
+                                data: { id: data.id, _token: _token }
+                            }).done(function (data){
+                                console.log(data);
+                                var products_list = $("#promo_details_gifts");
+                                var htmls = "";
+                                $.each(data, function (i, row){
+                                    $("#promo_details_gifts option[value='"+row.product.id+"']").attr("selected", "selected");
+                                    htmls+= generate_gift_qty_form(row.product.id, row.product.name, row.quantity_free, 'gift_quantities');
+                                    window.global_free_gift_product_ids.push(row.product.id);
+                                    window.global_free_gift_quantities.push({"id" : row.product.id, "quantity" : row.quantity_free});
+                                });
+                                $(".selected-products-qty-div").html(htmls);
+                                $("#promo_details_gifts").select2();
+                                
+                                $("#form_promo_product_info").find('input.gift_quantities').each(function (i, row){
+                                    $(row).attr("data-min", 1);
+                                });
+                                allowNumericOnly( $('.number') );
                             });
-                            $(".selected-products-qty-div").html(htmls);
-                            $("#promo_details_gifts").select2();
-                            
-                            $("#form_promo_product_info").find('input.gift_quantities').each(function (i, row){
-                                $(row).attr("data-min", 1);
-                            });
-                            allowNumericOnly( $('.number') );
-                        });
+                        }
                     }
-                }
 
 
             });
@@ -306,7 +315,9 @@ $(document).ready(function (){
         
         $(modal).modal('show');
         
+
         $("select.select2").select2();
+        $('.data-show').trigger('change click');
 
     });
 
@@ -976,58 +987,6 @@ $("#add_gallery").click(function (){
         }
     });
 
-    $('#promo_details_gifts').change(function (){
-        var $this = $(this);
-        var htmls = "";
-        var dropdown_values = $this.val();
-        
-        if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
-            $.each(dropdown_values, function (i, row){
-                dropdown_values[i] = parseInt(row);
-            });
-
-            $.each(dropdown_values, function (i, row){
-                if( $.inArray( row, window.global_free_gift_product_ids) === -1 ){
-                    window.global_free_gift_product_ids.push(row);
-
-                    var check = getArrayIndexForKey(window.global_free_gift_quantities, "id", row);
-                    if( check === -1 ){ // make sure the product doesn't exist yet
-                        window.global_free_gift_quantities.push({"id" : row, "quantity" : 0});
-                    }
-
-                    // htmls+= generate_gift_qty_form(row, $this.children("option[value='"+row+"']").text());
-                }
-
-            });
-        }
-
-        // if wala sa select tas naa sa global_free_gift_qty, remove
-        $.each(window.global_free_gift_product_ids, function (i, row){
-            if( $.inArray(row, dropdown_values) === -1 ){ // means value is found in global_free_gift_qty and not in select
-                console.log("means value is found in global_free_gift_qty and not in select");
-                console.log("global_free_gift_quantities:");
-                console.log(global_free_gift_product_ids);
-                console.log("dropdown_values:");
-                console.log(dropdown_values);
-                var index =  window.global_free_gift_product_ids.indexOf(row);
-                console.log("index: "+index+" row: "+row);
-                if (index > -1) {
-                    window.global_free_gift_product_ids.splice(index, 1); // 
-                }
-            }
-        });
-
-
-        $.each(window.global_free_gift_quantities, function (i, row){
-            if( $.inArray(row.id, global_free_gift_product_ids) !== -1 ){
-                htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'gift_quantities');
-            }
-        
-        });
-
-        $(".selected-products-qty-div").html(htmls);
-        allowNumericOnly( $('.number') );
-    });
 
     $('.data-show').bind('change click', function(){
         dataShowTarget($(this), $(this).val());
@@ -1196,6 +1155,248 @@ $("#add_gallery").click(function (){
             $("#return_quantity").trigger('change');
         }
     });
+
+    $.ajax({
+        url: 'get-selected-branch',
+        type: 'post',
+        dataType: 'json',
+        data: { _token: $('input[name="_token"]').val() }
+    }).done(function (data){
+        if( typeof(data) !== 'string' ){
+            console.log(data);
+            $("#session_branch_name").html(data.name);
+        }
+    });
+
+
+    // Adding promo validation & codes here
+        $('#promo_details_gifts').change(function (){
+            var $this = $(this);
+            var htmls = "";
+            var dropdown_values = $this.val();
+            
+            if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
+                $.each(dropdown_values, function (i, row){
+                    dropdown_values[i] = parseInt(row);
+                });
+
+                $.each(dropdown_values, function (i, row){
+                    if( $.inArray( row, window.global_free_gift_product_ids) === -1 ){
+                        window.global_free_gift_product_ids.push(row);
+
+                        var check = getArrayIndexForKey(window.global_free_gift_quantities, "id", row);
+                        if( check === -1 ){ // make sure the product doesn't exist yet
+                            window.global_free_gift_quantities.push({"id" : row, "quantity" : 1});
+                        }
+
+                        // htmls+= generate_gift_qty_form(row, $this.children("option[value='"+row+"']").text());
+                    }
+
+                });
+            }
+
+            // if wala sa select tas naa sa global_free_gift_qty, remove
+            $.each(window.global_free_gift_product_ids, function (i, row){
+                if( $.inArray(row, dropdown_values) === -1 ){ // means value is found in global_free_gift_qty and not in select
+                    console.log("means value is found in global_free_gift_qty and not in select");
+                    console.log("global_free_gift_quantities:");
+                    console.log(global_free_gift_product_ids);
+                    console.log("dropdown_values:");
+                    console.log(dropdown_values);
+                    var index =  window.global_free_gift_product_ids.indexOf(row);
+                    console.log("index: "+index+" row: "+row);
+                    if (index > -1) {
+                        window.global_free_gift_product_ids.splice(index, 1); // 
+                    }
+                }
+            });
+
+
+            $.each(window.global_free_gift_quantities, function (i, row){
+                if( $.inArray(row.id, global_free_gift_product_ids) !== -1 ){
+                    htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'gift_quantities');
+                }
+            
+            });
+
+            $(".selected-products-qty-div").html(htmls);
+            allowNumericOnly( $('.number') );
+        });
+
+        $('#promo_details_per_transaction_gifts').change(function (){
+            var $this = $(this);
+            var htmls = "";
+            var dropdown_values = $this.val();
+            
+            if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
+                $.each(dropdown_values, function (i, row){
+                    dropdown_values[i] = parseInt(row);
+                });
+
+                $.each(dropdown_values, function (i, row){
+                    // if( $.inArray( row, window.global_free_gift_product_ids) === -1 ){
+                    if( $.inArray( row, window.global_per_transaction_free_gift_product_ids) === -1 ){
+                        window.global_per_transaction_free_gift_product_ids.push(row);
+
+                        var check = getArrayIndexForKey(window.global_per_transaction_quantities, "id", row);
+                        if( check === -1 ){ // make sure the product doesn't exist yet
+                            window.global_per_transaction_quantities.push({"id" : row, "quantity" : 1}); // set default to 1
+                        }
+
+                        // htmls+= generate_gift_qty_form(row, $this.children("option[value='"+row+"']").text());
+                    }
+
+                });
+            }
+
+            // if wala sa select tas naa sa global_free_gift_qty, remove
+            $.each(window.global_per_transaction_free_gift_product_ids, function (i, row){
+                if( $.inArray(row, dropdown_values) === -1 ){ // means value is found in global_free_gift_qty and not in select
+                    console.log("means value is found in global_free_gift_qty and not in select");
+                    console.log("global_per_transaction_free_gift_product_ids:");
+                    console.log(global_per_transaction_free_gift_product_ids);
+                    console.log("dropdown_values:");
+                    console.log(dropdown_values);
+                    var index =  window.global_per_transaction_free_gift_product_ids.indexOf(row);
+                    console.log("index: "+index+" row: "+row);
+                    if (index > -1) {
+                        window.global_per_transaction_free_gift_product_ids.splice(index, 1); // 
+                    }
+                }
+            });
+
+
+            $.each(window.global_per_transaction_quantities, function (i, row){
+                if( $.inArray(row.id, global_per_transaction_free_gift_product_ids) !== -1 ){
+                    htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'per_transaction_gift_quantities');
+                }
+            
+            });
+
+            $(".per-transaction-selected-products-qty-div").html(htmls);
+            allowNumericOnly( $('.number') );
+        });
+        
+        // validation on promo details of each product
+            $(document).on("submit", "#form_promo_product_info", function (e){
+                var $this = $(this);
+                var hasError = false;
+
+                var minimum_purchase = $this.find("input[name='minimum_purchase']"),
+                    quantity_required = $this.find("input[name='quantity_required']"),
+                    has_free_gifts = $this.find("input[name='has_free_gifts']"),
+                    promo_details_gifts = $this.find('#promo_details_gifts');
+
+                if( minimum_purchase.is(":visible") === true && (minimum_purchase.val() == "" ||  minimum_purchase.val() == "0" ) ){
+                    hasError = true;
+                    _error(minimum_purchase, "This field is required.");
+                }
+
+                if( quantity_required.is(":visible") === true && (quantity_required.val() == "" ||  quantity_required.val() == "0" ) ){
+                    hasError = true;
+                    _error(quantity_required, "This field is required.");
+                }
+
+                if( quantity_required.is(":visible") === false &&  minimum_purchase.is(":visible") === false ){
+                    hasError = true;
+                    _error($this.find('label[for="discount_detail_minimum_type"]:last'), "This field is required.");
+                }
+
+                if( has_free_gifts.val() == 1 &&  (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) ){
+                    hasError = true;
+                    _error(promo_details_gifts, "Please select atleast one product.");
+                }
+
+                $.each($(document).find('#form_promo_product_info input.gift_quantities'), function (i, row){
+                    if( $(row).val() == "" || $(row).val() == 0 ){
+                        hasError = true;
+                        _error($(row), "This field is required.");
+                    }
+                });
+
+                if( hasError === true ){
+                    e.preventDefault();
+                    return false;
+                }
+            });
+    
+        // validation for Add new Promo
+            $(document).on("click", "#btn_create_edit_promo", function (e){
+                
+                var $this = $("#form_edit_promo");
+                var hasError = false;
+
+                var date_range = $this.find("input[name='date_range']"), 
+                    long_title = $this.find("input[name='long_title']");
+
+                if( long_title.val() == "" ){
+                    hasError = true;
+                    _error(long_title, "This field is required.");
+                }
+
+                if( date_range.val() == "" ){
+                    hasError = true;
+                    _error(date_range, "This field is required.");
+                }
+
+
+                var product_applicability = "";
+
+                if( $("#per_transaction_outer_div").is(":visible") === true ){
+                    product_applicability = 'PER_TRANSACTION';
+                }else if( $("#specific_products_outer_div").is(":visible") === true ){
+                    product_applicability = 'SPECIFIC_PRODUCTS';
+                }
+
+                
+                
+                if( product_applicability === "PER_TRANSACTION" ){
+                    // if Per Transaction
+                    var minimum_purchase_amount = $this.find("input[name='minimum_purchase_amount']"),
+                        is_free_delivery = $this.find("input[name='is_free_delivery']:checked"),
+                        peso_discount = $this.find('input[name="peso_discount"]'),
+                        percentage_discount = $this.find('input[name="percentage_discount"]'),
+                        promo_details_per_transaction_gifts = $this.find("#promo_details_per_transaction_gifts");
+
+                    if( minimum_purchase_amount.val() == 0 || minimum_purchase_amount.val() == "" ){
+                        hasError = true;
+                        _error(minimum_purchase_amount, "Please provide a minimum purchase amount.");
+                    }
+
+                    if( promo_details_per_transaction_gifts.is(":visible") === true && (promo_details_per_transaction_gifts.val() === null 
+                            || promo_details_per_transaction_gifts == "") ){
+                        hasError = true;
+                        _error(promo_details_per_transaction_gifts, "Please select atleast one product.");
+                    }
+
+                    if( per_transaction_has_free_gifts.val() == 0 && is_free_delivery.val() == 0 && 
+                        ( (peso_discount.is(":visible") === true && (peso_discount.val() == 0 || peso_discount.val() == "") ) || 
+                           percentage_discount.is(":visible") === true && (percentage_discount.val() == 0 || percentage_discount.val() == "") ) ){
+                        hasError = true;
+                        $("#per_transaction_promo_offers").next('div.label-danger').html("Please add atleast one offer (Free Gifts, Free Delivery, Discount) to continue.").fadeIn().delay(5000).fadeOut(400);
+                    }
+
+
+                }else if(product_applicability === "SPECIFIC_PRODUCTS"){
+                    // If Specific Products
+                    var specific_promo_product_ids = $this.find("#specific_promo_product_ids");
+
+                    if( specific_promo_product_ids.val() === null || specific_promo_product_ids.val() == "" ){
+                        hasError = true;
+                        _error(specific_promo_product_ids, "Please select atleast one product which will be included on this promo.");
+                    }
+                }else{
+                    hasError = true;
+                    _error(product_applicability, "This field is required.");
+                }
+
+                if( hasError === true ){
+                    e.preventDefault();
+                    return false;
+                }else{
+                    $("#form_edit_promo")[0].submit();
+                }
+            });
 });
 
 //   On Stock Returns tab, you can exchange the returned product there with a new the same product.

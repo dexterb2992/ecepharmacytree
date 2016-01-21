@@ -441,3 +441,10 @@ function compute_points($sales_amount){
 	
 	return $points_earned;
 }
+
+function get_session_branch_name(){
+	if( session()->get('selected_branch') != 0 ){
+		return ECEPharmacyTree\Branch::find(session()->get('selected_branch'))->first()->name;
+	}
+	return "No branch selected.";
+}

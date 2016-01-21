@@ -26,17 +26,21 @@ jQuery(function($){
 	get_new_notifications();
 
 	if( $.getUrlParam('sc') == 'noti' ){
+		var source = $.getUrlParam('s');
+
 		$.ajax({
 			url: '/read-notification',
 			type: 'post',
 			dataType: 'json',
 			data: {
 					_token: $('input[name="_token"]').val(),
-					source: $.getUrlParam('s')
+					source: source
 				}
 		}).done(function (data){
 			if( data.status == 500 ){
 				console.log("Something, went wrong. Cannot read notifications right now.");
+			}else if (data.status == 200 ){
+				$("#"+source).next("small").html("");
 			}
 		});
 	}

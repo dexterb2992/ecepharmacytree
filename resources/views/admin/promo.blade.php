@@ -50,32 +50,34 @@ use Illuminate\Support\Str;
                                     <td>
                                         @if($promo->product_applicability == 'SPECIFIC_PRODUCTS')
                                             <?php $x = 0; ?>
-                                            @foreach($promo->discounts as $discount)
-                                                @if($x < 2)
-                                                <span data-id="{{ $discount->id }}" data-toggle="tooltip" data-original-title="Click for more details" 
-                                                    class="btn-success btn btn-xs promo-product-details add-edit-btn" data-action="edit"
-                                                    data-modal-target="#modal-promo-product-info" data-target="#form_promo_product_info"
-                                                    data-title="promo details for <a href='{{ route('Products::index').'?q='.$discount->product->name }}'>{{ $discount->product->name }}</a>">
-                                                    {!! Str::limit($discount->product->name, 29) !!}
-                                                </span>
-                                                @else
-                                                    <div id="more_{{ $discount->id }}" style="display:none;">
-                                                        <span data-id="{{ $discount->id }}" data-toggle="tooltip" data-original-title="Click for more details"
-                                                            class="btn-success btn btn-xs promo-product-details add-edit-btn" data-action="edit" 
+                                            @if( isset($promo->discounts) && !empty($promo->discounts) )
+                                                @foreach($promo->discounts as $discount)
+                                                        @if($x < 2)
+                                                        <span data-id="{{ $discount->id }}" data-toggle="tooltip" data-original-title="Click for more details" 
+                                                            class="btn-success btn btn-xs promo-product-details add-edit-btn" data-action="edit"
                                                             data-modal-target="#modal-promo-product-info" data-target="#form_promo_product_info"
                                                             data-title="promo details for <a href='{{ route('Products::index').'?q='.$discount->product->name }}'>{{ $discount->product->name }}</a>">
                                                             {!! Str::limit($discount->product->name, 29) !!}
                                                         </span>
-                                                    </div>
-                                                    @if($x == count($promo->discounts)-1)
-                                                        <span data-toggle="tooltip" data-target="#more_{{ $discount->id }}" data-original-title="Expand to show more products"
-                                                            class="btn btn-xs bg-purple show-hide-more-products" >
-                                                            <i class="fa-eye fa"></i>
-                                                        </span>
-                                                    @endif
-                                                @endif
-                                                <?php $x++; ?>
-                                            @endforeach
+                                                        @else
+                                                            <div id="more_{{ $discount->id }}" style="display:none;">
+                                                                <span data-id="{{ $discount->id }}" data-toggle="tooltip" data-original-title="Click for more details"
+                                                                    class="btn-success btn btn-xs promo-product-details add-edit-btn" data-action="edit" 
+                                                                    data-modal-target="#modal-promo-product-info" data-target="#form_promo_product_info"
+                                                                    data-title="promo details for <a href='{{ route('Products::index').'?q='.$discount->product->name }}'>{{ $discount->product->name }}</a>">
+                                                                    {!! Str::limit($discount->product->name, 29) !!}
+                                                                </span>
+                                                            </div>
+                                                            @if($x == count($promo->discounts)-1)
+                                                                <span data-toggle="tooltip" data-target="#more_{{ $discount->id }}" data-original-title="Expand to show more products"
+                                                                    class="btn btn-xs bg-purple show-hide-more-products" >
+                                                                    <i class="fa-eye fa"></i>
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    <?php $x++; ?>
+                                                @endforeach
+                                            @endif
                                             {!! count($promo->discounts) < 1 ? '<span class="label label-default">No product selected</span>' : '' !!}
                                         @else
                                             <span class="label label-primary">All Products</span>
@@ -128,38 +130,11 @@ use Illuminate\Support\Str;
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input type="text" class="form-control pull-right daterange" id="date_range" required/>
+									<input type="text" class="form-control pull-right daterange" id="date_range" name="date_range" readonly required/>
 									<input type="hidden" name="start_date">
 									<input type="hidden" name="end_date">
 								</div><!-- /.input group -->
 							</div><!-- /.form group -->
-
-                            <div class="form-group">
-                                <label>Product Applicability<red>*</red>(<small><i>Whether the promotion is applicable to all products or only specific products.</i></small>)</label>
-                                <select class="form-control" name="product_applicability" data-show-target="#specific_products_outer_div" data-show-target-when="SPECIFIC_PRODUCTS" required>
-                                    <option value="ALL_PRODUCTS">All Products</option>
-                                    <option value="SPECIFIC_PRODUCTS">Specific Products</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group" style="display:none;" id="specific_products_outer_div">
-                                <label>Products<red>*</red>(<small><i>Select those products that will be applied with this promo.</i></small>)</label>
-                                <select class="form-control select2" name="product_id[]" multiple>
-                                    @foreach($products as $product)
-                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Minimum Purchase Amount</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        {{ peso() }}
-                                    </div>
-                                    <input type="text" class="form-control number" name="minimum_purchase_amount">
-                                </div>
-                            </div>  
 
                             <div class="form-group">
                                 <label>Offer Type<red>*</red> (<small><i>This attribute indicates whether or not a coupon code is required for users to redeem the offer.</i></small>)</label>
@@ -168,7 +143,7 @@ use Illuminate\Support\Str;
                                     <option value="GENERIC_CODE">GENERIC CODE</option>
                                 </select>
                             </div>
-                            
+
                             <div class="form-group" style="display:none;" id="redemption_code_outer_div">
                                 <label>Generic Redemption Code (<small><i>The text code that customers can use online to redeem the promotion.</i></small>)</label>
                                 <div class="input-group">
@@ -184,13 +159,126 @@ use Illuminate\Support\Str;
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                <label>Product Applicability<red>*</red>(<small><i>Whether the promotion is applicable to per transaction or only specific products.</i></small>)</label>
+                                <!-- <select class="form-control" name="product_applicability" data-show-target="#specific_products_outer_div" data-show-target-when="SPECIFIC_PRODUCTS" required> -->
+                                <!-- <select class="form-control" name="product_applicability" id="product_applicability" required>
+                                    <option value="PER_TRANSACTION">Per Transaction</option>
+                                    <option value="SPECIFIC_PRODUCTS">Specific Products</option>
+                                </select> -->
+
+                                
+                                <label for="product_applicability">
+                                    <input type="radio" name="product_applicability" value="PER_TRANSACTION" 
+                                        data-check-value="PER_TRANSACTION" data-uncheck-value="SPECIFIC_PRODUCTS" class="form-control icheck data-show" 
+                                        data-show-target="#per_transaction_outer_div" data-show-target-when="PER_TRANSACTION" />
+                                    Per Transaction
+                                </label>
+
+                                
+                                <label for="product_applicability">
+                                    <input type="radio" name="product_applicability" value="SPECIFIC_PRODUCTS" 
+                                    data-check-value="SPECIFIC_PRODUCTS" data-uncheck-value="PER_TRANSACTION" class="form-control icheck data-show" 
+                                    data-show-target="#specific_products_outer_div" data-show-target-when="SPECIFIC_PRODUCTS"/>
+                                    Specific Products
+                                </label>
+                            </div>
+
+                            <!-- the container for a Specific Products Promo -->
+                                <div class="form-group" style="display:none;" id="specific_products_outer_div">
+                                    <label>Products<red>*</red>(<small><i>Select those products that will be applied with this promo.</i></small>)</label>
+                                    <select class="form-control select2" id="specific_promo_product_ids" name="product_id[]" multiple>
+                                        @foreach($products as $product)
+                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                            <!-- the container for a Per Transaction Promo -->
+                                <div id="per_transaction_outer_div" style="display:none;">
+                                    <div class="form-group">
+                                        <label>Minimum Purchase Amount</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                {{ peso() }}
+                                            </div>
+                                            <input type="text" class="form-control number" name="minimum_purchase_amount" required>
+                                        </div>
+                                    </div>  
+
+                                    <div class="form-group">
+                                        <label id="per_transaction_promo_offers">Offers: </label><div class="label-danger label"></div>
+                                        <div class="form-group">
+                                            
+                                            <label for="per_transaction_has_free_gifts">
+                                                <input type="checkbox" name="per_transaction_has_free_gifts" id="per_transaction_has_free_gifts" value="1" 
+                                                data-check-value="1" data-uncheck-value="0" class="form-control icheck data-show" 
+                                                data-show-target="#per_transaction_gift_products_outer_div" data-show-target-when="1"/>
+                                                Has Free Gifts
+                                            </label>
+
+                                            <label for="per_transaction_has_free_gifts">
+                                                <input type="checkbox" name="is_free_delivery" id="is_free_delivery" value="1" 
+                                                data-check-value="1" data-uncheck-value="0" class="form-control icheck data-show" />
+                                                Free Delivery
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group" style="display:none;" id="per_transaction_gift_products_outer_div">
+                                            <label>Select product/s to use as free gift</label>
+                                            <select class="form-control select2" id="promo_details_per_transaction_gifts" name="per_transaction_product_id[]" multiple>
+                                                @foreach($products as $product)
+                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            <div class="per-transaction-selected-products-qty-div form-horizontal"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Discount Type </label><br/>
+
+                                        <label for="discount_type">
+                                            <input type="radio" name="discount_type" value="peso_discount" 
+                                                data-check-value="peso_discount" data-uncheck-value="percentage_discount" class="form-control icheck data-show" 
+                                                data-show-target="#peso_discount_outer_div" data-show-target-when="peso_discount" />
+                                            Peso-based Discount
+                                        </label>
+
+                                        
+                                        <label for="discount_type">
+                                            <input type="radio" name="discount_type" value="percentage_discount" 
+                                            data-check-value="percentage_discount" data-uncheck-value="peso_discount" class="form-control icheck data-show" 
+                                            data-show-target="#percentage_discount_outer_div" data-show-target-when="percentage_discount" />
+                                            Percentage-based Discount
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group" id="peso_discount_outer_div" style="display:none;">
+                                        <label>Peso-based Discount</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">{!! peso() !!}</span>
+                                            <input class="form-control number" name="peso_discount" id="peso_discount" placeholder="(Optional)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none;" id="percentage_discount_outer_div">
+                                        <label>Percentage-based Discount</label>
+                                        <div class="input-group">
+                                            <input class="form-control number" name="percentage_discount" id="percentage_discount" placeholder="(Optional)"/>
+                                            <span class="input-group-addon">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
+                            <button type="button" class="btn btn-primary" name="submit" id="btn_create_edit_promo">Save changes</button>
                         </div>
-                    </div><!-- /.modal-content -->
-                </form><!-- /form -->
+                    </form><!-- /form -->
+                </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
@@ -205,10 +293,33 @@ use Illuminate\Support\Str;
                             <h4 class="modal-title">Promo details for <a href="javascript:void(0);" target="_blank" id="modal_product_name">{Product name}</a></h4>
                         </div>
                         <div class="modal-body">
-                        
                             <div class="form-group">
+                                <label>Choose a minimum type </label><br/>
+
+                                <label for="discount_detail_minimum_type">
+                                    <input type="radio" name="discount_detail_minimum_type" value="quantity_required" 
+                                        data-check-value="quantity_required" data-uncheck-value="minimum_purchase" class="form-control icheck data-show" 
+                                        data-show-target="#discount_detail_minimum_quantity_div" data-show-target-when="quantity_required" />
+                                    Minimum Quantity
+                                </label>
+
+                                
+                                <label for="discount_detail_minimum_type">
+                                    <input type="radio" name="discount_detail_minimum_type" value="minimum_purchase" 
+                                    data-check-value="minimum_purchase" data-uncheck-value="quantity_required" class="form-control icheck data-show" 
+                                    data-show-target="#discount_detail_minimum_purchase_div" data-show-target-when="minimum_purchase" />
+                                    Minimum Purchase Amount
+                                </label>
+                            </div>
+
+                            <div class="form-group" id="discount_detail_minimum_quantity_div" style="display:none;">
                                 <label>Minimum Quantity</label>
                                 <input type="text" class="form-control number" name="quantity_required">
+                            </div>
+
+                            <div class="form-group"  id="discount_detail_minimum_purchase_div" style="display:none;">
+                                <label>Minimum Purchase Amount</label>
+                                <input type="text" class="form-control number" name="minimum_purchase">
                             </div>
 
                             <div class="form-group">
@@ -216,10 +327,12 @@ use Illuminate\Support\Str;
                             </div>
 
                             <div class="form-group">
-                                <input type="checkbox" name="has_free_gifts" id="has_free_gifts" value="1" 
-                                    data-check-value="1" data-uncheck-value="0" class="form-control icheck data-show" 
-                                    data-show-target="#gift_products_outer_div" data-show-target-when="1"/>
-                                <label for="has_free_gifts">Has Free Gifts</label>
+                                <label for="has_free_gifts">
+                                    <input type="checkbox" name="has_free_gifts" id="has_free_gifts" value="1" 
+                                        data-check-value="1" data-uncheck-value="0" class="form-control icheck data-show" 
+                                        data-show-target="#gift_products_outer_div" data-show-target-when="1"/>
+                                    Has Free Gifts
+                                </label>
                             </div>
 
                             <div class="form-group" style="display:none;" id="gift_products_outer_div">
@@ -234,6 +347,25 @@ use Illuminate\Support\Str;
                             </div>
 
                             <div class="form-group">
+                                <label>Discount Type </label><br/>
+
+                                <label for="discount_type">
+                                    <input type="radio" name="discount_detail_discount_type" value="peso_discount" 
+                                        data-check-value="peso_discount" data-uncheck-value="percentage_discount" class="form-control icheck data-show" 
+                                        data-show-target="#discount_detail_peso_discount_div" data-show-target-when="peso_discount" />
+                                    Peso-based Discount
+                                </label>
+
+                                
+                                <label for="discount_type">
+                                    <input type="radio" name="discount_detail_discount_type" value="percentage_discount" 
+                                    data-check-value="percentage_discount" data-uncheck-value="peso_discount" class="form-control icheck data-show" 
+                                    data-show-target="#discount_detail_percentage_discount_div" data-show-target-when="percentage_discount" />
+                                    Percentage-based Discount
+                                </label>
+                            </div>
+
+                            <div class="form-group" id="discount_detail_peso_discount_div" style="display:none;">
                                 <label>Peso-based Discount</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">{!! peso() !!}</span>
@@ -241,12 +373,28 @@ use Illuminate\Support\Str;
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="discount_detail_percentage_discount_div" style="display:none;">
                                 <label>Percentage-based Discount</label>
                                 <div class="input-group">
                                     <input class="form-control number" name="percentage_discount" id="percentage_discount" />
                                     <span class="input-group-addon">%</span>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>For every minimum quantity/purchase, this promo will be applied.</label><br/>
+                                <label for="is_every">
+                                    <input type="radio" name="is_every" value="0" 
+                                        data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
+                                    Yes
+                                </label>
+
+                                
+                                <label for="is_every">
+                                    <input type="radio" name="is_every" value="0" 
+                                    data-check-value="0" data-uncheck-value="1" class="form-control icheck" checked />
+                                    No, apply just once.
+                                </label>
                             </div>
 
                         </div>

@@ -21,7 +21,7 @@ class OrderController extends Controller
     public function index()
     {
 
-        $orders = Order::where('branch_id', Auth::user()->branch->id)->orderBy('id', 'DESC')->get();
+        $orders = Order::where('branch_id', session()->get('selected_branch'))->orderBy('id', 'DESC')->get();
 
         return view('admin.orders')->withOrders($orders);
     }

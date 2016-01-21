@@ -23,7 +23,7 @@ class CreatePromosTable extends Migration
                 
             $table->string('generic_redemption_code')->nullable();  // Provide the text code that customers can use online(Example: EXTRA20).  
             $table->double('minimum_purchase_amount');              // optional
-            $table->double('quantity_required');
+            // $table->double('quantity_required');
             $table->integer('is_free_delivery');
             $table->longtext('free_gifts');
             $table->double('percentage_discount');

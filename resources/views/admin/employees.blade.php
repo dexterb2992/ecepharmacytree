@@ -83,9 +83,8 @@
 							<div class="form-group">
 								{!! Form::label('Role') !!}
 								<select class="form-control" name="access_level">
-									<option value="1">Admin</option>
-									<option value="2">Branch Manager</option>
-									<option value="3">Pharmacist</option>
+									{!! Auth::user()->access_level == 1 ? '<option value="1">Super Admin</option>' : '' !!}
+									<option value="2">Branch Admin</option>
 								</select>
 								{!! _error($errors->first('access_level')) !!}
 							</div>

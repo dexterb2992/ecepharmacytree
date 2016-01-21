@@ -37,7 +37,9 @@ class UserController extends Controller
                 ->where('branch_id', '=', Auth::user()->branch->id)->get();
             $branches = Branch::where('id', '=', Auth::user()->branch->id)->get();
         }else{
-            $employees = User::where('id', '!=', Auth::user()->id)->get();
+            // $employees = User::where('id', '!=', Auth::user()->id)->get();
+            $employees = User::where('id', '!=', Auth::user()->id)
+                ->where('branch_id', '=', session()->get('selected_branch'))->get();
             $branches = Branch::all();
         }
 
@@ -302,9 +304,12 @@ class UserController extends Controller
      */
     public function setBranchToLogin(){
         $input = Input::all();
-        session()->put('selected_branch', $input['branch_id']); 
-        if (session()->get('selected_branch') > 0)
-            return Redirect::to( route('dashboard') );
+        $branch = Branch::find($input['branch_id']);
+        session()->put('selected_branch', $branch->id); 
+        if (session()->get('selected_branch') == $input['branch_id'])
+            return Redirect::to( route('dashboard') )->withFlash_message([
+                'msg' => "You are now logged in at $branch->name branch.", 'type' => 'success'
+            ]);
         return Redirect::to( '/auth/logout' );
     }
 
