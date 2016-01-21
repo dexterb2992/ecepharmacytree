@@ -132,6 +132,7 @@
 <form method="post" name="fulfill_orders" action="/fulfill_orders">
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   <input type="hidden" name="branch_id" value="{{ $order->branch_id }}">
+  <input type="hidden" name="order_id" value="{{ $order->id }}">
   <div class="modal" id="modal-fulfill-items">
     <div class="modal-dialog">
       <div class="modal-content">

@@ -12,6 +12,7 @@ use Redirect;
 use Auth;
 use ECEPharmacyTree\Inventory;
 use Input;
+use ECEPharmacyTree\Log;
 
 class OrderController extends Controller
 {
@@ -121,7 +122,7 @@ class OrderController extends Controller
 
                 $prod_id = $order_detail_pid[$key];
 
-                $this->deductInventory($prod_id, $value, $input['branch_id']);
+                $this->deductInventory($prod_id, $value, $input['branch_id'], $input['order_id']);
             }
 
             $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
@@ -130,14 +131,12 @@ class OrderController extends Controller
 
             $affected = DB::update($sql);
         }
-    
+
         return Redirect::back();
     }
 
-    function deductInventory($product_id, $quantity, $branch_id){
+    function deductInventory($product_id, $quantity, $branch_id, $order_id) {
         $inventories = Inventory::where('product_id', $product_id)->where('branch_id', $branch_id)->orderBy('expiration_date', 'ASC')->get();
-        // echo "pid=".$product_id." qty=".$quantity." brnch_id=".$branch_id;
-        // dd($inventories);
 
         $_quantity = $quantity;
         $remains = 0;
@@ -148,14 +147,38 @@ class OrderController extends Controller
 
             if($_quantity  > $inventory->available_quantity){
                 $remains = $_quantity - $inventory->available_quantity;
+                $old_qty = $inventory->available_quantity;
                 $inventory->available_quantity = 0;
-                $inventory->save();
+                $new_qty = $inventory->available_quantity;
+
+                if($inventory->save()){
+                    $this->logAdjustment($inventory, $old_qty, $new_qty, $order_id);
+                }
             } else {
+                $old_qty = $inventory->available_quantity;
                 $inventory->available_quantity = $inventory->available_quantity - $_quantity;
-                $inventory->save();
+                $new_qty = $inventory->available_quantity;
+                
+                if($inventory->save()){
+                    if($inventory->save()){
+                        $this->logAdjustment($inventory, $old_qty, $new_qty, $order_id);
+                    }
+                }
                 break;
             }
         }
+    }
+
+    function logAdjustment($inventory, $old_qty, $new_qty, $order_id){
+        $log = new Log;
+        $log->user_id = Auth::user()->id;
+        $log->action = 'Adjusted an inventory information with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
+        target="blank">Lot #'.$inventory->lot_number.'</a>'
+        .' and change quantity from '.$old_qty.' to '.$new_qty
+        .'. <br/><code>Order Fulfillment: </code> <a href="'.URL::route('orders/'.$order_id)'" 
+        target="blank">Lot #'.$inventory->lot_number.'</a>';
+        $log->table = 'inventories';
+        $log->save();
     }
 
     /**
