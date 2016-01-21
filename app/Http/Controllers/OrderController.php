@@ -11,6 +11,7 @@ use DB;
 use Redirect;
 use Auth;
 use ECEPharmacyTree\Inventory;
+use Input;
 
 class OrderController extends Controller
 {
