@@ -59,7 +59,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $norder_details = $order->order_details()->get();
 
-        $this->addAvailableQuantityToArrayObj($order_details, $order->branch_id);
+        // $this->addAvailableQuantityToArrayObj($order_details, $order->branch_id);
 
         $order_details = DB::select("call get_baskets_and_products(".$user_id.")");
         echo 'order_details_here ='.$order_details.'\n order_details here2='.$norder_details;
