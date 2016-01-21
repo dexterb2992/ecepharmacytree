@@ -13,6 +13,7 @@ use Auth;
 use ECEPharmacyTree\Inventory;
 use Input;
 use ECEPharmacyTree\Log;
+use URL;
 
 class OrderController extends Controller
 {
