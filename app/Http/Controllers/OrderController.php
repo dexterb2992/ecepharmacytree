@@ -113,22 +113,25 @@ class OrderController extends Controller
         $when_and_thens = "";
         $where_ids = "";
 
-        foreach($input['order_fulfillment_qty'] as $key => $value) {
-            $when_and_thens .= " WHEN " . $key . " THEN qty_fulfilled+".$value;
-            $where_ids .= $key . ",";
+        if(isset($input['order_fulfillment_qty'])){
+            foreach($input['order_fulfillment_qty'] as $key => $value) {
+                $when_and_thens .= " WHEN " . $key . " THEN qty_fulfilled+".$value;
+                $where_ids .= $key . ",";
 
-            $this->deductInventory($key, $value, $input['branch_id']);
+                $this->deductInventory($key, $value, $input['branch_id']);
+            }
+
+            $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
+
+            $sql = "UPDATE order_details SET qty_fulfilled = CASE id ".$when_and_thens." END WHERE id IN (".$where_ids.")";
+
+            $affected = DB::update($sql);
         }
-
-        $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
-
-        $sql = "UPDATE order_details SET qty_fulfilled = CASE id ".$when_and_thens." END WHERE id IN (".$where_ids.")";
-
-        $affected = DB::update($sql);
+        
 
         //move this code to fulfill items on admin
         // if($order_saved) {
-            
+        
         // }
 
         return Redirect::back();
