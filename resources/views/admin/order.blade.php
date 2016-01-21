@@ -154,7 +154,8 @@
                 <td class="col-xs-3">
                   @if($order_detail->available_quantity == 0)
                   <i>Out of Stock</i><br/>
-                  <b>Items to be fulfilled ( {{ $order_detail->quantity - $order_detail->qty_fulfilled }} )</b>
+                  <b>Fulfilled: {{ $order_detail->qty_fulfilled }}</b>
+                  <b>Unfulfilled: {{ $order_detail->quantity - $order_detail->qty_fulfilled }}</b>
                   @elseif($order_detail->quantity > $order_detail->available_quantity)
                   <div class="input-group">
                   <input type="hidden" name="order_detail_pid[{{ $order_detail->id }}]" value="{{ $order_detail->product_id }}">
