@@ -114,11 +114,14 @@ class OrderController extends Controller
         $where_ids = "";
 
         if(isset($input['order_fulfillment_qty'])){
+            $order_detail_pid = $input['order_detail_pid'];
             foreach($input['order_fulfillment_qty'] as $key => $value) {
                 $when_and_thens .= " WHEN " . $key . " THEN qty_fulfilled+".$value;
                 $where_ids .= $key . ",";
 
-                $this->deductInventory($key, $value, $input['branch_id']);
+                $prod_id = $order_detail_pid[$key];
+
+                $this->deductInventory($prod_id, $value, $input['branch_id']);
             }
 
             $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
@@ -127,13 +130,7 @@ class OrderController extends Controller
 
             $affected = DB::update($sql);
         }
-        
-
-        //move this code to fulfill items on admin
-        // if($order_saved) {
-
-        // }
-
+    
         return Redirect::back();
     }
 

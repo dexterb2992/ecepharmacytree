@@ -157,6 +157,7 @@
                   <b>Items to be fulfilled ( {{ $order_detail->quantity }} )</b>
                   @elseif($order_detail->quantity > $order_detail->available_quantity)
                   <div class="input-group">
+                  <input type="hidden" name="order_detail_pid[{{ $order_detail->id }}]" value="{{ $order_detail->product_id }}">
                     <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->available_quantity }}" max="{{ $order_detail->available_quantity }}" min="0">
                     <div class="input-group-addon">
                       of  <strong>{{ $order_detail->quantity - $order_detail->qty_fulfilled }}</strong>
