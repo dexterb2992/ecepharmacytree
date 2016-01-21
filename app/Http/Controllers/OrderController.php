@@ -62,8 +62,8 @@ class OrderController extends Controller
         // $this->addAvailableQuantityToArrayObj($order_details, $order->branch_id);
 
         $order_details = DB::select("call get_order_details_with_availablestocks(".$order->branch_id.", ".$order->id.")");
-        echo 'order_details_here ='.$order_details.'\n order_details here2='.$norder_details;
-exit(0);
+        dd($order_details);
+        dd($norder_details);
 
         //ang gusto nako maachieve kay mag push ug isa ka object sa array object nga available_quantity na gikan inventory sa each order details.
 
