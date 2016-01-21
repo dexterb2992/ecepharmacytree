@@ -105,6 +105,7 @@ class OrderController extends Controller
      * @return Response
      */
      function fulfill_orders() {
+        
         $when_and_thens = "";
         $where_ids = "";
 
@@ -118,6 +119,28 @@ class OrderController extends Controller
         $sql = "UPDATE order_details SET qty_fulfilled = CASE id ".$when_and_thens." END WHERE id IN (".$where_ids.")";
 
         $affected = DB::update($sql);
+
+        //move this code to fulfill items on admin
+        // if($order_saved) {
+        //     $inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
+        //     $_quantity = $quantity;
+        //     $remains = 0;
+
+        //     foreach ($inventories as $inventory) {
+        //         if($remains > 0)
+        //             $_quantity = $remains;
+
+        //         if($_quantity  > $inventory->available_quantity){
+        //             $remains = $_quantity - $inventory->available_quantity;
+        //             $inventory->available_quantity = 0;
+        //             $inventory->save();
+        //         } else {
+        //             $inventory->available_quantity = $inventory->available_quantity - $_quantity;
+        //             $inventory->save();
+        //             break;
+        //         }
+        //     }
+        // }
 
         return Redirect::back();
     }
