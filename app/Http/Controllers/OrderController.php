@@ -111,7 +111,7 @@ class OrderController extends Controller
 
         foreach($_POST['order_fulfillment_qty'] as $key => $value) {
             echo "key = ".$key." value=".$value;
-            $when_and_thens .= " WHEN " . $key . " THEN ".$value;
+            $when_and_thens .= " WHEN " . $key . " THEN qty_fulfilled+".$value;
             $where_ids .= $key . ",";
         }
         $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
