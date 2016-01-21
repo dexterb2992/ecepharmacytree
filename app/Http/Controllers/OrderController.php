@@ -57,7 +57,7 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::findOrFail($id);
-        $order_details = DB::select("SELECT * from order_details where order_id = 108");
+        $order_details = DB::select("call get_order_details_with_availablestocks(".$order->id.", ".$order->branch_id.")");
         $order_details_with_prescriptions = $order->order_details()->whereRaw('prescription_id > 0')->get();
 
         return view('admin.order')->withOrder($order)->withOrderDetails($order_details)->withOrderDetailsWithPrescriptions($order_details_with_prescriptions);

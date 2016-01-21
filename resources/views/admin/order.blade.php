@@ -14,10 +14,10 @@
           @foreach($order_details as $order_detail)
           <tr>
             <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
-            <td>{{ $order_detail->product()->first()->name }}</td>
-            <td>&#8369; {{ $order_detail->product()->first()->price.' x '.$order_detail->quantity }}</td>
-            <td>&#8369; {{ ($order_detail->product()->first()->price * $order_detail->quantity) }}</td>
-            <?php $order_total = $order_total + ($order_detail->product()->first()->price * $order_detail->quantity); ?>
+            <td>{{ $order_detail->pname }}</td>
+            <td>&#8369; {{ $order_detail->pprice.' x '.$order_detail->quantity }}</td>
+            <td>&#8369; {{ ($order_detail->pprice * $order_detail->quantity) }}</td>
+            <?php $order_total = $order_total + ($order_detail->pprice * $order_detail->quantity); ?>
           </tr>
           @endforeach
           <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
@@ -149,7 +149,7 @@
             <tbody>
               @foreach($order_details as $order_detail)
               <tr>
-                <td>{{ ucfirst($order_detail->product()->first()->name) }}</td>
+                <td>{{ ucfirst($order_detail->pname) }}</td>
                 <td>&nbsp;</td>
                 <td class="col-xs-3">
                   <div class="input-group">
