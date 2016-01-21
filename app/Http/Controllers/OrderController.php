@@ -158,7 +158,7 @@ class OrderController extends Controller
                 $old_qty = $inventory->available_quantity;
                 $inventory->available_quantity = $inventory->available_quantity - $_quantity;
                 $new_qty = $inventory->available_quantity;
-                
+
                 if($inventory->save()){
                     if($inventory->save()){
                         $this->logAdjustment($inventory, $old_qty, $new_qty, $order_id);
@@ -175,7 +175,7 @@ class OrderController extends Controller
         $log->action = 'Adjusted an inventory information with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
         target="blank">Lot #'.$inventory->lot_number.'</a>'
         .' and change quantity from '.$old_qty.' to '.$new_qty
-        .'. <br/><code>Order Fulfillment: </code> <a href="'.URL::route('orders/'.$order_id)'" 
+        .'. <br/><code>Order Fulfillment: </code> <a href="'.URL::route('orders/'.$order_id).'" 
         target="blank">Lot #'.$inventory->lot_number.'</a>';
         $log->table = 'inventories';
         $log->save();
