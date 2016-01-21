@@ -131,7 +131,7 @@ class OrderController extends Controller
 
         //move this code to fulfill items on admin
         // if($order_saved) {
-        
+
         // }
 
         return Redirect::back();
@@ -139,6 +139,9 @@ class OrderController extends Controller
 
     function deductInventory($product_id, $quantity, $branch_id){
         $inventories = Inventory::where('product_id', $product_id)->where('branch_id', $branch_id)->orderBy('expiration_date', 'ASC')->get();
+        
+        dd($inventories);
+        
         $_quantity = $quantity;
         $remains = 0;
 
