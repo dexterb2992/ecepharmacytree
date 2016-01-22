@@ -147,6 +147,7 @@ $(document).ready(function (){
         _clear_form_data(form);
         url = mainurl+action;
 
+        window.responseBarangayId = 0;
         if( action == "edit" ){
             title = "Edit "+dataTitle;
             url = $this.data("url");
@@ -168,15 +169,49 @@ $(document).ready(function (){
 
                     $.each(data, function (i, row){ // loop through all object elements 
                         // just add your custom conditions here 
+                        if( i == "barangay_id" ){
+                            window.responseBarangayId = row;
+                            // let's populate address here
+                            $.ajax({
+                                url: '/populate-address/'+window.responseBarangayId,
+                                type: 'get',
+                                dataType: 'json'
+                            }).done(function (data){
+                                console.log(data);
+                                if( data.hasOwnProperty('provinces') && data.hasOwnProperty('municipalities') 
+                                    && data.hasOwnProperty('barangays') && data.hasOwnProperty('selected') ){
+
+                                    var provinces = address_populator_helper(data.provinces, data.selected.province_id);
+                                    var municipalities = address_populator_helper(data.municipalities, data.selected.municipality_id);
+                                    var barangays = address_populator_helper(data.barangays, data.selected.barangay_id);
+
+
+                                    $("select[name='province_id'], select[name='municipality_id'], select[name='barangay_id'], select[name='region_id']").select2('destroy');
+
+                                    $("select[name='region_id'] option[value='"+data.selected.region_id+"']").attr("selected", "selected");
+
+                                    $("select[name='province_id']").html(provinces).select2();
+                                    $("select[name='municipality_id']").html(municipalities).select2();
+                                    $("select[name='barangay_id']").html(barangays).select2();
+                                    $("select[name='region_id']").select2();
+                                }
+                            });
+                        }
+
+
+                        form.find("textarea[name='"+i+"']").val(row);
+
                             if( i == "description" ){
                                 var str = row+"";
                                 var reg = /\\r?\\n/g; // remove extra slashes
                                 var newRow = str.replace(reg, '\n');
+
+                                form.find("textarea[name='"+i+"']").val(newRow);
                             }
 
 
                             form.find("input[name='"+i+"']").val(row);
-                            form.find("textarea[name='"+i+"']").val(newRow);
+                            
                             var cbox = form.find('input[name="'+i+'"][type="checkbox"]');
                             if( cbox.length > 0 ){
                                 if( row == 1 ){

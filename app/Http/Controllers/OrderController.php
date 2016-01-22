@@ -32,31 +32,6 @@ class OrderController extends Controller
         return view('admin.orders')->withOrders($orders);
     }
 
-    // function firstOrderFirstServeSort($orders)
-    // {
-    //     $ordersFulfilled = 
-    // }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -76,7 +51,8 @@ class OrderController extends Controller
 
     public function show_all(){
         // $orders = Order::all();
-        $orders = Order::where('branch_id', Auth::user()->branch->id)->orderBy('id', 'DESC')->get();
+        $orders = Order::where('branch_id', Auth::user()->branch->id)
+            ->where('status', '!=', 'refunded_in_full')->orderBy('id', 'DESC')->get();
         $orders->load('patient');
         $orders->load('order_details');
         $orders->load('billing');
@@ -97,13 +73,7 @@ class OrderController extends Controller
 
             foreach ($order->order_details as $order_detail) {
                 $order_detail->load('product');
-                // todo tomorrow:
-                // logics here to determine the max returnable quantity when there are already stocks that had
-                // been returned by the customer
-                // 
             }
-
-            
             
         }
 

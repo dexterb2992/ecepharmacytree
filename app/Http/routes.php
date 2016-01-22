@@ -74,7 +74,10 @@ Route::get('test/{referral_id}', function ($referral_id){
 	dd(get_uplines($referral_id, true, true));
 });
 
-Route::get("get-selected-branch", 'BranchController@show_selected_branch');
+Route::get('get_clinic_records', 'ApiController@getClinicRecords');
+
+Route::post("get-selected-branch", 'BranchController@show_selected_branch');
+
 
 Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin', 'middleware' => 'admin']);
@@ -206,6 +209,7 @@ Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@sh
 
 Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
 Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
+Route::post('doctors/delete', ['as' => 'delete_doctor', 'uses' => 'DoctorController@delete' ]);
 
 Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
 Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
@@ -300,6 +304,8 @@ Route::get('api/{type}/{what}', function ($type, $what){
 			return does_sku_exist(Input::get('sku')) ? 'true' : 'false';
 	}else if( $type == 'str_singular' ){
 		return str_singular($what);
+	}else if( $type == "get-downlines" ){
+		return get_all_downlines($what);
 	}
 });
 
@@ -321,3 +327,5 @@ Route::get('emailtestingservice', ['as' => 'email_testing_service', 'uses' => 'V
 Route::post('notify', 'NotificationsController@index');
 Route::post('read-notification', 'NotificationsController@update');
 Route::get('read-notification', 'NotificationsController@update');
+
+Route::get('populate-address/{barangay_id}', ['as' => 'populate_address', 'uses' => 'LocationController@populate_address_by_barangay']);

@@ -28,15 +28,23 @@ class NotificationsController extends Controller
      */
     public function index()
     {
+        if( null === session()->get('selected_branch') )
+            return json_encode( array( 'error' => 'Please select branch.', 'status' => 500 ) );
+
         $patients = Patient::where('is_new', '=', 1)->count();
-        $users = User::where('is_new', '=', 1)->count();
+        $users = User::where('is_new', '=', 1)->where('branch_id', '=', session()->get('selected_branch'))->count();
         $product_groups = ProductGroup::where('is_new', '=', 1)->count();
         $products = Product::where('is_new', '=', 1)->count();
         $doctors = Doctor::where('is_new', '=', 1)->count();
         $promos = Promo::where('is_new', '=', 1)->count();
-        $inventories = Inventory::where('is_new', '=', 1)->count();
-        $stock_returns = StockReturn::where('is_new', '=', 1)->count();
-        $orders = Order::where('is_new', '=', 1)->count();
+        $inventories = Inventory::where('is_new', '=', 1)->where('branch_id', '=', session()->get('selected_branch'))->count();
+        $stock_returns = StockReturn::where('is_new', '=', 1)->with([
+            'order' => function ($query){
+                $query->where('branch_id', '=', session()->get('selected_branch'));
+            }
+        ])->count();
+
+        $orders = Order::where('is_new', '=', 1)->where('branch_id', '=', session()->get('selected_product'))->count();
         $branches = Branch::where('is_new', '=', 1)->count();
 
         $unseen_notifications = [];

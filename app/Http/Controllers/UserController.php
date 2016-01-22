@@ -9,6 +9,7 @@ use Redirect;
 use Image;
 use Illuminate\Mail\Mailer;
 
+use Carbon\Carbon;
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\User;
@@ -56,51 +57,66 @@ class UserController extends Controller
     public function create()
     {
         $return_data = [];
+        try {
+            $input = Input::all();
+            //dd($input);
+            $step1_validator = $this->step1_validator($input);
+            if( $step1_validator->fails() ){
+                $return_data['status_code'] = '500';
+                $errors = $step1_validator->errors()->toArray();
+
+                return redirect(route('employees'))->withFlash_message([
+                    'msg' => "Sorry, there's something wrong with the data that you submitted.",
+                    'type' => 'danger'
+                ])->withErrors($errors)->withInput();
+            }
+
+            $fname = $input['fname'];
+            $lname = $input['lname'];
+            $email = $input['email'];
+            $password = generate_random_string(6);
+            $role = get_role($input['access_level']);
+            $branch = Branch::findOrFail($input['branch_id']);
+            $branch_name = $branch->name;
+
+            $user = new User;
+            $user->fname = $input['fname'];
+            $user->lname = $input['lname'];
+            $user->email = $email;
+            $user->password = bcrypt($password);
+            $user->branch_id = $branch->id;
+            $user->access_level = $input['access_level'];
+
         
-        $input = Input::all();
-        //dd($input);
-        $step1_validator = $this->step1_validator($input);
-        if( $step1_validator->fails() ){
-            $return_data['status_code'] = '500';
-            $errors = $validator->errors()->toArray();
+            if( $user->save() )
+                $res = $this->mailer->send( 'emails.register', 
+                    compact('fname', 'lname', 'email', 'password', 'role', 'branch_name'), function ($m) use ($fname, $lname, $email, $password, $role, $branch_name) {
+                        $m->subject('Pharmacy Tree Registration');
+                        $m->to($email);
+                }); 
+
+            return redirect(route('employees'))->withFlash_message([
+                'msg' => 'An email has been sent to '.$email.'. Please tell this person to check his/her email.',
+                'type' => 'success'
+            ]);
+        } catch (\Exception $e) {
+           
+            $errorCode = isset($e->errorInfo[1]) ? $e->errorInfo[1] : 500;
+            if($errorCode == 1062){
+                return redirect(route('employees'))->withFlash_message([
+                    'msg' => "Sorry, but email $user->email was taken already.",
+                    'type' => 'danger'
+                ])->withInput();
+            }
+            return redirect(route('employees'))->withFlash_message([
+                'msg' => "Sorry, something wen't wrong while processing your request..",
+                'type' => 'danger'
+            ])->withInput();
         }
 
-        $email = $input['email'];
-        $password = generate_random_string(6);
-        $role = get_role($input['access_level']);
-        $branch = Branch::findOrFail($input['branch_id']);
-        $branch_name = $branch->name;
-
-        $user = new User;
-        $user->email = $email;
-        $user->password = bcrypt($password);
-        $user->branch_id = $branch->id;
-        $user->access_level = $input['access_level'];
-
-        if( $user->save() )
-            $res = $this->mailer->send( 'emails.register', 
-                compact('email', 'password', 'role', 'branch_name'), function ($m) use ($email, $password, $role, $branch_name) {
-                    $m->subject('Pharmacy Tree Registration');
-                    $m->to($email);
-            }); 
-
-        return redirect(route('employees'))->withFlash_message([
-            'msg' => 'An email has been sent to '.$email.'. Please tell this person to check his/her email.',
-            'type' => 'success'
-        ]);
-
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        
-    }
+
 
     /**
      * Display the specified resource.
@@ -215,7 +231,7 @@ class UserController extends Controller
     }
 
     public function step1_validator(array $data){
-        $rules = ['email' => 'required'];
+        $rules = ['email' => 'required', 'fname' => 'required', 'lname' => 'required'];
         return Validator::make($data, $rules);
     }
 
@@ -328,8 +344,9 @@ class UserController extends Controller
     {
         $id = Input::get('id');
         $user = User::findOrFail($id);
+        // $user->deleted_at = date('Y-m-d H:i:s');
 
-        if($user->delete())
+        if($user->destroy($id))
             return json_encode( array("status" => "success") );
          
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );

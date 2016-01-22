@@ -38,7 +38,7 @@
                                     <i class="fa fa-edit"></i>
                                 </a>
                             </td>
-                            <td>{!! ($employee->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
+                            <td>{!! ($employee->deleted_at != null ) ? '<label class="label-danger label">deactivated</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">
 	                                @if($employee->deleted_at != null )
@@ -73,7 +73,18 @@
                 	<div class="register-box-body">
 				        <p class="login-box-msg">Register an account</p>
 				        {!! Form::open(['action' => 'UserController@create', 'method' => 'post', 'id' => 'form_add_employee', 'enctype' => "multipart/form-data"]) !!}
-				       
+				            <div class="form-group">
+                                {!! Form::label('First name') !!}
+                                {!! Form::text('fname', '', ['class' => 'form-control']) !!}
+                                {!! _error($errors->first('fname')) !!}
+                            </div>  
+
+                            <div class="form-group">
+                                {!! Form::label('Last name') !!}
+                                {!! Form::text('lname', '', ['class' => 'form-control']) !!}
+                                {!! _error($errors->first('fname')) !!}
+                            </div>  
+
 				          	<div class="form-group">
 				          		{!! Form::label('Email') !!}
 				          		{!! Form::email('email', '', ['class' => 'form-control']) !!}
