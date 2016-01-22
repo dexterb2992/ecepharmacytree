@@ -26,9 +26,7 @@
                             <table class="table table-bordered table-hover datatable">
                                 <thead>
                                     <th>PRC No.</th>
-                                    <th>First Name</th>
-                                    <th>Middle Name</th>
-                                    <th>Last Name</th>
+                                    <th>Name</th>
                                     <th>Specialty</th>
                                     <th>Affiliation</th>
                                     <th>Email</th>
@@ -38,18 +36,16 @@
                                     @foreach($doctors as $doctor)
                                     <tr>
                                         <td>{{ $doctor->prc_no }}</td>
-                                        <td>{{ ucfirst($doctor->fname) }}</td>
-                                        <td>{{ ucfirst($doctor->mname) }}</td>
-                                        <td>{{ ucfirst($doctor->lname) }}</td>
+                                        <td>{{ get_person_fullname($doctor) }}</td>
                                         <td>{{ $doctor->subspecialty()->first()->name }} ({{ $doctor->subspecialty()->first()->specialty()->first()->name }})</td>
                                         <td>{{ ucfirst($doctor->affiliation) }}</td>
-                                        <td>{{ $doctor->email }}</td>
+                                        <td><label class="label-info label">{{ $doctor->email }}</label></td>
 
                                         <td>
                                             <div class="tools">
                                                 <span class="add-edit-btn edit-doctor" data-action="edit" data-modal-target="#modal-add-edit-doctor" data-title="doctor" data-id="{{ $doctor->id }}" data-action="edit" data-target="#form_edit_doctor"><i class="fa fa-edit"></i> Edit</span>
 
-                                                <span class="action-icon specialty-action-icon delete-doctor" data-modal-target="#modal-add-edit-doctor" data-title="doctor" data-urlmain="/doctor/" data-action="remove" data-id="{{ $doctor->id }}"><i class="fa fa-trash-o"></i> Remove</span>
+                                                <span class="action-icon specialty-action-icon delete-doctor" data-modal-target="#modal-add-edit-doctor" data-title="doctor" data-urlmain="/doctors/" data-action="remove" data-id="{{ $doctor->id }}"><i class="fa fa-trash-o"></i> Remove</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -84,7 +80,7 @@
 
                                         <div class="form-group">
                                             <label for="name">PRC Number</label>
-                                            <input type="text" class="form-control" id="prc_no" placeholder="PRC Number" name="prc_no" required>
+                                            <input type="text" class="form-control number" id="prc_no" placeholder="PRC Number" name="prc_no" required>
                                         </div>
 
                                         <div class="form-group">
@@ -117,12 +113,12 @@
 
                                         <div class="form-group">
                                             <label for="name">Affiliation</label>
-                                            <input type="text" class="form-control" id="affiliation" placeholder="Affiliation" name="affiliation" required>
+                                            <input type="text" class="form-control" id="affiliation" placeholder="Affiliation" name="affiliation">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="name">Email</label>
-                                            <input type="text" class="form-control" id="email" placeholder="Email" name="email" required>
+                                            <input type="text" class="form-control" id="email" placeholder="Email" name="email">
                                         </div>
 
                                     </div>

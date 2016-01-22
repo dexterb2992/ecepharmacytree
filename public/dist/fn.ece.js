@@ -478,3 +478,42 @@ function getSessionBranch(){
         }
     });
 }
+
+function address_populator_helper(options, selected_id){
+    var output = "";
+    $.each(options, function (i, row){
+        if( selected_id == row.id ){
+            output+= "<option value='"+row.id+"' selected>"+row.name+"</option>";
+        }else{
+            output+= "<option value='"+row.id+"'>"+row.name+"</option>";
+        }
+    });
+    return output;
+}
+
+
+function populate_address_details(barangay_id){
+    // $('select[name="region_id"]')
+   /* $.ajax({
+        url: '/populate-address/'+barangay_id,
+        type: 'get'
+    }).done(function (data){
+        console.log(data);
+        if( data.hasOwnProperty('provinces') && data.hasOwnProperty('municipalities') 
+            && data.hasOwnProperty('barangays') && data.hasOwnProperty('selected') ){
+
+            var provinces = address_populator_helper(data.provinces, data.selected.province_id);
+            var municipalities = address_populator_helper(data.municipalities, data.selected.municipality_id);
+            var barangays = address_populator_helper(data.barangays, data.selected.barangay_id);
+
+            $("select[name='province_id'], select[name='municipality_id'], select[name='barangay_id'], select[name='region_id']").select2('destroy');
+
+            $("select[name='region_id'] option[value='"+data.selected.region_id+"']").attr("selected", "selected");
+
+            $("select[name='province_id']").html(provinces).select2();
+            $("select[name='municipality_id']").html(municipalities).select2();
+            $("select[name='barangay_id']").html(barangays).select2();
+            $("select[name='region_id']").select2();
+        }
+    });*/
+}

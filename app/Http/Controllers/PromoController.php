@@ -210,4 +210,5 @@ class PromoController extends Controller
         $free_products->load('product');
         return $free_products;
     }
+
 }

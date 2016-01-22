@@ -20,14 +20,6 @@ use ECEPharmacyTree\Inventory;
 class StockReturnController extends Controller
 {
 
-    public function index(){
-        //
-    }
-
-    public function create(){
-        //
-    }
-
 
     public function store(){
         $input = Input::all();

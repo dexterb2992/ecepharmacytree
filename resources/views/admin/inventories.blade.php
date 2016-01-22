@@ -104,8 +104,8 @@
 												<td>
 													<div class="btn-group pull-right">
 														@if( $check_stock_availability == 'out_of_stock' || $check_stock_availability == 'critical')
-															<span class="btn-xs btn-primary btn action-icon pull-right" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}">
-															<i class="fa-refresh fa"></i></span>
+															<!-- <span class="btn-xs btn-primary btn action-icon pull-right" title="Restock" data-action="restock" data-pid="{{ $inventory->product->id }}">
+															<i class="fa-refresh fa"></i></span> -->
 														@endif
 														<span class="btn btn-danger btn-xs action-icon remove-product pull-right" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
 															 data-id="{{ $inventory->id }}" title="Remove" data-toggle="tooltip" data-original-title="Remove">
