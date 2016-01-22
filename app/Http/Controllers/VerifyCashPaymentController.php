@@ -122,26 +122,26 @@ class VerifyCashPaymentController extends Controller
 					$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ";
 			}
 
-			if($order_saved) {
-				$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
-				$_quantity = $quantity;
-				$remains = 0;
+			// if($order_saved) {
+			// 	$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
+			// 	$_quantity = $quantity;
+			// 	$remains = 0;
 
-				foreach ($inventories as $inventory) {
-					if($remains > 0)
-						$_quantity = $remains;
+			// 	foreach ($inventories as $inventory) {
+			// 		if($remains > 0)
+			// 			$_quantity = $remains;
 
-					if($_quantity  > $inventory->available_quantity){
-						$remains = $_quantity - $inventory->available_quantity;
-						$inventory->available_quantity = 0;
-						$inventory->save();
-					} else {
-						$inventory->available_quantity = $inventory->available_quantity - $_quantity;
-						$inventory->save();
-						break;
-					}
-				}
-			}
+			// 		if($_quantity  > $inventory->available_quantity){
+			// 			$remains = $_quantity - $inventory->available_quantity;
+			// 			$inventory->available_quantity = 0;
+			// 			$inventory->save();
+			// 		} else {
+			// 			$inventory->available_quantity = $inventory->available_quantity - $_quantity;
+			// 			$inventory->save();
+			// 			break;
+			// 		}
+			// 	}
+			// }
 
 
 			if(count($results) == $counter) {
@@ -166,21 +166,21 @@ class VerifyCashPaymentController extends Controller
 				$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
-				$payment = new InServerPayment;
-				$payment->billing_id = $billing_id;
-				$payment->txn_id = 'transaction_id';
-				$payment->or_no = 'official_receipt_number';
+				// $payment = new InServerPayment;
+				// $payment->billing_id = $billing_id;
+				// $payment->txn_id = 'transaction_id';
+				// $payment->or_no = 'official_receipt_number';
 
-				if($payment->save())
-					$response['payment_message'] = "payment saved on database";
-				else
-					$response['payment_message'] = "error saving payment";
+				// if($payment->save())
+				// 	$response['payment_message'] = "payment saved on database";
+				// else
+				// 	$response['payment_message'] = "error saving payment";
 
 
-				// if(Basket::where('patient_id', '=', $user_id)->delete()) 
-				// 	$response['basket_message'] = "basket/s deleted on database";
-				// else 
-				// 	$response['basket_message'] = "basket/s not deleted on database";
+				if(Basket::where('patient_id', '=', $user_id)->delete()) 
+					$response['basket_message'] = "basket/s deleted on database";
+				else 
+					$response['basket_message'] = "basket/s not deleted on database";
 
 
 				$setting = Setting::first();

@@ -30,7 +30,7 @@ switch ($request) {
     /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
-    $result = mysql_query("SELECT p.*, cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM products AS p INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id AND inv.branch_id = ".$_GET['branch_id']." GROUP BY p.id;") or returnError(mysql_error());
+    $result = mysql_query("call get_products(".$_GET['branch_id'].",".$_GET['patient_id'].")") or returnError(mysql_error());
     $tbl = "products";
     break;
     case 'get_doctors':
@@ -86,10 +86,7 @@ switch ($request) {
     /* Requires Parameters */
 
     case 'get_nocode_promos':
-    $sql = "SELECT pr.id as pr_promo_id, pr.product_applicability, pr.minimum_purchase_amount, 
-    pr.is_free_delivery as pr_free_delivery, pr.percentage_discount as pr_percentage, pr.peso_discount as pr_peso, pr.long_title, pr.start_date, pr.end_date, 
-    dfp.* FROM promos as pr left join discounts_free_products as dfp on pr.id = dfp.promo_id where offer_type = 'NO_CODE' AND pr.deleted_at IS NULL 
-    AND '".$dateonly."' >= pr.start_date AND '".$dateonly."' <= pr.end_date";
+    $sql = "SELECT pr.id as pr_promo_id, pr.product_applicability, pr.minimum_purchase_amount, pr.is_free_delivery as pr_free_delivery, pr.percentage_discount as pr_percentage, pr.peso_discount as pr_peso, pr.long_title, pr.start_date, pr.end_date, dfp.*, fp.product_id as free_product_id, p.name, p.packing as free_product_packing, fp.quantity_free FROM promos as pr left join discounts_free_products as dfp on pr.id = dfp.promo_id left join free_products as fp on dfp.id = fp.dfp_id left join products as p on fp.product_id = p.id where offer_type = 'NO_CODE' AND pr.deleted_at IS NULL AND '".$dateonly."' >= pr.start_date AND '".$dateonly."' <= pr.end_date";
  
     $result = mysql_query($sql) or returnError(mysql_error()); 
     $tbl = "promos";
