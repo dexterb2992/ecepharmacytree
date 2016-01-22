@@ -19,7 +19,7 @@ class BasketRepository {
 
 		foreach($results as $result){
 
-			if($result->available_quantity == 0 || $result->quantity == 0) {
+			if($result->available_quantity < 1) {
 				$basket = Basket::findOrFail($result->basket_id);
 				if(!empty($basket) && $basket->delete()){
 					$basket_quantity_changed = true;
