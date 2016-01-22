@@ -20,7 +20,7 @@ class BasketRepository {
 		foreach($results as $result){
 
 			if($result->available_quantity < 1) {
-				$basket = Basket::findOrFail($result->basket_id);
+				$basket = Basket::find($result->basket_id);
 				if(!empty($basket) && $basket->delete()){
 					$basket_quantity_changed = true;
 					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
@@ -33,7 +33,7 @@ class BasketRepository {
 			}
 
 			if($result->quantity > $result->available_quantity || $result->quantity > 0 || $result->available_quantity > 0) {
-				$basket = Basket::findOrFail($result->basket_id);
+				$basket = Basket::find($result->basket_id);
 				$basket->quantity = $result->available_quantity;
 				if(!empty($basket) && $basket->save()){
 					$result->quantity = $result->available_quantity;     
