@@ -74,6 +74,8 @@ Route::get('test/{referral_id}', function ($referral_id){
 	dd(get_uplines($referral_id, true, true));
 });
 
+Route::get('get_clinic_records', 'ClinicController@getClinicRecords');
+
 Route::post("get-selected-branch", 'BranchController@show_selected_branch');
 
 Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
