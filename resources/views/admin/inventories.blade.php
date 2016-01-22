@@ -145,7 +145,7 @@
 									<tbody>
 										@foreach($stock_returns as $stock_return)
 											<tr>
-												<td></td>
+												<td>{{ $stock_return->order->patient->fname.' '.$stock_return->order->patient->lname }}</td>
 												<td>{!! $stock_return->action !!}</td>
 												<td>
 													<?php $date_added = Carbon::parse($stock_return->created_at); ?>

@@ -14,10 +14,10 @@
           @foreach($order_details as $order_detail)
           <tr>
             <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
-            <td>{{ $order_detail->product()->first()->name }}</td>
-            <td>&#8369; {{ $order_detail->product()->first()->price.' x '.$order_detail->quantity }}</td>
-            <td>&#8369; {{ ($order_detail->product()->first()->price * $order_detail->quantity) }}</td>
-            <?php $order_total = $order_total + ($order_detail->product()->first()->price * $order_detail->quantity); ?>
+            <td>{{ $order_detail->pname }}</td>
+            <td>&#8369; {{ $order_detail->pprice.' x '.$order_detail->quantity }}</td>
+            <td>&#8369; {{ ($order_detail->pprice * $order_detail->quantity) }}</td>
+            <?php $order_total = $order_total + ($order_detail->pprice * $order_detail->quantity); ?>
           </tr>
           @endforeach
           <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
@@ -121,8 +121,8 @@
         </div>
         <div class="modal-body">
           Processed by <b>{{ $order->billing()->first()->payment_method }}</b>
-        <input type="text" name="or_txn_number" class="form-control" required>
-        <button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Accept Payment</button>
+          <input type="text" name="or_txn_number" class="form-control" required>
+          <button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Accept Payment</button>
         </div>
       </div>
     </div>
@@ -131,6 +131,8 @@
 
 <form method="post" name="fulfill_orders" action="/fulfill_orders">
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="branch_id" value="{{ $order->branch_id }}">
+  <input type="hidden" name="order_id" value="{{ $order->id }}">
   <div class="modal" id="modal-fulfill-items">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -148,15 +150,32 @@
             <tbody>
               @foreach($order_details as $order_detail)
               <tr>
-                <td>{{ ucfirst($order_detail->product()->first()->name) }}</td>
+                <td>{{ ucfirst($order_detail->pname) }}</td>
                 <td>&nbsp;</td>
                 <td class="col-xs-3">
+                  @if($order_detail->available_quantity == 0)
+                  <i>Out of Stock</i><br/>
+                  <b>Fulfilled: {{ $order_detail->qty_fulfilled }}</b>
+                  <b>Unfulfilled: {{ $order_detail->quantity - $order_detail->qty_fulfilled }}</b>
+                  @elseif($order_detail->quantity > $order_detail->available_quantity)
                   <div class="input-group">
+                  <input type="hidden" name="order_detail_pid[{{ $order_detail->id }}]" value="{{ $order_detail->product_id }}">
+                    <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->available_quantity }}" max="{{ $order_detail->available_quantity }}" min="0">
+                    <div class="input-group-addon">
+                      of  <strong>{{ $order_detail->quantity - $order_detail->qty_fulfilled }}</strong>
+                    </div>
+                  </div>
+                  <b>Limited Stocks</b>
+                  @else
+                  <div class="input-group">
+                  <input type="hidden" name="order_detail_pid[{{ $order_detail->id }}]" value="{{ $order_detail->product_id }}">
                     <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" max="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" min="0">
                     <div class="input-group-addon">
                       of  <strong>{{ $order_detail->quantity - $order_detail->qty_fulfilled }}</strong>
                     </div>
                   </div>
+                  @endif
+                  
                 </td>
               </tr>
               @endforeach
@@ -170,22 +189,22 @@
 </form>
 
 <!-- Modal for Create/Edit product -->
-  <div class="modal" id="modal-view-prescription">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- <form role="form" id="form_view_member" data-urlmain="/members/"> -->
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">View Prescription</h4>
+<div class="modal" id="modal-view-prescription">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- <form role="form" id="form_view_member" data-urlmain="/members/"> -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">View Prescription</h4>
+      </div>
+      <div class="modal-body">
+        <div class="ytp-thumbnail-overlay ytp-cued-thumbnail-overlay">
+          <img id="image_holder" class="img-responsive primary-photo" src="">
         </div>
-        <div class="modal-body">
-          <div class="ytp-thumbnail-overlay ytp-cued-thumbnail-overlay">
-            <img id="image_holder" class="img-responsive primary-photo" src="">
-          </div>
-        </div>
-        <!-- </form> -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  </div><!-- /.col -->
+      </div>
+      <!-- </form> -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</div><!-- /.col -->
 @stop
 

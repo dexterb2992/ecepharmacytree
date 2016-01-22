@@ -174,9 +174,9 @@ class BranchController extends Controller
                 return $branch;
             }
 
-            return 'No selected branch.';
+            return json_encode(array('error' => 'No selected branch.', 'status' => 500));
         }
         
-        return 'Invalid request';
+        return json_encode(array('error' => 'Invalid request', 'status' => 500));
     }
 }

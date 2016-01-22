@@ -82,33 +82,32 @@ class PointsRepository {
                                 ." earned from ".$order_detail->product->name." ("
                                 .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
                                 .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n"; 
-                    }*/
+                            }*/
 
-                    $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
-                                ." earned from ".$order_detail->product->name." ("
+                            $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
+                            ." earned from ".$order_detail->product->name." ("
                                 .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
-                                .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
-                    
-                }
+.str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
+
+}
                 //pre($notes);
-                $points_per_one_hundred = (double)$settings->points;
-                $points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
-                
+$points_per_one_hundred = (double)$settings->points;
+$points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
+
 
 
                 // add points   
-                $user_old_points = (double)$user->points; 
-                $user->points = $points_earned + $user_old_points;
+$user_old_points = (double)$user->points; 
+$user->points = $points_earned + $user_old_points;
 
                 // points_discount deduction
-                if( $user->points >=  $billing->points_discount ){
-                    $user->points = $user->points - $billing->points_discount;
-                }
+if( $user->points >=  $billing->points_discount ){
+    $user->points = $user->points - $billing->points_discount;
+}
 
-                if( $user->save() ){
-                    // log for points changes
-                    $ref_com_log = new ReferralCommissionActivityLog;
-                    $ref_com_log->billing_id = $billing->id;
+if( $user->save() ){
+    $ref_com_log = new ReferralCommissionActivityLog;
+    $ref_com_log->billing_id = $billing->id;
                     $ref_com_log->to_upline_id = $user->id;   // means self, no upline
                     $ref_com_log->to_upline_type = isset($user->prc_no) ? 'doctor' : 'patient';
                     $ref_com_log->referral_level = 0; // if 0, it means - to the user itself, it's not a referral points
@@ -120,12 +119,14 @@ class PointsRepository {
                     $ref_com_log->save();
 
                     //log for used points
-                    $points_activity_log = new PointsActivityLog;
-                    $points_activity_log->user_type = isset($user->prc_no) ? 'doctor' : 'patient';
-                    $points_activity_log->user_id = $user->id;
-                    $points_activity_log->points_used = $billing->points_discount;
-                    $points_activity_log->notes = "You used ".$billing->points_discount." for order #".$order->id;
-                    $points_activity_log->save();
+                    if($billing->points_discount > 0){
+                        $points_activity_log = new PointsActivityLog;
+                        $points_activity_log->user_type = isset($user->prc_no) ? 'doctor' : 'patient';
+                        $points_activity_log->user_id = $user->id;
+                        $points_activity_log->points_used = $billing->points_discount;
+                        $points_activity_log->notes = "You used ".$billing->points_discount." for order #".$order->id;
+                        $points_activity_log->save();
+                    }
 
                 }
                 // dd($uplines);
@@ -140,7 +141,7 @@ class PointsRepository {
                 foreach ($uplines as $upline) {
                     // $counter++;
                     if( $limit > 0 ){
-                        
+
                         $variation = $settings->commission_variation/100;
                         for ($i=1; $i < $limit; $i++) { 
                             $variation *= $settings->commission_variation/100;
@@ -152,7 +153,7 @@ class PointsRepository {
                         $old_upline_points = $upline->points;
                         $upline->points = $old_upline_points + $referral_points_earned;
                         $notes = "You earned ".($variation * 100)."% of $points_earned ".str_auto_plural('point', $points_earned).
-                                "earned by $user->fname $user->lname's last order on {$order_date->formatLocalized('%A %d %B %Y')}";
+                        "earned by $user->fname $user->lname's last order on {$order_date->formatLocalized('%A %d %B %Y')}";
                         if( $upline->save() ){
                             // save a referral commission changes log
                             $ref_com_log = new ReferralCommissionActivityLog;
@@ -186,6 +187,6 @@ class PointsRepository {
         if( $billings_has_uncomputed_points === false )
             // return array('msg' => "Sorry, but the points from all purchases made by $user->fname $user->lname has aleady been redeemed.", 'status' => 500);
             return json_encode(array('msg' => "Sorry, but the points from all purchases made by $user->fname $user->lname has aleady been redeemed.", 'status' => 500));
-	}
+    }
 
 }

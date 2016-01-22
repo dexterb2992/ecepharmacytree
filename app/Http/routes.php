@@ -78,6 +78,7 @@ Route::get('get_clinic_records', 'ClinicController@getClinicRecords');
 
 Route::post("get-selected-branch", 'BranchController@show_selected_branch');
 
+
 Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
 Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin', 'middleware' => 'admin']);
 

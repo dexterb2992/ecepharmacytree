@@ -60,8 +60,10 @@ class PatientController extends Controller
     public function show($id)
     {
         $member = Patient::findOrFail($id);
-        if( isset( $member->id ) )
+        if( isset( $member->id ) ){
+            $member->full_address = $member->full_address();
             return $member->toJson();
+        }
     }
 
     /**

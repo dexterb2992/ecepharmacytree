@@ -11,6 +11,9 @@ use DB;
 use Redirect;
 use Auth;
 use ECEPharmacyTree\Inventory;
+use Input;
+use ECEPharmacyTree\Log;
+use URL;
 
 class OrderController extends Controller
 {
@@ -24,8 +27,15 @@ class OrderController extends Controller
 
         $orders = Order::where('branch_id', session()->get('selected_branch'))->orderBy('id', 'DESC')->get();
 
+        // $this->firstOrderFirstServeSort($orders);
+
         return view('admin.orders')->withOrders($orders);
     }
+
+    // function firstOrderFirstServeSort($orders)
+    // {
+    //     $ordersFulfilled = 
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -57,11 +67,12 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::findOrFail($id);
-        $order_details = $order->order_details()->get();
+        $order_details = DB::select("call get_order_details_with_availablestocks(".$order->id.", ".$order->branch_id.")");
         $order_details_with_prescriptions = $order->order_details()->whereRaw('prescription_id > 0')->get();
 
         return view('admin.order')->withOrder($order)->withOrderDetails($order_details)->withOrderDetailsWithPrescriptions($order_details_with_prescriptions);
     }
+
 
     public function show_all(){
         // $orders = Order::all();
@@ -106,33 +117,35 @@ class OrderController extends Controller
      * @return Response
      */
      function fulfill_orders() {
-        
+        $input = Input::all();
+
         $when_and_thens = "";
         $where_ids = "";
 
-        foreach($_POST['order_fulfillment_qty'] as $key => $value) {
-            $when_and_thens .= " WHEN " . $key . " THEN qty_fulfilled+".$value;
-            $where_ids .= $key . ",";
+        if(isset($input['order_fulfillment_qty'])){
+            $order_detail_pid = $input['order_detail_pid'];
+            foreach($input['order_fulfillment_qty'] as $key => $value) {
+                $when_and_thens .= " WHEN " . $key . " THEN qty_fulfilled+".$value;
+                $where_ids .= $key . ",";
 
-            $this->deductInventory($key, $value);
+                $prod_id = $order_detail_pid[$key];
+
+                $this->deductInventory($prod_id, $value, $input['branch_id'], $input['order_id']);
+            }
+
+            $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
+
+            $sql = "UPDATE order_details SET qty_fulfilled = CASE id ".$when_and_thens." END WHERE id IN (".$where_ids.")";
+
+            $affected = DB::update($sql);
         }
-
-        $where_ids = substr($where_ids, 0, strlen($where_ids) - 1);
-
-        $sql = "UPDATE order_details SET qty_fulfilled = CASE id ".$when_and_thens." END WHERE id IN (".$where_ids.")";
-
-        $affected = DB::update($sql);
-
-        //move this code to fulfill items on admin
-        // if($order_saved) {
-            
-        // }
 
         return Redirect::back();
     }
 
-    function deductInventory($product_id, $quantity){
-        $inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
+    function deductInventory($product_id, $quantity, $branch_id, $order_id) {
+        $inventories = Inventory::where('product_id', $product_id)->where('branch_id', $branch_id)->orderBy('expiration_date', 'ASC')->get();
+
         $_quantity = $quantity;
         $remains = 0;
 
@@ -142,14 +155,38 @@ class OrderController extends Controller
 
             if($_quantity  > $inventory->available_quantity){
                 $remains = $_quantity - $inventory->available_quantity;
+                $old_qty = $inventory->available_quantity;
                 $inventory->available_quantity = 0;
-                $inventory->save();
+                $new_qty = $inventory->available_quantity;
+
+                if($inventory->save()){
+                    $this->logAdjustment($inventory, $old_qty, $new_qty, $order_id);
+                }
             } else {
+                $old_qty = $inventory->available_quantity;
                 $inventory->available_quantity = $inventory->available_quantity - $_quantity;
-                $inventory->save();
+                $new_qty = $inventory->available_quantity;
+
+                if($inventory->save()){
+                    if($inventory->save()){
+                        $this->logAdjustment($inventory, $old_qty, $new_qty, $order_id);
+                    }
+                }
                 break;
             }
         }
+    }
+
+    function logAdjustment($inventory, $old_qty, $new_qty, $order_id){
+        $log = new Log;
+        $log->user_id = Auth::user()->id;
+        $log->action = 'Adjusted an inventory information with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
+        target="blank">Lot #'.$inventory->lot_number.'</a>'
+        .' - changed quantity from '.$old_qty.' to '.$new_qty
+        .'. <br/><code>Order Fulfillment: </code> <a href="'.URL::route('orders').'/'.$order_id.'" 
+        target="blank">Order #'.$order_id.'</a>';
+        $log->table = 'inventories';
+        $log->save();
     }
 
     /**

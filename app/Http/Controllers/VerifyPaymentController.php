@@ -149,26 +149,26 @@ class VerifyPaymentController extends Controller
 				}
 
 				//move this code to fulfill items on admin
-				if($order_saved) {
-					$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
-					$_quantity = $quantity;
-					$remains = 0;
+				// if($order_saved) {
+				// 	$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
+				// 	$_quantity = $quantity;
+				// 	$remains = 0;
 
-					foreach ($inventories as $inventory) {
-						if($remains > 0)
-							$_quantity = $remains;
+				// 	foreach ($inventories as $inventory) {
+				// 		if($remains > 0)
+				// 			$_quantity = $remains;
 
-						if($_quantity  > $inventory->available_quantity){
-							$remains = $_quantity - $inventory->available_quantity;
-							$inventory->available_quantity = 0;
-							$inventory->save();
-						} else {
-							$inventory->available_quantity = $inventory->available_quantity - $_quantity;
-							$inventory->save();
-							break;
-						}
-					}
-				}
+				// 		if($_quantity  > $inventory->available_quantity){
+				// 			$remains = $_quantity - $inventory->available_quantity;
+				// 			$inventory->available_quantity = 0;
+				// 			$inventory->save();
+				// 		} else {
+				// 			$inventory->available_quantity = $inventory->available_quantity - $_quantity;
+				// 			$inventory->save();
+				// 			break;
+				// 		}
+				// 	}
+				// }
 
 
 				if(count($results) == $counter) {

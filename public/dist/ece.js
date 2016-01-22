@@ -290,6 +290,23 @@ $(document).ready(function (){
                         }
                     }
 
+                    if( data.hasOwnProperty('per_transaction_has_free_gifts') ){
+                        var products_list = $("#promo_details_per_transaction_gifts");
+                        var htmls = "";
+                        $.each(data.free_gifts, function (i, row){
+                            $("#promo_details_per_transaction_gifts option[value='"+row.id+"']").attr("selected", "selected");
+                            htmls+= generate_gift_qty_form(row.id, row.name, row.quantity_free, 'per_transaction_gift_quantities');
+                            window.global_per_transaction_quantities.push(row.id);
+                            window.global_per_transaction_free_gift_product_ids.push({"id" : row.id, "quantity" : row.quantity_free});
+                        });
+                        $(".per-transaction-selected-products-qty-div").html(htmls);
+                        $("#promo_details_per_transaction_gifts").select2();
+                        
+                        $("#form_promo_product_info").find('input.per_transaction_gift_quantities').each(function (i, row){
+                            $(row).attr("data-min", 1);
+                        });
+                    }
+
 
             });
         } else if(action == "preview_image"){
@@ -1156,17 +1173,6 @@ $("#add_gallery").click(function (){
         }
     });
 
-    $.ajax({
-        url: 'get-selected-branch',
-        type: 'post',
-        dataType: 'json',
-        data: { _token: $('input[name="_token"]').val() }
-    }).done(function (data){
-        if( typeof(data) !== 'string' ){
-            console.log(data);
-            $("#session_branch_name").html(data.name);
-        }
-    });
 
 
     // Adding promo validation & codes here
@@ -1285,7 +1291,9 @@ $("#add_gallery").click(function (){
                 var minimum_purchase = $this.find("input[name='minimum_purchase']"),
                     quantity_required = $this.find("input[name='quantity_required']"),
                     has_free_gifts = $this.find("input[name='has_free_gifts']"),
-                    promo_details_gifts = $this.find('#promo_details_gifts');
+                    promo_details_gifts = $this.find('#promo_details_gifts'),
+                    percentage_discount = $this.find('input[name="percentage_discount"]'),
+                    peso_discount = $this.find('input[name="peso_discount"]');
 
                 if( minimum_purchase.is(":visible") === true && (minimum_purchase.val() == "" ||  minimum_purchase.val() == "0" ) ){
                     hasError = true;
@@ -1305,6 +1313,14 @@ $("#add_gallery").click(function (){
                 if( has_free_gifts.val() == 1 &&  (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) ){
                     hasError = true;
                     _error(promo_details_gifts, "Please select atleast one product.");
+                }
+
+                // when no offer is selected
+                if( has_free_gifts.val() == 1 &&  (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) &&
+                    (peso_discount.val() == "" || peso_discount.val() == 0) && (percentage_discount.val() == "" || percentage_discount.val() == 0)
+                ){
+                    hasError = true;
+                    $("#specific_product_offers").next('div.label-danger').html("Please add atleast one offer (Free Gifts, Free Delivery, Discount) to continue.").fadeIn().delay(5000).fadeOut(400);
                 }
 
                 $.each($(document).find('#form_promo_product_info input.gift_quantities'), function (i, row){
@@ -1327,7 +1343,11 @@ $("#add_gallery").click(function (){
                 var hasError = false;
 
                 var date_range = $this.find("input[name='date_range']"), 
-                    long_title = $this.find("input[name='long_title']");
+                    long_title = $this.find("input[name='long_title']"),
+                    start_date = $this.find("input[name='start_date']"),
+                    end_date = $this.find("input[name='end_date']"),
+                    offer_type = $this.find('select[name="offer_type"]'),
+                    generic_redemption_code = $this.find('input[name="generic_redemption_code"]');
 
                 if( long_title.val() == "" ){
                     hasError = true;
@@ -1339,9 +1359,20 @@ $("#add_gallery").click(function (){
                     _error(date_range, "This field is required.");
                 }
 
+                if( start_date.val() == "Invalid date" || end_date.val() == "Invalid date" ){
+                    hasError = true;
+                    _error(date_range, "Invalid date.");
+                }
+
+                if( offer_type.val() == "GENERIC_CODE" && generic_redemption_code.val() == ""){
+                    hasError = true;
+                    _error(generic_redemption_code, "This field is required.");
+                }
+
+
 
                 var product_applicability = "";
-
+                console.log("product_applicability: " +product_applicability);
                 if( $("#per_transaction_outer_div").is(":visible") === true ){
                     product_applicability = 'PER_TRANSACTION';
                 }else if( $("#specific_products_outer_div").is(":visible") === true ){
@@ -1356,7 +1387,15 @@ $("#add_gallery").click(function (){
                         is_free_delivery = $this.find("input[name='is_free_delivery']:checked"),
                         peso_discount = $this.find('input[name="peso_discount"]'),
                         percentage_discount = $this.find('input[name="percentage_discount"]'),
-                        promo_details_per_transaction_gifts = $this.find("#promo_details_per_transaction_gifts");
+                        promo_details_per_transaction_gifts = $this.find("#promo_details_per_transaction_gifts"),
+                        per_transaction_has_free_gifts = $this.find('input[name="per_transaction_has_free_gifts"]:checked');
+
+                        console.log("minimum_purchase_amount: "+minimum_purchase_amount.val());
+                        console.log("is_free_delivery: "+is_free_delivery.val());
+                        console.log("peso_discount: "+peso_discount.val());
+                        console.log("percentage_discount: "+percentage_discount.val());
+                        console.log("promo_details_per_transaction_gifts: "+promo_details_per_transaction_gifts.val());
+                        console.log("per_transaction_has_free_gifts: "+per_transaction_has_free_gifts.val());
 
                     if( minimum_purchase_amount.val() == 0 || minimum_purchase_amount.val() == "" ){
                         hasError = true;
@@ -1369,10 +1408,10 @@ $("#add_gallery").click(function (){
                         _error(promo_details_per_transaction_gifts, "Please select atleast one product.");
                     }
 
-                    if( per_transaction_has_free_gifts.val() == 0 && is_free_delivery.val() == 0 && 
-                        ( (peso_discount.is(":visible") === true && (peso_discount.val() == 0 || peso_discount.val() == "") ) || 
-                           percentage_discount.is(":visible") === true && (percentage_discount.val() == 0 || percentage_discount.val() == "") ) ){
-                        hasError = true;
+                    if( per_transaction_has_free_gifts.val() != 1 && is_free_delivery.val() != 1 && (
+                        peso_discount.val() == "" || percentage_discount == "" 
+                        )){
+                            hasError = true;
                         $("#per_transaction_promo_offers").next('div.label-danger').html("Please add atleast one offer (Free Gifts, Free Delivery, Discount) to continue.").fadeIn().delay(5000).fadeOut(400);
                     }
 
@@ -1380,6 +1419,8 @@ $("#add_gallery").click(function (){
                 }else if(product_applicability === "SPECIFIC_PRODUCTS"){
                     // If Specific Products
                     var specific_promo_product_ids = $this.find("#specific_promo_product_ids");
+                    console.log("specific_promo_product_ids: ");
+                    console.log(specific_promo_product_ids);
 
                     if( specific_promo_product_ids.val() === null || specific_promo_product_ids.val() == "" ){
                         hasError = true;
@@ -1387,16 +1428,21 @@ $("#add_gallery").click(function (){
                     }
                 }else{
                     hasError = true;
-                    _error(product_applicability, "This field is required.");
+                    _error($this.find("label#label_for_product_applicability"), "This field is required.");
                 }
 
                 if( hasError === true ){
+                    $(this).attr("type", "button");
                     e.preventDefault();
                     return false;
                 }else{
-                    $("#form_edit_promo")[0].submit();
+                    console.log("submitting form now...");
+                    $(this).attr("type", "submit");
+                    $("#form_edit_promo").submit();
                 }
             });
+
+    getSessionBranch();
 });
 
 //   On Stock Returns tab, you can exchange the returned product there with a new the same product.

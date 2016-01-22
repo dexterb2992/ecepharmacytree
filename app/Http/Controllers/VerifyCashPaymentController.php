@@ -31,9 +31,7 @@ class VerifyCashPaymentController extends Controller
 
 	function verification() {
 		$input = Input::all();
-
-		// dd($input);
-		// exit(0);
+		$response = array();
 
 		$user_id = $input['user_id'];         
 		$branch_server_id = $input['branch_server_id'];
@@ -57,6 +55,8 @@ class VerifyCashPaymentController extends Controller
 			echo json_encode($basket_response);	
 			exit(0);
 		}
+
+		$response['basket_quantity_changed'] = false;
 
 		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
@@ -122,28 +122,6 @@ class VerifyCashPaymentController extends Controller
 					$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ";
 			}
 
-			if($order_saved) {
-				$inventories = Inventory::where('product_id', $product_id)->orderBy('expiration_date', 'ASC')->get();
-				$_quantity = $quantity;
-				$remains = 0;
-
-				foreach ($inventories as $inventory) {
-					if($remains > 0)
-						$_quantity = $remains;
-
-					if($_quantity  > $inventory->available_quantity){
-						$remains = $_quantity - $inventory->available_quantity;
-						$inventory->available_quantity = 0;
-						$inventory->save();
-					} else {
-						$inventory->available_quantity = $inventory->available_quantity - $_quantity;
-						$inventory->save();
-						break;
-					}
-				}
-			}
-
-
 			if(count($results) == $counter) {
 				$gross_total = $totalAmount;
 				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount;
@@ -163,49 +141,24 @@ class VerifyCashPaymentController extends Controller
 					$response['billing_id'] = $billing_id;
 					$billing_saved = true;
 				} else
-				$response["billing_message"] = "Sorry, we can't process your request right now.";
+					$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
-				$payment = new InServerPayment;
-				$payment->billing_id = $billing_id;
-				$payment->txn_id = 'transaction_id';
-				$payment->or_no = 'official_receipt_number';
-
-				if($payment->save())
-					$response['payment_message'] = "payment saved on database";
-				else
-					$response['payment_message'] = "error saving payment";
-
-
-				// if(Basket::where('patient_id', '=', $user_id)->delete()) 
-				// 	$response['basket_message'] = "basket/s deleted on database";
-				// else 
-				// 	$response['basket_message'] = "basket/s not deleted on database";
+				if(Basket::where('patient_id', '=', $user_id)->delete()) 
+					$response['basket_message'] = "basket/s deleted on database";
+				else 
+					$response['basket_message'] = "basket/s not deleted on database";
 
 
 				$setting = Setting::first();
-
-				/*$earned_points = round(($setting->points/100) * $totalAmount, 2);
-				$patient = Patient::findOrFail($user_id);
-				$patient->points = $earned_points;
-
-				if($patient->save())
-					$response['points_update_message'] = "points updated";
-				else 
-					$response['points_update_message'] = "points not updated";*/
 				
 				$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
 
 				$this->emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status);				
-
 			}
 		}
 
 		echo json_encode($response);
-	}
-
-	function check_if_stocks_valid(){
-		
 	}
 
 	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){
