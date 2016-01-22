@@ -26,6 +26,7 @@ use Illuminate\Mail\Mailer;
 class VerifyPaymentController extends Controller
 {
 
+
 	function __construct(Mailer $mailer) {
 		$this->mailer = $mailer;
 	}
