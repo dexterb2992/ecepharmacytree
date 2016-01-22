@@ -56,6 +56,8 @@ class VerifyCashPaymentController extends Controller
 			exit(0);
 		}
 
+		$response['basket_quantity_changed'] = false;
+
 		$results = DB::select("call get_baskets_and_products(".$user_id.")");
 
 		$counter = 0;
