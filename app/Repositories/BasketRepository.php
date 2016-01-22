@@ -19,33 +19,31 @@ class BasketRepository {
 
 		foreach($results as $result){
 			if($result->quantity > $result->available_quantity) {
-
-				// $basket = Basket::findOrFail($result->basket_id);
-
-				if($result->available_quantity == 0){
-					// if($basket->delete())
-						$basket_quantity_changed = true;
-				} 
-				// else {
-				// 	$basket->quantity = $result->available_quantity;
-				// 	if($basket->save()){
-				// 		$result->quantity = $result->available_quantity;     
-				// 		$basket_quantity_changed = true;  
-				// 		array_push($final_array, $result);
-				// 	}
-				// }
-				// $basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
-				// if(!empty($basketpromo)){
-				// 	$response['basket_promo'] = $basketpromo;
-				// 	$response['basket_id'] = $basket->id;
-				// 	if($basketpromo->delete())
-				// 		$basket_promo_removed = true;	
-				// }				
-
+				$basket = Basket::findOrFail($result->basket_id);
+				$basket->quantity = $result->available_quantity;
+				if($basket->save()){
+					$result->quantity = $result->available_quantity;     
+					$basket_quantity_changed = true;               
+					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
+					$response['basket_promo'] = $basketpromo;
+					$response['basket_id'] = $basket->id;
+					if($basketpromo->delete())
+						$basket_promo_removed = true;
+				}
+			} else if($result->available_quantity == 0) {
+				$basket = Basket::findOrFail($result->basket_id);
+				if($basket->delete()){
+					$basket_quantity_changed = true;
+					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
+					$response['basket_promo'] = $basketpromo;
+					$response['basket_id'] = $basket->id;
+					if($basketpromo->delete())
+						$basket_promo_removed = true;
+				}
 			}
-
 		}
-		$response['baskets'] = $final_array;
+
+		$response['baskets'] = $results;
 		$response['success'] = 1;
 		$response['server_timestamp'] = date("Y-m-d H:i:s", time());
 		$response['basket_quantity_changed'] = $basket_quantity_changed;
