@@ -304,6 +304,8 @@ Route::get('api/{type}/{what}', function ($type, $what){
 			return does_sku_exist(Input::get('sku')) ? 'true' : 'false';
 	}else if( $type == 'str_singular' ){
 		return str_singular($what);
+	}else if( $type == "get-downlines" ){
+		return get_all_downlines($what);
 	}
 });
 
