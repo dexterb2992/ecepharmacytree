@@ -21,24 +21,26 @@ class BasketRepository {
 			if($result->quantity > $result->available_quantity) {
 				$basket = Basket::findOrFail($result->basket_id);
 				$basket->quantity = $result->available_quantity;
-				if($basket->save()){
+				if($!empty($basket) && $basket->save()){
 					$result->quantity = $result->available_quantity;     
 					$basket_quantity_changed = true;               
 					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
-					$response['basket_promo'] = $basketpromo;
-					$response['basket_id'] = $basket->id;
-					if($basketpromo->delete())
+					if(!empty($basketpromo) && $basketpromo->delete()){
+						$response['basket_promo'] = $basketpromo;
+						$response['basket_id'] = $basket->id;
 						$basket_promo_removed = true;
+					}
 				}
 			} else if($result->available_quantity == 0) {
 				$basket = Basket::findOrFail($result->basket_id);
-				if($basket->delete()){
+				if(!empty($basket) && $basket->delete()){
 					$basket_quantity_changed = true;
 					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
-					$response['basket_promo'] = $basketpromo;
-					$response['basket_id'] = $basket->id;
-					if($basketpromo->delete())
+					if(!empty($basketpromo) && $basketpromo->delete()){
+						$response['basket_promo'] = $basketpromo;
+						$response['basket_id'] = $basket->id;
 						$basket_promo_removed = true;
+					}
 				}
 			}
 		}
