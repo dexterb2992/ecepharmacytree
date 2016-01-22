@@ -315,7 +315,7 @@ if ($request == 'register') {
 
     	foreach ($collection->jsobj as $col) {
     		$whens = $whens." when id = ".$col->id." then ".$col->quantity;
-    		$ids = $ids.$col->id.",";
+    		$ids = $ids.$col->id.","; 
             //if promo_id has value then initialize BasketPromo and fuck the shit up oh. -> save the promo_id and promo_type and discount_promo_value or id
             // if($col->promo_id != "" && $col->promo_value > 0){
             //     $sql = "INSERT INTO basket_promos(basket_id, promo_id, promo_type, ".$col->promo_type.") VALUES (".$col->id.",".$col->promo_id.",'".$col->promo_type."',".$col->promo_value.") ON DUPLICATE KEY UPDATE promo_id=".$col->promo_id.", promo_type='".$col->promo_type."', ".$col->promo_type."=".$col->promo_value;
@@ -329,7 +329,7 @@ if ($request == 'register') {
     	}
 
     	$ids = substr($ids, 0, strlen($ids) -1);
-    	$sql = "update baskets set quantity = ( case".$whens." end ) "."where id in (".$ids.")";
+    	$sql = "update baskets set quantity = ( case".$whens." end ) where id in (".$ids.")";
 
     	if (mysql_query($sql)) {
     		$response["success"] = 1;
