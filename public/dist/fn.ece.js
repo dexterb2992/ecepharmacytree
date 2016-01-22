@@ -452,7 +452,7 @@ function calculateStockReturnAmount(){
 var getSessionBranch_Retries = 0;
 function getSessionBranch(){
     $.ajax({
-        url: 'get-selected-branch',
+        url: '/get-selected-branch',
         type: 'get',
         dataType: 'json',
         beforeSend: function (){

@@ -46,9 +46,4 @@ class Patient extends Model
             return $this->optional_address;
         }
     }
-
-    // public function full_address(){
-    //     return ucfirst($patient->address_street).', '
-    //         .ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
-    // }
 }

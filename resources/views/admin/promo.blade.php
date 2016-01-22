@@ -78,10 +78,7 @@ use Illuminate\Support\Str;
                                             @endif
                                             {!! count($promo->discounts) < 1 ? '<span class="label label-default">No product selected</span>' : '' !!}
                                         @else
-                                            <?php 
-                                                $free_products = [];
-                                            ?>
-                                            <span class="label label-primary">All Products</span>
+                                            <span class="label label-primary">Applicable to all</span>
                                         @endif
                                     </td>
                                     <td>

@@ -158,55 +158,11 @@
                                     <input type="text" class="form-control whitenbg" id="mobile_no" name="mobile_no" readonly="">
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <label for="unit_floor_room_no">Unit/Room No.</label>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <label for="building">Building</label>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <label for="block_no">Block No.</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <input type="text" class="form-control whitenbg" name="unit_floor_room_no" id="unit_floor_room_no" placeholder="Unit/Room No." readonly="">
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <input type="text" class="form-control whitenbg" name="building" id="building" placeholder="Building" readonly="">
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <input type="text" class="form-control whitenbg" name="block_no" id="block_no" placeholder="Block No." readonly="">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <label for="lot_no">Lot No.</label>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <label for="phase_no">Phase No.</label>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <label for="address_zip">ZIP Code <i>*</i></label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <input type="text" class="form-control whitenbg" name="lot_no" id="lot_no" placeholder="Lot No." readonly="">
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <input type="text" class="form-control whitenbg" name="phase_no" id="phase_no" placeholder="Phase No." readonly="">
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <input type="text" class="form-control whitenbg" name="address_zip" id="address_zip" placeholder="ZIP Code" readonly="">
-                                    </div>
-                                </div>
                                 <div class="form-group">
-                                    <label for="address_street">Street and/or Subdivision (<i>Include Subdivision if applicable</i>)</label>
+                                    <label for="address_street">Full Address</label>
                                     <input type="text" class="form-control whitenbg" id="address_street" placeholder="Street" name="address_street"  readonly="">
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="address_barangay">Barangay<i>*</i></label>
                                     <input type="text" class="form-control whitenbg" id="address_barangay" placeholder="Barangay" name="address_barangay"  readonly="">
                                 </div>
@@ -225,7 +181,7 @@
                                         <option value="{{ $region->id }}">{{ $region->name }}</option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
