@@ -14,6 +14,7 @@ class CreatePatientRecordsTable extends Migration
     {
         Schema::create('patient_records', function(Blueprint $table) {
             $table->increments('id');
+            $table->integer('clinic_patient_record_id')->default(0);
             $table->integer('patient_id')->unsigned();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->integer('doctor_id')->default(0);
