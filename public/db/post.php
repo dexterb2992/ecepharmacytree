@@ -323,6 +323,8 @@ if ($request == 'register') {
                     $response["promo_message"] = 'promo_saved';
                 else
                     $response["promo_message"] = 'promo_not_saved';
+
+                $response['queryaf'] = $sql;
             } 
     	}
 
