@@ -19,18 +19,21 @@ class BasketRepository {
 
 		foreach($results as $result){
 			if($result->quantity > $result->available_quantity) {
+
 				$basket = Basket::findOrFail($result->basket_id);
+
 				if($result->available_quantity == 0){
 					if($basket->delete())
 						$basket_quantity_changed = true;
-				} else {
-					$basket->quantity = $result->available_quantity;
-					if($basket->save()){
-						$result->quantity = $result->available_quantity;     
-						$basket_quantity_changed = true;  
-						array_push($final_array, $result);
-					}
-				}
+				} 
+				// else {
+				// 	$basket->quantity = $result->available_quantity;
+				// 	if($basket->save()){
+				// 		$result->quantity = $result->available_quantity;     
+				// 		$basket_quantity_changed = true;  
+				// 		array_push($final_array, $result);
+				// 	}
+				// }
 				$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
 				if(!empty($basketpromo)){
 					$response['basket_promo'] = $basketpromo;
