@@ -14,7 +14,7 @@ class CreateBasketPromosTable extends Migration
     {
         Schema::create('basket_promos', function(Blueprint $table) {
             $table->increments('id');        
-            $table->integer('basket_id')->unsigned();
+            $table->integer('basket_id')->unsigned()->unique();
             $table->foreign('basket_id')->references('id')->on('patients')->onDelete('cascade');
             $table->integer('promo_id')->unsigned();
             $table->foreign('promo_id')->references('id')->on('patients')->onDelete('cascade');
