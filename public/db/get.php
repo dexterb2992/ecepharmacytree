@@ -164,7 +164,7 @@ switch ($request) {
     $tbl = "billings";
     break;    
 
-    case 'get_order_preference'
+    case 'get_order_preference':
     $result = mysql_query("SELECT * FROM order_preference where patient_id = ".$_GET['patient_id']) or returnError(mysql_error());
     $tbl = "order_preference";
     break;
