@@ -449,7 +449,7 @@ function calculateStockReturnAmount(){
     $("#refund_amount").html(total_amount);
 }
 
-
+var getSessionBranch_Retries = 0;
 function getSessionBranch(){
     $.ajax({
         url: 'get-selected-branch',
@@ -463,7 +463,11 @@ function getSessionBranch(){
             if( !data.error ){
                 $("#session_branch_name").html(data.name);
             }else{
-                getSessionBranch();
+                $("#session_branch_name").html(data.error);
+                if( getSessionBranch_Retries < 10 ){
+                    getSessionBranch();
+                    getSessionBranch_Retries++;
+                }
             }
         },
         error: function (shr, status, data){
