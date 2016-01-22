@@ -30,9 +30,7 @@ class BasketRepository {
 						$basket_promo_removed = true;
 					}
 				}
-			}
-
-			if($result->quantity > $result->available_quantity || $result->quantity > 0 || $result->available_quantity > 0) {
+			} else if($result->quantity > $result->available_quantity && $result->available_quantity > 0) {
 				$basket = Basket::find($result->basket_id);
 				$basket->quantity = $result->available_quantity;
 				if(!empty($basket) && $basket->save()){
