@@ -21,7 +21,7 @@ class BasketRepository {
 			if($result->quantity > $result->available_quantity) {
 				$basket = Basket::findOrFail($result->basket_id);
 				$basket->quantity = $result->available_quantity;
-				if($!empty($basket) && $basket->save()){
+				if(!empty($basket) && $basket->save()){
 					$result->quantity = $result->available_quantity;     
 					$basket_quantity_changed = true;               
 					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
