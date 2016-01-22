@@ -53,7 +53,7 @@ class ApiController extends Controller
 
         $update_row = "UPDATE clinic_patient_doctor SET patient_id = '".$patient_id."' WHERE username = '".$username."' and password = '".$password."' and patient_id = 0";
         
-        $update_row =  DB::table('users')
+        $update_row =  DB::table('clinic_patient_doctor')
             ->where('username', $username)
             ->where('password', $password)
             ->where('patient_id', 0)
