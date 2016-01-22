@@ -44,6 +44,8 @@ class BasketRepository {
 					}
 				}
 				array_push($final_array, $result);
+			} else {
+				array_push($final_array, $result);
 			} 
 			
 		}
