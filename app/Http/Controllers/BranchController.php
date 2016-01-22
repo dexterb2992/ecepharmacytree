@@ -43,7 +43,7 @@ class BranchController extends Controller
     function saveBranchPreference(){
         $input = Input::all();
         $response = array();
-        $preference_saved = false;
+        $success = false;
 
         if($input['action'] == 'insert'){
             $orderpreference = new OrderPreference;
@@ -60,10 +60,10 @@ class BranchController extends Controller
 
         if($orderpreference->save()){
             $response['orderpreference'] =  $orderpreference;
-            $preference_saved = true;
+            $success = true;
         }
 
-        $response['preference_saved'] = $preference_saved;
+        $response['success'] = $success;
         $response['server_timestamp'] =  Carbon::now('Asia/Manila')->toDateTimeString();
         return Response::json($response);
     }
