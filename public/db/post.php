@@ -316,6 +316,11 @@ if ($request == 'register') {
     	foreach ($collection->jsobj as $col) {
     		$whens = $whens." when id = ".$col->id." then ".$col->quantity;
     		$ids = $ids.$col->id.",";
+            //if promo_id has value then initialize BasketPromo and fuck the shit up oh. -> save the promo_id and promo_type and discount_promo_value or id
+            if($col->promo_id != "" ){
+                $sql = "INSERT (basket_id, promo_id, promo_type, ".$col->promo_type.") VALUES (".$col->id.",".$col->promo_id.",".$col->promo_type.",".$col->promo_value.") INTO basket_promos";
+                $response["ins_query"] = $sql;
+            }
     	}
 
     	$ids = substr($ids, 0, strlen($ids) -1);
