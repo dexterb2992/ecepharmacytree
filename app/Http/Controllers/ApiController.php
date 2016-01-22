@@ -34,7 +34,10 @@ class ApiController extends Controller
 
 	function getClinicRecords(){
     	$input = Input::all();
-    	return $input;
+
+
+
+    	return $input->patient_id;
 	}
 
 	// function process()
