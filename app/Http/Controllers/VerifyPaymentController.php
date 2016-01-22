@@ -105,8 +105,16 @@ class VerifyPaymentController extends Controller
 				$quantity = $result->quantity;
 				$product_id = $result->product_id;
 				$prescription_id = $result->prescription_id;
-				$totalAmount += $quantity * $result->price;
 				$current_product_price = $result->price;
+
+				if($result->promo_type == "peso_discount"){
+					$totalAmount += ($quantity * $result->price) - $result->peso_discount;
+				} else if ($result->promo_type == "percentage_discount") {
+					$totalAmount += ($quantity * $result->price) - $result->percentage_discount;
+				} else {
+					$totalAmount += $quantity * $result->price;					
+				}
+
 
 				if($counter == 1) {
 					$order = new Order;
@@ -142,6 +150,12 @@ class VerifyPaymentController extends Controller
 					$order_detail->quantity = $quantity;
 					$order_detail->price = $current_product_price;
 					$order_detail->type = 'type';
+					$order_detail->promo_id = $result->promo_id;
+					$order_detail->promo_type = $result->promo_type;
+					$order_detail->percentage_discount = $result->percentage_discount;
+					$order_detail->peso_discount = $result->peso_discount;
+					$order_detail->free_gift = $result->free_gift;
+					$order_detail->promo_free_product_qty = $result->promo_free_product_qty;
 
 					if($order_detail->save())
 						$response['order_details_message_'.$counter] = "order detail saved on database";
