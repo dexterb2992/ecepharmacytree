@@ -24,7 +24,7 @@ class BasketRepository {
 					$result->quantity = $result->available_quantity;     
 					$basket_quantity_changed = true;               
 					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
-					if($basket->delete())
+					if($basketpromo->delete())
 						$basket_promo_removed = true;
 				}
 			}
