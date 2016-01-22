@@ -325,7 +325,6 @@ if ($request == 'register') {
                 //     $response["promo_message"] = 'promo_not_saved';
                 $response["ondup"] = $sql;
             } 
-            $sql = " INSERT INTO table (user_name) VALUES ('baz'), ('bar'), ('qux') ON DUPLICATE KEY UPDATE user_visits=user_visits+1;"
     	}
 
     	$ids = substr($ids, 0, strlen($ids) -1);
