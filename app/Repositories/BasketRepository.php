@@ -18,6 +18,20 @@ class BasketRepository {
 		$results = DB::select("call check_basket(".$patient_id.", ".$branch_id.")");
 
 		foreach($results as $result){
+
+			if($result->available_quantity == 0) {
+				$basket = Basket::findOrFail($result->basket_id);
+				if(!empty($basket) && $basket->delete()){
+					$basket_quantity_changed = true;
+					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
+					if(!empty($basketpromo) && $basketpromo->delete()){
+						$response['basket_promo'] = $basketpromo;
+						$response['basket_id'] = $basket->id;
+						$basket_promo_removed = true;
+					}
+				}
+			}
+
 			if($result->quantity > $result->available_quantity) {
 				$basket = Basket::findOrFail($result->basket_id);
 				$basket->quantity = $result->available_quantity;
@@ -31,21 +45,14 @@ class BasketRepository {
 						$basket_promo_removed = true;
 					}
 				}
-			} else if($result->available_quantity == 0) {
-				$basket = Basket::findOrFail($result->basket_id);
-				if(!empty($basket) && $basket->delete()){
-					$basket_quantity_changed = true;
-					$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
-					if(!empty($basketpromo) && $basketpromo->delete()){
-						$response['basket_promo'] = $basketpromo;
-						$response['basket_id'] = $basket->id;
-						$basket_promo_removed = true;
-					}
-				}
-			}
+				array_push($final_array, $result);
+			} else {
+				array_push($final_array, $result);
+			} 
+			
 		}
 
-		$response['baskets'] = $results;
+		$response['baskets'] = $final_array;
 		$response['success'] = 1;
 		$response['server_timestamp'] = date("Y-m-d H:i:s", time());
 		$response['basket_quantity_changed'] = $basket_quantity_changed;
