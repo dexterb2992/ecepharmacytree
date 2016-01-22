@@ -60,6 +60,7 @@ class BranchController extends Controller
 
         if($orderpreference->save()){
             $response['orderpreference'] =  $orderpreference;
+            $response['server_id'] = $orderpreference->id;
             $success = true;
         }
 
