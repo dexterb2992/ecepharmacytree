@@ -160,7 +160,7 @@
 
                                 <div class="form-group">
                                     <label for="address_street">Full Address</label>
-                                    <input type="text" class="form-control whitenbg" id="address_street" placeholder="Street" name="address_street"  readonly="">
+                                    <input type="text" class="form-control whitenbg" id="full_address" placeholder="Street" name="full_address"  readonly="">
                                 </div>
                                 <!-- <div class="form-group">
                                     <label for="address_barangay">Barangay<i>*</i></label>
