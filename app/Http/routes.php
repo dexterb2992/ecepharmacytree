@@ -44,7 +44,7 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::post('saveBranchPreference', 'BranchController@saveBranchPreference');
+Route::get('saveBranchPreference', 'BranchController@saveBranchPreference');
 
 Route::get('check_basket', 'BasketController@check_basket');
 
