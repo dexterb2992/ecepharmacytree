@@ -65,7 +65,7 @@ class ApiController extends Controller
             $response['success_update'] = 0;
         } 
     }
-    	return echo json_encode($response);
+    	return json_encode($response);
 	}
 
 	// function process()
