@@ -31,9 +31,7 @@ class VerifyCashPaymentController extends Controller
 
 	function verification() {
 		$input = Input::all();
-
-		// dd($input);
-		// exit(0);
+		$response = array();
 
 		$user_id = $input['user_id'];         
 		$branch_server_id = $input['branch_server_id'];
@@ -192,7 +190,7 @@ class VerifyCashPaymentController extends Controller
 				if($patient->save())
 					$response['points_update_message'] = "points updated";
 				else 
-					$response['points_update_message'] = "points not updated";*/
+				$response['points_update_message'] = "points not updated";*/
 				
 				$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
 
