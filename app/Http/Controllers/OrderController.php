@@ -14,7 +14,6 @@ use ECEPharmacyTree\Inventory;
 use Input;
 use ECEPharmacyTree\Log;
 use URL;
-use Carbon\Carbon;
 
 class OrderController extends Controller
 {

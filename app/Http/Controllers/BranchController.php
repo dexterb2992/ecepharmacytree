@@ -15,6 +15,7 @@ use ECEPharmacyTree\OrderPreference;
 use ECEPharmacyTree\Municipality;
 use ECEPharmacyTree\Province;
 use Response;
+use Carbon\Carbon;
 
 class BranchController extends Controller
 {
@@ -61,7 +62,7 @@ class BranchController extends Controller
             $response['latest_updated_at'] = $orderpreference->updated_at;    
         }
 
-        $response['server_timestamp'] =  Carbon\Carbon::now('Asia/Manila')->toDateTimeString();
+        $response['server_timestamp'] =  Carbon::now('Asia/Manila')->toDateTimeString();
         return $response;
     }
 
