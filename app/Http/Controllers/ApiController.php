@@ -43,7 +43,7 @@ class ApiController extends Controller
     $response['records'] = $result;
 
     if(!empty($result)){
-        $result2 = DB::select("SELECT * FROM patient_records where clinic_patient_record_id = ".$result->cpr_id);
+        $result2 = DB::select("SELECT * FROM patient_records where clinic_patient_record_id = ".$result[0]->cpr_id);
 
         if(!empty($result2)){
             $response['has_record'] = 1;
