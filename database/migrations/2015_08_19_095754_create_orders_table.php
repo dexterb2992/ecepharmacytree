@@ -29,6 +29,7 @@ class CreateOrdersTable extends Migration
             $table->double('delivery_charge');
             $table->string('status')->default('open');
             $table->integer('is_new')->default(1);
+            $table->integer('is_returned')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

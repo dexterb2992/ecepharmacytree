@@ -93,7 +93,24 @@ class PromoController extends Controller
                 $product_ids[] = ['id' => $discount->product_id];
             }
             $promo->product_id = $product_ids;
-            return $promo->toJson();
+            if( $promo->free_gifts != "" ){
+                $free_gifts = [];
+                $promo->per_transaction_has_free_gifts = 1;
+                $arr_free_gifts = json_decode($promo->free_gifts);
+
+                $product_ids = [];
+
+                // dd($arr_free_gifts);
+                foreach ($arr_free_gifts as $gift) {
+                    $product = Product::find($gift->product_id);
+                    $product->quantity_free = $gift->quantity;
+                    array_push($free_gifts, $product);
+                    array_push($product_ids, $gift->product_id);
+                }
+                $promo->free_gifts = $free_gifts;
+                $promo->product_id = $product_ids;
+            }
+            return $promo;
         }
         
     }
@@ -108,27 +125,27 @@ class PromoController extends Controller
     public function update()
     {
         $input = Input::all();
-        $promo = Promo::findOrFail($input['id']);
-        $promo->long_title = $input["long_title"];
-        $promo->start_date = $input["start_date"];
-        $promo->end_date = $input["end_date"];
-        $promo->generic_redemption_code = $input['generic_redemption_code'];
-        $promo->product_applicability = $input["product_applicability"];
-        $promo->minimum_purchase_amount = $input["minimum_purchase_amount"];
-        $promo->offer_type = $input["offer_type"];
-        $promo->generic_redemption_code = $input["generic_redemption_code"];
+        // $promo = Promo::findOrFail($input['id']);
+        // $promo->long_title = $input["long_title"];
+        // $promo->start_date = $input["start_date"];
+        // $promo->end_date = $input["end_date"];
+        // $promo->generic_redemption_code = $input['generic_redemption_code'];
+        // $promo->product_applicability = $input["product_applicability"];
+        // $promo->minimum_purchase_amount = $input["minimum_purchase_amount"];
+        // $promo->offer_type = $input["offer_type"];
+        // $promo->generic_redemption_code = $input["generic_redemption_code"];
 
-        if( $promo->save() ){
-            $dfps = DiscountsFreeProduct::where('promo_id', $promo->id)->delete();
+        if( $this->promo->update($input) ){
+            // $dfps = DiscountsFreeProduct::where('promo_id', $promo->id)->delete();
 
-            if( isset($input['product_id']) && (count($input['product_id']) > 0) && ($input["product_applicability"] == 'SPECIFIC_PRODUCTS') ){
-                foreach ($input['product_id'] as $key => $value) {
-                    $dfp = new DiscountsFreeProduct;
-                    $dfp->promo_id = $promo->id;
-                    $dfp->product_id = $value;
-                    $dfp->save();
-                }
-            }
+            // if( isset($input['product_id']) && (count($input['product_id']) > 0) && ($input["product_applicability"] == 'SPECIFIC_PRODUCTS') ){
+            //     foreach ($input['product_id'] as $key => $value) {
+            //         $dfp = new DiscountsFreeProduct;
+            //         $dfp->promo_id = $promo->id;
+            //         $dfp->product_id = $value;
+            //         $dfp->save();
+            //     }
+            // }
             session()->flash("flash_message", ["msg" => "Promo information has been updated.", "type" => "info"]);
             return Redirect::to( route('Promo::index') );
         }
@@ -163,12 +180,20 @@ class PromoController extends Controller
             }
 
         } 
+        
+        $dfp->discount_detail_minimum_type = 'quantity_required';
 
         if( $dfp->minimum_purchase != 0 && $dfp->quantity_required == 0 ){
             $dfp->discount_detail_minimum_type = 'minimum_purchase';
-        }else{
-            $dfp->discount_detail_minimum_type = 'quantity_required';
         }
+
+        $dfp->discount_detail_discount_type = "percentage_discount";
+        if(  $dfp->peso_discount != 0 && $dfp->percentage_discount == 0 ){
+            $dfp->discount_detail_discount_type = "peso_discount";
+        }
+
+
+
         return $dfp;
     }
 

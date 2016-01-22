@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
                             <tr>
                                 <th>Title</th>
                                 <th>Validity</th>
-                                <th>Offer Type</th>
+                                <th>Coupon Code</th>
                                 <th>Applicability</th>
                                 <th>Products</th>
                                 <th>Min. Purchase Amount</th>
@@ -38,14 +38,12 @@ use Illuminate\Support\Str;
                                         </span>
                                     </td>
                                     <td>
-                                        <span data-toggle="tooltip" data-original-title="{!! clean($promo->offer_type) !!}">
-                                            <i class="fa fa-circle text-{{$promo->offer_type == 'NO_CODE' ? 'orange' : 'olive'}}"></i>
-                                        </span>
+                                        {!! $promo->offer_type == 'NO_CODE' ? '<div class="label label-default">N/A</div>' : $promo->generic_redemption_code !!}
                                     </td>
                                     <td>
-                                        <span data-toggle="tooltip" data-original-title="{!! clean($promo->product_applicability) !!}">
-                                            <i class="fa fa-circle text-{{$promo->product_applicability == 'SPECIFIC_PRODUCTS' ? 'yellow' : 'green'}}"></i>
-                                        </span>
+                                        {!! $promo->product_applicability == 'SPECIFIC_PRODUCTS' ? 
+                                            '<div class="label label-warning">Only Specific products</div>' : 
+                                            '<div class="label label-success">Every Transaction</div>' !!}
                                     </td>
                                     <td>
                                         @if($promo->product_applicability == 'SPECIFIC_PRODUCTS')
@@ -80,11 +78,14 @@ use Illuminate\Support\Str;
                                             @endif
                                             {!! count($promo->discounts) < 1 ? '<span class="label label-default">No product selected</span>' : '' !!}
                                         @else
+                                            <?php 
+                                                $free_products = [];
+                                            ?>
                                             <span class="label label-primary">All Products</span>
                                         @endif
                                     </td>
                                     <td>
-                                        {{ peso().' '.to_money($promo->minimum_purchase_amount, 2) }}
+                                        {!! $promo->product_applicability == 'SPECIFIC_PRODUCTS' ? 'N/A' : peso().' '.to_money($promo->minimum_purchase_amount, 2) !!}
                                     </td>
                                     <td>
                                         <div class="btn-group">
@@ -130,7 +131,7 @@ use Illuminate\Support\Str;
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input type="text" class="form-control pull-right daterange" id="date_range" name="date_range" readonly required/>
+									<input type="text" class="form-control pull-right daterange" id="date_range" name="date_range" required/>
 									<input type="hidden" name="start_date">
 									<input type="hidden" name="end_date">
 								</div><!-- /.input group -->
@@ -160,12 +161,8 @@ use Illuminate\Support\Str;
                             </div>
 
                             <div class="form-group">
-                                <label>Product Applicability<red>*</red>(<small><i>Whether the promotion is applicable to per transaction or only specific products.</i></small>)</label>
-                                <!-- <select class="form-control" name="product_applicability" data-show-target="#specific_products_outer_div" data-show-target-when="SPECIFIC_PRODUCTS" required> -->
-                                <!-- <select class="form-control" name="product_applicability" id="product_applicability" required>
-                                    <option value="PER_TRANSACTION">Per Transaction</option>
-                                    <option value="SPECIFIC_PRODUCTS">Specific Products</option>
-                                </select> -->
+                                <label id="label_for_product_applicability">Product Applicability<red>*</red>(<small><i>Whether the promotion is applicable to per transaction or only specific products.</i></small>)</label>
+                                <div class="label-danger label"></div><br/>
 
                                 
                                 <label for="product_applicability">
@@ -182,6 +179,7 @@ use Illuminate\Support\Str;
                                     data-show-target="#specific_products_outer_div" data-show-target-when="SPECIFIC_PRODUCTS"/>
                                     Specific Products
                                 </label>
+
                             </div>
 
                             <!-- the container for a Specific Products Promo -->
@@ -202,7 +200,7 @@ use Illuminate\Support\Str;
                                             <div class="input-group-addon">
                                                 {{ peso() }}
                                             </div>
-                                            <input type="text" class="form-control number" name="minimum_purchase_amount" required>
+                                            <input type="text" class="form-control number" name="minimum_purchase_amount">
                                         </div>
                                     </div>  
 
@@ -323,7 +321,7 @@ use Illuminate\Support\Str;
                             </div>
 
                             <div class="form-group">
-                                <label>Offers</label>
+                                <label id="specific_product_offers">Offers</label><div class="label-danger label"></div>
                             </div>
 
                             <div class="form-group">
