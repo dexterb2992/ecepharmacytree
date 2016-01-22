@@ -63,7 +63,7 @@ class BranchController extends Controller
         }
 
         $response['server_timestamp'] =  Carbon::now('Asia/Manila')->toDateTimeString();
-        return $response;
+        return Response::json($response);
     }
 
     /**
