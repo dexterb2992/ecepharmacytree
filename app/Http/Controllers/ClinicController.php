@@ -109,9 +109,4 @@ class ClinicController extends Controller
     session()->flash('flash_message', ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"]);
     return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
 }
-
-function getClinicRecords(){
-    $input = Input::all();
-    return $input;
-}
 }

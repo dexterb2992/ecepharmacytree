@@ -32,6 +32,11 @@ class ApiController extends Controller
 		$this->pre_response  = array("success" => 1, "message" => "");
 	}
 
+	function getClinicRecords(){
+    $input = Input::all();
+    return $input;
+}
+
 	public function process()
 	{
 		$input = Input::all();

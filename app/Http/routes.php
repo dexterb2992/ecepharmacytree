@@ -38,7 +38,7 @@ Route::controllers([
 	]);
 
 
-Route::get('/', ['as' => 'dashboard', 'uses' => 'UserController@dashboard']);
+Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
 
 Route::get('home', function(){
 	return redirect('/');
@@ -74,7 +74,7 @@ Route::get('test/{referral_id}', function ($referral_id){
 	dd(get_uplines($referral_id, true, true));
 });
 
-Route::get('get_clinic_records', 'ClinicController@getClinicRecords');
+Route::get('get_clinic_records', 'ApiController@getClinicRecords');
 
 Route::post("get-selected-branch", 'BranchController@show_selected_branch');
 
