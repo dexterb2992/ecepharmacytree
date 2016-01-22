@@ -87,7 +87,7 @@ class InventoryController extends Controller
         $inventory->product_id = $input["product_id"];
 
         $product = Product::find( $inventory->product_id );
-        $quantity = $product->qty_per_packing * $input["quantity"];
+        $quantity = $input["quantity"];
 
         $inventory->quantity = $quantity;
         $inventory->available_quantity = $quantity;

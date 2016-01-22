@@ -156,22 +156,30 @@ function _clear_form_data(form){
 }
 
 function _error(element, error_msg){
-    console.log(element);
-    if( element.parent('.input-group').length ){ // has parent
-        if( element.parent('.input-group').next('.label-danger').length ){
-            element.parent('.input-group').next('.label-danger').html(error_msg);
-        }else{
-            element.parent('.input-group').after('<div class="label label-danger">'+error_msg+'</label>');
-        }
-    }else{
-       if( element.next('.label-danger').length ){
-            element.next('.label-danger').html(error_msg);
-        }else{
-            element.after('<div class="label label-danger">'+error_msg+'</label>');
-        } 
-    }
+    
+    try{
+        if( element.parent('.input-group').length ){ // has parent
+            if( element.parent('.input-group').next('.label-danger').length ){
+                element.parent('.input-group').next('.label-danger').html(error_msg);
+            }else{
+                element.parent('.input-group').after('<div class="label label-danger">'+error_msg+'</label>');
+            }
 
-	element.next('div.label-danger').fadeIn().delay(5000).fadeOut(400);
+            element.parent('.input-group').next('div.label-danger').fadeIn().delay(5000).fadeOut(400);
+        }else{
+           if( element.next('.label-danger').length ){
+                element.next('.label-danger').html(error_msg);
+            }else{
+                element.after('<div class="label label-danger">'+error_msg+'</label>');
+            } 
+
+            element.next('div.label-danger').fadeIn().delay(5000).fadeOut(400);
+        }
+
+        
+    }catch(Exception){
+        console.log(Exception);
+    }
 }
 
 function formfinder(form, name, fieldType){
@@ -441,3 +449,32 @@ function calculateStockReturnAmount(){
     $("#refund_amount").html(total_amount);
 }
 
+var getSessionBranch_Retries = 0;
+function getSessionBranch(){
+    $.ajax({
+        url: 'get-selected-branch',
+        type: 'get',
+        dataType: 'json',
+        beforeSend: function (){
+            console.log("getting session branch now..");
+        },
+        success: function (data){
+            console.log(data);
+            if( !data.error ){
+                $("#session_branch_name").html(data.name);
+            }else{
+                $("#session_branch_name").html(data.error);
+                if( getSessionBranch_Retries < 10 ){
+                    getSessionBranch();
+                    getSessionBranch_Retries++;
+                }
+            }
+        },
+        error: function (shr, status, data){
+            console.log("Error getting session branch. "+data+" Status "+shr.status);
+        },
+        complete: function (){
+            console.log("getting session branch completed.");
+        }
+    });
+}

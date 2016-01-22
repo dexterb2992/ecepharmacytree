@@ -57,9 +57,13 @@ class PromoRepository {
 
     }
 
-    function save($input){
+    function save($input, $promoID = null){
         $promo = new Promo;
-        dd($input);
+        if( $promoID !== null ){
+            $promo = Promo::findOrFail($promoID);
+        }
+        
+        // dd($input);
         $promo->long_title = $input["long_title"];
         $promo->start_date = $input["start_date"];
         $promo->end_date = $input["end_date"];
@@ -68,16 +72,16 @@ class PromoRepository {
         $promo->offer_type = $input["offer_type"];
         $promo->generic_redemption_code = $input["generic_redemption_code"];
 
-        if( $input["product_applicability"] == "SPECIFIC_PRODUCTS" ){
-
-        }else{
+        if( $input["product_applicability"] == "PER_TRANSACTION" ){
             $promo->minimum_purchase_amount = $input["minimum_purchase_amount"]; // optional
-            $promo->is_free_delivery = $input["is_free_delivery"];
+            $promo->is_free_delivery = isset($input["is_free_delivery"]) ? $input["is_free_delivery"] : 0;
 
-            $promo->peso_discount = $input['discount_type'] == 'peso_discount' ? $input["peso_discount"] : 0;
-            $promo->percentage_discount = $input['discount_type'] == 'peso_discount' ? 0 : $input["percentage_discount"];
+            if( isset($input['discount_type']) ){
+                $promo->peso_discount = $input['discount_type'] == 'peso_discount' ? $input["peso_discount"] : 0;
+                $promo->percentage_discount = $input['discount_type'] == 'peso_discount' ? 0 : $input["percentage_discount"];
+            }
             
-            if( $input["has_free_gifts"] == 1 ){
+            if( isset($input["per_transaction_has_free_gifts"]) && $input["per_transaction_has_free_gifts"] == 1 ){
                 $free_gifts = array();
                 foreach ($input['per_transaction_gift_quantities'] as $key => $value) {
                     $free_gifts[] = array('product_id' => $key, 'quantity' => $value);
@@ -97,6 +101,23 @@ class PromoRepository {
                 }
             }
 
+            return true;
+        }
+        return false;
+    }
+
+    function update($input){
+        if( $this->save($input, $input['id']) ){
+            $dfps = DiscountsFreeProduct::where('promo_id', $input['id'])->delete();
+
+            if( isset($input['product_id']) && (count($input['product_id']) > 0) && ($input["product_applicability"] == 'SPECIFIC_PRODUCTS') ){
+                foreach ($input['product_id'] as $key => $value) {
+                    $dfp = new DiscountsFreeProduct;
+                    $dfp->promo_id = $input['id'];
+                    $dfp->product_id = $value;
+                    $dfp->save();
+                }
+            }
             return true;
         }
         return false;
