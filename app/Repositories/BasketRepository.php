@@ -4,7 +4,7 @@ namespace ECEPharmacyTree\Repositories;
 
 use DB;
 use ECEPharmacyTree\Basket;
-use BasketPromo;
+use ECEPharmacyTree\BasketPromo;
 
 class BasketRepository {
 
