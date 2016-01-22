@@ -20,10 +20,10 @@ class BasketRepository {
 		foreach($results as $result){
 			if($result->quantity > $result->available_quantity) {
 
-				$basket = Basket::findOrFail($result->basket_id);
+				// $basket = Basket::findOrFail($result->basket_id);
 
 				if($result->available_quantity == 0){
-					if($basket->delete())
+					// if($basket->delete())
 						$basket_quantity_changed = true;
 				} 
 				// else {
@@ -34,13 +34,13 @@ class BasketRepository {
 				// 		array_push($final_array, $result);
 				// 	}
 				// }
-				$basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
-				if(!empty($basketpromo)){
-					$response['basket_promo'] = $basketpromo;
-					$response['basket_id'] = $basket->id;
-					if($basketpromo->delete())
-						$basket_promo_removed = true;	
-				}				
+				// $basketpromo = BasketPromo::where('basket_id', $basket->id)->first();
+				// if(!empty($basketpromo)){
+				// 	$response['basket_promo'] = $basketpromo;
+				// 	$response['basket_id'] = $basket->id;
+				// 	if($basketpromo->delete())
+				// 		$basket_promo_removed = true;	
+				// }				
 
 			}
 
