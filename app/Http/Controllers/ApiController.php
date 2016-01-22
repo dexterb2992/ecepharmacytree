@@ -33,9 +33,9 @@ class ApiController extends Controller
 	}
 
 	function getClinicRecords(){
-    $input = Input::all();
-    return $input;
-}
+    	$input = Input::all();
+    	return $input;
+	}
 
 	public function process()
 	{
@@ -162,8 +162,8 @@ class ApiController extends Controller
 		}
 	}
 
-	public function generate_response($input){
-		
+	function generate_response($input)
+	{	
 		$tbl = $input['tbl_name'];
 
 		$response = array();
