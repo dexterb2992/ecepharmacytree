@@ -32,7 +32,7 @@ class BasketRepository {
 				}
 			}
 
-			if($result->quantity > $result->available_quantity && $result->quantity != 0) {
+			if($result->quantity > $result->available_quantity || $result->quantity > 0 || $result->available_quantity > 0) {
 				$basket = Basket::findOrFail($result->basket_id);
 				$basket->quantity = $result->available_quantity;
 				if(!empty($basket) && $basket->save()){
