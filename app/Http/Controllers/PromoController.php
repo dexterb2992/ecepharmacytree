@@ -64,6 +64,13 @@ class PromoController extends Controller
     public function store()
     {
         $input = Input::all();
+
+        $check_response = $this->promo->check($input);
+        if( $check_response['is_allowed'] == false ){
+            session()->flash("flash_message", ["msg" => $check_response['msg'], "type" => "important"]);
+            return Redirect::to( route('Promo::index') );
+        }
+
         $response = $this->promo->save($input);
 
         if( $response ){
@@ -125,27 +132,9 @@ class PromoController extends Controller
     public function update()
     {
         $input = Input::all();
-        // $promo = Promo::findOrFail($input['id']);
-        // $promo->long_title = $input["long_title"];
-        // $promo->start_date = $input["start_date"];
-        // $promo->end_date = $input["end_date"];
-        // $promo->generic_redemption_code = $input['generic_redemption_code'];
-        // $promo->product_applicability = $input["product_applicability"];
-        // $promo->minimum_purchase_amount = $input["minimum_purchase_amount"];
-        // $promo->offer_type = $input["offer_type"];
-        // $promo->generic_redemption_code = $input["generic_redemption_code"];
 
         if( $this->promo->update($input) ){
-            // $dfps = DiscountsFreeProduct::where('promo_id', $promo->id)->delete();
 
-            // if( isset($input['product_id']) && (count($input['product_id']) > 0) && ($input["product_applicability"] == 'SPECIFIC_PRODUCTS') ){
-            //     foreach ($input['product_id'] as $key => $value) {
-            //         $dfp = new DiscountsFreeProduct;
-            //         $dfp->promo_id = $promo->id;
-            //         $dfp->product_id = $value;
-            //         $dfp->save();
-            //     }
-            // }
             session()->flash("flash_message", ["msg" => "Promo information has been updated.", "type" => "info"]);
             return Redirect::to( route('Promo::index') );
         }

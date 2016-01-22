@@ -122,4 +122,19 @@ class PromoRepository {
         }
         return false;
     }
+
+    public function check($input){
+        $today =  Carbon::today('Asia/Manila')->addHours(23 );
+        $products = Product::all();
+
+        $number_of_active_per_transaction_promo = Promo::where('end_date', '>=', $today)->where('product_applicability', '=', 'PER_TRANSACTION')->count();
+        if( $number_of_active_per_transaction_promo > 0 ){
+            return array(
+                    'msg' => "Sorry, but currently, there's an active Per Transaction Promo. 
+                            You can add a new promo only when no other Per Transaction Promo is running..",
+                    "is_allowed" => false
+                    );
+        }
+        return [];
+    }
 }

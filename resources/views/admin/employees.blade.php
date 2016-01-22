@@ -5,7 +5,7 @@
     <div class="col-xs-12">
         <div class="box box-success">
             <div class="box-header">
-                <h3 class="box-title">Members</h3><br/>
+                <h3 class="box-title">Employees</h3><br/>
                 <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-view-employee" data-action="create" data-title="inventory"><i class="fa-plus fa"></i> Add New</button>
             </div><!-- /.box-header -->
             <div class="box-body">
