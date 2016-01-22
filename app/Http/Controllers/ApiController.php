@@ -33,11 +33,36 @@ class ApiController extends Controller
 	}
 
 	function getClinicRecords(){
+		$response = array();
     	$input = Input::all();
+    	$username = $input['username'];
+    $password = $input['password'];
+    $patient_id = $input['patient_id'];
+
+    $result = DB::select("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id LEFT JOIN clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")");
+
+    // if () {
+    // 	// $response['records']
+    //     $row_cp = mysql_fetch_object($result);
+    //     $sql_cp = mysql_query("SELECT * FROM patient_records where clinic_patient_record_id = ".$row_cp->cpr_id);
+
+    //     if(mysql_num_rows($sql_cp) > 0){
+    //         $response['has_record'] = 1;
+    //     } else {
+    //         $response['has_record'] = 0;
+    //     }
+
+    //     $update_row = "UPDATE clinic_patient_doctor SET patient_id = '".$patient_id."' WHERE username = '".$username."' and password = '".$password."' and patient_id = 0";
+    //     if(mysql_query($update_row)) {
+    //         $response['success_update'] = 1;
+    //     } else {
+    //         $response['success_update'] = 0;
+    //     } 
+
+    // }
 
 
-
-    	return $input->patient_id;
+    	return $result;
 	}
 
 	// function process()
