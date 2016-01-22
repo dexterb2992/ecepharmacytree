@@ -59,7 +59,7 @@ class BranchController extends Controller
 
         if($orderpreference->save()){
             $response['orderpreference'] =  $orderpreference;
-            $response['latest_updated_at'] = $orderpreference->updated_at;    
+            $response['latest_updated_at'] = $orderpreference->updated_at->date;    
         }
 
         $response['server_timestamp'] =  Carbon::now('Asia/Manila')->toDateTimeString();
