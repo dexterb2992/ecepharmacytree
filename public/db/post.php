@@ -318,7 +318,7 @@ if ($request == 'register') {
     		$ids = $ids.$col->id.","; 
             //if promo_id has value then initialize BasketPromo and fuck the shit up oh. -> save the promo_id and promo_type and discount_promo_value or id
             if($col->promo_type != ""){
-                $sql = "INSERT INTO basket_promos(basket_id, promo_id, promo_type, ".$col->promo_type.", promo_free_product_qty) VALUES (".$col->id.",".$col->promo_id.",'".$col->promo_type."',".$col->promo_value.", ".$col->promo_free_product_qty.") ON DUPLICATE KEY UPDATE promo_id=".$col->promo_id.", promo_type='".$col->promo_type."', ".$col->promo_type."=".$col->promo_value.", promo_free_product_qty=".$promo_free_product_qty;
+                $sql = "INSERT INTO basket_promos(basket_id, promo_id, promo_type, ".$col->promo_type.", promo_free_product_qty) VALUES (".$col->id.",".$col->promo_id.",'".$col->promo_type."',".$col->promo_value.", ".$col->promo_free_product_qty.") ON DUPLICATE KEY UPDATE promo_id=".$col->promo_id.", promo_type='".$col->promo_type."', ".$col->promo_type."=".$col->promo_value.", promo_free_product_qty=".$col->promo_free_product_qty;
                 if(mysql_query($sql))
                     $response["promo_message"] = 'promo_saved';
                 else
