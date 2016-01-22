@@ -43,13 +43,13 @@ class ApiController extends Controller
     $response['records'] = $result;
 
     if(!empty($result)){
-        $result2 = DB::select("SELECT * FROM patient_records where clinic_patient_record_id = ".$result[0]->cpr_id);
+        // $result2 = DB::select("SELECT * FROM patient_records where clinic_patient_record_id = ".$result[0]->cpr_id);
 
-        if(!empty($result2)){
-            $response['has_record'] = 1;
-        } else {
-            $response['has_record'] = 0;
-        }
+        // if(!empty($result2)){
+        //     $response['has_record'] = 1;
+        // } else {
+        //     $response['has_record'] = 0;
+        // }
 
         $update_row = "UPDATE clinic_patient_doctor SET patient_id = '".$patient_id."' WHERE username = '".$username."' and password = '".$password."' and patient_id = 0";
         
