@@ -258,32 +258,43 @@ switch ($request) {
     $username = $_GET['username'];
     $password = $_GET['password'];
     $patient_id = $_GET['patient_id'];
+    // $resp = array();
 
-    $result = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id inner join clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or returnError(mysql_error());
-
+    // $resultskie = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id LEFT JOIN clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or die(mysql_error());
+    $resultskie = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cm.med_name, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id INNER JOIN clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id INNER JOIN clinic_medicines as cm  on cm.id = ct.medicine_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or die(mysql_error());
+    $result = $resultskie;
     $tbl = "records";
-            // echo count($result);
-    if (count($result) != 0) {
-        $row_cp = mysql_fetch_object($result);
-        $sql_cp = mysql_query("SELECT * FROM patient_records where clinic_patient_record_id = ".$row_cp->cpr_id);
 
-        if(mysql_num_rows($sql_cp) > 0){
+    if (mysql_num_rows($result) > 0) {
+    	$row_cp = mysql_fetch_object(mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id LEFT JOIN clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")"));
+    	$result2 = mysql_query("SELECT * FROM patient_records where clinic_patient_record_id = ".$row_cp->cpr_id);
+
+        if(mysql_num_rows($result2) > 0){
             $response['has_record'] = 1;
         } else {
             $response['has_record'] = 0;
         }
 
-        $update_row = "UPDATE clinic_patient_doctor SET patient_id = $patient_id WHERE username = '".$username."' and password = '".$password."' and patient_id = 0";
+        $update_row = "UPDATE clinic_patient_doctor SET patient_id = '".$patient_id."' WHERE username = '".$username."' and password = '".$password."' and patient_id = 0";
         if(mysql_query($update_row)) {
             $response['success_update'] = 1;
         } else {
             $response['success_update'] = 0;
         } 
-
     }
+//     $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
+
+// if(mysql_num_rows($result_latest_updated_at) > 0){
+//     $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
+//     $latest_updated_at = $result_latest_updated_at_array['updated_at'];
+// }
+
+// $response["success"]          = 1;
+// $response["latest_updated_at"] = "$latest_updated_at";
+//     $response['server_timestamp'] = $datenow;
+//     echo json_encode($response);
+//     exit(0);
     break;
-
-
 
     case 'google_distance_matrix':
     $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&destinations=";
