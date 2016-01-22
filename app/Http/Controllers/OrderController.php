@@ -25,7 +25,8 @@ class OrderController extends Controller
     public function index()
     {
 
-        $orders = Order::where('branch_id', session()->get('selected_branch'))->orderByRaw('created_at', 'DESC')->get();
+        $orders = Order::whereRaw('branch_id = '.session()->get('selected_branch'))->orderByRaw('id', 'DESC')->get();
+
 
         // $this->firstOrderFirstServeSort($orders);
 
