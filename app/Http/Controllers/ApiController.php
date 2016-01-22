@@ -26,7 +26,7 @@ class ApiController extends Controller
 	private $result;
 
 
-	public function __construct()
+	function __construct()
 	{
 		$this->datenow = Carbon::now('Asia/Manila');
 		$this->pre_response  = array("success" => 1, "message" => "");
@@ -37,7 +37,7 @@ class ApiController extends Controller
     	return $input;
 	}
 
-	public function process()
+	function process()
 	{
 		$input = Input::all();
 		$request = $input['q'];
@@ -183,20 +183,20 @@ class ApiController extends Controller
 		return Response::json($response);
 	}
 
-	public function get_clinic_patients_process($input){
+ function get_clinic_patients_process($input){
 		$this->result = mysql_query("SELECT cpd.*, cpd.id as cpd_id, cp.*, b.municipality_id, m.province_id, p.region_id FROM clinic_patients as cp inner join clinic_patient_doctor as cpd on cp.id = cpd.clinic_patients_id inner join barangays as b on cp.address_barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE BINARY cpd.username = '".$input['username']."' and BINARY cpd.password= '".$input['password']."'") or returnError(mysql_error());  
 
 		// echo no users JSON
 		echo json_encode($response);
 	}
 
-	public function get_clinic_patients_process($input){
+	function get_clinic_patients_process($input){
 		$result = mysql_query("SELECT cpd.*, cpd.id as cpd_id, cp.*, b.municipality_id, m.province_id, p.region_id FROM clinic_patients as cp inner join clinic_patient_doctor as cpd on cp.id = cpd.clinic_patients_id inner join barangays as b on cp.address_barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE BINARY cpd.username = '".$input['username']."' and BINARY cpd.password= '".$input['password']."'") or returnError(mysql_error());  
 
 		$tbl = $input['tbl_name'];
 	}
 
-	public function get_clinic_records_process($input){
+	function get_clinic_records_process($input){
 		$username = $input['username'];
 		$password = $input['password'];
 		$patient_id = $input['patient_id'];
@@ -233,7 +233,7 @@ class ApiController extends Controller
 		}
 	}
 
-	public function google_distance_matrix_process($input){
+	function google_distance_matrix_process($input){
 		$tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$input['mylocation_lat'].",".$input['mylocation_long']."&destinations=";
 		$reverse_geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$input['mylocation_lat'].",".$input['mylocation_long']."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
 	    $json_reverse_geocode = file_get_contents($reverse_geocode_url); // this WILL do an http request for you
@@ -272,7 +272,7 @@ class ApiController extends Controller
 		// }
 	}
 
-	public function google_distance_matrix_process($input){
+	function google_distance_matrix_process($input){
 		$tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$input['mylocation_lat'].",".$input['mylocation_long']."&destinations=";
 		$reverse_geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$input['mylocation_lat'].",".$input['mylocation_long']."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
 	    $json_reverse_geocode = file_get_contents($reverse_geocode_url); // this WILL do an http request for you
@@ -317,7 +317,7 @@ class ApiController extends Controller
         $response["branches"] = $storage;
 	}
 
-    public function get_basket_items_process($input){
+    function get_basket_items_process($input){
     	if (!isset($input['patient_id'])) {
     		$this->pre_response = array(
     			"success" => 0,
@@ -330,7 +330,7 @@ class ApiController extends Controller
     	}
     }
 
-    public function get_product_subcategories_process($input){
+    function get_product_subcategories_process($input){
     	if (isset($input['cat']) && $input['cat'] != "") {
     		if ($input['cat'] == "all") {
     			$this->result = mysql_query("SELECT * FROM product_subcategories WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
