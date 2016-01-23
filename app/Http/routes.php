@@ -78,7 +78,7 @@ Route::get('test/{referral_id}', function ($referral_id){
 
 Route::get('get_clinic_records', 'ApiController@getClinicRecords');
 
-Route::post("get-selected-branch", 'BranchController@show_selected_branch');
+Route::get("get-selected-branch", 'BranchController@show_selected_branch');
 
 
 Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
