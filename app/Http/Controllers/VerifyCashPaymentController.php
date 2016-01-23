@@ -115,6 +115,12 @@ class VerifyCashPaymentController extends Controller
 				$order_detail->quantity = $quantity;
 				$order_detail->price = $current_product_price;
 				$order_detail->type = 'type';
+				$order_detail->promo_id = $result->promo_id;
+				$order_detail->promo_type = $result->promo_type;
+				$order_detail->percentage_discount = $result->percentage_discount;
+				$order_detail->peso_discount = $result->peso_discount;
+				$order_detail->free_gift = $result->free_gift;
+				$order_detail->promo_free_product_qty = $result->promo_free_product_qty;
 
 				if($order_detail->save())
 					$response['order_details_message_'.$counter] = "order detail saved on database";
@@ -141,7 +147,7 @@ class VerifyCashPaymentController extends Controller
 					$response['billing_id'] = $billing_id;
 					$billing_saved = true;
 				} else
-					$response["billing_message"] = "Sorry, we can't process your request right now.";
+				$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
 				if(Basket::where('patient_id', '=', $user_id)->delete()) 
