@@ -22,6 +22,7 @@ class CreateBasketPromosTable extends Migration
             $table->double('percentage_discount');
             $table->double('peso_discount');
             $table->integer('free_gift');
+            $table->integer('promo_free_product_qty');
             $table->timestamps();
         });
 
