@@ -20,6 +20,7 @@ use ECEPharmacyTree\Payment as InServerPayment;
 use Response;
 use Illuminate\Mail\Mailer;
 use ECEPharmacyTree\Repositories\BasketRepository;
+use ECEPharmacyTree\BasketPromo;
 
 class VerifyCashPaymentController extends Controller
 {
