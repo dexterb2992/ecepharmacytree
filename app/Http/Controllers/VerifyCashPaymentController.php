@@ -71,6 +71,7 @@ class VerifyCashPaymentController extends Controller
 		$prescription_id = 0;
 		$current_product_price = 0;
 		$order_date = null;
+		$undiscounted_total = 0;
 
 		foreach($results as $result) {
 			$counter += 1;
@@ -78,13 +79,14 @@ class VerifyCashPaymentController extends Controller
 			$quantity = $result->quantity;
 			$product_id = $result->product_id;
 			$prescription_id = $result->prescription_id;
+			$undiscounted_total = $quantity * $result->price;
 
 			if($result->promo_type == "peso_discount"){
-				$totalAmount += ($quantity * $result->price) - $result->peso_discount;
+				$totalAmount += $undiscounted_total - $result->peso_discount;
 			} else if ($result->promo_type == "percentage_discount") {
-				$totalAmount += ($quantity * $result->price) - $result->percentage_discount;
+				$totalAmount += $undiscounted_total - $result->percentage_discount;
 			} else {
-				$totalAmount += $quantity * $result->price;					
+				$totalAmount += $undiscounted_total;					
 			}
 
 			if($counter == 1) {
