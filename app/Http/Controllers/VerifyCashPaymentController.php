@@ -156,6 +156,12 @@ class VerifyCashPaymentController extends Controller
 					$response['basket_message'] = "basket/s not deleted on database";
 
 
+				if(BasketPromo::where('patient_id', '=', $user_id)->delete()) 
+					$response['basket_promo_message'] = "basket promos deleted on database";
+				else 
+					$response['basket_promo_message'] = "basket promos not deleted on database";
+
+
 				$setting = Setting::first();
 				
 				$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
