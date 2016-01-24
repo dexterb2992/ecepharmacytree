@@ -149,7 +149,7 @@ class VerifyCashPaymentController extends Controller
 
 				$billing = new Billing;
 				$billing->order_id = $order_id;
-				$billing->gross_total = $gross_total;
+				$billing->gross_total = $undiscounted_total;
 				$billing->total = $totalAmount_final;
 				$billing->payment_status = $payment_status;
 				$billing->payment_method = $payment_method;
