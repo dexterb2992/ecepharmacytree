@@ -78,7 +78,14 @@ class VerifyCashPaymentController extends Controller
 			$quantity = $result->quantity;
 			$product_id = $result->product_id;
 			$prescription_id = $result->prescription_id;
-			$totalAmount += $quantity * $result->price;
+
+			if($result->promo_type == "peso_discount"){
+				$totalAmount += ($quantity * $result->price) - $result->peso_discount;
+			} else if ($result->promo_type == "percentage_discount") {
+				$totalAmount += ($quantity * $result->price) - $result->percentage_discount;
+			} else {
+				$totalAmount += $quantity * $result->price;					
+			}
 
 			if($counter == 1) {
 				$order = new Order;
@@ -127,6 +134,11 @@ class VerifyCashPaymentController extends Controller
 					$response['order_details_message_'.$counter] = "order detail saved on database";
 				else
 					$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ";
+
+				if(BasketPromo::where('basket_id', '=', $result->id)->delete()) 
+					$response['basket_promo_message_'.$counter] = "basket promos deleted on database";
+				else 
+					$response['basket_promo_message_'.$counter] = "basket promos not deleted on database";
 			}
 
 			if(count($results) == $counter) {
@@ -155,12 +167,6 @@ class VerifyCashPaymentController extends Controller
 					$response['basket_message'] = "basket/s deleted on database";
 				else 
 					$response['basket_message'] = "basket/s not deleted on database";
-
-
-				if(BasketPromo::where('patient_id', '=', $user_id)->delete()) 
-					$response['basket_promo_message'] = "basket promos deleted on database";
-				else 
-					$response['basket_promo_message'] = "basket promos not deleted on database";
 
 
 				$setting = Setting::first();

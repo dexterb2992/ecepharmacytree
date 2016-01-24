@@ -161,6 +161,11 @@ class VerifyPaymentController extends Controller
 						$response['order_details_message_'.$counter] = "order detail saved on database";
 					else
 						$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ";
+
+					if(BasketPromo::where('basket_id', '=', $result->id)->delete()) 
+						$response['basket_promo_message_'.$counter] = "basket promos deleted on database";
+					else 
+						$response['basket_promo_message_'.$counter] = "basket promos not deleted on database";
 				}
 
 				//move this code to fulfill items on admin
