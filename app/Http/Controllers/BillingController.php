@@ -49,7 +49,7 @@ class BillingController extends Controller
                 $order = $billing->order()->first();
                 $patient = $order->patient()->first();
 
-                $multilined_notif = array(1 => 'Thank you for '.get_person_fullname($patient).' ! ', 2 => 'This is to notify that we have accepted your payment for order #'.$order->id, 3 => 'We are now preparing the items for delivery.');
+                $multilined_notif = array(1 => 'Thank you for '.get_person_fullname($patient).' ! ', 2 => 'We have accepted your payment for order #'.$order->id, 3 => 'We are now preparing the items for delivery.');
 
                 $data = array( 'message' => json_encode($multilined_notif) );
 
