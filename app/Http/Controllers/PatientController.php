@@ -28,7 +28,7 @@ class PatientController extends Controller
         if($patient->save())
             $response['success'] = true;
         else
-            $response['success'] = false
+            $response['success'] = false;
 
         return Response::json($response);
     }
