@@ -12,11 +12,26 @@ use ECEPharmacyTree\Region;
 use ECEPharmacyTree\Province;
 use ECEPharmacyTree\Municipality;
 use ECEPharmacyTree\Barangay;
-
+use Response;
 
 
 class PatientController extends Controller
 {
+
+    function save_user_token(){
+        $input  = Input::all();
+        $response = array();
+
+        $patient =  Patient::findOrFail($input['user_id']);
+        $patient->regId = $input['token'];
+        
+        if($patient->save())
+            $response['success'] = true;
+        else
+            $response['success'] = false
+
+        return Response::json($response);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -102,18 +117,18 @@ class PatientController extends Controller
 
         if($member->delete())
             return json_encode( array("status" => "success") );
-         
+
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 
-     public function unblock()
+    public function unblock()
     {
         $id = Input::get('id');
         $member = Patient::withTrashed()->findOrFail($id);
 
         if($member->restore())
             return json_encode( array("status" => "success") );
-         
+
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

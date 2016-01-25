@@ -38,6 +38,7 @@ class CreatePatientsTable extends Migration
             $table->string('referred_byUser')->nullable();
             $table->string('referred_byDoctor')->nullable();
             $table->integer('is_new')->default(1);
+            $table->string('regId');
             $table->timestamps();
             $table->softDeletes();
         });
