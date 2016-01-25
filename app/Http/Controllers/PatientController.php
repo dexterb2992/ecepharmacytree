@@ -30,11 +30,11 @@ class PatientController extends Controller
         else
             $response['success'] = false;
 
-        $data = array( 'message' => 'Putang ina mo!' );
+        // $data = array( 'message' => 'Sample message' );
 
-        $ids = array( 'fWs0-Oacg0g:APA91bFYMy9zWce6heS54Eb6GTEwmoy_ruOaYEDiZMvEbY6ucuncSg2E--mz_QTBLR4SSOnNiPIEQzgVGh9XQafOWXBpFaMlZKZsttRZCHsa6g8_WP_EBXbzmBOYnB8a4fnRcS1JtJVo' );
+        // $ids = array( 'fWs0-Oacg0g:APA91bFYMy9zWce6heS54Eb6GTEwmoy_ruOaYEDiZMvEbY6ucuncSg2E--mz_QTBLR4SSOnNiPIEQzgVGh9XQafOWXBpFaMlZKZsttRZCHsa6g8_WP_EBXbzmBOYnB8a4fnRcS1JtJVo' );
 
-        $this->sendGoogleCloudMessage($data, $ids);
+        // $this->sendGoogleCloudMessage($data, $to_token);
 
         return Response::json($response);
     }
