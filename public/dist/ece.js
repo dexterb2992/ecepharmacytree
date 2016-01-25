@@ -146,7 +146,7 @@ $(document).ready(function (){
         console.log('target: '+target+" id: "+target+" mainurl: "+mainurl);
         _clear_form_data(form);
         url = mainurl+action;
-
+        window.hasAdditionalAddress = false;
         window.responseBarangayId = 0;
         if( action == "edit" ){
             title = "Edit "+dataTitle;
@@ -201,49 +201,54 @@ $(document).ready(function (){
 
                         form.find("textarea[name='"+i+"']").val(row);
 
-                            if( i == "description" ){
-                                var str = row+"";
-                                var reg = /\\r?\\n/g; // remove extra slashes
-                                var newRow = str.replace(reg, '\n');
+                        if( i == "description" ){
+                            var str = row+"";
+                            var reg = /\\r?\\n/g; // remove extra slashes
+                            var newRow = str.replace(reg, '\n');
 
-                                form.find("textarea[name='"+i+"']").val(newRow);
+                            form.find("textarea[name='"+i+"']").val(newRow);
+                        }
+
+                        if( i == "additional_address" ){
+                            window.hasAdditionalAddress = true;
+                        }
+
+
+                        form.find("input[name='"+i+"']").val(row);
+                        
+                        var cbox = form.find('input[name="'+i+'"][type="checkbox"]');
+                        if( cbox.length > 0 ){
+                            if( row == 1 ){
+                                cbox.attr("checked", "checked");
+                                cbox.iCheck('uncheck');
+                                cbox.iCheck('check');
+                            }else{
+                                cbox.removeAttr("checked");
+                                cbox.iCheck('check');
+                                cbox.iCheck('uncheck');
                             }
+                        }
 
-
-                            form.find("input[name='"+i+"']").val(row);
+                        var radio = form.find('input[name="'+i+'"][type="radio"][data-check-value="'+row+'"]');
+                        if( radio.length > 0 ){
+                            radio.attr("checked", "checked");
+                            radio.iCheck('uncheck');
+                            radio.iCheck('check');
                             
-                            var cbox = form.find('input[name="'+i+'"][type="checkbox"]');
-                            if( cbox.length > 0 ){
-                                if( row == 1 ){
-                                    cbox.attr("checked", "checked");
-                                    cbox.iCheck('uncheck');
-                                    cbox.iCheck('check');
-                                }else{
-                                    cbox.removeAttr("checked");
-                                    cbox.iCheck('check');
-                                    cbox.iCheck('uncheck');
-                                }
-                            }
+                        }
 
-                            var radio = form.find('input[name="'+i+'"][type="radio"][data-check-value="'+row+'"]');
-                            if( radio.length > 0 ){
-                                radio.attr("checked", "checked");
-                                radio.iCheck('uncheck');
-                                radio.iCheck('check');
-                                
-                            }
+                        if(row == "") {
+                            form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
+                        } else {
+                            form.find("img[name='"+i+"']").attr('src', 'db/uploads/user_'+data.id+'/'+row);
+                        }
 
-                            if(row == "") {
-                                form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
-                            } else {
-                                form.find("img[name='"+i+"']").attr('src', 'db/uploads/user_'+data.id+'/'+row);
-                            }
 
-                            if( i == "start_date" ) 
-                                start_date = row;
+                        if( i == "start_date" ) 
+                            start_date = row;
 
-                            if( i == "end_date" )
-                                end_date = row;
+                        if( i == "end_date" )
+                            end_date = row;
                     });
 
                     form.find("input#date_range").val(start_date+" - "  +end_date);
@@ -280,6 +285,8 @@ $(document).ready(function (){
                                 }
                             }
                         });
+
+
 
                 }catch(Exception){
                     console.log(Exception);
@@ -370,6 +377,15 @@ $(document).ready(function (){
 
         $("select.select2").select2();
         $('.data-show').trigger('change click');
+
+        console.log("checking if hasAdditionalAddress ");
+        setTimeout(function(){
+            if( window.hasAdditionalAddress == true ){
+                console.log("hasAdditionalAddress: yes");
+                    initMap();
+            }
+        },1000);
+        
 
     });
 

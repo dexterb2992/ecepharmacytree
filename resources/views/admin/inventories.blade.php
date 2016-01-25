@@ -275,11 +275,11 @@
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="new_quantity">New Quantity Received</label>
-	                            	<input class="form-control number" type="text" name="new_quantity" id="new_quantity">
+	                            	<input class="form-control number" type="text" name="new_quantity" id="new_quantity" required>
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="new_quantity">Reason</label>
-	                            	<textarea class="form-control" name="reason"></textarea>
+	                            	<textarea class="form-control" name="reason" required></textarea>
 	                            </div>
 		        			</div>
 		        			<div class="modal-footer">
@@ -321,7 +321,7 @@
 
 		        					<dl class="dl-vertical">
 		        						<dt>Gross total:</dt>
-		        						<dd id="gross_total">₱ 44.5 </dd>
+		        						<dd id="gross_total"></dd>
 		        					</dl>
 		        					<br/>
 		        					<dl class="dl-vertical">

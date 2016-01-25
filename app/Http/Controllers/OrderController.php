@@ -52,7 +52,8 @@ class OrderController extends Controller
 
     public function show_all(){
         // $orders = Order::all();
-        $orders = Order::where('branch_id', session()->get('selected_branch'))->orderBy('id', 'DESC')->get();
+        $orders = Order::where('branch_id', session()->get('selected_branch'))
+            ->where('status', '!=', 'refunded_in_full')->orderBy('id', 'DESC')->get();
         $orders->load('patient');
         $orders->load('order_details');
         $orders->load('billing');
@@ -157,39 +158,5 @@ class OrderController extends Controller
         target="blank">Order #'.$order_id.'</a>';
         $log->table = 'inventories';
         $log->save();
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

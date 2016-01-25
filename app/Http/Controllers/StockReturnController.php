@@ -133,24 +133,10 @@ class StockReturnController extends Controller
 
     }
 
-    public function show($id){
-        //
-    }
 
     public function stock_return_codes(){
         $codes = StockReturnCode::all();
         return $codes;
     }
 
-    public function edit($id){
-        //
-    }
-
-    public function update(Request $request, $id){
-        //
-    }
-
-    public function destroy($id){
-        //
-    }
 }

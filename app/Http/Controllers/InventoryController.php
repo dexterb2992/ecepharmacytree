@@ -101,10 +101,16 @@ class InventoryController extends Controller
                                 target="blank">Lot #'.$inventory->lot_number.'</a>',
                 'table' => 'inventories'
             ]);
-            return Redirect::to( route('Inventory::index') );
+            return Redirect::to( route('Inventory::index') )->withFlash_message([
+                "type" => "success",
+                "msg" => "A new stock for $product->name with Lot# $inventory->lot_number has been added successfully."
+            ]);
         }
         return Redirect::to( route('Inventory::index') )
-            ->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
+            ->withFlash_message([
+                "type" => "danger",
+                "msg" => "Sorry, but we can't process your request right now. Please try again later."
+            ]);
     }
 
     /**
@@ -159,10 +165,13 @@ class InventoryController extends Controller
                                 target="blank">Lot #'.$inventory->lot_number.'</a>',
                 'table' => 'inventories'
             ]);
-            return Redirect::to( route('Inventory::index') );
+            return Redirect::to( route('Inventory::index') )->withFlash_message([
+                'type' => 'success',
+                'msg' => "Inventory information for ".$inventory->product->name." with Lot # $inventory->lot_number has been updated."
+            ]);
         }
         return Redirect::to( route('Inventory::index') )
-            ->withFlash_message("Sorry, but we can't process your request right now. Please try again later.");
+            ->withFlash_message(['type' => 'warning', 'msg' => "Sorry, but we can't process your request right now. Please try again later."]);
     
     }
 
