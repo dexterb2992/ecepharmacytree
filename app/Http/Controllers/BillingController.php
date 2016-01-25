@@ -9,16 +9,19 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Billing;
 use Input;
 use ECEPharmacyTree\Repositories\PointsRepository;
+use ECEPharmacyTree\Repositories\GCMRepository;
 
 
 class BillingController extends Controller
 {
 
     protected $points;
+    protected $gcm;
 
-    function __construct(PointsRepository $points)
+    function __construct(PointsRepository $points, GCMRepository $gcm)
     {
         $this->points = $points;
+        $this->gcm = $gcm;
     }
 
 
@@ -35,13 +38,23 @@ class BillingController extends Controller
         $billing->or_txt_number = $input['or_txn_number'];
 
         if( $billing->save() ){
+
             $message = json_decode($this->points->process_points($input['referral_id']));
 
             if($message->status == 500)
                 return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'danger', 'msg' => $message->msg ]);
 
-            if($message->status == 200)
+            if($message->status == 200){
+
+                $order = $billing->order()->first();
+                $patient = $order->patient()->first();
+
+                $data = array( 'message' => 'Thank you for '.get_person_fullname($patient).' ! \n This is to notify that we have accepted your payment for order #'.$order->id.' \n We are now preparing the items for delivery.' );
+
+                $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
+                
                 return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'success', 'msg' => $message->msg ]);
+            }
         }
         
         return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'danger', 'msg' => 'Sorry. Unable to mark payment.' ]);
