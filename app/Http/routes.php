@@ -332,4 +332,4 @@ Route::get('read-notification', 'NotificationsController@update');
 
 Route::get('populate-address/{barangay_id}', ['as' => 'populate_address', 'uses' => 'LocationController@populate_address_by_barangay']);
 
-Route::post('save_user_token', 'PatientController@save_user_token');
+Route::get('save_user_token', 'PatientController@save_user_token');
