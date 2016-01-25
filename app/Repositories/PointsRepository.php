@@ -45,8 +45,9 @@ class PointsRepository {
         $billings_has_uncomputed_points = false;
 
         $notes = "";
+        
+        // krsort($uplines);
 
-        krsort($uplines);
         //pre("# of billings: ".count($billings));
         foreach ($billings as $billing) {
             if( $billing->payment_status == 'paid' && $billing->points_computation_status == 0 ){
@@ -72,42 +73,34 @@ class PointsRepository {
 
                         $sales_amount -= $amount;
 
-                        // $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
-                                // ." earned from ".$order_detail->product->name." ("
-                                // .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
-                                // .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n"; 
+                        
                     }
-                    /*else{
-                         $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
-                                ." earned from ".$order_detail->product->name." ("
-                                .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
-                                .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n"; 
-                            }*/
 
-                            $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
+                    $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
                             ." earned from ".$order_detail->product->name." ("
-                                .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
-.str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
+                            .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
+                            .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
 
-}
+                }
+
                 //pre($notes);
-$points_per_one_hundred = (double)$settings->points;
-$points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
+                $points_per_one_hundred = (double)$settings->points;
+                $points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
 
 
 
                 // add points   
-$user_old_points = (double)$user->points; 
-$user->points = $points_earned + $user_old_points;
+                $user_old_points = (double)$user->points; 
+                $user->points = $points_earned + $user_old_points;
 
                 // points_discount deduction
-if( $user->points >=  $billing->points_discount ){
-    $user->points = $user->points - $billing->points_discount;
-}
+                if( $user->points >=  $billing->points_discount ){
+                    $user->points = $user->points - $billing->points_discount;
+                }
 
-if( $user->save() ){
-    $ref_com_log = new ReferralCommissionActivityLog;
-    $ref_com_log->billing_id = $billing->id;
+                if( $user->save() ){
+                    $ref_com_log = new ReferralCommissionActivityLog;
+                    $ref_com_log->billing_id = $billing->id;
                     $ref_com_log->to_upline_id = $user->id;   // means self, no upline
                     $ref_com_log->to_upline_type = isset($user->prc_no) ? 'doctor' : 'patient';
                     $ref_com_log->referral_level = 0; // if 0, it means - to the user itself, it's not a referral points
@@ -131,14 +124,25 @@ if( $user->save() ){
                 }
                 // dd($uplines);
                 $counter = 0; // note that 0 is the primary upline
+                // pre("limit: $limit uplines: ".count($uplines));
+                $difference = 0;
 
-                if( $limit > count($uplines) ){
-                    $limit -= (count($uplines)-1);
+                if( $limit > count($uplines) ){         
+                    $difference = $limit - count($uplines);
+                }
+                $limit -= $difference;
+                $new_uplines = [];
+
+                // remove uplines beyond referral limit
+                for ($i=0; $i < $limit; $i++) { 
+                    if( $i < $limit ){
+                        $new_uplines[] = $uplines[$i];
+                    }
                 }
 
-                //pre("new limit: $limit");
+                krsort($new_uplines);
 
-                foreach ($uplines as $upline) {
+                foreach ($new_uplines as $upline) {
                     // $counter++;
                     if( $limit > 0 ){
 
@@ -169,7 +173,7 @@ if( $user->save() ){
                             $ref_com_log->save();
                         }
 
-                        //pre("$upline->fname $upline->lname => gross_total: $billing->gross_total points_earned: $points_earned variation: $variation referral_commission: ".$referral_points_earned);
+                        // pre("$upline->fname $upline->lname => gross_total: $billing->gross_total points_earned: $points_earned variation: $variation referral_commission: ".$referral_points_earned);
                         $variation = 0; 
                     }
                     $limit--;
@@ -177,15 +181,12 @@ if( $user->save() ){
                 $billing->points_computation_status = 1;
                 if( $billing->save() )
                     return json_encode(array('msg' => 'Points and Referral Commission has been updated.', 'status' => 200));
-                    // return array('msg' => 'Points and Referral Commission has been updated.', 'status' => 200);
 
-                // return array('msg' => 'Points and Referral Commission has not been fully updated.', 'status' => 500);
                 return json_encode(array('msg' => 'Points and Referral Commission has not been fully updated.', 'status' => 500));
             }
         }    
 
         if( $billings_has_uncomputed_points === false )
-            // return array('msg' => "Sorry, but the points from all purchases made by $user->fname $user->lname has aleady been redeemed.", 'status' => 500);
             return json_encode(array('msg' => "Sorry, but the points from all purchases made by $user->fname $user->lname has aleady been redeemed.", 'status' => 500));
     }
 

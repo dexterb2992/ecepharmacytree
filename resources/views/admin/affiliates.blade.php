@@ -29,10 +29,10 @@ use Illuminate\Support\Str;
 							@foreach($doctors as $doctor)
 								<tr>
 									<td>
-										<a href="javascript:void(0);" data-id="{{ $doctor->id }}" class="show-downlines">
+										<a href="javascript:void(0);" data-id="d{{ $doctor->id }}" class="show-downlines">
 											<i class="fa fa-user-md"></i>  {{ get_person_fullname($doctor) }}
 										</a>
-										<ul class="referral-chart" data-id="{{ $doctor->id }}" style="display:none">
+										<ul class="referral-chart" data-id="d{{ $doctor->id }}" style="display:none">
 											<li class="bg-light-blue">
 												<i class="fa fa-user-md"></i>  
 												{!! '<span data-original-title="'.get_person_fullname($doctor).'" data-toggle="tooltip">'
@@ -59,10 +59,10 @@ use Illuminate\Support\Str;
 							@foreach($patients as $patient)
 								<tr>
 									<td>
-										<a href="javascript:void(0);" data-id="{{ $patient->id }}" class="show-downlines">
+										<a href="javascript:void(0);" data-id="p{{ $patient->id }}" class="show-downlines">
 											{{ get_person_fullname($patient) }}
 										</a>
-										<ul class="referral-chart" data-id="{{ $patient->id }}" style="display:none">
+										<ul class="referral-chart" data-id="p{{ $patient->id }}" style="display:none">
 											<li class="bg-light-blue">
 												{!! '<span data-original-title="'.get_person_fullname($patient).'" data-toggle="tooltip">'
 													.Str::limit(get_person_fullname($patient), 15, '').'</span>'

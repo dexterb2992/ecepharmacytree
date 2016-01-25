@@ -108,8 +108,8 @@ function rn2br($str){
 
 function get_person_fullname($person, $reversed = false){
 	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : '';
-	$fname = ucfirst($person->fname)." ";
-	$lname = ucfirst($person->lname);
+	$fname = !empty($person->fname) ? ucfirst($person->fname)." " : '';
+	$lname = !empty($person->lname) ? ucfirst($person->lname) : '';
     if( $reversed )
         return $lname.", ".$fname.$mname;
     return $fname." ".$mname." ".$lname;
@@ -410,13 +410,17 @@ function get_uplines($referral_id, $is_one = false, $generate_clickable_html = f
 			}
 		}
 	}
-	// dd($uplines);
+
+	if( !empty($uplines) ){
+		// dd($uplines);
+	}
 
 	if( $is_one ){
 		if( count($uplines) > 0  ){
 			if( $generate_clickable_html ){
 				$prefix = isset($uplines[0]->sub_specialty_id) ? "<i class='fa fa-user-md'></i>" : '';
-				$html = "<a href='javascript:void(0);' data-id='{$uplines[0]->id}' class='show-downlines'>$prefix "
+				$id_prefix = isset($uplines[0]->sub_specialty_id) ? "d" : 'p';
+				$html = "<a href='javascript:void(0);' data-id='$id_prefix{$uplines[0]->id}' class='show-downlines'>$prefix "
 					.get_person_fullname($uplines[0]).
 				"</a>";
 				return $html;
