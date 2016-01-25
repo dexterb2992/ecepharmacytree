@@ -49,10 +49,12 @@ class BillingController extends Controller
                 $order = $billing->order()->first();
                 $patient = $order->patient()->first();
 
-                $data = array( 'message' => 'Thank you for '.get_person_fullname($patient).' ! \n This is to notify that we have accepted your payment for order #'.$order->id.' \n We are now preparing the items for delivery.' );
+                $multilined_notif = array('Thank you for '.get_person_fullname($patient).' ! ','This is to notify that we have accepted your payment for order #'.$order->id, 'We are now preparing the items for delivery.');
+
+                $data = array( 'message' => $multilined_notif );
 
                 $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
-                
+
                 return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'success', 'msg' => $message->msg ]);
             }
         }
