@@ -49,8 +49,8 @@ class PatientController extends Controller
 
     // Set GCM post variables (device IDs and push payload)     
         $post = array(
-            'registration_ids'  => $ids,
-            'data'              => $data,
+            'to'  => 'fWs0-Oacg0g:APA91bFYMy9zWce6heS54Eb6GTEwmoy_ruOaYEDiZMvEbY6ucuncSg2E--mz_QTBLR4SSOnNiPIEQzgVGh9XQafOWXBpFaMlZKZsttRZCHsa6g8_WP_EBXbzmBOYnB8a4fnRcS1JtJVo',
+            'data'  => $data,
             );
 
     // Set CURL request headers (authentication and type)       
