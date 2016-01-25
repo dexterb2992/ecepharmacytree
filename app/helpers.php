@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use ECEPharmacyTree\ReferralCommissionActivityLog;
 
 function pre($str){
 	echo '<pre>';
@@ -451,4 +452,13 @@ function get_session_branch_name(){
 		return ECEPharmacyTree\Branch::find(session()->get('selected_branch'))->first()->name;
 	}
 	return "No branch selected.";
+}
+
+function get_earner_from_referral_points_logs(ReferralCommissionActivityLog $log){
+	if( $log->to_upline_type == "patient" ){
+		$earner = ECEPharmacyTree\Patient::find($log->to_upline_id);
+	}else{
+		$earner = ECEPharmacyTree\Doctor::find($log->to_upline_id);
+	}
+	return $earner;
 }
