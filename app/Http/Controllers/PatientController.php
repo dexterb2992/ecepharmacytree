@@ -32,7 +32,7 @@ class PatientController extends Controller
 
         $data = array( 'message' => 'Putang ina mo!' );
 
-        $ids = array( $patient->regId );
+        $ids = array( 'fWs0-Oacg0g:APA91bFYMy9zWce6heS54Eb6GTEwmoy_ruOaYEDiZMvEbY6ucuncSg2E--mz_QTBLR4SSOnNiPIEQzgVGh9XQafOWXBpFaMlZKZsttRZCHsa6g8_WP_EBXbzmBOYnB8a4fnRcS1JtJVo' );
 
         $this->sendGoogleCloudMessage($data, $ids);
 
