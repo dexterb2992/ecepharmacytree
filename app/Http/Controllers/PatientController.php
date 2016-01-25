@@ -20,17 +20,17 @@ class PatientController extends Controller
 
     function save_user_token(){
         $input  = Input::all();
-        // $response = array();
+        $response = array();
 
-        // $patient =  Patient::findOrFail($input['user_id']);
-        // $patient->regId = $input['token'];
+        $patient =  Patient::findOrFail($input['user_id']);
+        $patient->regId = $input['token'];
         
-        // if($patient->save())
-        //     $response['success'] = true;
-        // else
-        //     $response['success'] = false;
+        if($patient->save())
+            $response['success'] = true;
+        else
+            $response['success'] = false;
 
-        return Response::json($input);
+        return Response::json($response);
     }
     /**
      * Display a listing of the resource.
