@@ -51,7 +51,7 @@ class BillingController extends Controller
 
                 $multilined_notif = array('Thank you for '.get_person_fullname($patient).' ! ','This is to notify that we have accepted your payment for order #'.$order->id, 'We are now preparing the items for delivery.');
 
-                $data = array( 'message' => json_encode($multilined_notif) );
+                $data = array( 'message' => $multilined_notif );
 
                 $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
 
