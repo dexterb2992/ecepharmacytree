@@ -134,7 +134,7 @@ use Illuminate\Support\Str;
 								<tbody>
 									@foreach($logs as $log)
 									<tr>
-										<td>{{ $log->notes }}</td>
+										<td>{!! $log->notes !!}</td>
 										<td>{{ $log->date }}</td>
 									</tr>
 									@endforeach
