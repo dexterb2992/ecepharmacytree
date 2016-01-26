@@ -117,7 +117,6 @@ class VerifyCashPaymentController extends Controller
 
 			}
 
-
 			if($order_saved) {
 				$order_detail = new OrderDetail;
 				$order_detail->order_id = $order_id;
