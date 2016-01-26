@@ -50,7 +50,7 @@ public function insertProduct($subcategory_id, $name, $generic_name, $descriptio
  $product->generic_name = $generic_name;
  $product->description = $description;
  $product->prescription_required = $prescription_required;
- $product->unit_cost = $unit_cost
+ $product->unit_cost = $unit_cost;
  $product->price = $price;
  $product->unit = $unit;
  $product->packing = $packing;
