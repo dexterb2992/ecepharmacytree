@@ -143,6 +143,7 @@ class VerifyCashPaymentController extends Controller
 					$response['basket_promo_message_'.$counter] = "basket promos not deleted on database";
 			}
 
+
 			if(count($results) == $counter) {
 				$gross_total = $totalAmount;
 				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount;
