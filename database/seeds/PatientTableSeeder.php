@@ -26,7 +26,8 @@ class PatientTableSeeder extends Seeder
         	"weight" => "75",
         	"address_barangay_id" => 2,
             "address_street" => "150th A St.",
-        	"referral_id" => "ABC123"
+        	"referral_id" => "ABC123",
+            "email_address" => "lourdrivera123@gmail.com"
         ]);
     }
 }
