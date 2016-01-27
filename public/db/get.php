@@ -63,7 +63,7 @@ switch ($request) {
     break;
 
     case 'get_treatments':
-    $result = mysql_query("SELECT * FROM patient_treatments WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $result = mysql_query("SELECT pt.* FROM patient_treatments as pt INNER JOIN patient_records as pr on pr.id = pt.patient_records_id WHERE pr.patient_id = ".$_GET['patient_id']." AND (pt.deleted_at IS NULL OR pt.deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "patient_treatments";
     break;
 
@@ -139,7 +139,7 @@ switch ($request) {
     break;
 
     case 'get_patient_records':
-    $result = mysql_query("SELECT * FROM patient_records WHERE patient_id = ".$_GET['patient_id']) 
+    $result = mysql_query("SELECT * FROM patient_records where patient_id = ".$_GET['patient_id']) 
     or returnError(mysql_error());
     $tbl = "patient_records";
     break;
