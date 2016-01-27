@@ -31,6 +31,6 @@ class CreateOrderHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::drop('clinic_doctor');
+        Schema::drop('order_history');
     }
 }

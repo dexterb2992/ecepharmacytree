@@ -35,6 +35,6 @@ class CreateBasketPromosTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('basket_promos');
     }
 }

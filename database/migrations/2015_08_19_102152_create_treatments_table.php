@@ -33,6 +33,6 @@ class CreateTreatmentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('treatments');
+        Schema::drop('patient_treatments');
     }
 }

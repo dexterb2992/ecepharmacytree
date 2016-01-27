@@ -30,6 +30,6 @@ class CreateNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('billings');
+        Schema::drop('notifications');
     }
 }

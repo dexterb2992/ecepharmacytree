@@ -21,6 +21,6 @@ class BranchTableSeeder extends Seeder
           array('id' => '20','name' => 'ECE Gensan','additional_address' => '82 Aparente St., Dadiangas Heights, ','barangay_id' => '37642','latitude' => '6.125150946243104','longitude' => '125.17165467934569','telephone_numbers' => '','telefax' => '(083)554-9033 ','mobile_numbers' => '0922-8401630','status' => '1','is_new' => '0','created_at' => '2015-11-16 21:40:34','updated_at' => '2016-01-19 13:26:33','deleted_at' => NULL)
           );
 
-Branch::insert($clinic_doctor);
+Branch::insert($branches);
 }
 }
