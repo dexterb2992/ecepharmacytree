@@ -14,4 +14,5 @@ class Doctor extends Model
     public function subspecialty(){
     	return $this->belongsTo('ECEPharmacyTree\SubSpecialty', 'sub_specialty_id');
     }
+
 }

@@ -10,9 +10,8 @@ class ReturnCodeTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-    	StockReturnCode::where('id', '>', 0)->delete();
+    public function run() {
+    	StockReturnCode::truncate();
         $return_codes = array(
         	['id' => 1, 'name' => "Change of mind", "created_at" => null, "updated_at" => null],
         	['id' => 2, 'name' => "Ordered Incorrectly", "created_at" => null, "updated_at" => null],

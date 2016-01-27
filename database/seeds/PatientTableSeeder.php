@@ -12,7 +12,7 @@ class PatientTableSeeder extends Seeder
      */
     public function run()
     {
-         Patient::where("id", ">", 0)->delete();
+         Patient::truncate();
          Patient::create([
         	"fname" => "Zemiel",
         	"lname" => "Asma",

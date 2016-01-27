@@ -25,6 +25,7 @@ class CreateClinicPatientsTable extends Migration
             // $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
             // $table->integer('doctor_id')->unsigned();
             // $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');
+            $table->string('email_address');
             $table->string('mobile_no');
             $table->string('tel_no')->nullable();
             $table->longText('photo')->nullable();

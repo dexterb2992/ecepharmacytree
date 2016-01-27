@@ -11,7 +11,7 @@ class ProductSubcategoryTableSeeder extends Seeder
     public function run()
     {
         // TestDummy::times(20)->create('App\Post');
-    	ProductSubcategory::where('id', '>', 0)->delete();
+    	ProductSubcategory::truncate();
 
         $values = array(
         	'1' => array(

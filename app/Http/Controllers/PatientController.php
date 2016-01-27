@@ -39,60 +39,6 @@ class PatientController extends Controller
         return Response::json($response);
     }
 
-    function sendGoogleCloudMessage( $data, $ids ){
-        // Insert real GCM API key from Google APIs Console
-    // https://code.google.com/apis/console/        
-        $apiKey = 'AIzaSyBBZnU4T90rSnbSnqFdV_IyFDEDbATUZz4';
-
-    // Define URL to GCM endpoint
-        $url = 'https://gcm-http.googleapis.com/gcm/send';
-
-    // Set GCM post variables (device IDs and push payload)     
-        $post = array(
-            'to'  => 'fWs0-Oacg0g:APA91bFYMy9zWce6heS54Eb6GTEwmoy_ruOaYEDiZMvEbY6ucuncSg2E--mz_QTBLR4SSOnNiPIEQzgVGh9XQafOWXBpFaMlZKZsttRZCHsa6g8_WP_EBXbzmBOYnB8a4fnRcS1JtJVo',
-            'data'  => $data,
-            );
-
-    // Set CURL request headers (authentication and type)       
-        $headers = array( 
-            'Authorization: key=' . $apiKey,
-            'Content-Type: application/json'
-            );
-
-    // Initialize curl handle       
-        $ch = curl_init();
-
-    // Set URL to GCM endpoint      
-        curl_setopt( $ch, CURLOPT_URL, $url );
-
-    // Set request method to POST       
-        curl_setopt( $ch, CURLOPT_POST, true );
-
-    // Set our custom headers       
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
-
-    // Get the response back as string instead of printing it       
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-
-    // Set JSON post data
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $post ) );
-
-    // Actually send the push   
-        $result = curl_exec( $ch );
-
-    // Error handling
-        if ( curl_errno( $ch ) )
-        {
-            echo 'GCM error: ' . curl_error( $ch );
-        }
-
-    // Close curl handle
-        curl_close( $ch );
-
-    // Debug GCM response       
-        echo $result;
-    }
-
 
     /**
      * Display a listing of the resource.
