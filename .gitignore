@@ -3,3 +3,4 @@
 Homestead.yaml
 .env
 /public/db/uploads
+/public/db/libs/adaptivepayments-sdk-php
