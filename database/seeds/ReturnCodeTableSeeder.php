@@ -9,8 +9,7 @@ class ReturnCodeTableSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
-     */
-    public function run()
+     */*
     {
     	StockReturnCode::where('id', '>', 0)->delete();
         $return_codes = array(
