@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 
 use ECEPharmacyTree\ClinicPatientDoctor;
-class ClinicMedicineTableSeeder extends Seeder
+class ClinicPatientDoctorTableSeeder extends Seeder
 {
 	public function run()
 	{
