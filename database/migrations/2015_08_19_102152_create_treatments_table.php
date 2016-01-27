@@ -18,7 +18,6 @@ class CreateTreatmentsTable extends Migration
             $table->foreign('patient_records_id')->references('id')->on('patient_records')->onDelete('cascade');
             $table->integer('medicine_id');
             $table->string('medicine_name');
-            $table->string('generic_name');
             $table->string('dosage');
             $table->integer('is_new')->default(1);
             $table->timestamps();

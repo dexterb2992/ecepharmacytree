@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
-use DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        
+
         $this->call(Illuminate\Database\Seeder\RegionTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\ProvinceTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\MunicipalityTableSeeder::class);
