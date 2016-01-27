@@ -25,8 +25,8 @@ class CreateClinicTreatmentsTable extends Migration
             $table->string('route');
             $table->string('frequency');
             $table->integer('refills')->default(0);
-            $table->string('duration')->default(0);
-            $table->string('duration_type');
+            $table->integer('duration')->default(0);
+            $table->integer('duration_type');
             $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
