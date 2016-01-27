@@ -4,7 +4,7 @@ namespace ECEPharmacyTree;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PatientCommission extends Model
+class DoctorSecretary extends Model
 {
-    //
+    protected $table = "doctor_secretary";
 }

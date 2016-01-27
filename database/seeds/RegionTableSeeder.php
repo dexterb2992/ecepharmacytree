@@ -12,7 +12,7 @@ class RegionTableSeeder extends Seeder
      */
     public function run()
     {
-        Region::where('id', '>', 0)->delete();
+        Region::truncate();
 
         $columns = ['id', 'code', 'name'];
         $regions = extract_db_to_array(public_path()."/db-src/regions.dex", $columns);

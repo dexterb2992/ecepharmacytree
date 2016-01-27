@@ -18,8 +18,9 @@ class CreateTreatmentsTable extends Migration
             $table->foreign('patient_records_id')->references('id')->on('patient_records')->onDelete('cascade');
             $table->integer('medicine_id');
             $table->string('medicine_name');
-            $table->string('generic_name');
-            $table->string('dosage');
+            $table->string('frequency');
+            $table->integer('duration');
+            $table->integer('duration_type');
             $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();
@@ -33,6 +34,6 @@ class CreateTreatmentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('treatments');
+        Schema::drop('patient_treatments');
     }
 }

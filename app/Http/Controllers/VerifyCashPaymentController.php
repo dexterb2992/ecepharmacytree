@@ -117,7 +117,6 @@ class VerifyCashPaymentController extends Controller
 
 			}
 
-
 			if($order_saved) {
 				$order_detail = new OrderDetail;
 				$order_detail->order_id = $order_id;
@@ -143,6 +142,7 @@ class VerifyCashPaymentController extends Controller
 				else 
 					$response['basket_promo_message_'.$counter] = "basket promos not deleted on database";
 			}
+
 
 			if(count($results) == $counter) {
 				$gross_total = $totalAmount;

@@ -11,13 +11,12 @@ class BarangayTableSeeder extends Seeder
 {
     public function run()
     {
-        Barangay::where('id', '>', 0)->delete();
+        Barangay::truncate();
         $columns = ['id', 'name', 'municipality_id'];
         $barangays = extract_db_to_array(public_path()."/db-src/barangays.dex", $columns);
 
         foreach ($barangays as $barangay) {
         	Barangay::insert( $barangay );
         }
-        // Barangay::insert( $barangays );
     }
 }
