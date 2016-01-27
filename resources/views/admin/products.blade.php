@@ -29,7 +29,16 @@
                             <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-product" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <small class=""><a href="{{ route('Products::all') }}">Show Deleted Products</a></small>
+                            @if( Route::is('Products::all') )
+                                <small class="">
+                                    <a href="{{ route('Products::index') }}">Hide Deleted Products</a>
+                                </small>
+                            @else
+                                <small class="">
+                                    <a href="{{ route('Products::all') }}">Show Deleted Products</a>
+                                </small>
+                            @endif
+                            
                             <table class="table table-bordered table-hover datatable products-table">
                                 <thead>
                                     <tr>
@@ -46,7 +55,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach($products as $product)
-                                        <tr data-id="{{ $product->id }}">
+                                        <tr data-id="{{ $product->id }}" class="{!! !is_null($product->deleted_at) ? 'danger' : '' !!}">
                                             <td>
                                                 <a href="javascript:void(0)" class="products-gallery-toggler" data-target="#modal-products-gallery">
                                                     <img data-toggle="tooltip" data-original-title="Click to view gallery" src="{{ !empty($product->galleries[0]) ? url('images/50x50/'.$product->galleries[0]->filename) : url('images/50x50/nophoto.jpg') }}">

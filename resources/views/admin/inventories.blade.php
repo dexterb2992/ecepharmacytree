@@ -95,8 +95,10 @@
 													</span>
 												</td>
 												<td>
-													<?php $date_added = Carbon::parse($inventory->created_at); ?>
-													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->formatLocalized('%A %d %B %Y') }}">
+													<?php 
+														$date_added = $inventory->created_at;
+													?>
+													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->toDayDateTimeString() }}">
 														<i class="fa-clock-o fa"></i> 
 														{{ $date_added->diffForHumans() }}
 													</span>
@@ -181,10 +183,10 @@
 												<td>{{ get_person_fullname($log->user) }}</td>
 												<td>{!! $log->action !!}</td>
 												<td>
-													<?php $date_added = Carbon::parse($log->created_at); ?>
-													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->formatLocalized('%A %d %B %Y') }}">
+													<?php $date_added = $log->created_at; ?>
+													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->toDayDateTimeString() }}">
 														<i class="fa-clock-o fa"></i> 
-														{{ $date_added->diffForHumans() }}
+														{{ $date_added }}
 													</span>
 												</td>
 											</tr>
@@ -219,7 +221,8 @@
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="lot_number">Lot Number</label>
-	                            	<input class="form-control" type="text" id="inventory_lot_number" name="lot_number" required>
+	                            	<input class="form-control autocomplete" type="text" id="inventory_lot_number" name="lot_number" autocomplete="off" required>
+	                            	<input class="form-control autocomplete" type="text" id="inventory_lot_number_setter" autocomplete="off" style="display:none;">
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received 
@@ -370,16 +373,16 @@
 		        					<label>Action</label>
 		        					<div class="stock-return-actions">
 		        						<label>
-		        							<input type="radio" name="action" class="icheck" data-check-value="refund" value="refund" checked> Refund 
+		        							<input type="radio" name="action" class="icheck" data-check-value="replace" value="replace" checked> Replacement 
 		        						</label>
-			        					<label data-toggle="tooltip" data-original-title="Amount to be refunded">{{ peso() }}<span id="refund_amount"> - </span></label>
+			        					<label data-toggle="tooltip" data-original-title="Replacement Amount">{{ peso() }}<span id="refund_amount"> - </span></label>
 		        					</div>
 		        					<input type="hidden" name="amount_refunded" id="amount_refunded">
 		        				</div>
 			        		</div>
 			        		
 			        		<div class="modal-footer">
-			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return & Refund</button>
+			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return & Replace</button>
 			        		</div>
 			        	{!! Form::close() !!}
 	        		</div>

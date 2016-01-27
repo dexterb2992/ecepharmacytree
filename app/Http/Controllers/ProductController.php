@@ -148,8 +148,26 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail(Input::get("id"));
         if( $product->delete() ){
+            session()->flash("flash_message", ["msg" => "$product->name has been deleted.", "type" => "danger"]);
             return json_encode( array("status" => "success") );
         }
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+    }
+
+    public function restore(){
+
+        if( Request::ajax() ){
+            $product = Product::withTrashed()->findOrFail( Input::get('id') );
+
+            if( $product->restore() )  {
+                session()->flash("flash_message", ["msg" => "$product->name has been restored.", "type" => "info"]);
+                return json_encode( array("status" => "success") );
+            }
+            return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+
+        }
+
+        session()->flash("flash_message", array("msg" => "Error 403. Forbidden..You are not allowed to access this feature.", "type" => "danger"));
+        return json_encode( array("status" => "403", "msg" => "Error 403. Forbidden..You are not allowed to access this feature.") );
     }
 }

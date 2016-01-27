@@ -8,6 +8,7 @@ use Input;
 use Carbon\Carbon;
 use Auth;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Illuminate\Support\Facades\DB;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -18,17 +19,14 @@ use ECEPharmacyTree\Order;
 use ECEPharmacyTree\StockReturnCode;
 use ECEPharmacyTree\StockReturn;
 use ECEPharmacyTree\InventoryAdjustment;
+use ECEPharmacyTree\OrderLotNumber;
 
 class InventoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
+
     public function index()
     {   
-        $inventories = Inventory::where('available_quantity', '>', '0')
+        $inventories = Inventory::where('available_quantity', '>', 0)
             ->where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
         $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
@@ -68,13 +66,6 @@ class InventoryController extends Controller
             ->withStock_returns($stock_returns);
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
     public function store(Request $request)
     {
         // Note: the quantity that will be saved will be 
@@ -98,7 +89,7 @@ class InventoryController extends Controller
             Log::create([
                 'user_id' => Auth::user()->id,
                 'action'  => 'Added an inventory with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
-                                target="blank">Lot #'.$inventory->lot_number.'</a>',
+                                target="blank">Lot# '.$inventory->lot_number.'</a>',
                 'table' => 'inventories'
             ]);
             return Redirect::to( route('Inventory::index') )->withFlash_message([
@@ -113,12 +104,6 @@ class InventoryController extends Controller
             ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function show($id)
     {
         if( Request::ajax() ){
@@ -133,13 +118,6 @@ class InventoryController extends Controller
         return 'Whoops! It seems like you are lost. Let\'s go back to <a href="'.url('/').'">dashboard</a>.';
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  int  $id
-     * @return Response
-     */
     public function update()
     {
         $input = Input::all();
@@ -180,10 +158,20 @@ class InventoryController extends Controller
         $inventory = Inventory::findOrFail( $input['id'] );
         $old_qty = $inventory->quantity;
         
-        $def_q = $input["new_quantity"] - $inventory->quantity;
+        $new_quantity = $input["new_quantity"];
         $old_av = $inventory->available_quantity;
+
+        // get # of sold products on this inventory
+        $sold_products_count = OrderLotNumber::where('inventory_id', '=', $inventory->id)->sum('quantity');
         
-        $new_av = $old_av + $def_q;
+        if( $new_quantity < $sold_products_count ){
+            return redirect()->back()->withFlash_message([
+                'type' => 'danger',
+                'msg' => "Sorry, you can't adjust an inventory with a new quantity greater than the number of sold products in a particular inventory."
+            ]);
+        }
+
+        $new_av = $new_quantity - $sold_products_count;
 
         $inventory->available_quantity = $new_av >= 1 ? $new_av : 0;
         $inventory->quantity = $input['new_quantity'];
@@ -202,10 +190,12 @@ class InventoryController extends Controller
         if( $inventory->save() && $adjustment->save() ){
             Log::create([
                 'user_id' => Auth::user()->id,
-                'action'  => 'Adjusted an inventory information with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
-                                target="blank">Lot #'.$inventory->lot_number.'</a>'
-                                .' and change quantity from '.$old_qty.' to '.$input['new_quantity']
-                                .'. <br/><code>Reason:</code> '.$input['reason'],
+                'action'  => "Adjusted an inventory information with <a href='".route('Inventory::index')."?q=$inventory->lot_number'
+                                target='blank'>Lot# $inventory->lot_number</a>
+                                and changed received quantity from $old_qty to ".$input['new_quantity']."
+                                <br/>Available quantity was changed from $old_av to $new_av. The number of sold items for inventory 
+                                with ID# $inventory->id:  $sold_products_count. <br/>
+                                <code>Reason:</code> ".$input['reason'],
                 'table' => 'inventories'
             ]);
 
@@ -223,12 +213,7 @@ class InventoryController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+
     public function destroy()
     {   
 
@@ -245,5 +230,23 @@ class InventoryController extends Controller
                 return json_encode( array("status" => "success") );
         }
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later." ) );
+    }
+
+    public function get_lot_numbers(){
+        if( Request::ajax() ){
+            DB::enableQueryLog();
+            $lot_numbers = DB::table('inventories')
+                ->join('products', function ($join){           
+                    $join->on('inventories.product_id', '=', 'products.id');
+                })->whereRaw('inventories.branch_id= '.session()->get("selected_branch").' and products.deleted_at is null')
+                ->get();
+                // pre(DB::getQueryLog());
+            return $lot_numbers;
+        }
+
+        return json_encode( array(
+            "error" => "Sorry, you don't have permission to do this action.",
+            "status" => 403
+        ) );
     }
 }

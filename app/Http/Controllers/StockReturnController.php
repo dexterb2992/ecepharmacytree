@@ -3,6 +3,7 @@
 namespace ECEPharmacyTree\Http\Controllers;
 use Input; 
 use Redirect;
+use Auth;
 
 use Illuminate\Http\Request;
 
@@ -16,6 +17,8 @@ use ECEPharmacyTree\Order;
 use ECEPharmacyTree\OrderDetail;
 use ECEPharmacyTree\ProductStockReturn;
 use ECEPharmacyTree\Inventory;
+use ECEPharmacyTree\Product;
+use ECEPharmacyTree\Log;
 
 class StockReturnController extends Controller
 {
@@ -83,6 +86,7 @@ class StockReturnController extends Controller
         // (this is when the admin mistakenly chosen the 'Not all products on this order are returned' radio button)
         $order->load('order_details');
 
+        $activity_log = "Returned ";
 
         // continue returning items to inventory
         foreach($input['products_return_qtys'] as $key_product_id => $input_value){
@@ -91,6 +95,7 @@ class StockReturnController extends Controller
             $sr_detail->stock_return_id = $stock_return->id;
             $sr_detail->quantity = $input_value;
             
+            $product = Product::findOrFail($key_product_id);
 
             $input['products_return_qtys']['remaining'] = [$key_product_id => $input_value]; // iv: 4, lq: 5(1 & 4)
 
@@ -111,6 +116,8 @@ class StockReturnController extends Controller
 
                     $inventory->available_quantity = $inventory->available_quantity + $returned_qty;
                     $inventory->save();
+                    $activity_log.= "$input_value $product->packing to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
+                                target='_blank'>Lot# $inventory->lot_number </a>, ";
                 }
             }
 
@@ -118,14 +125,21 @@ class StockReturnController extends Controller
         }
 
         if( $input['all_product_is_returned'] == 1  ){
-            $order->status = 'refunded_in_full';
+            $order->is_returned = 1;
             $order->save();
         }
 
-        if( $stock_return->save() )
+        if( $stock_return->save() ){
+            Log::create([
+                'user_id' => Auth::user()->id,
+                'action'  => $activity_log,
+                'table' => 'inventories'
+            ]);
+
             return redirect('inventory/all')->withFlash_message([
                 'type' => 'success', 'msg' => 'A stock has been successfully returned.'
             ]);
+        }
 
         return redirect('inventory/all')->withFlash_message([
             'type' => 'error', 'msg' => 'Sorry, we can\'t process your request right now. Please try again later.'

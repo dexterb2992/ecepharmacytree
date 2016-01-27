@@ -492,28 +492,76 @@ function address_populator_helper(options, selected_id){
 }
 
 
-function populate_address_details(barangay_id){
-    // $('select[name="region_id"]')
-   /* $.ajax({
-        url: '/populate-address/'+barangay_id,
-        type: 'get'
-    }).done(function (data){
-        console.log(data);
-        if( data.hasOwnProperty('provinces') && data.hasOwnProperty('municipalities') 
-            && data.hasOwnProperty('barangays') && data.hasOwnProperty('selected') ){
-
-            var provinces = address_populator_helper(data.provinces, data.selected.province_id);
-            var municipalities = address_populator_helper(data.municipalities, data.selected.municipality_id);
-            var barangays = address_populator_helper(data.barangays, data.selected.barangay_id);
-
-            $("select[name='province_id'], select[name='municipality_id'], select[name='barangay_id'], select[name='region_id']").select2('destroy');
-
-            $("select[name='region_id'] option[value='"+data.selected.region_id+"']").attr("selected", "selected");
-
-            $("select[name='province_id']").html(provinces).select2();
-            $("select[name='municipality_id']").html(municipalities).select2();
-            $("select[name='barangay_id']").html(barangays).select2();
-            $("select[name='region_id']").select2();
+function checkLotNumber($this){
+    console.log("triggered change on inventory_lot_number");
+    var found = false,
+        selectedRow = [];
+    $.each(window.lotnumbers_library, function (i, row){
+        if( row.lot_number == $this.val() ){
+            console.log("found row: ");
+            console.log(row);
+            found = true;
+            selectedRow = row;
         }
-    });*/
+    });
+
+    if( found === true ){
+        $("#inventories_product_id").select2("destroy").children("option").removeAttr("selected").attr("disabled", "disabled");
+        $("#inventories_product_id option[value='"+selectedRow.product_id+"']").attr("selected", "selected").removeAttr("disabled");
+        $("#inventories_product_id").attr("readonly", "readonly").select2().trigger("change");
+        $("#form_edit_inventory input[name='expiration_date']").val(selectedRow.expiration).attr("readonly", "readonly");
+    }else{
+        $("#form_edit_inventory input[name='expiration_date']").removeAttr("readonly").val("");
+        $("#inventories_product_id").select2("destroy").children("option").removeAttr("selected").removeAttr("disabled");
+        $("#inventories_product_id").removeAttr("readonly").select2().trigger("change");
+    }
+}
+
+window.lotnumbers_source = [];
+window.lotnumbers_library = [];
+var getLotNumber_Retries = 0;
+function getLotNumbers(){
+    $.ajax({
+        url: '/lot-numbers',
+        type: 'post',
+        dataType: 'json',
+        data: {_token: $("input[name='_token']").val()},
+        beforeSend: function (){
+            console.log("getting lot numbers now..");
+        },
+        success: function (data){
+            console.log(data);
+            if( !data.error ){
+                $.each(data, function (i, row){
+                    window.lotnumbers_source.push(row.lot_number);
+                    window.lotnumbers_library.push({
+                        "lot_number" : row.lot_number, 
+                        "expiration" : row.expiration_date,
+                        "product_id" : row.product_id
+                    });
+                });
+                $("#inventory_lot_number").autocomplete({ 
+                    source: window.lotnumbers_source,
+                    change: function (){
+                        checkLotNumber( $(this) );
+                    },
+                    select: function (){
+                        checkLotNumber( $(this) );
+                    }
+                });
+                // $( ".inventory_lot_number" ).autocomplete( "option", "appendTo", ".eventInsForm" );
+            }else{
+                if( getLotNumber_Retries < 10 ){
+                    getLotNumbers();
+                    getLotNumber_Retries++;
+                }
+            }
+        },
+        error: function (shr, status, data){
+            console.log("Error getting lot numbers branch. "+data+" Status "+shr.status);
+        },
+        complete: function (){
+            console.log("getting session lot numbers completed.");
+        }
+    });
 }

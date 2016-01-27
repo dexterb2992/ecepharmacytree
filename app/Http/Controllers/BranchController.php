@@ -186,29 +186,30 @@ class BranchController extends Controller
                     $flash_message = ["msg" => "Branch has been activated.", "type" => "info"];
 
                 }
-                session()->flash("flash_message", $flash_message);
-                return json_encode( array("status" => "success") );
-            }
-
-            session()->flash("flash_message", array("msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"));
-            return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+                
+            session()->flash("flash_message", $flash_message);
+            return json_encode( array("status" => "success") );
         }
 
-        public function get_which_branch(){
-            $branches = Branch::all();
-            return view('auth.choosebranch')->withBranches($branches);
-        }
-
-        public function show_selected_branch(){
-            if( Request::ajax() ){
-                if( session()->get('selected_branch') != 0 ){
-                    $branch = Branch::find( session()->get('selected_branch') );
-                    return $branch;
-                }
-
-                return json_encode(array('error' => 'No selected branch.', 'status' => 500));
-            }
-
-            return json_encode(array('error' => 'Invalid request', 'status' => 500));
-        }
+        session()->flash("flash_message", array("msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"));
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
+
+    public function get_which_branch(){
+        $branches = Branch::all();
+        return view('auth.choosebranch')->withBranches($branches);
+    }
+
+    public function show_selected_branch(){
+        if( Request::ajax() ){
+            if( session()->get('selected_branch') != 0 ){
+                $branch = Branch::find( session()->get('selected_branch') );
+                return $branch;
+            }
+
+            return json_encode(array('error' => 'No selected branch.', 'status' => 500));
+        }
+
+        return json_encode(array('error' => 'Invalid request', 'status' => 500));
+    }
+}
