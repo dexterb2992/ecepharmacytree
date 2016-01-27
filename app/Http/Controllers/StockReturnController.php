@@ -47,8 +47,17 @@ class StockReturnController extends Controller
         $lesser_lot_number = [];
         $temp_lot_number = [];
 
+        $activity_log = "Returned ";
+
         foreach ($order->lot_numbers as $lot_number) {
             $lot_number->load('inventory');
+
+            if( $input['all_product_is_returned'] == 1 ){
+                $activity_log.= "$lot_number->quantity {$lot_number->inventory->product->packing} to 
+                        <a href='".route('Inventory::index')."?q={$lot_number->inventory->lot_number}' 
+                                target='_blank'>Lot# {$lot_number->inventory->lot_number} </a>\n ";
+            }
+
         }
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
@@ -86,47 +95,48 @@ class StockReturnController extends Controller
         // (this is when the admin mistakenly chosen the 'Not all products on this order are returned' radio button)
         $order->load('order_details');
 
-        $activity_log = "Returned ";
+        
 
         // continue returning items to inventory
-        foreach($input['products_return_qtys'] as $key_product_id => $input_value){
-            $sr_detail = new ProductStockReturn;
-            $sr_detail->product_id = $key_product_id;
-            $sr_detail->stock_return_id = $stock_return->id;
-            $sr_detail->quantity = $input_value;
-            
-            $product = Product::findOrFail($key_product_id);
+            foreach($input['products_return_qtys'] as $key_product_id => $input_value){
+                $sr_detail = new ProductStockReturn;
+                $sr_detail->product_id = $key_product_id;
+                $sr_detail->stock_return_id = $stock_return->id;
+                $sr_detail->quantity = $input_value;
+                
+                $product = Product::findOrFail($key_product_id);
 
-            $input['products_return_qtys']['remaining'] = [$key_product_id => $input_value]; // iv: 4, lq: 5(1 & 4)
+                $input['products_return_qtys']['remaining'] = [$key_product_id => $input_value]; // iv: 4, lq: 5(1 & 4)
 
-            foreach ($arr_lot_numbers as $lot_number) {
-                // $lot_number[quantity] = 1 , remaining = 3
-                if($lot_number['inventory']['product_id'] == $key_product_id){
-                    $inventory = Inventory::find($lot_number['inventory']['id']);
+                foreach ($arr_lot_numbers as $lot_number) {
+                    // $lot_number[quantity] = 1 , remaining = 3
+                    if($lot_number['inventory']['product_id'] == $key_product_id){
+                        $inventory = Inventory::find($lot_number['inventory']['id']);
 
-                    if( $input['products_return_qtys']['remaining'][$key_product_id] > $lot_number['quantity'] ){
-                        $input['products_return_qtys']['remaining'][$key_product_id] -= $lot_number['quantity'];
-                        $returned_qty = $lot_number['quantity']; 
-                    }else if( $input['products_return_qtys']['remaining'][$key_product_id] == $lot_number['quantity'] ){
-                        $input['products_return_qtys']['remaining'][$key_product_id] = 0;
-                        $returned_qty = $input_value;
-                    }else if( $input['products_return_qtys']['remaining'][$key_product_id] < $lot_number['quantity'] ){
-                        $returned_qty = $input['products_return_qtys']['remaining'][$key_product_id];
+                        if( $input['products_return_qtys']['remaining'][$key_product_id] > $lot_number['quantity'] ){
+                            $input['products_return_qtys']['remaining'][$key_product_id] -= $lot_number['quantity'];
+                            $returned_qty = $lot_number['quantity']; 
+                        }else if( $input['products_return_qtys']['remaining'][$key_product_id] == $lot_number['quantity'] ){
+                            $input['products_return_qtys']['remaining'][$key_product_id] = 0;
+                            $returned_qty = $input_value;
+                        }else if( $input['products_return_qtys']['remaining'][$key_product_id] < $lot_number['quantity'] ){
+                            $returned_qty = $input['products_return_qtys']['remaining'][$key_product_id];
+                        }
+
+                        $inventory->available_quantity = $inventory->available_quantity + $returned_qty;
+                        $inventory->save();
+                        $activity_log.= "$input_value $product->packing to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
+                                    target='_blank'>Lot# $inventory->lot_number </a>\n ";
                     }
-
-                    $inventory->available_quantity = $inventory->available_quantity + $returned_qty;
-                    $inventory->save();
-                    $activity_log.= "$input_value $product->packing to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
-                                target='_blank'>Lot# $inventory->lot_number </a>, ";
                 }
-            }
 
-            $sr_detail->save();
-        }
+                $sr_detail->save();
+            }
 
         if( $input['all_product_is_returned'] == 1  ){
             $order->is_returned = 1;
             $order->save();
+            
         }
 
         if( $stock_return->save() ){

@@ -149,6 +149,7 @@ class ProductController extends Controller
         $product = Product::findOrFail(Input::get("id"));
         if( $product->delete() ){
             session()->flash("flash_message", ["msg" => "$product->name has been deleted.", "type" => "danger"]);
+            sleep(1);
             return json_encode( array("status" => "success") );
         }
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
@@ -161,6 +162,7 @@ class ProductController extends Controller
 
             if( $product->restore() )  {
                 session()->flash("flash_message", ["msg" => "$product->name has been restored.", "type" => "info"]);
+                sleep(1);
                 return json_encode( array("status" => "success") );
             }
             return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );

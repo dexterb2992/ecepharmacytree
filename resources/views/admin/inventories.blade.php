@@ -110,7 +110,7 @@
 															<i class="fa-refresh fa"></i></span> -->
 														@endif
 														<span class="btn btn-danger btn-xs action-icon remove-product pull-right" data-action="remove" data-title="inventory" data-urlmain="/inventory/"
-															 data-id="{{ $inventory->id }}" title="Remove" data-toggle="tooltip" data-original-title="Remove">
+															 data-id="{{ $inventory->id }}" title="Remove">
 															 <i class="fa fa-trash-o"></i>
 														</span>
 														<span class="btn-warning btn btn-xs pull-right btn-adjustment" data-id="{{ $inventory->id }}" data-toggle="modal" data-target="#modal-add-adjustments">
@@ -382,7 +382,7 @@
 			        		</div>
 			        		
 			        		<div class="modal-footer">
-			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return & Replace</button>
+			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return to Stocks</button>
 			        		</div>
 			        	{!! Form::close() !!}
 	        		</div>

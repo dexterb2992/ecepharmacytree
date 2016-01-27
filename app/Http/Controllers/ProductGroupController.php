@@ -28,16 +28,6 @@ class ProductGroupController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -50,7 +40,7 @@ class ProductGroupController extends Controller
         if( $this->validator($input)->passes() ){
 
             $group = new ProductGroup;
-            $group->name = $input['name'];
+            $group->name = ucfirst($input['name']);
             $group->points = $input['points'];
             if( $group->save() )
                 if( isset($input['products_involved']) && count($input['products_involved']) > 0 ){
@@ -115,8 +105,11 @@ class ProductGroupController extends Controller
         $input = Input::all();
         if( $this->validator($input)->passes() ){
             $group = ProductGroup::findOrFail($input['id']);
-            $group->name = $input['name'];
+            $group->name = ucfirst($input['name']);
             $group->points = $input['points'];
+
+            $productnames = "";
+
             if( $group->save() )
                 if( isset($input['products_involved']) && count($input['products_involved']) > 0 ){
                     // make sure to remove the products which are removed from this group
@@ -130,11 +123,22 @@ class ProductGroupController extends Controller
                         $product = Product::find($value);
                         $product->product_group_id = $group->id;
                         $product->save();
+                        $productnames.= $product->name.", ";
+                    }
+                }else{
+                    $o_prods = $group->products;
+                    foreach ($o_prods as $prod) {
+                       Product::where('product_group_id', $prod->product_group_id)->update(['product_group_id' => 0]);
                     }
                 }
+                if(  $productnames == "" )
+                    return redirect()->back()->withFlash_message([
+                        'msg' => "$group->name has been updated successfully.",
+                        'type' => 'info'
+                    ]);
 
                 return redirect()->back()->withFlash_message([
-                    'msg' => 'New product group has been added successfully.',
+                    'msg' => "$productnames has been added to Group $group->name successfully.",
                     'type' => 'info'
                 ]);
 
@@ -157,11 +161,12 @@ class ProductGroupController extends Controller
     {
         $id = Input::get("id");
         $group = ProductGroup::findOrFail($id);
+        $name = $group->name;
         if( $group->delete() ){
             Product::where('product_group_id', $id)->update([
                 'product_group_id' => 0
             ]);
-
+            session()->flash("flash_message", array("type" => "danger", "msg" => "$name has been deleted successfully."));
             return json_encode( array("status" => "success") );
         }
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
