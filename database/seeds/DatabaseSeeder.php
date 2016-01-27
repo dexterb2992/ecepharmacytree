@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,12 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
-        $this->call(Illuminate\Database\Seeder\BarangayTableSeeder::class);
-        $this->call(Illuminate\Database\Seeder\MunicipalityTableSeeder::class);
-        $this->call(Illuminate\Database\Seeder\ProvinceTableSeeder::class);
-        $this->call(Illuminate\Database\Seeder\RegionTableSeeder::class);
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
+        $this->call(Illuminate\Database\Seeder\RegionTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\ProvinceTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\MunicipalityTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\BarangayTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\BranchTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\UserTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\ProductCategoryTableSeeder::class);
@@ -37,6 +38,8 @@ class DatabaseSeeder extends Seeder
         $this->call(Illuminate\Database\Seeder\ClinicPatientDoctorTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\SecretaryTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\DoctorSecretaryTableSeeder::class);
-        // Model::reguard();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Model::reguard();
     }
 }
