@@ -10,7 +10,7 @@ class SettingTableSeeder extends Seeder
     public function run()
     {
         // TestDummy::times(20)->create('App\Post');
-        Setting::where("id", ">", 0)->delete();
+        Setting::truncate();
         Setting::create([
         	"points" => 1,
         	"level_limit" => 3,

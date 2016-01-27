@@ -9,7 +9,7 @@ class ClinicDoctorTableSeeder extends Seeder
 {
 	public function run()
 	{
-		ClinicDoctor::where('id', '>', 0)->delete();
+		ClinicDoctor::truncate();
 		$clinic_doctor = array(
 			array('id' => '1','doctor_id' => '2','clinic_id' => '1','clinic_sched' => 'Monday - Friday
 				8:00 am - 5:00 pm','is_active' => '1','created_at' => '0000-00-00 00:00:00','updated_at' => '0000-00-00 00:00:00'),

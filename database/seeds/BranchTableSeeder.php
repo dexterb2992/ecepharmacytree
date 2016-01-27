@@ -7,7 +7,7 @@ class BranchTableSeeder extends Seeder
 {
     public function run()
     {
-        Branch::where('id', '>', 0)->delete();
+        Branch::truncate();
         $branches = array(
           array('id' => '1','name' => 'ECE Marketing Naga','additional_address' => 'Door C Benmar Bldg. 2','barangay_id' => '18587','latitude' => '13.620693578547499','longitude' => '123.22112048570557','telephone_numbers' => '','telefax' => '(054)472-8899','mobile_numbers' => '','status' => '1','is_new' => '0','created_at' => '2015-11-06 21:57:02','updated_at' => '2016-01-19 13:26:33','deleted_at' => NULL),
           array('id' => '11','name' => 'ECE Marketing Lipa','additional_address' => 'Arika Heights Compound B. Reyes St.','barangay_id' => '12017','latitude' => '13.941876000000011','longitude' => '121.16461291904909','telephone_numbers' => '','telefax' => '(043)756-0348','mobile_numbers' => '','status' => '1','is_new' => '0','created_at' => '2015-11-16 20:03:13','updated_at' => '2016-01-19 13:26:33','deleted_at' => NULL),

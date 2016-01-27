@@ -11,7 +11,7 @@ class ProductTableSeeder extends Seeder
   public function run()
   {
         // TestDummy::times(20)->create('App\Post');
-   Product::where('id', '>', 0)->delete();
+   Product::truncate();
    $this->insertProduct(12, 'PIMAX 200MCG ENTERIC-COATED TAB 30S', 'Tamsulosin HCl', 'Indications: Treatment of benign prostatic hyperplasia to relieve symptoms of urinary obstruction. \n Dosage: 200/400 mcg once daily.', 1, 60, 420, 'tablet', 'box', 30, '9071');
    $this->insertProduct(24, 'DAPHNE TAB 500MCG 28', 'Lynestrenol', 'Indication: Contraception & in cases of intolerance to estrogen-progestogen combined pills or when estrogens are contraindicated. Also indicated in lactating mothers & smoking women who require contraception. \n Dosaging: For dosage information of prescription medicine, please consult with your doctor.', 0, 59.04, 95, 'tablet', 'box', 28, '609415');
    $this->insertProduct(24, 'DAPHNE', 'Lynestrenol', 'Indications  Contraception, especially in cases of intolerance from estrogen-progestogen combined pills or when estrogens are contraindicated. Daphne is also indicated in lactating mothers and smoking women who require contraception.

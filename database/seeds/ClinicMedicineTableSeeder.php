@@ -7,7 +7,7 @@ class ClinicMedicineTableSeeder extends Seeder
 {
 	public function run()
 	{
-		ClinicMedicine::where('id', '>', 0)->delete();
+		ClinicMedicine::truncate();
 		$clinic_medicines = array(
 			array('id' => '8','clinic_id' => '2','med_name' => 'Paracetamol Biogesic 500mg Tab','is_new' => '1','created_at' => '2016-01-23 05:54:02','updated_at' => '0000-00-00 00:00:00'),
 			array('id' => '9','clinic_id' => '2','med_name' => 'Ibufrofen Medicol 500mg Cap','is_new' => '1','created_at' => '2016-01-23 05:54:02','updated_at' => '2016-01-24 23:21:13'),

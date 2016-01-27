@@ -9,7 +9,7 @@ class DoctorSecretaryTableSeeder extends Seeder
 {
 	public function run()
 	{
-		DoctorSecretary::where('id', '>', 0)->delete();
+		DoctorSecretary::truncate();
 		$doctor_secretary = array(
 			array('doctor_id' => '2','secretary_id' => '11','is_active' => '0','username' => 'asdf','password' => '912ec803b2ce49e4a541068d495ab570','created_at' => '2015-12-16 20:55:36','updated_at' => '0000-00-00 00:00:00'),
 			array('doctor_id' => '2','secretary_id' => '12','is_active' => '1','username' => 'asdff','password' => '912ec803b2ce49e4a541068d495ab570','created_at' => '2015-12-16 21:57:55','updated_at' => '0000-00-00 00:00:00'),

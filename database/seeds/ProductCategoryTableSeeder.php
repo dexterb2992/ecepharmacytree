@@ -11,7 +11,7 @@ class ProductCategoryTableSeeder extends Seeder
     public function run()
     {
         // TestDummy::times(20)->create('App\Post');
-        ProductCategory::where('id', '>', 0)->delete();
+        ProductCategory::truncate();
 
 		$values = array(
 			1 => 'over-the-counter-medicines',
