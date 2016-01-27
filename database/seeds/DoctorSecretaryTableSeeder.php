@@ -18,6 +18,6 @@ class DoctorSecretaryTableSeeder extends Seeder
 			array('doctor_id' => '2','secretary_id' => '14','is_active' => '1','username' => 'marj','password' => 'af6c609ae89ebd77f4fb68af1115bd69','created_at' => '2015-12-18 21:40:55','updated_at' => '0000-00-00 00:00:00'),
 			array('doctor_id' => '3','secretary_id' => '11','is_active' => '1','username' => 'qwer','password' => '962012d09b8170d912f0669f6d7d9d07','created_at' => '2015-12-18 22:45:25','updated_at' => '0000-00-00 00:00:00')
 			);
-DoctorSecretary::insert($clinic_doctor);
+DoctorSecretary::insert($doctor_secretary);
 }
 }
