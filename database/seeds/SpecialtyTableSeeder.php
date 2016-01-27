@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use ECEPharmacyTree\Specialty;
 
-class SpecialtyTableSeederpotanginamo extends Seeder
+class SpecialtyTableSeeder extends Seeder
 {
 	public function run()
 	{

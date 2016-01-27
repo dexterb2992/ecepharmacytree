@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Illuminate\Database\Seeder\SettingTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\PatientTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\ReturnCodeTableSeeder::class);
-        $this->call(Illuminate\Database\Seeder\SpecialtyTableSeederpotanginamo::class);
+        $this->call(Illuminate\Database\Seeder\SpecialtyTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\SubSpecialtyTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\DoctorTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\ClinicTableSeeder::class);
