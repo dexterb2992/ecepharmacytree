@@ -35,7 +35,7 @@ class BillingController extends Controller
         $input = Input::all();
         $billing = Billing::where('order_id', $input['order_id'])->first();
         $billing->payment_status = "paid";
-        $billing->or_txt_number = $input['or_txn_number'];
+        $billing->or_txn_number = $input['or_txn_number'];
 
         if( $billing->save() ){
 
