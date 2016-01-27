@@ -25,8 +25,7 @@ class CreateOrderDetailsTable extends Migration
             $table->double('quantity');
             $table->string('type')->default('delivery'); // pickup or delivery
             $table->integer('qty_fulfilled')->default(0);
-            $table->integer('promo_id')->unsigned();
-            $table->foreign('promo_id')->references('id')->on('patients')->onDelete('cascade');
+            $table->integer('promo_id');
             $table->string('promo_type');
             $table->double('percentage_discount');
             $table->double('peso_discount');
