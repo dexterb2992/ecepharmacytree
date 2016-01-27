@@ -224,9 +224,11 @@ class InventoryController extends Controller
             if( $inventory->delete() )  
                 Log::create([
                     'user_id' => Auth::user()->id,
-                    'action'  => 'Deleted inventory with Lot #'.$inventory->lot_number,
+                    'action'  => "Deleted inventory with Lot# $inventory->lot_number",
                     'table' => 'inventories'
                 ]);
+                session()->flash("flash_message", ["msg" => "A stock with Lot# $inventory->lot_number has been deleted.", "type" => "danger"]);
+                sleep(1);
                 return json_encode( array("status" => "success") );
         }
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later." ) );

@@ -1194,7 +1194,7 @@ $("#add_gallery").click(function (){
 
                 // add max qty to the newly appended textviews
                 $("#form_return_n_refund").find('input.products_return_qtys').each(function (i, row){
-                    $(row).attr("data-max", window.maxReturnQty[$(row).data("id")].qty);
+                    $(row).attr("data-max", window.maxReturnQty[$(row).data("id")].qty).attr("data-min", 1);
                     $(row).on("keyup change", function (){
                         calculateStockReturnAmount();
                     });

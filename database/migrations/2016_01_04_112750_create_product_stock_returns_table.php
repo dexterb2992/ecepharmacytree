@@ -19,6 +19,7 @@ class CreateProductStockReturnsTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->double('quantity');
+            $table->double('defective_quantity');
             $table->timestamps();
         });
     }
