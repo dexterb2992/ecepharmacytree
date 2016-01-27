@@ -21,9 +21,9 @@ class CreatePatientsTable extends Migration
             $table->string('password');
             $table->string('email_address');
             $table->string('mobile_no');
-            $table->string('tel_no')->nullable();
-            $table->longText('photo')->nullable();
-            $table->string('occupation')->nullable();
+            $table->string('tel_no');
+            $table->longText('photo');
+            $table->string('occupation');
             $table->string('birthdate');
             $table->string('sex', 6);
             $table->string('civil_status', 20);
