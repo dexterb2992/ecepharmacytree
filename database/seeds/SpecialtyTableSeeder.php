@@ -1,7 +1,6 @@
 <?php namespace Illuminate\Database\Seeder;
 
 use Illuminate\Database\Seeder;
-
 use ECEPharmacyTree\Specialty;
 
 class SpecialtyTableSeeder extends Seeder
