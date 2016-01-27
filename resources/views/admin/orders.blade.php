@@ -8,10 +8,10 @@
                 <h3 class="box-title">Orders</h3><br/>
             </div><!-- /.box-header -->
             <div class="box-body">
-                <table class="table table-bordered table-hover datatable">
+                <table class="table table-bordered table-hover table-orders">
                     <thead>
                         <tr>
-                            <th>Order</th>
+                            <th class="sorting_desc">Order</th>
                             <th>Date</th>
                             <th>Customer</th>
                             <th>Payment Status</th>

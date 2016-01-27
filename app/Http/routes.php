@@ -121,12 +121,13 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	 * Routes for Products and Product Categories & SubCategories
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'ProductController@index']);
-	Route::get('deleted', ['as' => 'all', 'uses' => 'ProductController@all_include_deleted']);
+	Route::get('with-deleted', ['as' => 'all', 'uses' => 'ProductController@all_include_deleted']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'ProductController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
 	Route::post('/all', ['as' => 'get_all', 'uses' => 'ProductController@show_all']);
+	Route::post('deactivate', ['as' => 'deactivate', 'uses' => 'ProductController@restore']);
 
 
 	Route::get('gallery/{product_id}', ['as' => 'gallery', 'uses' => 'ProductsGalleryController@show']);
@@ -333,3 +334,6 @@ Route::get('read-notification', 'NotificationsController@update');
 Route::get('populate-address/{barangay_id}', ['as' => 'populate_address', 'uses' => 'LocationController@populate_address_by_barangay']);
 
 Route::post('save_user_token', 'PatientController@save_user_token');
+
+Route::post('lot-numbers', 'InventoryController@get_lot_numbers');
+Route::get('lot-numbers', 'InventoryController@get_lot_numbers');

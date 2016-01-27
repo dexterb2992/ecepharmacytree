@@ -25,7 +25,7 @@ class OrderController extends Controller
     public function index()
     {
 
-        $orders = Order::where('branch_id', session()->get('selected_branch'))->orderBy('created_at', 'ASC')->get();
+        $orders = Order::where('branch_id', session()->get('selected_branch'))->orderBy('id', 'DESC')->get();
 
 
         // $this->firstOrderFirstServeSort($orders);
@@ -53,7 +53,7 @@ class OrderController extends Controller
     public function show_all(){
         // $orders = Order::all();
         $orders = Order::where('branch_id', session()->get('selected_branch'))
-            ->where('status', '!=', 'refunded_in_full')->orderBy('id', 'DESC')->get();
+            ->where('is_refunded', '=', 0)->orderBy('id', 'DESC')->get();
         $orders->load('patient');
         $orders->load('order_details');
         $orders->load('billing');

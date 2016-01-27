@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
 							<small>(Click on each name to view its downlines)</small>
 						</div>
 						<div class="box-body">
-							<table class="table table-bordered table-hover datatable table-referrals">
+							<table class="table table-bordered table-hover table-referrals">
 								<thead>
 									<tr>
 										<th>Name</th>

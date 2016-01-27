@@ -58,13 +58,18 @@ $(document).ready(function (){
         donut.redraw();
     });
 
-    $('.datatable:not(.table-referrals)').DataTable({
+    $('.datatable').DataTable({
         "paging": true,
         "lengthChange": false,
         "searching": true,
         "ordering": true,
         "info": true,
         "autoWidth": false
+    });
+
+    $('.table-orders').DataTable({
+        "iDisplayLength": -1,
+        "aaSorting": [[ 0, "desc" ]]
     });
 
     $('.table-referrals').DataTable({
@@ -363,7 +368,7 @@ $(document).ready(function (){
             title = "Add new "+dataTitle;
 
             _clear_form_data(form);
-            form.find('#inventories_product_id').removeAttr("disabled");
+            form.find('#inventories_product_id').removeAttr("disabled").trigger("change");
             updateInventoryProductQty();
         }
 
@@ -452,7 +457,7 @@ $(document).ready(function (){
             showAlert(title, msg, alertType, type);
         }else{
             $.ajax({
-                url : '/branches/deactivate',
+                url : mainurl+'deactivate',
                 type : 'post',
                 dataType : 'json',
                 data : { id : id, _token : _token }
@@ -1494,6 +1499,16 @@ $("#add_gallery").click(function (){
             });
 
     getSessionBranch();
+
+    // get lot numbers
+    if( $("#inventory_lot_number").length > 0 ){
+        getLotNumbers();
+    }
+
+
+    $("#inventory_lot_number").bind("change keyup",function(){
+        checkLotNumber( $(this) );
+    });
 });
 
 //   On Stock Returns tab, you can exchange the returned product there with a new the same product.
