@@ -14,6 +14,7 @@ use ECEPharmacyTree\Inventory;
 use Input;
 use ECEPharmacyTree\Log;
 use URL;
+use ECEPharmacyTree\OrderLotNumber;
 
 class OrderController extends Controller
 {
@@ -157,6 +158,13 @@ class OrderController extends Controller
         .'. <br/><code>Order Fulfillment: </code> <a href="'.URL::route('orders').'/'.$order_id.'" 
         target="blank">Order #'.$order_id.'</a>';
         $log->table = 'inventories';
-        $log->save();
+        if( $log->save() ){
+            $qty_used = $old_qty-$new_qty;
+            $oln = new OrderLotNumber;
+            $oln->order_id = $order_id;
+            $oln->inventory_id = $inventory->id;
+            $oln->quantity = $qty_used;
+            $oln->save();
+        }
     }
 }

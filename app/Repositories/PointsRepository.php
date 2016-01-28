@@ -40,34 +40,34 @@ class PointsRepository {
     }
 
     function process_points($referral_id) {
-      $user = Patient::where('referral_id', '=', $referral_id)->first();
-      $settings = get_recent_settings();
+        $user = Patient::where('referral_id', '=', $referral_id)->first();
+        $settings = get_recent_settings();
 
 
-      if( empty($user) ) 
-        $user = Doctor::where('referral_id', '=', $referral_id)->first();
+        if( empty($user) ) 
+            $user = Doctor::where('referral_id', '=', $referral_id)->first();
 
-    if( empty($user) )
-        return json_encode(array('msg' => "Sorry, but we can't find a user with Referral ID of $referral_id.", 'status' => 500));
+        if( empty($user) )
+            return json_encode(array('msg' => "Sorry, but we can't find a user with Referral ID of $referral_id.", 'status' => 500));
 
-        // dd($user);
+            // dd($user);
 
-    $uplines = get_uplines($referral_id);
+        $uplines = get_uplines($referral_id);
 
-    $orders = $user->orders;
-        // pre($uplines);
-    $billings = array();
-    foreach ($orders as $order) {
-        $billings[] = $order->billing;
+        $orders = $user->orders;
+            // pre($uplines);
+        $billings = array();
+        foreach ($orders as $order) {
+            $billings[] = $order->billing;
 
-    }
+        }
 
 
-    $points = 0;
-    $limit = $settings->level_limit;
-    $billings_has_uncomputed_points = false;
+        $points = 0;
+        $limit = $settings->level_limit;
+        $billings_has_uncomputed_points = false;
 
-    $notes = "";
+        $notes = "";
 
         // krsort($uplines);
 
@@ -100,30 +100,30 @@ class PointsRepository {
                 }
 
                 $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
-                ." earned from ".$order_detail->product->name." ("
+                    ." earned from ".$order_detail->product->name." ("
                     .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
-.str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
+                    .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
 
-}
+            }
 
                 //pre($notes);
-$points_per_one_hundred = (double)$settings->points;
-$points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
+                $points_per_one_hundred = (double)$settings->points;
+                $points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
 
 
 
                 // add points   
-$user_old_points = (double)$user->points; 
-$user->points = $points_earned + $user_old_points;
+                $user_old_points = (double)$user->points; 
+                $user->points = $points_earned + $user_old_points;
 
                 // points_discount deduction
-if( $user->points >=  $billing->points_discount ){
-    $user->points = $user->points - $billing->points_discount;
-}
+                if( $user->points >=  $billing->points_discount ){
+                    $user->points = $user->points - $billing->points_discount;
+                }
 
-if( $user->save() ){
-    $ref_com_log = new ReferralCommissionActivityLog;
-    $ref_com_log->billing_id = $billing->id;
+                if( $user->save() ){
+                    $ref_com_log = new ReferralCommissionActivityLog;
+                    $ref_com_log->billing_id = $billing->id;
                     $ref_com_log->to_upline_id = $user->id;   // means self, no upline
                     $ref_com_log->to_upline_type = isset($user->prc_no) ? 'doctor' : 'patient';
                     $ref_com_log->referral_level = 0; // if 0, it means - to the user itself, it's not a referral points
