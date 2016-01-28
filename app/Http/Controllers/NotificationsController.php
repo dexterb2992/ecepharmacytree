@@ -44,7 +44,8 @@ class NotificationsController extends Controller
             }
         ])->count();
 
-        $orders = Order::where('is_new', '=', 1)->where('branch_id', '=', session()->get('selected_product'))->count();
+        $orders = Order::where('is_new', '=', 1)->where('branch_id', '=', session()->get('selected_branch'))->count();
+
         $branches = Branch::where('is_new', '=', 1)->count();
 
         $unseen_notifications = [];

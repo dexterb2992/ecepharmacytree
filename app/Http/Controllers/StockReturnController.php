@@ -51,11 +51,12 @@ class StockReturnController extends Controller
 
         foreach ($order->lot_numbers as $lot_number) {
             $lot_number->load('inventory');
-            $activity_log[] = "$lot_number->quantity {$lot_number->inventory->product->packing} to 
-                        <a href='".route('Inventory::index')."?q={$lot_number->inventory->lot_number}' 
-                                target='_blank'>Lot# {$lot_number->inventory->lot_number} </a> ";
+            if( $input['all_product_is_returned'] == 1 ){
+                $activity_log[] = "$lot_number->quantity ".str_auto_plural($lot_number->inventory->product->packing,$lot_number->quantity)
+                    ." to<a href='".route('Inventory::index')."?q={$lot_number->inventory->lot_number}' 
+                    target='_blank'>Lot# {$lot_number->inventory->lot_number} </a> ";
+            }
         }
-        dd($order);
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
 
@@ -124,7 +125,11 @@ class StockReturnController extends Controller
 
                         $inventory->available_quantity = $inventory->available_quantity + $returned_qty;
                         $inventory->save();
-                        $activity_log[] = "$input_value $product->packing to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
+                        // $activity_log[] = "$input_value to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
+                        //             target='_blank'>Lot# $inventory->lot_number </a>\n ";
+
+                        $activity_log[] ="$input_value ".str_auto_plural($inventory->product->packing, $input_value)
+                                    ." to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
                                     target='_blank'>Lot# $inventory->lot_number </a>\n ";
                     }
                 }
@@ -144,7 +149,7 @@ class StockReturnController extends Controller
         if( $stock_return->save() ){
             Log::create([
                 'user_id' => Auth::user()->id,
-                'action'  => $activity_log,
+                'action'  => "Returned $activity_log",
                 'table' => 'inventories'
             ]);
 
