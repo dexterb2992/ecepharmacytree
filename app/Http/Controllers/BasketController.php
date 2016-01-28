@@ -25,9 +25,9 @@ class BasketController extends Controller
 
     function check_basket(){
         $input = Input::all();
-        $response = array();
+
         $response = json_decode($this->basket->check_and_adjust_basket($input['patient_id'], $input['branch_id']));
-        $response['expected_points'] = (double) $this->points->compute_basket_points(Input::all());
+        $response->expected_points = (double) $this->points->compute_basket_points(Input::all());
 
         return json_encode($response);
     }
