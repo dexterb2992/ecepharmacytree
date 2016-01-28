@@ -13,94 +13,114 @@ use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Doctor;
 use ECEPharmacyTree\ReferralCommissionActivityLog;
 use ECEPharmacyTree\ProductGroup;
+use Input;
 
 class PointsRepository {
-	
-	function process_points($referral_id) {
-		$user = Patient::where('referral_id', '=', $referral_id)->first();
+
+    function compute_basket_points(){
+        $input =  Input::all();
         $settings = get_recent_settings();
-        
+        $patient = Patient::findOrFail($input['id']);
+        $basket_items = $patient->basket()->get();
 
-        if( empty($user) ) 
-            $user = Doctor::where('referral_id', '=', $referral_id)->first();
-        
-        if( empty($user) )
-            return json_encode(array('msg' => "Sorry, but we can't find a user with Referral ID of $referral_id.", 'status' => 500));
-
-        // dd($user);
-
-        $uplines = get_uplines($referral_id);
-        
-        $orders = $user->orders;
-        // pre($uplines);
-        $billings = array();
-        foreach ($orders as $order) {
-            $billings[] = $order->billing;
+        foreach($basket_items as $basket_item){
+            if($basket_item->products()->first()->product_group_id > 0){
+                $group = ProductGroup::find($order_detail->product->product_group_id);
+                $points_per_one_hundred = (double)$group->points;
+            } else {
+                $points_per_one_hundred = (double)$settings->points;
+                
+            }
 
         }
 
-        
-        $points = 0;
-        $limit = $settings->level_limit;
-        $billings_has_uncomputed_points = false;
+    }
 
-        $notes = "";
-        
+    function process_points($referral_id) {
+      $user = Patient::where('referral_id', '=', $referral_id)->first();
+      $settings = get_recent_settings();
+
+
+      if( empty($user) ) 
+        $user = Doctor::where('referral_id', '=', $referral_id)->first();
+
+    if( empty($user) )
+        return json_encode(array('msg' => "Sorry, but we can't find a user with Referral ID of $referral_id.", 'status' => 500));
+
+        // dd($user);
+
+    $uplines = get_uplines($referral_id);
+
+    $orders = $user->orders;
+        // pre($uplines);
+    $billings = array();
+    foreach ($orders as $order) {
+        $billings[] = $order->billing;
+
+    }
+
+
+    $points = 0;
+    $limit = $settings->level_limit;
+    $billings_has_uncomputed_points = false;
+
+    $notes = "";
+
         // krsort($uplines);
 
         //pre("# of billings: ".count($billings));
-        foreach ($billings as $billing) {
-            if( $billing->payment_status == 'paid' && $billing->points_computation_status == 0 ){
-                $billings_has_uncomputed_points = true;
+    foreach ($billings as $billing) {
+        if( $billing->payment_status == 'paid' && $billing->points_computation_status == 0 ){
+            $billings_has_uncomputed_points = true;
                 //pre("uncomputed billing.");
                 // points computation
                 // $points_earned = compute_points($billing->gross_total);
-                $sales_amount = $billing->gross_total;
-                $points_per_order_detail = 0;
-                
-                foreach ($billing->order->order_details as $order_detail) {
-                    $points_per_one_hundred = (double)$settings->points;
-                    $amount = (double)($order_detail->price * $order_detail->quantity);
+            $sales_amount = $billing->gross_total;
+            $points_per_order_detail = 0;
+
+            foreach ($billing->order->order_details as $order_detail) {
+                $points_per_one_hundred = (double)$settings->points;
+                $amount = (double)($order_detail->price * $order_detail->quantity);
+                $points_earned_for_this_order_detail = $amount * ( $points_per_one_hundred/100);
+
+                if( $order_detail->product->product_group_id > 0 ){
+                    $group = ProductGroup::find($order_detail->product->product_group_id);
+                    $points_per_one_hundred = (double)$group->points;
+                        // $amount = (double)($order_detail->price * $order_detail->quantity);
                     $points_earned_for_this_order_detail = $amount * ( $points_per_one_hundred/100);
 
-                    if( $order_detail->product->product_group_id > 0 ){
-                        $group = ProductGroup::find($order_detail->product->product_group_id);
-                        $points_per_one_hundred = (double)$group->points;
-                        // $amount = (double)($order_detail->price * $order_detail->quantity);
-                        $points_earned_for_this_order_detail = $amount * ( $points_per_one_hundred/100);
+                    $points_per_order_detail+= $points_earned_for_this_order_detail;
 
-                        $points_per_order_detail+= $points_earned_for_this_order_detail;
+                    $sales_amount -= $amount;
 
-                        $sales_amount -= $amount;
-
-                        
-                    }
-
-                    $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
-                            ." earned from ".$order_detail->product->name." ("
-                            .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
-                            .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
 
                 }
 
+                $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
+                ." earned from ".$order_detail->product->name." ("
+                    .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
+.str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";
+
+}
+
                 //pre($notes);
-                $points_per_one_hundred = (double)$settings->points;
-                $points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
+$points_per_one_hundred = (double)$settings->points;
+$points_earned = $points_per_order_detail + ( $sales_amount * ( $points_per_one_hundred/100) );
 
 
 
                 // add points   
-                $user_old_points = (double)$user->points; 
-                $user->points = $points_earned + $user_old_points;
+$user_old_points = (double)$user->points; 
+$user->points = $points_earned + $user_old_points;
 
                 // points_discount deduction
-                if( $user->points >=  $billing->points_discount ){
-                    $user->points = $user->points - $billing->points_discount;
-                }
+if( $user->points >=  $billing->points_discount ){
+    $user->points = $user->points - $billing->points_discount;
+}
 
-                if( $user->save() ){
-                    $ref_com_log = new ReferralCommissionActivityLog;
-                    $ref_com_log->billing_id = $billing->id;
+if( $user->save() ){
+    $ref_com_log = new ReferralCommissionActivityLog;
+    $ref_com_log->billing_id = $billing->id;
                     $ref_com_log->to_upline_id = $user->id;   // means self, no upline
                     $ref_com_log->to_upline_type = isset($user->prc_no) ? 'doctor' : 'patient';
                     $ref_com_log->referral_level = 0; // if 0, it means - to the user itself, it's not a referral points
