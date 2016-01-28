@@ -68,7 +68,7 @@
       if( quantity > 1 ){
         return str_plural( str )+suf;
       }else{
-        return str_singular( str )+suf;
+        return str+suf;
       }
     }catch(Exception){
       console.log(Exception);

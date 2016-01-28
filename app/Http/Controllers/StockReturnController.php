@@ -55,6 +55,7 @@ class StockReturnController extends Controller
                         <a href='".route('Inventory::index')."?q={$lot_number->inventory->lot_number}' 
                                 target='_blank'>Lot# {$lot_number->inventory->lot_number} </a> ";
         }
+        dd($order);
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
 
@@ -79,7 +80,7 @@ class StockReturnController extends Controller
             }
         }
 
-        if( !isset($input['products_return_qtys']) ){
+        if( !isset($input['products_return_qtys']) && $input['all_product_is_returned'] != 1 ){
             return Redirect::back()->withInput()->withFlash_message([
                 'msg' => 'Sorry, some things are missing when you submit your request. Please try again.',
                 'type' => 'error'
@@ -95,6 +96,7 @@ class StockReturnController extends Controller
         
 
         // continue returning items to inventory
+        if( isset($input["products_return_qtys"]) ){
             foreach($input['products_return_qtys'] as $key_product_id => $input_value){
                 $sr_detail = new ProductStockReturn;
                 $sr_detail->product_id = $key_product_id;
@@ -129,6 +131,7 @@ class StockReturnController extends Controller
 
                 $sr_detail->save();
             }
+        }
 
         $activity_log = implode(", \n", $activity_log);
 

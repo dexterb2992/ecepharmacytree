@@ -86,7 +86,7 @@
 
                                                         <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
                                                          data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
-                                                         data-id="{{ $product->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
+                                                         data-id="{{ $product->id }}" title="View|Edit" data-toggle="tooltip" data-original-title="View|Edit">
                                                             <i class="fa fa-edit"></i>
                                                         </span>
                                                     @else
