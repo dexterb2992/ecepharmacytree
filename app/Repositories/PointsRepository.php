@@ -13,26 +13,29 @@ use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Doctor;
 use ECEPharmacyTree\ReferralCommissionActivityLog;
 use ECEPharmacyTree\ProductGroup;
-use Input;
 
 class PointsRepository {
 
-    function compute_basket_points(){
-        $input =  Input::all();
+    function compute_basket_points($input){
         $settings = get_recent_settings();
-        $patient = Patient::findOrFail($input['id']);
+        $patient = Patient::findOrFail($input['patient_id']);
         $basket_items = $patient->basket()->get();
+        $total_points_earned = 0;
 
-        foreach($basket_items as $basket_item){
+        foreach($basket_items as $basket_item) {
+            $amount = (double)($basket_item->product()->first()->price * $basket_item->quantity);
+           
             if($basket_item->products()->first()->product_group_id > 0){
                 $group = ProductGroup::find($order_detail->product->product_group_id);
                 $points_per_one_hundred = (double)$group->points;
             } else {
                 $points_per_one_hundred = (double)$settings->points;
-                
             }
-
+            $points_earned_for_this_basket_item = $amount * ( $points_per_one_hundred/100);
+            $total_points_earned += $points_earned_for_this_basket_item;
         }
+
+        return $total_points_earned;
 
     }
 

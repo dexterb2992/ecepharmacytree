@@ -10,11 +10,17 @@ use ECEPharmacyTree\Basket;
 use DB;
 use Input;
 use ECEPharmacyTree\Repositories\BasketRepository;
+use ECEPharmacyTree\Repositories\PointsRepository;
 
 class BasketController extends Controller
 {
-    function __construct(BasketRepository $basket) {
+    function __construct(BasketRepository $basket, PointsRepository $points) {
         $this->basket = $basket;
+        $this->points = $points;
+    }
+
+    function compute_basket_points(){
+        return $this->points->compute_basket_points(Input::all());
     }
 
     function check_basket(){
