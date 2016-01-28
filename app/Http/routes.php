@@ -76,6 +76,8 @@ Route::get('test/{referral_id}', function ($referral_id){
 	dd(get_uplines($referral_id, true, true));
 });
 
+Route::get('compute_basket_points', 'BasketController@compute_basket_points');
+
 Route::get('get_clinic_records', 'ApiController@getClinicRecords');
 
 Route::get("get-selected-branch", 'BranchController@show_selected_branch');
