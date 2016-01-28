@@ -1136,6 +1136,7 @@ $("#add_gallery").click(function (){
 
                     $("#customer_name").html(row.patient.fname+" "+row.patient.lname);
                     $("#total_amount").html(peso()+' '+row.billing.total);
+                    $("#gross_total").html(peso()+' '+row.billing.gross_total);
                     $("#all_less").html(discounts_html);
                     $("#refund_amount").html(window.selectedOrder.billing.total);
                     $('#amount_refunded').val(window.selectedOrder.billing.total);

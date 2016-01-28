@@ -135,6 +135,6 @@ class PromoRepository {
                     "is_allowed" => false
                     );
         }
-        return [];
+        return ["is_allowed" => true];
     }
 }
