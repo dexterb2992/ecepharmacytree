@@ -366,6 +366,22 @@ use Illuminate\Support\Str;
                                     <span class="input-group-addon">{!! peso() !!}</span>
                                     <input class="form-control number" name="peso_discount" id="peso_discount" />
                                 </div>
+
+                                <div class="form-group">
+                                    <label>For every minimum quantity/purchase, this promo will be applied.</label><br/>
+                                    <label for="is_every">
+                                        <input type="radio" name="is_every" value="0" 
+                                            data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
+                                        Yes
+                                    </label>
+
+                                    
+                                    <label for="is_every">
+                                        <input type="radio" name="is_every" value="0" 
+                                        data-check-value="0" data-uncheck-value="1" class="form-control icheck" checked />
+                                        No, apply just once.
+                                    </label>
+                                </div>
                             </div>
 
                             <div class="form-group" id="discount_detail_percentage_discount_div" style="display:none;">
@@ -374,22 +390,6 @@ use Illuminate\Support\Str;
                                     <input class="form-control number" name="percentage_discount" id="percentage_discount" />
                                     <span class="input-group-addon">%</span>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>For every minimum quantity/purchase, this promo will be applied.</label><br/>
-                                <label for="is_every">
-                                    <input type="radio" name="is_every" value="0" 
-                                        data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
-                                    Yes
-                                </label>
-
-                                
-                                <label for="is_every">
-                                    <input type="radio" name="is_every" value="0" 
-                                    data-check-value="0" data-uncheck-value="1" class="form-control icheck" checked />
-                                    No, apply just once.
-                                </label>
                             </div>
 
                         </div>
