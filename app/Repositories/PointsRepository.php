@@ -23,7 +23,7 @@ class PointsRepository {
         $total_points_earned = 0;
 
         foreach($basket_items as $basket_item) {
-            $amount = (double)($basket_item->product()->first()->price * $basket_item->quantity);
+            $amount = (double)($basket_item->products()->first()->price * $basket_item->quantity);
            
             if($basket_item->products()->first()->product_group_id > 0){
                 $group = ProductGroup::find($order_detail->product->product_group_id);
