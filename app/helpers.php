@@ -108,12 +108,12 @@ function rn2br($str){
 }
 
 function get_person_fullname($person, $reversed = false){
-	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : '';
+	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : ' ';
 	$fname = !empty($person->fname) ? ucfirst($person->fname)." " : '';
 	$lname = !empty($person->lname) ? ucfirst($person->lname) : '';
     if( $reversed )
         return $lname.", ".$fname.$mname;
-    return $fname." ".$mname." ".$lname;
+    return $fname."".$mname." ".$lname;
 }
 
 
