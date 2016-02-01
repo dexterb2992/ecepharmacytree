@@ -20,107 +20,119 @@
               @if($order_detail->promo_id > 0)
               <p style="text-decoration:line-through">&#8369; {{ $product_total }}</p>
               <br/><b>
-                @if($order_detail->promo_type == 'peso_discount')
-                <?php $product_total -= $order_detail->peso_discount; ?>
-                &#8369; {{ $product_total }}
-                @elseif($order_detail->promo_type == 'percentage_discount')
-                <?php $product_total -= $order_detail->percentage_discount; ?>                
-                &#8369; {{ $product_total }}
-                @elseif($order_detail->promo_type == 'free_gift')
-                {{ 'free gift '.$order_detail->free_gift }}
-                @endif
-              </b>
-              @else
-              <b>&#8369; {{ $product_total }}</b>
+              @if($order_detail->promo_type == 'peso_discount')
+              <?php $product_total -= $order_detail->peso_discount; ?>
+              &#8369; {{ $product_total }}
+              @elseif($order_detail->promo_type == 'percentage_discount')
+              <?php $product_total -= $order_detail->percentage_discount; ?>                
+              &#8369; {{ $product_total }}
+              @elseif($order_detail->promo_type == 'free_gift')
+              {{ 'free gift '.$order_detail->free_gift }}
               @endif
-            </td>
-            
-            <?php $order_total += $product_total; ?>
-            <?php $gross_total += $order_detail->price * $order_detail->quantity; ?>
-          </tr>
-          @endforeach
-          <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
-          <tr><td class="borderless"></td><td class="borderless type-subdued">Subtotal</td><td class="borderless">&#8369; {{ $gross_total }}</td></tr>
-          <!-- <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr> -->
-          <tr><td class="borderless"></td><td class="borderless next-heading">Total</td><td class="borderless next-heading">&#8369; {{ $order_total }}</td></tr>
-          <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order_total }}</td></tr>
-
-          @if($order->billing()->first()->payment_status == "paid")
-          <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> Payment has been accepted.</h2></td><td></td><td></td></tr>
-          @else
-          <tr><td><h2 class="next-heading"><span class="fa fa-thumbs-o-up">&nbsp;</span>Accept Payment</h2></td><td></td><td>
-            <button class="btn btn-primary margin-top-10 no-margin-left add-edit-btn" data-action="mark_as_paid" data-modal-target="#modal-mark-payment" data-action="fulfill_items">Mark as paid</button></td></tr>
-            @endif
-            @if(check_if_not_fulfilled($order))
-            <tr><td><h2 class="next-heading"><span class="fa fa-truck">&nbsp;</span>Fulfill items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
-            @elseif(check_if_partially_fulfilled($order))
-            <tr><td><h2 class="next-heading"><span class="fa fa-truck">&nbsp;</span>Fulfill remaining items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
+            </b>
             @else
-            <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> All items have been fulfilled.</h2></td><td></td><td></td></tr>
+            <b>&#8369; {{ $product_total }}</b>
             @endif
+          </td>
 
-          </table>
-        </div><!-- /.box-body -->
-      </div><!-- /.box -->
-    </div><!-- /.col -->
-    <div class="col-xs-4">
-      <div class="box box-primary">
-        <div class="box-header">
-          <!-- <h3 class="box-title">{{ get_person_fullname($order->patient()->first()) }}</h3> -->
-          <div class="user-panel">
-            <div class="pull-left image">
-              <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-            </div>
-            <div class="pull-left info">
-              <h3 class="color-black next-heading padding-customer">{{ get_person_fullname($order->patient()->first()) }}</h3>
-            </div>
+
+        </tr>
+
+        <?php $order_total += $product_total; ?>
+        <?php $gross_total += $order_detail->price * $order_detail->quantity; ?>
+        @endforeach
+
+        @if($order->modeOfDelivery == 'delivery')
+        @if($order->promo_type == 'free_delivery')
+        <tr><td>Delivery Charge</td><td></td><td>{{ 'Free' }}</td></tr>
+        @else
+        <?php $order_total += $order->delivery_charge; ?>
+        <tr><td>Delivery Charge</td><td></td><td>{{ $order->delivery_charge }}</td></tr>
+        @endif
+        @endif
+
+        <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Subtotal</td><td class="borderless">&#8369; {{ $gross_total }}</td></tr>
+        <!-- <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr> -->
+        <tr><td class="borderless"></td><td class="borderless next-heading">Total</td><td class="borderless next-heading">&#8369; {{ $order_total }}</td></tr>
+        <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order_total }}</td></tr>
+
+        @if($order->billing()->first()->payment_status == "paid")
+        <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> Payment has been accepted.</h2></td><td></td><td></td></tr>
+        @else
+        <tr><td><h2 class="next-heading"><span class="fa fa-thumbs-o-up">&nbsp;</span>Accept Payment</h2></td><td></td><td>
+          <button class="btn btn-primary margin-top-10 no-margin-left add-edit-btn" data-action="mark_as_paid" data-modal-target="#modal-mark-payment" data-action="fulfill_items">Mark as paid</button></td></tr>
+          @endif
+          @if(check_if_not_fulfilled($order))
+          <tr><td><h2 class="next-heading"><span class="fa fa-truck">&nbsp;</span>Fulfill items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
+          @elseif(check_if_partially_fulfilled($order))
+          <tr><td><h2 class="next-heading"><span class="fa fa-truck">&nbsp;</span>Fulfill remaining items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
+          @else
+          <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> All items have been fulfilled.</h2></td><td></td><td></td></tr>
+          @endif
+
+        </table>
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+  </div><!-- /.col -->
+  <div class="col-xs-4">
+    <div class="box box-primary">
+      <div class="box-header">
+        <!-- <h3 class="box-title">{{ get_person_fullname($order->patient()->first()) }}</h3> -->
+        <div class="user-panel">
+          <div class="pull-left image">
+            <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          </div>
+          <div class="pull-left info">
+            <h3 class="color-black next-heading padding-customer">{{ get_person_fullname($order->patient()->first()) }}</h3>
           </div>
         </div>
-        <div class="box-body">
-          <hr class="margin-top-5"/> 
-          <h3 class="next-heading align-center">Shipping Address</h3>
-          <p class="align-center">{{ ucfirst($order->recipient_address) }}</p>
-          <hr class="margin-top-5"/> 
-          <p class="align-center"><i class="fa fa-phone-square">&nbsp;</i>{{ $order->recipient_contactNumber }}</p>
-          <hr class="margin-top-5"/> 
-          <p class="align-center"><i class="fa fa-truck"></i> <b>Shipping Method:</b> {{ ucFirst($order->modeOfDelivery) }}</p>
-          <hr class="margin-top-5"/> 
-          <p class="align-center"><span class="pf pf-cash-on-delivery"></span><span class="pf pf-paypal"></span><span class="pf pf-credit-card"></span> <b>Payment Option:</b> {{ ucFirst($order->billing()->first()->payment_method) }}</p>
-          <hr class="margin-top-5"/> 
-          <p class="align-center"><i class="fa fa-building"></i> <b>Chosen Branch:</b> {{ ucFirst($order->branch()->first()->name) }}</p>
-        </div>
       </div>
-      @if(check_if_order_had_approved_prescriptions($order))
-      <div class="box box-success">
-        <div class="box-header">
-          <h2 class="next-heading align-center">Prescriptions</h2>
-        </div>
-        <div class="box-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Date Uploaded</th>
-              </tr>
-            </thead>
-            <tbody>
-             @foreach($order_details_with_prescriptions as $order_details_with_prescription)
-             <tr>
-              <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
-              <td>
-                <a href="javascript:void(0);" class="add-edit-btn" data-action="preview_image" data-modal-target="#modal-view-prescription" data-target="#view-prescription-form">
-                  <img class="img-responsive primary-photo table-size-image" name="photo" src="{{ URL::to('/db/uploads/user_'.$order->patient_id.'/'.$order_details_with_prescription->patient_prescriptions()->first()->filename) }}" alt="Photo">
-                </a>
-              </td>
-              <td>{{ Carbon\Carbon::parse($order_details_with_prescription->patient_prescriptions()->first()->created_at)->toDayDateTimeString() }}</td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
+      <div class="box-body">
+        <hr class="margin-top-5"/> 
+        <h3 class="next-heading align-center">Shipping Address</h3>
+        <p class="align-center">{{ ucfirst($order->recipient_address) }}</p>
+        <hr class="margin-top-5"/> 
+        <p class="align-center"><i class="fa fa-phone-square">&nbsp;</i>{{ $order->recipient_contactNumber }}</p>
+        <hr class="margin-top-5"/> 
+        <p class="align-center"><i class="fa fa-truck"></i> <b>Shipping Method:</b> {{ ucFirst($order->modeOfDelivery) }}</p>
+        <hr class="margin-top-5"/> 
+        <p class="align-center"><span class="pf pf-cash-on-delivery"></span><span class="pf pf-paypal"></span><span class="pf pf-credit-card"></span> <b>Payment Option:</b> {{ ucFirst($order->billing()->first()->payment_method) }}</p>
+        <hr class="margin-top-5"/> 
+        <p class="align-center"><i class="fa fa-building"></i> <b>Chosen Branch:</b> {{ ucFirst($order->branch()->first()->name) }}</p>
       </div>
     </div>
-    @endif
+    @if(check_if_order_had_approved_prescriptions($order))
+    <div class="box box-success">
+      <div class="box-header">
+        <h2 class="next-heading align-center">Prescriptions</h2>
+      </div>
+      <div class="box-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Date Uploaded</th>
+            </tr>
+          </thead>
+          <tbody>
+           @foreach($order_details_with_prescriptions as $order_details_with_prescription)
+           <tr>
+            <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
+            <td>
+              <a href="javascript:void(0);" class="add-edit-btn" data-action="preview_image" data-modal-target="#modal-view-prescription" data-target="#view-prescription-form">
+                <img class="img-responsive primary-photo table-size-image" name="photo" src="{{ URL::to('/db/uploads/user_'.$order->patient_id.'/'.$order_details_with_prescription->patient_prescriptions()->first()->filename) }}" alt="Photo">
+              </a>
+            </td>
+            <td>{{ Carbon\Carbon::parse($order_details_with_prescription->patient_prescriptions()->first()->created_at)->toDayDateTimeString() }}</td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
   </div>
+  @endif
+</div>
 </div><!-- /.row -->
 
 <form method="post" name="order_form_nothing">
