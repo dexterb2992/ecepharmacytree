@@ -10,7 +10,7 @@
       </div><!-- /.box-header -->
       <div class="box-body">
         <table class="table" >
-          <?php $order_total = 0; ?>
+          <?php $order_total = 0; $gross_total = 0; ?>
           @foreach($order_details as $order_detail)
           <?php $product_total = $order_detail->price * $order_detail->quantity; ?>
           <tr>
