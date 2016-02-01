@@ -15,9 +15,25 @@
           <tr>
             <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
             <td>{{ $order_detail->pname }}</td>
-            <td>&#8369; {{ $order_detail->pprice.' x '.$order_detail->quantity }}</td>
-            <td>&#8369; {{ ($order_detail->pprice * $order_detail->quantity) }}</td>
-            <?php $order_total = $order_total + ($order_detail->pprice * $order_detail->quantity); ?>
+            <td>&#8369; {{ $order_detail->price.' x '.$order_detail->quantity }}</td>
+            <td>&#8369; {{ ($order_detail->price * $order_detail->quantity) }}
+              @if($order->promo_id > 0)
+              <?php $product_total = $order_detail->price * $order_detail->quantity; ?>
+              <br/>
+              <b>
+                @if($order_detail->promo_type == 'peso_discount')
+                <?php $product_total -= $order_detail->peso_discount ?>
+                &#8369; {{ $product_total }}
+                @elseif($order_detail->promo_type == 'percentage_discount')
+                <?php $product_total -= $order_detail->percentage_discount ?>                
+                &#8369; {{ $product_total }}
+                @elseif($order_detail->promo_type == 'free_gift')
+                {{ 'free gift '.$order_detail->free_gift }}
+              </b>
+              @endif
+            </td>
+            
+            <?php $order_total += $product_total; ?>
           </tr>
           @endforeach
           <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
@@ -25,7 +41,7 @@
           <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr>
           <tr><td class="borderless"></td><td class="borderless next-heading">Total</td><td class="borderless next-heading">&#8369; {{ $order_total }}</td></tr>
           <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order_total }}</td></tr>
-          
+
           @if($order->billing()->first()->payment_status == "paid")
           <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> Payment has been accepted.</h2></td><td></td><td></td></tr>
           @else
@@ -39,7 +55,7 @@
             @else
             <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> All items have been fulfilled.</h2></td><td></td><td></td></tr>
             @endif
-            
+
           </table>
         </div><!-- /.box-body -->
       </div><!-- /.box -->
@@ -159,7 +175,7 @@
                   <b>Unfulfilled: {{ $order_detail->quantity - $order_detail->qty_fulfilled }}</b>
                   @elseif($order_detail->quantity > $order_detail->available_quantity)
                   <div class="input-group">
-                  <input type="hidden" name="order_detail_pid[{{ $order_detail->id }}]" value="{{ $order_detail->product_id }}">
+                    <input type="hidden" name="order_detail_pid[{{ $order_detail->id }}]" value="{{ $order_detail->product_id }}">
                     <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->available_quantity }}" max="{{ $order_detail->available_quantity }}" min="0">
                     <div class="input-group-addon">
                       of  <strong>{{ $order_detail->quantity - $order_detail->qty_fulfilled }}</strong>
@@ -168,14 +184,14 @@
                   <b>Limited Stocks</b>
                   @else
                   <div class="input-group">
-                  <input type="hidden" name="order_detail_pid[{{ $order_detail->id }}]" value="{{ $order_detail->product_id }}">
+                    <input type="hidden" name="order_detail_pid[{{ $order_detail->id }}]" value="{{ $order_detail->product_id }}">
                     <input type="number" name="order_fulfillment_qty[{{ $order_detail->id }}]" class="form-control" value="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" max="{{ $order_detail->quantity - $order_detail->qty_fulfilled }}" min="0">
                     <div class="input-group-addon">
                       of  <strong>{{ $order_detail->quantity - $order_detail->qty_fulfilled }}</strong>
                     </div>
                   </div>
                   @endif
-                  
+
                 </td>
               </tr>
               @endforeach
