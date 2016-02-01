@@ -12,15 +12,13 @@
         <table class="table" >
           <?php $order_total = 0; ?>
           @foreach($order_details as $order_detail)
+          <?php $product_total = $order_detail->price * $order_detail->quantity; ?>
           <tr>
-            <!-- <strong><i class="fa fa-close"></i> Unfulfilled</strong> -->
             <td>{{ $order_detail->pname }}</td>
             <td>&#8369; {{ $order_detail->price.' x '.$order_detail->quantity }}</td>
-            <td>&#8369; {{ ($order_detail->price * $order_detail->quantity) }}
+            <td>&#8369; {{ $product_total }}
               @if($order->promo_id > 0)
-              <?php $product_total = $order_detail->price * $order_detail->quantity; ?>
-              <br/>
-              <b>
+              <br/><b>
                 @if($order_detail->promo_type == 'peso_discount')
                 <?php $product_total -= $order_detail->peso_discount; ?>
                 &#8369; {{ $product_total }}
@@ -29,6 +27,7 @@
                 &#8369; {{ $product_total }}
                 @elseif($order_detail->promo_type == 'free_gift')
                 {{ 'free gift '.$order_detail->free_gift }}
+                @endif
               </b>
               @endif
             </td>
