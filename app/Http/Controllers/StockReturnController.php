@@ -47,17 +47,15 @@ class StockReturnController extends Controller
         $lesser_lot_number = [];
         $temp_lot_number = [];
 
-        $activity_log = "Returned ";
+        $activity_log = [];
 
         foreach ($order->lot_numbers as $lot_number) {
             $lot_number->load('inventory');
-
             if( $input['all_product_is_returned'] == 1 ){
-                $activity_log.= "$lot_number->quantity {$lot_number->inventory->product->packing} to 
-                        <a href='".route('Inventory::index')."?q={$lot_number->inventory->lot_number}' 
-                                target='_blank'>Lot# {$lot_number->inventory->lot_number} </a>\n ";
+                $activity_log[] = "$lot_number->quantity ".str_auto_plural($lot_number->inventory->product->packing,$lot_number->quantity)
+                    ." to<a href='".route('Inventory::index')."?q={$lot_number->inventory->lot_number}' 
+                    target='_blank'>Lot# {$lot_number->inventory->lot_number} </a> ";
             }
-
         }
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
@@ -79,10 +77,11 @@ class StockReturnController extends Controller
         if( $input['all_product_is_returned'] == 1 ){
             foreach ($arr_lot_numbers as $lot_number) {
                 $input['products_return_qtys'] = [$lot_number['inventory']['product_id'] => $lot_number['quantity']];
+
             }
         }
 
-        if( !isset($input['products_return_qtys']) ){
+        if( !isset($input['products_return_qtys']) && $input['all_product_is_returned'] != 1 ){
             return Redirect::back()->withInput()->withFlash_message([
                 'msg' => 'Sorry, some things are missing when you submit your request. Please try again.',
                 'type' => 'error'
@@ -98,6 +97,7 @@ class StockReturnController extends Controller
         
 
         // continue returning items to inventory
+        if( isset($input["products_return_qtys"]) ){
             foreach($input['products_return_qtys'] as $key_product_id => $input_value){
                 $sr_detail = new ProductStockReturn;
                 $sr_detail->product_id = $key_product_id;
@@ -125,13 +125,20 @@ class StockReturnController extends Controller
 
                         $inventory->available_quantity = $inventory->available_quantity + $returned_qty;
                         $inventory->save();
-                        $activity_log.= "$input_value $product->packing to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
+                        // $activity_log[] = "$input_value to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
+                        //             target='_blank'>Lot# $inventory->lot_number </a>\n ";
+
+                        $activity_log[] ="$input_value ".str_auto_plural($inventory->product->packing, $input_value)
+                                    ." to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
                                     target='_blank'>Lot# $inventory->lot_number </a>\n ";
                     }
                 }
 
                 $sr_detail->save();
             }
+        }
+
+        $activity_log = implode(", \n", $activity_log);
 
         if( $input['all_product_is_returned'] == 1  ){
             $order->is_returned = 1;
@@ -142,7 +149,7 @@ class StockReturnController extends Controller
         if( $stock_return->save() ){
             Log::create([
                 'user_id' => Auth::user()->id,
-                'action'  => $activity_log,
+                'action'  => "Returned $activity_log",
                 'table' => 'inventories'
             ]);
 

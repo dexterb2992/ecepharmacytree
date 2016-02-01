@@ -20,7 +20,7 @@ class PromoRepository {
         $dfp = DiscountsFreeProduct::find($input['id']);
         $dfp->quantity_required = $input["discount_detail_minimum_type"] == "minimum_purchase" ? 0 : $input['quantity_required'];
         $dfp->minimum_purchase = $input["discount_detail_minimum_type"] == "minimum_purchase" ? $input['minimum_purchase'] : 0;
-
+        $dfp->is_every = isset($input["is_every"]) ? $input['is_every'] : 0;
 
         if( !isset($input["discount_detail_discount_type"]) ){
             $dfp->percentage_discount = 0;
@@ -135,6 +135,6 @@ class PromoRepository {
                     "is_allowed" => false
                     );
         }
-        return [];
+        return ["is_allowed" => true];
     }
 }

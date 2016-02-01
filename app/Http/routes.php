@@ -72,9 +72,11 @@ Route::get('check_basket', 'BasketController@check_basket');
 	// ->withBranch_name("ECE Marketing - Davao");
 // });
 Route::get('compute-referral-points/{referral_id}', 'PointsController@store');
-Route::get('test/{referral_id}', function ($referral_id){
-	dd(get_uplines($referral_id, true, true));
+Route::get('test', function (){
+	
 });
+
+Route::get('compute_basket_points', 'BasketController@compute_basket_points');
 
 Route::get('get_clinic_records', 'ApiController@getClinicRecords');
 
