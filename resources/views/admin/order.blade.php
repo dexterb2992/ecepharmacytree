@@ -50,6 +50,24 @@
         @endif
         @endif
 
+        @if($order->billing()->first()->coupon_discount > 0)
+        <tr>
+          <td>Points Discount</td>
+          <td></td>
+          <?php $order_total -= $order->billing()->first()->points_discount; ?>
+          <td>{{ $order->billing()->first()->points_discount }}</td>
+        </tr>
+        @endif
+
+        @if($order->billing()->first()->coupon_discount > 0)
+        <tr>
+          <td>Coupon Discount</td>
+          <td></td>
+          <?php $order_total -= $order->billing()->first()->coupon_discount; ?>
+          <td>{{ $order->billing()->first()->coupon_discount }}</td>
+        </tr>
+        @endif
+
         <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
         <tr><td class="borderless"></td><td class="borderless type-subdued">Subtotal</td><td class="borderless">&#8369; {{ $gross_total }}</td></tr>
         <!-- <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr> -->
