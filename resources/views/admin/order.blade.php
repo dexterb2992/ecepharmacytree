@@ -22,10 +22,10 @@
               <br/>
               <b>
                 @if($order_detail->promo_type == 'peso_discount')
-                <?php $product_total -= $order_detail->peso_discount ?>
+                <?php $product_total -= $order_detail->peso_discount; ?>
                 &#8369; {{ $product_total }}
                 @elseif($order_detail->promo_type == 'percentage_discount')
-                <?php $product_total -= $order_detail->percentage_discount ?>                
+                <?php $product_total -= $order_detail->percentage_discount; ?>                
                 &#8369; {{ $product_total }}
                 @elseif($order_detail->promo_type == 'free_gift')
                 {{ 'free gift '.$order_detail->free_gift }}
