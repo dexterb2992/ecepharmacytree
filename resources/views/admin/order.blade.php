@@ -55,7 +55,7 @@
           <td>Points Discount</td>
           <td></td>
           <?php $order_total -= $order->billing()->first()->points_discount; ?>
-          <td><b>&#8369;{{ $order->billing()->first()->points_discount }}</b></td>
+          <td><b>&#8369; {{ $order->billing()->first()->points_discount }}</b></td>
         </tr>
         @endif
 
@@ -64,7 +64,7 @@
           <td>Coupon Discount</td>
           <td></td>
           <?php $order_total -= $order->billing()->first()->coupon_discount; ?>
-          <td><b>&#8369;{{ $order->billing()->first()->coupon_discount }}</b></td>
+          <td><b>&#8369; {{ $order->billing()->first()->coupon_discount }}</b></td>
         </tr>
         @endif
 
