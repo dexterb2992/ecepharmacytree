@@ -36,11 +36,12 @@
             </td>
             
             <?php $order_total += $product_total; ?>
+            <?php $gross_total += $order_detail->price * $order_detail->quantity; ?>
           </tr>
           @endforeach
           <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
-          <tr><td class="borderless"></td><td class="borderless type-subdued">Subtotal</td><td class="borderless">&#8369; {{ $order_total }}</td></tr>
-          <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr>
+          <tr><td class="borderless"></td><td class="borderless type-subdued">Subtotal</td><td class="borderless">&#8369; {{ $gross_total }}</td></tr>
+          <!-- <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr> -->
           <tr><td class="borderless"></td><td class="borderless next-heading">Total</td><td class="borderless next-heading">&#8369; {{ $order_total }}</td></tr>
           <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order_total }}</td></tr>
 
