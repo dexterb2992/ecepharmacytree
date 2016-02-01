@@ -18,7 +18,7 @@
             <td>&#8369; {{ $order_detail->price.' x '.$order_detail->quantity }}</td>
             <td>
               @if($order_detail->promo_id > 0)
-              <i style="text-decoration:line-through">&#8369; {{ $product_total }}</i>
+              <p style="text-decoration:line-through">&#8369; {{ $product_total }}</p>
               <br/><b>
                 @if($order_detail->promo_type == 'peso_discount')
                 <?php $product_total -= $order_detail->peso_discount; ?>
