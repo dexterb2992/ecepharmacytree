@@ -34,8 +34,6 @@
             <b>&#8369; {{ $product_total }}</b>
             @endif
           </td>
-
-
         </tr>
 
         <?php $order_total += $product_total; ?>
@@ -47,7 +45,8 @@
         <tr><td>Delivery Charge</td><td></td><td>{{ 'Free' }}</td></tr>
         @else
         <?php $order_total += $order->delivery_charge; ?>
-        <tr><td>Delivery Charge</td><td></td><td>{{ $order->delivery_charge }}</td></tr>
+        <?php $gross_total += $order->delivery_charge; ?>
+        <tr><td>Delivery Charge</td><td></td><td><b>&#8369; {{ $order->delivery_charge }}</b></td></tr>
         @endif
         @endif
 
