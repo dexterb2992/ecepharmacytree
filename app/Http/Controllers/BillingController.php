@@ -50,7 +50,7 @@ class BillingController extends Controller
                 $order = $billing->order()->first();
                 $patient = $order->patient()->first();
 
-                $multilined_notif = array(1 => 'Congratulations '.get_person_fullname($patient).' ! ', 2 => ' you just acquired '.$message->points_earned.' points from your purchase. We have accepted your payment for order #'.$order->id);
+                $multilined_notif = array(1 => 'Congratulations '.get_person_fullname($patient).' ! ', 2 => ' You just acquired '.$message->points_earned.' points from your purchase.', 3 => 'Thank you for ordering through Pharmacy Tree App Order#'.$order->id);
 
                 $data = array( 'message' => json_encode($multilined_notif), 'title' => 'Pharmacy Tree');
 
