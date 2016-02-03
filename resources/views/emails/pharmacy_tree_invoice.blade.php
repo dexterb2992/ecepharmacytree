@@ -71,7 +71,6 @@
         <div class="row" style="box-sizing: border-box;">
           <!-- accepted payments column -->
           <div class="col-xs-6" style="box-sizing: border-box;float: left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;width: 50%;">
-            <p class="lead" style="box-sizing: border-box;margin: 0px 0px 10px;font-size: 21px;">Order Details:</p>
             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;box-sizing: border-box;margin: 0px 0px 10px;color: #777;padding: 19px;border-radius: 4px;min-height: 20px;margin-bottom: 20px;background-color: #F5F5F5;border: 1px solid #E3E3E3;box-shadow: none !important;">
               <strong> Order ID: {{ $order_id }} </strong><br style="box-sizing: border-box;">
               Order receiving option: {{ $modeOfDelivery }}<br style="box-sizing: border-box;">
