@@ -52,7 +52,8 @@ class BillingController extends Controller
 
                 $multilined_notif = array(1 => 'Congratulations '.get_person_fullname($patient).' ! ', 2 => 'You just acquired '.$message->points_earned.' points.', 3 => 'Thank you for your order. Ref#'.$order->id.'.');
 
-                $data = array( 'message' => json_encode($multilined_notif), 'title' => 'Pharmacy Tree');
+                $data = array( 'message' => json_encode($multilined_notif), 'title' => 'Pharmacy Tree', 'intent' => 'OrderDetailsActivity', 
+                    'order_id' => $order->id);
 
                 $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
 
