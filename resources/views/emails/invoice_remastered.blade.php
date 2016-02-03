@@ -54,7 +54,7 @@
                                   <td width="25%" class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;padding: 5px 0;border-top: #eee 1px solid;">
                                     @if($order_detail->promo_id > 0)
                                     <p style="text-decoration:line-through">&#8369; {{ $product_total }}</p>
-                                    <br style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;"/><b>
+                                    <b>
                                     @if($order_detail->promo_type == 'peso_discount')
                                     <?php $product_total -= $order_detail->peso_discount; ?>
                                     &#8369; {{ $product_total }}
