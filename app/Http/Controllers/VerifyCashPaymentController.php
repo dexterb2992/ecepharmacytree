@@ -50,6 +50,10 @@ class VerifyCashPaymentController extends Controller
 		$promo_id = $input['promo_id'];
 		$promo_type = $input['promo_type'];
 
+		if($promo_type == 'free_delivery'){
+			$delivery_charge = 0;
+		}
+
 		$basket_response = json_decode($this->basket->check_and_adjust_basket($user_id, $branch_server_id));
 
 		if($basket_response->basket_quantity_changed){
@@ -147,7 +151,7 @@ class VerifyCashPaymentController extends Controller
 
 			if(count($results) == $counter) {
 				$gross_total = $totalAmount;
-				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount;
+				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount + $delivery_charge;
 
 				$billing = new Billing;
 				$billing->order_id = $order_id;
