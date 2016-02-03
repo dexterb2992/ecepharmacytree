@@ -23,6 +23,8 @@ class CreateOrderDetailsTable extends Migration
                                      // the already completed orders' amount won't be affected by the changes
             $table->integer('prescription_id')->default(0);
             $table->double('quantity');
+            $table->double('quantity_returned')->default(0); // default returned quantity - this will be used to check if the products
+                                                            // of this order detail is returnable 
             $table->string('type')->default('delivery'); // pickup or delivery
             $table->integer('qty_fulfilled')->default(0);
             $table->integer('promo_id');

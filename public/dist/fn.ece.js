@@ -125,7 +125,7 @@ $.fn.hasParent = function(a) {
         }
 
         if( typeof min !== 'undefined' ){
-            if( val <  parseFloat(min) ){
+            if( val <  parseFloat(min) || $(this).val() == "" ){
                 $(this).val(min);
             }
         }

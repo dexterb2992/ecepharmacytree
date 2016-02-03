@@ -73,7 +73,7 @@ class OrderController extends Controller
                 $stock_return->load('product_stock_returns');
             }
 
-            foreach ($order->order_details as $order_detail) {
+            foreach ($order->order_details as $key => $order_detail) {
                 $order_detail->load('product');
             }
             

@@ -219,7 +219,8 @@ tr.selected td{
 }
 
 .alert-important {
-    background-color: #00c0ef !important;
+    /*background-color: #00c0ef !important;*/
+    background-color: #dd4b39 !important;
     color: white;
 }
 
@@ -439,3 +440,41 @@ label[for="product_applicability"], label[for="discount_type"], label[for="has_f
 }
 
 .ui-autocomplete { z-index:2147483647; }
+
+.navbar-nav>.user-menu>.dropdown-menu>.user-body a {
+    color: white !important;
+}
+
+.product-list-items{
+    margin-right: 10px;
+}
+
+.returned-item-qty{
+    max-height: 23px;
+    margin-right: 4px;
+    text-align: center;
+    max-width: 60px;
+}
+
+.btn-xxs{
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    padding-top: 2px;
+    margin-bottom: 2px;
+}
+
+table#tbl_stock_returns>tbody>tr>td, table#tbl_stock_returns>thead>tr>th {
+    text-align: center;
+}
+
+
+.glow {
+    -webkit-animation: glow 1s infinite alternate;
+}
+
+@-webkit-keyframes glow {
+    to {
+        text-shadow: -1px 1px 8px currentColor, 1px -1px 8px #fff;
+    }
+}

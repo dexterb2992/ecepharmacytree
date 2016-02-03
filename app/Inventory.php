@@ -27,4 +27,8 @@ class Inventory extends Model
     public function lot_number(){
         return $this->hasOne('ECEPharmacyTree\OrderLotNumber');
     }
+
+    public function product_stock_returns(){
+        return $this->belongsTo('ECEPharmacyTree\ProductStockReturn');
+    }
 }

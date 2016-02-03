@@ -43,4 +43,8 @@ class Product extends Model
         return $this->hasMany('ECEPharmacyTree\FreeProduct');
     }
 
+    public function stock_return(){
+        return $this->hasMany('ECEPharmacyTree\ProductStockReturn');    
+    }
+
 }

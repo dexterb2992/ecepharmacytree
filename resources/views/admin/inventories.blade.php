@@ -1,5 +1,6 @@
 <?php 
 	use Carbon\Carbon; 
+	use Illuminate\Support\Str; 
 	$is_critical = false;
 ?>
 
@@ -15,7 +16,7 @@
 						<a href="#tab_inventory" data-toggle="tab">Stocks</a>
 					</li>
 					<li>
-						<a href="#tab_stock_returns" data-toggle="tab">Stock Returns</a>
+						<a href="#tab_stock_returns" data-toggle="tab">Stock Returns </a>
 					</li>
 					<li>
 						<a href="#tab_logs" data-toggle="tab">Logs</a>
@@ -136,11 +137,11 @@
 								Stock Returns
 							</div>
 							<div class="box-body">
-								<table class="table table-bordered table-hover datatable" id="tbl_inventory_logs">
+								<table class="table table-bordered table-hover" id="tbl_stock_returns">
 									<thead>
 										<tr>
-											<th>User</th>
-											<th>Action</th>
+											<th>Customer</th>
+											<th>Items</th>
 											<th>Date</th>
 										</tr>
 									</thead>
@@ -148,12 +149,42 @@
 										@foreach($stock_returns as $stock_return)
 											<tr>
 												<td>{{ $stock_return->order->patient->fname.' '.$stock_return->order->patient->lname }}</td>
-												<td>{!! $stock_return->action !!}</td>
+												<td>
+													<?php $x = 0; ?>
+													@foreach($stock_return->product_stock_returns as $psr)
+													
+														@if($x < 2)
+                                                        <span class="btn-success btn btn-xs" data-toggle="tooltip" 
+                                                            data-original-title="{!! $psr->quantity.' '.str_auto_plural($psr->product->packing, $psr->quantity).' of '.$psr->product->name !!}">
+                                                            {!! $psr->quantity.' x '.Str::limit($psr->product->name, 29) !!}
+                                                        </span>
+                                                        @else
+                                                            <div class="more_{{ $stock_return->id }}" style="display:none;">
+                                                                <span class="btn-success btn btn-xs" data-toggle="tooltip" 
+                                                                	data-original-title="{!! $psr->quantity.' '.str_auto_plural($psr->product->packing, $psr->quantity).' of '.$psr->product->name !!}">
+                                                                    {!! $psr->quantity.' x '.Str::limit($psr->product->name, 29) !!}
+                                                                </span>
+                                                            </div>
+                                                            @if($x == count($stock_return->product_stock_returns)-1)
+                                                                <span data-toggle="tooltip" data-target=".more_{{ $stock_return->id }}" data-original-title="Expand to show more products"
+                                                                    class="btn btn-xs bg-purple show-hide-more-products" data-id="{{ $stock_return->id }}">
+                                                                    <i class="fa-eye fa"></i>
+                                                                </span>
+                                                            @endif
+                                                           
+                                                        @endif
+                                                        <?php $x++; ?>
+													@endforeach
+													<a class="btn-xs btn btn-warning btn-flat classify-returned-products" data-toggle="tooltip"
+														data-original-title="Classify returned items" data-id="{{ $stock_return->id }}">
+														<i class="fa-filter fa"></i> 
+													</a>
+												</td>
 												<td>
 													<?php $date_added = Carbon::parse($stock_return->created_at); ?>
-													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->formatLocalized('%A %d %B %Y') }}">
+													<span class="label label-primary" data-toggle="tooltip" data-original-title="{{ $date_added->diffForHumans() }}">
 														<i class="fa-clock-o fa"></i> 
-														{{ $date_added->diffForHumans() }}
+														{{ $date_added }}
 													</span>
 												</td>
 											</tr>
@@ -301,7 +332,7 @@
 	        			{!! Form::open(['action' => 'StockReturnController@store', 'method' => 'post', 'id' => 'form_return_n_refund']) !!}
 		        			<div class="modal-header">
 		        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        				<h4>STOCK RETURNS / REFUND FORM</h4>
+		        				<h4>STOCK RETURNS / RETURN FORM</h4>
 		        			</div>
 		        			<div class="modal-body">
 		        				<div class="form-group">
@@ -385,6 +416,27 @@
 			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return to Stocks</button>
 			        		</div>
 			        	{!! Form::close() !!}
+	        		</div>
+	        	</div>
+	        </div>
+
+	        <!-- Modal For Each Returned Product -->
+	        <div class="modal" id="modal-stock-return-details">
+	        	<div class="modal-dialog">
+	        		<div class="modal-content">
+	        			<div class="modal-header">
+	        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        			<h4 class="alert alert-warning align-center glow" style="margin-top: -2px;margin-right: -4px;">
+		        				Remove the newly returned items from inventory
+		        			</h4>
+	        			</div>
+	        			<div class="modal-body">
+	        				<span id="returned_stocks_lists_request_status"></span>
+	        				<ul class="todo-list" id="returned_stocks_lists">
+			                    
+			                </ul>
+	        			</div>
+	        			<div class="modal-footer"></div>
 	        		</div>
 	        	</div>
 	        </div>
