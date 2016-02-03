@@ -122,11 +122,12 @@ class OrderController extends Controller
             if($affected > 0){
                 $order = Order::findOrFail($input['order_id']);
                 $patient = $order->patient()->first();
-                dd($patient->regId);
 
                 if($order->modeOfDelivery == 'pickup'){
+                    var_dump('i was here');
                     $multilined_notif = array(1 => 'Your order is ready for delivery !', 2 => 'Your order must arrive on or before specified date', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
                 } else {
+                    var_dump('else i was here');
                     $multilined_notif = array(1 => 'Your order is ready for pickup !', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
                 }
 
