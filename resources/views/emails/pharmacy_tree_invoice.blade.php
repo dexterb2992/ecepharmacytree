@@ -45,7 +45,7 @@
         </div><!-- /.row -->
 
         <!-- Table row -->
-        <div class="row" style="box-sizing: border-box;">
+        <div class="row" style="box-sizing: border-box;margin-top:20px;">
           <div class="col-xs-12 table-responsive" style="box-sizing: border-box;width: 100%;float: left;position: relative;min-height: .01%;padding-right: 15px;padding-left: 15px;overflow-x: auto;">
             <table class="table table-striped" style="box-sizing: border-box;border-spacing: 0;border-collapse: collapse;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 0;">
               <thead style="box-sizing: border-box;">
@@ -68,16 +68,16 @@
           </div><!-- /.col -->
         </div><!-- /.row -->
 
-        <div class="row" style="box-sizing: border-box;">
+        <div class="row" style="box-sizing: border-box;margin-top:20px;">
           <!-- accepted payments column -->
-          <div class="col-xs-6" style="box-sizing: border-box;float: left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;width: 50%;">
+          <div class="col-xs-6" style="box-sizing: border-box;min-height: 1px;padding-right: 15px;padding-left: 15px;width: 50%;">
             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;box-sizing: border-box;margin: 0px 0px 10px;color: #777;padding: 19px;border-radius: 4px;min-height: 20px;margin-bottom: 20px;background-color: #F5F5F5;border: 1px solid #E3E3E3;box-shadow: none !important;">
               <strong> Order ID: {{ $order_id }} </strong><br style="box-sizing: border-box;">
               Order receiving option: {{ $modeOfDelivery }}<br style="box-sizing: border-box;">
               Payment method: {{ $payment_method }}
             </p>
           </div><!-- /.col -->
-          <div class="col-xs-6" style="box-sizing: border-box;float: left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;width: 50%;">
+          <div class="col-xs-6" style="box-sizing: border-box;padding-right: 15px;padding-left: 15px;width: 50%;">
             <!-- <p class="lead" style="box-sizing: border-box;margin: 0px 0px 10px;font-size: 21px;">Amount Due 2/22/2014</p> -->
             <div class="table-responsive" style="box-sizing: border-box;min-height: .01%;overflow-x: auto;">
               <table class="table" style="box-sizing: border-box;border-spacing: 0;border-collapse: collapse;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 0;">
