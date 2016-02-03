@@ -150,7 +150,7 @@ class VerifyCashPaymentController extends Controller
 
 
 			if(count($results) == $counter) {
-				$gross_total = $totalAmount;
+				$gross_total = $totalAmount + $delivery_charge;
 				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount + $delivery_charge;
 
 				$billing = new Billing;
