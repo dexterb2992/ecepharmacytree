@@ -67,6 +67,7 @@ class VerifyCashPaymentController extends Controller
 
 		$counter = 0;
 		$totalAmount = 0;
+		$grosstotalAmount = 0;
 		$gross_total = 0;
 		$totalAmount_final = 0;
 		$order_id = 0;
@@ -87,6 +88,8 @@ class VerifyCashPaymentController extends Controller
 			$undiscounted_total += $quantity * $result->price;
 			$per_item_total = $quantity * $result->price;
 
+			$grosstotalAmount += $per_item_total;
+			
 			if($result->promo_type == "peso_discount"){
 				$totalAmount += $per_item_total - $result->peso_discount;
 			} else if ($result->promo_type == "percentage_discount") {
@@ -150,7 +153,7 @@ class VerifyCashPaymentController extends Controller
 
 
 			if(count($results) == $counter) {
-				$gross_total = $totalAmount + $delivery_charge;
+				$gross_total = $grosstotalAmount + $delivery_charge;
 				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount + $delivery_charge;
 
 				$billing = new Billing;
