@@ -124,7 +124,7 @@ class OrderController extends Controller
                 $patient = $order->patient()->first();
                 dd($patient->regId);
 
-                if($order->modeOfDelivery == "delivery"){
+                if($order->modeOfDelivery == 'pickup'){
                     $multilined_notif = array(1 => 'Your order is ready for delivery !', 2 => 'Your order must arrive on or before specified date', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
                 } else {
                     $multilined_notif = array(1 => 'Your order is ready for pickup !', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
