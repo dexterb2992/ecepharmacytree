@@ -50,7 +50,7 @@
         @endif
         @endif
 
-        @if($order->billing()->first()->coupon_discount > 0)
+        @if($order->billing()->first()->points_discount > 0)
         <tr>
           <td>Points Discount</td>
           <td></td>

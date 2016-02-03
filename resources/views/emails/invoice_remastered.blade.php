@@ -88,7 +88,7 @@
                               @endif
                               @endif
 
-                              @if($order->billing()->first()->coupon_discount > 0)
+                              @if($order->billing()->first()->points_discount > 0)
                               <tr style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                 <td width="55%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;padding: 5px 0;border-top: #eee 1px solid;">Points Discount</td>
                                 <td width="20%" class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;padding: 5px 0;border-top: #eee 1px solid;"></td>
