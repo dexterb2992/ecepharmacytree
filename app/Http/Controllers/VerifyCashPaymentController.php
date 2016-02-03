@@ -50,6 +50,10 @@ class VerifyCashPaymentController extends Controller
 		$promo_id = $input['promo_id'];
 		$promo_type = $input['promo_type'];
 
+		if($promo_type == 'free_delivery'){
+			$delivery_charge = 0;
+		}
+
 		$basket_response = json_decode($this->basket->check_and_adjust_basket($user_id, $branch_server_id));
 
 		if($basket_response->basket_quantity_changed){
@@ -72,6 +76,7 @@ class VerifyCashPaymentController extends Controller
 		$current_product_price = 0;
 		$order_date = null;
 		$undiscounted_total = 0;
+		
 
 		foreach($results as $result) {
 			$counter += 1;
@@ -81,7 +86,7 @@ class VerifyCashPaymentController extends Controller
 			$prescription_id = $result->prescription_id;
 			$undiscounted_total += $quantity * $result->price;
 			$per_item_total = $quantity * $result->price;
-
+			
 			if($result->promo_type == "peso_discount"){
 				$totalAmount += $per_item_total - $result->peso_discount;
 			} else if ($result->promo_type == "percentage_discount") {
@@ -145,12 +150,12 @@ class VerifyCashPaymentController extends Controller
 
 
 			if(count($results) == $counter) {
-				$gross_total = $totalAmount;
-				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount;
+				$gross_total = $undiscounted_total + $delivery_charge;
+				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount + $delivery_charge;
 
 				$billing = new Billing;
 				$billing->order_id = $order_id;
-				$billing->gross_total = $undiscounted_total;
+				$billing->gross_total = $gross_total;
 				$billing->total = $totalAmount_final;
 				$billing->payment_status = $payment_status;
 				$billing->payment_method = $payment_method;
@@ -173,19 +178,19 @@ class VerifyCashPaymentController extends Controller
 
 
 				$setting = Setting::first();
-				
-				$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
-
-				$this->emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status);				
+				$order = Order::findOrFail($order_id);
+				$order_details = DB::select("SELECT od.id, od.promo_id, od.promo_type, od.peso_discount, od.percentage_discount, od.free_gift, od.promo_free_product_qty, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
+				$order_date = Carbon::parse($order_date)->toFormattedDateString();
+				$this->emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status, $order);				
 			}
 		}
 
 		echo json_encode($response);
 	}
 
-	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){
-		$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
-			compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'points_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
+	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status, $order){	
+		$res = $this->mailer->send( 'emails.invoice_remastered', 
+			compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'points_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status', 'order'), function ($m) use ($email) {
 				$m->subject('Pharmacy Tree Invoice');
 				$m->to($email);
 			});
