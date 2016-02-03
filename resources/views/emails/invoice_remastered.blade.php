@@ -53,7 +53,7 @@
                                   <td width="20%" class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;padding: 5px 0;border-top: #eee 1px solid;">&#8369; {{ $order_detail->price.' x '.$order_detail->quantity }}</td>
                                   <td width="25%" class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;padding: 5px 0;border-top: #eee 1px solid;">
                                     @if($order_detail->promo_id > 0)
-                                    <p style="text-decoration:line-through">&#8369; {{ $product_total }} &nbsp;</p>
+                                    <p style="text-decoration:line-through;margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">&#8369; {{ $product_total }}</p>
                                     <b>
                                     @if($order_detail->promo_type == 'peso_discount')
                                     <?php $product_total -= $order_detail->peso_discount; ?>
