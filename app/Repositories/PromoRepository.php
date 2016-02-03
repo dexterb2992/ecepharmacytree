@@ -88,11 +88,16 @@ class PromoRepository {
                 }
 
                 $promo->free_gifts = json_encode($free_gifts);
+            }else{
+                $promo->free_gifts = "";
             }
         }
 
         if( $promo->save() ){
             if( isset($input['product_id']) && count($input['product_id']) > 0 &&  $input["product_applicability"] == "SPECIFIC_PRODUCTS" ){
+                foreach ($promo->discounts as $discount) {
+                    $discount->delete();
+                }
                 foreach ($input['product_id'] as $key => $value) {
                     $dfp = new DiscountsFreeProduct;
                     $dfp->promo_id = $promo->id;
@@ -124,7 +129,7 @@ class PromoRepository {
     }
 
     public function check($input){
-        $today =  Carbon::today('Asia/Manila')->addHours(23 );
+        $today =  Carbon::today('Asia/Manila');
         $products = Product::all();
 
         $number_of_active_per_transaction_promo = Promo::where('end_date', '>=', $today)->where('product_applicability', '=', 'PER_TRANSACTION')->count();
@@ -136,5 +141,85 @@ class PromoRepository {
                     );
         }
         return ["is_allowed" => true];
+    }
+
+    public function discount_details($id){
+        $dfp = DiscountsFreeProduct::findOrFail($id);
+        if( $dfp->has_free_gifts == 1 ){ // get Free Gifts
+            $free_products = $dfp->free_products;
+            if( count($free_products) >= 1 ){
+                $free_products->load('product');
+            }
+
+        } 
+        
+        $dfp->discount_detail_minimum_type = 'quantity_required';
+
+        if( $dfp->minimum_purchase != 0 && $dfp->quantity_required == 0 ){
+            $dfp->discount_detail_minimum_type = 'minimum_purchase';
+        }
+
+        $dfp->discount_detail_discount_type = "percentage_discount";
+        if(  $dfp->peso_discount != 0 && $dfp->percentage_discount == 0 ){
+            $dfp->discount_detail_discount_type = "peso_discount";
+        }
+
+
+
+        return $dfp;
+    }
+
+    public function destroy($id){
+        $product = Promo::findOrFail($id);
+        if( $product->delete() )
+            return true;
+        return false;
+    }
+
+    public function show($id){
+        $promo = Promo::find($id);
+        $product_ids = [];
+
+        if( isset( $promo->id ) ){
+            if( $promo->product_applicability == "PER_TRANSACTION" ){
+                $promo->discount_type = "peso_discount";
+                if( $promo->percentage_discount != 0 && $promo->peso_discount == 0 ){
+                    $promo->discount_type = "percentage_discount";
+                }
+
+                // if product_applicability = PER TRANSACTION
+                if( $promo->free_gifts != "" ){
+                    $free_gifts = [];
+                    $promo->per_transaction_has_free_gifts = 1;
+                    $arr_free_gifts = json_decode($promo->free_gifts);
+
+                    $product_ids = [];
+
+                    // dd($arr_free_gifts);
+                    foreach ($arr_free_gifts as $gift) {
+                        $product = Product::find($gift->product_id);
+                        $product->quantity_free = $gift->quantity;
+                        array_push($free_gifts, $product);
+                        array_push($product_ids, $gift->product_id);
+                    }
+                    $promo->free_gifts = $free_gifts;
+                    $promo->product_id = $product_ids;
+                }
+            }else{
+                if( isset($promo->free_gifts) ){
+                    $promo->free_gifts = json_decode($promo->free_gifts);
+                }
+                foreach ($promo->discounts as $discount) {
+                    $product_ids[] = ['id' => $discount->product_id];
+                }
+                $promo->product_id = $product_ids;
+                $promo->specific_promo_product_ids = $product_ids;
+            }
+
+            
+
+            
+            return $promo;
+        }
     }
 }

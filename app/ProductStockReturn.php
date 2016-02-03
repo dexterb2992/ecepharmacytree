@@ -14,6 +14,10 @@ class ProductStockReturn extends Model
     }
 
     public function product(){
-    	return $this->has('ECEPharmacyTree\Product');
+    	return $this->belongsTo('ECEPharmacyTree\Product');
+    }
+
+    public function inventory(){
+    	return $this->belongsTo('ECEPharmacyTree\Inventory');
     }
 }

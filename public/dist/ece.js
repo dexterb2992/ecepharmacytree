@@ -72,10 +72,11 @@ $(document).ready(function (){
         "aaSorting": [[ 0, "desc" ]]
     });
 
-    $('.table-referrals').DataTable({
+    $('.table-referrals, #tbl_stock_returns').DataTable({
         "iDisplayLength": -1,
         "aaSorting": [[ 2, "desc" ]]
     });
+
 
     $('.btn').addClass("btn-flat");
 
@@ -218,7 +219,6 @@ $(document).ready(function (){
                             window.hasAdditionalAddress = true;
                         }
 
-
                         form.find("input[name='"+i+"']").val(row);
                         
                         var cbox = form.find('input[name="'+i+'"][type="checkbox"]');
@@ -239,7 +239,7 @@ $(document).ready(function (){
                             radio.attr("checked", "checked");
                             radio.iCheck('uncheck');
                             radio.iCheck('check');
-                            
+                            radio.trigger("change");
                         }
 
                         if(row == "") {
@@ -299,7 +299,7 @@ $(document).ready(function (){
 
 
                 form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing");
-                form.find('#inventories_product_id').attr("disabled", "disabled");
+                form.find('#inventories_product_id, #inventory_quantity').attr("disabled", "disabled");
                 updateInventoryProductQty();
 
                 // add your conditions & magic codes here when form fields has been filled 
@@ -354,6 +354,15 @@ $(document).ready(function (){
                         });
                     }
 
+                    if( data.hasOwnProperty("specific_promo_product_ids") ){
+                        var products_list = $("#specific_promo_product_ids");
+                        var htmls = "";
+                        $.each(data.free_gifts, function (i, row){
+                            $("#specific_promo_product_ids option[value='"+row.id+"']").attr("selected", "selected");
+                        });
+                        $("#specific_promo_product_ids").select2();
+                    }
+
 
             });
         } else if(action == "preview_image"){
@@ -368,7 +377,7 @@ $(document).ready(function (){
             title = "Add new "+dataTitle;
 
             _clear_form_data(form);
-            form.find('#inventories_product_id').removeAttr("disabled").trigger("change");
+            form.find('#inventories_product_id, #inventory_quantity').removeAttr("disabled").trigger("change");
             updateInventoryProductQty();
         }
 
@@ -1114,14 +1123,22 @@ $("#add_gallery").click(function (){
                 // make sure that the order is already paid
                 // if( row.billing.payment_status == 'paid' ){
                     $.each(row.order_details, function (index, order_detail){
-                        var pId = order_detail.product.id;
+                        var pId = order_detail.product.id, return_status = "";
+
+                        if( order_detail.quantity > order_detail.quantity_returned ){
+                            productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
+                            window.maxReturnQty[order_detail.product.id] = {pId: pId, qty: order_detail.quantity-order_detail.quantity_returned, name: order_detail.product.name, price: order_detail.price};
+                        }
+
+                        if( order_detail.quantity == order_detail.quantity_returned ){
+                            return_status = '<span class="label label-info" style="margin-left: 4px">Returned</span>';
+                        }
+
                         productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
-                                order_detail.quantity+" "+
-                                str_auto_plural(order_detail.product.packing, order_detail.quantity)+
-                                ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
-                                order_detail.product.name+"</a>,<br/>";
-                        productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                        window.maxReturnQty[order_detail.product.id] = {pId: pId, qty: order_detail.quantity, name: order_detail.product.name, price: order_detail.price};
+                                    order_detail.quantity+" "+
+                                    str_auto_plural(order_detail.product.packing, order_detail.quantity)+
+                                    ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
+                                    order_detail.product.name+"</a>"+return_status+",<br/>";
                     });
 
                     // let's show the discounts that the user has availed
@@ -1355,29 +1372,41 @@ $("#add_gallery").click(function (){
                 if( minimum_purchase.is(":visible") === true && (minimum_purchase.val() == "" ||  minimum_purchase.val() == "0" ) ){
                     hasError = true;
                     _error(minimum_purchase, "This field is required.");
+                    console.log("error 1");
                 }
 
                 if( quantity_required.is(":visible") === true && (quantity_required.val() == "" ||  quantity_required.val() == "0" ) ){
                     hasError = true;
                     _error(quantity_required, "This field is required.");
+                    console.log("error 2");
                 }
 
                 if( quantity_required.is(":visible") === false &&  minimum_purchase.is(":visible") === false ){
                     hasError = true;
                     _error($this.find('label[for="discount_detail_minimum_type"]:last'), "This field is required.");
+                    console.log("error 3");
                 }
 
-                if( has_free_gifts.val() == 1 &&  (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) ){
+                if(  quantity_required.is(":visible") === true && (has_free_gifts.val() == 1 || has_free_gifts.val() == 0) &&  
+                    (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) ){
                     hasError = true;
                     _error(promo_details_gifts, "Please select atleast one product.");
+                    console.log("error 4");
                 }
 
+                // if(  quantity_required.is(":visible") === true && ( has_free_gifts.val() == 0 || has_free_gifts.val() == 1 ) ){
+                //     hasError = true;
+                //     _error(has_free_gifts, "This field is required.");
+                //     console.log("error 5");
+                // }
+
                 // when no offer is selected
-                if( has_free_gifts.val() == 1 &&  (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) &&
+                if( quantity_required.is(":visible") === false && (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) &&
                     (peso_discount.val() == "" || peso_discount.val() == 0) && (percentage_discount.val() == "" || percentage_discount.val() == 0)
                 ){
                     hasError = true;
-                    $("#specific_product_offers").next('div.label-danger').html("Please add atleast one offer (Free Gifts, Free Delivery, Discount) to continue.").fadeIn().delay(5000).fadeOut(400);
+                    $("#specific_product_offers").next('div.label-danger').html("Please specify the discount to continue.").fadeIn().delay(5000).fadeOut(400);
+                    console.log("error 5");
                 }
 
                 $.each($(document).find('#form_promo_product_info input.gift_quantities'), function (i, row){
@@ -1509,6 +1538,116 @@ $("#add_gallery").click(function (){
 
     $("#inventory_lot_number").bind("change keyup",function(){
         checkLotNumber( $(this) );
+    });
+
+    $(".classify-returned-products").click(function (){
+        var $this = $(this), id = $this.attr("data-id");
+
+        $.ajax({
+            url: '/get-stock-returns/'+id,
+            type: 'post',
+            data: {_token: $("input[name='_token']").val() }
+        }).done(function (data){
+            if( !data.error ){
+                var html = "";
+
+                if( data.length > 0 ){
+                    $.each(data, function (i, row){
+                        var option = "", max_removable = 0;
+                        max_removable = row.quantity - row.defective_quantity;
+                        if( row.quantity > row.defective_quantity ){
+                            option = '<input type="text" class="number returned-item-qty" value="'+max_removable+'" data-max="'+max_removable+'" data-min="1" placeholder="Defective quantity" name="damaged_qty">'+
+                                    '<a href="#!" class="btn-xxs btn-danger btn btn-flat btn-defective-qty" data-id="'+row.id+'">Mark as defective</a></div>';
+                        }else{
+                            option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
+                                ' marked as defective)</span>';
+                        }
+
+                        html+= '<li>'+
+                                '<div class="row" style="margin-right: 0px;">'+
+                                    '<div class="col-md-7">'+
+                                        '<span class="handle">'+
+                                            '<i class="fa fa-arrows"></i>'+
+                                        '</span>'+
+                                        '<span class="product-list-items" title="'+row.product.name+'">'+row.product.name+'</span>'+
+                                    '</div>'+
+                                    '<div class="col-md-5">'+option+
+                                '</div>'+
+                            '</li>';
+                    });
+                }else{
+                    html = "Sorry, we can't find anything.";
+                }
+                if( data.error ){
+                    html = data.error;
+                }
+                
+                $("#returned_stocks_lists").html(html);
+                $("#modal-stock-return-details").modal("show");
+                allowNumericOnly($(".number"));
+            }
+
+        });
+
+    });
+
+    $(document).on("click", ".btn-defective-qty", function (){
+        var $this = $(this), txtbox = $this.prev("input"), qty = txtbox.val();
+        $.ajax({
+            url: "/update-defective-stocks",
+            type: "post",
+            dataType: "json",
+            data: {
+                _token: $("input[name='_token']").val(),
+                id: $this.attr("data-id"),
+                defective_quantity: qty
+            },
+            beforeSend: function (){
+                $this.addClass("disabled").html("Loading..");
+            }
+        }).done(function (data){
+            $this.removeClass("disabled").html("Mark as defective");
+            var alert = '';
+            if( data.status == 200 ){
+                var option = "", row = data.data;
+
+                alert = '<br/><span class="label label-success">Successfully removed '+qty+' '+
+                        str_auto_plural(row.product.packing, qty)+' of '+row.product.name+' from the inventory</span>';
+                   
+                $("#returned_stocks_lists_request_status").append(alert);
+                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
+                    $(this).prev('br').remove();
+                    $(this).remove();
+                });
+
+                if( row.defective_quantity == row.quantity ){
+                    txtbox.fadeOut();
+                    $this.fadeOut(function (){
+                        option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
+                                ' marked as defective)</span>';
+                        if( txtbox.next('span').length > 0 ){
+                            txtbox.next('span').remove().after(option);
+                        }else{
+                            txtbox.after(option);
+                        }
+                    });
+                }else{
+                    var max_removable = row.quantity - row.defective_quantity;
+                    txtbox.attr("data-max", max_removable).val(max_removable);
+                }
+            }else if(data.error){
+                alert = '<br/><span class="label label-danger">'+data.error+'</span>';
+                console.log(alert);
+                $("#returned_stocks_lists_request_status").append(alert);
+                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
+                    $(this).remove();
+                });
+            }
+            
+
+        });
     });
 });
 

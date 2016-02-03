@@ -28,8 +28,7 @@ class PromoController extends Controller
      */
     public function index()
     {
-        $today =  Carbon::today('Asia/Manila')->addHours(23 );
-        // $promos = Promo::where('end_date', '>=', $today)->get();
+        $today =  Carbon::today('Asia/Manila');
         $products = Product::all();
 
         $promos = Promo::where('end_date', '>=', $today)
@@ -92,33 +91,7 @@ class PromoController extends Controller
     public function show($id)
     {
 
-        $promo = Promo::find($id);
-        $product_ids = [];
-
-        if( isset( $promo->id ) ){
-            foreach ($promo->discounts as $discount) {
-                $product_ids[] = ['id' => $discount->product_id];
-            }
-            $promo->product_id = $product_ids;
-            if( $promo->free_gifts != "" ){
-                $free_gifts = [];
-                $promo->per_transaction_has_free_gifts = 1;
-                $arr_free_gifts = json_decode($promo->free_gifts);
-
-                $product_ids = [];
-
-                // dd($arr_free_gifts);
-                foreach ($arr_free_gifts as $gift) {
-                    $product = Product::find($gift->product_id);
-                    $product->quantity_free = $gift->quantity;
-                    array_push($free_gifts, $product);
-                    array_push($product_ids, $gift->product_id);
-                }
-                $promo->free_gifts = $free_gifts;
-                $promo->product_id = $product_ids;
-            }
-            return $promo;
-        }
+        return $this->promo->show($id);
         
     }
 
@@ -151,45 +124,24 @@ class PromoController extends Controller
      */
     public function destroy()
     {
-        $product = Promo::findOrFail(Input::get("id"));
-        if( $product->delete() ){
+        if( $this->promo->destroy(Input::get("id")) ){
             session()->flash("flash_message", ["msg" => "Promo has been successfully removed.", "type" => "danger"]);
             return json_encode( array("status" => "success") );
         }
+
         session()->flash("flash_message", ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "warning"]);
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+       
     }
 
     public function details($id){
-        $dfp = DiscountsFreeProduct::findOrFail($id);
-        if( $dfp->has_free_gifts == 1 ){ // get Free Gifts
-            $free_products = $dfp->free_products;
-            if( count($free_products) >= 1 ){
-                $free_products->load('product');
-            }
 
-        } 
-        
-        $dfp->discount_detail_minimum_type = 'quantity_required';
-
-        if( $dfp->minimum_purchase != 0 && $dfp->quantity_required == 0 ){
-            $dfp->discount_detail_minimum_type = 'minimum_purchase';
-        }
-
-        $dfp->discount_detail_discount_type = "percentage_discount";
-        if(  $dfp->peso_discount != 0 && $dfp->percentage_discount == 0 ){
-            $dfp->discount_detail_discount_type = "peso_discount";
-        }
-
-
-
-        return $dfp;
+        return $this->promo->discount_details($id);
     }
 
     public function update_details(){
-        $input = Input::all();
         
-        if( $this->promo->update_details($input) )
+        if( $this->promo->update_details(Input::all()) )
             return Redirect::back()->withFlash_message([
                 'type' => 'success',
                 'msg' => "Promo details has been successfully saved."

@@ -31,8 +31,22 @@ class InventoryController extends Controller
         $products = Product::all();
         $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
         $reason_codes = StockReturnCode::all();
-        $orders = Order::all();
-        $stock_returns = StockReturn::all();
+        $orders = Order::where('branch_id', session()->get('selected_branch'))->get();
+        // $stock_returns = StockReturn::all();
+        $stock_returns = DB::table('stock_returns')
+            ->join('orders', function ($join) {
+                $join->on('orders.id', '=', 'stock_returns.order_id');
+            })->where('orders.branch_id', '=', session()->get('selected_branch'))
+            ->get(['stock_returns.id']);
+
+        $new_stock_returns = [];
+        foreach ($stock_returns as $stock_return) {
+            array_push($new_stock_returns, StockReturn::find($stock_return->id));
+           
+        }
+
+        $stock_returns = $new_stock_returns;
+        
         foreach ($stock_returns as $stock_return) {
             $stock_return->load('order');
             $stock_return->load('inventory');
@@ -49,10 +63,25 @@ class InventoryController extends Controller
     public function show_all(){
         $inventories = Inventory::where('branch_id', session()->get('selected_branch'))->get();
         $products = Product::all();
-        $orders = Order::all();
-        $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
+        $orders = Order::where('branch_id', session()->get('selected_branch'))->get();
+        $logs = Log::where('table', 'inventories')->where('branch_id', '=', session()->get('selected_branch'))
+            ->orderBy('id', 'desc')->get();
         $reason_codes = StockReturnCode::all();
-        $stock_returns = StockReturn::all();
+
+        $stock_returns = DB::table('stock_returns')
+            ->join('orders', function ($join) {
+                $join->on('orders.id', '=', 'stock_returns.order_id');
+            })->where('orders.branch_id', '=', session()->get('selected_branch'))
+            ->get(['stock_returns.id']);
+
+        $new_stock_returns = [];
+        foreach ($stock_returns as $stock_return) {
+            array_push($new_stock_returns, StockReturn::find($stock_return->id));
+           
+        }
+
+        $stock_returns = $new_stock_returns;
+
         foreach ($stock_returns as $stock_return) {
             $stock_return->load('order');
             $stock_return->load('inventory');
@@ -90,7 +119,8 @@ class InventoryController extends Controller
                 'user_id' => Auth::user()->id,
                 'action'  => 'Added an inventory with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
                                 target="blank">Lot# '.$inventory->lot_number.'</a>',
-                'table' => 'inventories'
+                'table' => 'inventories',
+                'branch_id' => session()->get('selected_branch')
             ]);
             return Redirect::to( route('Inventory::index') )->withFlash_message([
                 "type" => "success",
@@ -141,7 +171,8 @@ class InventoryController extends Controller
                 'user_id' => Auth::user()->id,
                 'action'  => 'Updated an inventory information with <a href="'.route('Inventory::index').'?q='.$inventory->lot_number.'" 
                                 target="blank">Lot #'.$inventory->lot_number.'</a>',
-                'table' => 'inventories'
+                'table' => 'inventories',
+                'branch_id' => session()->get('selected_branch')
             ]);
             return Redirect::to( route('Inventory::index') )->withFlash_message([
                 'type' => 'success',
@@ -196,7 +227,8 @@ class InventoryController extends Controller
                                 <br/>Available quantity was changed from $old_av to $new_av. The number of sold items for inventory 
                                 with ID# $inventory->id:  $sold_products_count. <br/>
                                 <code>Reason:</code> ".$input['reason'],
-                'table' => 'inventories'
+                'table' => 'inventories',
+                'branch_id' => session()->get('selected_branch')
             ]);
 
             return Redirect::back()->withFlash_message([
@@ -225,7 +257,8 @@ class InventoryController extends Controller
                 Log::create([
                     'user_id' => Auth::user()->id,
                     'action'  => "Deleted inventory with Lot# $inventory->lot_number",
-                    'table' => 'inventories'
+                    'table' => 'inventories',
+                    'branch_id' => session()->get('selected_branch')
                 ]);
                 session()->flash("flash_message", ["msg" => "A stock with Lot# $inventory->lot_number has been deleted.", "type" => "danger"]);
                 sleep(1);
