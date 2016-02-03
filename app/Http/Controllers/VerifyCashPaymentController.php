@@ -138,10 +138,10 @@ class VerifyCashPaymentController extends Controller
 				else
 					$response['order_details_message_'.$counter] = "Sorry, we can't process your request right now. ";
 
-				if(BasketPromo::where('basket_id', '=', $result->id)->delete()) 
-					$response['basket_promo_message_'.$counter] = "basket promos deleted on database";
-				else 
-					$response['basket_promo_message_'.$counter] = "basket promos not deleted on database";
+				// if(BasketPromo::where('basket_id', '=', $result->id)->delete()) 
+				// 	$response['basket_promo_message_'.$counter] = "basket promos deleted on database";
+				// else 
+				// 	$response['basket_promo_message_'.$counter] = "basket promos not deleted on database";
 			}
 
 
@@ -167,10 +167,10 @@ class VerifyCashPaymentController extends Controller
 				$response["billing_message"] = "Sorry, we can't process your request right now.";
 
 
-				if(Basket::where('patient_id', '=', $user_id)->delete()) 
-					$response['basket_message'] = "basket/s deleted on database";
-				else 
-					$response['basket_message'] = "basket/s not deleted on database";
+				// if(Basket::where('patient_id', '=', $user_id)->delete()) 
+				// 	$response['basket_message'] = "basket/s deleted on database";
+				// else 
+				// 	$response['basket_message'] = "basket/s not deleted on database";
 
 
 				$setting = Setting::first();
