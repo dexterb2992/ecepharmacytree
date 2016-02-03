@@ -129,7 +129,7 @@
                 </tr> -->
                 <tr style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                   <td class="content-block aligncenter" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;padding: 0 0 0;text-align: center;">
-                    ECE Pharmacy, Philippines
+                    ECE Marketing, Philippines
                   </td>
                 </tr>
               </table>
