@@ -1,36 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html style="font-family: sans-serif;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;">
   <head>
     <meta charset="UTF-8">
     <title>AdminLTE 2 | Invoice</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.4 -->
-    <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <!-- Font Awesome Icons -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <!-- Ionicons -->
-    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
-    <!-- Theme style -->
-    <link href="../../dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
-  <body onload="window.print();">
+  <body onload="window.print();" style="margin: 0;">
     <div class="wrapper">
       <!-- Main content -->
-      <section class="invoice">
+      <section class="invoice" style="display: block;">
         <!-- title row -->
         <div class="row">
           <div class="col-xs-12">
             <h2 class="page-header">
               <i class="fa fa-globe" style="display: inline-block;font: normal normal normal 14px/1 FontAwesome;font-size: inherit;text-rendering: auto;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;transform: translate(0, 0);"></i> AdminLTE, Inc.
-              <small class="pull-right" style="float: right;">Date: 2/10/2014</small>
+              <small class="pull-right" style="float: right;font-size: 80%;">Date: 2/10/2014</small>
             </h2>
           </div><!-- /.col -->
         </div>
@@ -39,7 +22,7 @@
           <div class="col-sm-4 invoice-col">
             From
             <address>
-              <strong>Admin, Inc.</strong><br>
+              <strong style="font-weight: bold;">Admin, Inc.</strong><br>
               795 Folsom Ave, Suite 600<br>
               San Francisco, CA 94107<br>
               Phone: (804) 123-5432<br>
@@ -49,7 +32,7 @@
           <div class="col-sm-4 invoice-col">
             To
             <address>
-              <strong>John Doe</strong><br>
+              <strong style="font-weight: bold;">John Doe</strong><br>
               795 Folsom Ave, Suite 600<br>
               San Francisco, CA 94107<br>
               Phone: (555) 539-1037<br>
@@ -57,55 +40,55 @@
             </address>
           </div><!-- /.col -->
           <div class="col-sm-4 invoice-col">
-            <b>Invoice #007612</b><br>
+            <b style="font-weight: bold;">Invoice #007612</b><br>
             <br>
-            <b>Order ID:</b> 4F3S8J<br>
-            <b>Payment Due:</b> 2/22/2014<br>
-            <b>Account:</b> 968-34567
+            <b style="font-weight: bold;">Order ID:</b> 4F3S8J<br>
+            <b style="font-weight: bold;">Payment Due:</b> 2/22/2014<br>
+            <b style="font-weight: bold;">Account:</b> 968-34567
           </div><!-- /.col -->
         </div><!-- /.row -->
 
         <!-- Table row -->
         <div class="row">
           <div class="col-xs-12 table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" style="border-spacing: 0;border-collapse: collapse;">
               <thead>
                 <tr>
-                  <th>Qty</th>
-                  <th>Product</th>
-                  <th>Serial #</th>
-                  <th>Description</th>
-                  <th>Subtotal</th>
+                  <th style="padding: 0;">Qty</th>
+                  <th style="padding: 0;">Product</th>
+                  <th style="padding: 0;">Serial #</th>
+                  <th style="padding: 0;">Description</th>
+                  <th style="padding: 0;">Subtotal</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>1</td>
-                  <td>Call of Duty</td>
-                  <td>455-981-221</td>
-                  <td>El snort testosterone trophy driving gloves handsome</td>
-                  <td>$64.50</td>
+                  <td style="padding: 0;">1</td>
+                  <td style="padding: 0;">Call of Duty</td>
+                  <td style="padding: 0;">455-981-221</td>
+                  <td style="padding: 0;">El snort testosterone trophy driving gloves handsome</td>
+                  <td style="padding: 0;">$64.50</td>
                 </tr>
                 <tr>
-                  <td>1</td>
-                  <td>Need for Speed IV</td>
-                  <td>247-925-726</td>
-                  <td>Wes Anderson umami biodiesel</td>
-                  <td>$50.00</td>
+                  <td style="padding: 0;">1</td>
+                  <td style="padding: 0;">Need for Speed IV</td>
+                  <td style="padding: 0;">247-925-726</td>
+                  <td style="padding: 0;">Wes Anderson umami biodiesel</td>
+                  <td style="padding: 0;">$50.00</td>
                 </tr>
                 <tr>
-                  <td>1</td>
-                  <td>Monsters DVD</td>
-                  <td>735-845-642</td>
-                  <td>Terry Richardson helvetica tousled street art master</td>
-                  <td>$10.70</td>
+                  <td style="padding: 0;">1</td>
+                  <td style="padding: 0;">Monsters DVD</td>
+                  <td style="padding: 0;">735-845-642</td>
+                  <td style="padding: 0;">Terry Richardson helvetica tousled street art master</td>
+                  <td style="padding: 0;">$10.70</td>
                 </tr>
                 <tr>
-                  <td>1</td>
-                  <td>Grown Ups Blue Ray</td>
-                  <td>422-568-642</td>
-                  <td>Tousled lomo letterpress</td>
-                  <td>$25.99</td>
+                  <td style="padding: 0;">1</td>
+                  <td style="padding: 0;">Grown Ups Blue Ray</td>
+                  <td style="padding: 0;">422-568-642</td>
+                  <td style="padding: 0;">Tousled lomo letterpress</td>
+                  <td style="padding: 0;">$25.99</td>
                 </tr>
               </tbody>
             </table>
@@ -116,10 +99,10 @@
           <!-- accepted payments column -->
           <div class="col-xs-6">
             <p class="lead">Payment Methods:</p>
-            <img src="../../dist/img/credit/visa.png" alt="Visa">
-            <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
-            <img src="../../dist/img/credit/american-express.png" alt="American Express">
-            <img src="../../dist/img/credit/paypal2.png" alt="Paypal">
+            <img src="../../dist/img/credit/visa.png" alt="Visa" style="border: 0;">
+            <img src="../../dist/img/credit/mastercard.png" alt="Mastercard" style="border: 0;">
+            <img src="../../dist/img/credit/american-express.png" alt="American Express" style="border: 0;">
+            <img src="../../dist/img/credit/paypal2.png" alt="Paypal" style="border: 0;">
             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
               Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
             </p>
@@ -127,22 +110,22 @@
           <div class="col-xs-6">
             <p class="lead">Amount Due 2/22/2014</p>
             <div class="table-responsive">
-              <table class="table">
+              <table class="table" style="border-spacing: 0;border-collapse: collapse;">
                 <tr>
-                  <th style="width:50%">Subtotal:</th>
-                  <td>$250.30</td>
+                  <th style="width: 50%;padding: 0;">Subtotal:</th>
+                  <td style="padding: 0;">$250.30</td>
                 </tr>
                 <tr>
-                  <th>Tax (9.3%)</th>
-                  <td>$10.34</td>
+                  <th style="padding: 0;">Tax (9.3%)</th>
+                  <td style="padding: 0;">$10.34</td>
                 </tr>
                 <tr>
-                  <th>Shipping:</th>
-                  <td>$5.80</td>
+                  <th style="padding: 0;">Shipping:</th>
+                  <td style="padding: 0;">$5.80</td>
                 </tr>
                 <tr>
-                  <th>Total:</th>
-                  <td>$265.24</td>
+                  <th style="padding: 0;">Total:</th>
+                  <td style="padding: 0;">$265.24</td>
                 </tr>
               </table>
             </div>
