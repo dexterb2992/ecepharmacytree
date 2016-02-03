@@ -36,6 +36,8 @@ class BillingController extends Controller
         $billing = Billing::where('order_id', $input['order_id'])->first();
         $billing->payment_status = "paid";
         $billing->or_txn_number = $input['or_txn_number'];
+        $earned_points = $this->points->compute_basket_points($input);
+        dd($earned_points);
 
         if( $billing->save() ){
 
@@ -49,7 +51,7 @@ class BillingController extends Controller
                 $order = $billing->order()->first();
                 $patient = $order->patient()->first();
 
-                $multilined_notif = array(1 => 'Thank you '.get_person_fullname($patient).' ! ', 2 => 'We have accepted your payment for order #'.$order->id);
+                $multilined_notif = array(1 => 'Congratulations '.get_person_fullname($patient).' ! ', 2 => ' you\'ve just acquired'.$.' We have accepted your payment for order #'.$order->id);
 
                 $data = array( 'message' => json_encode($multilined_notif), 'title' => 'Pharmacy Tree');
 

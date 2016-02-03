@@ -160,6 +160,7 @@
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
   <input type="hidden" name="order_id" value="{{ $order->id }}">
   <input type="hidden" name="referral_id" value ="{{ $order->patient()->first()->referral_id }}">
+  <input type="hidden" name="patient_id" value ="{{ $order->patient()->first()->id }}">
   <div class="modal" id="modal-mark-payment">
     <div class="modal-dialog">
       <div class="modal-content">
