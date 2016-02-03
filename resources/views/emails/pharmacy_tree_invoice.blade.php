@@ -81,7 +81,7 @@
           <div class="col-xs-6" style="box-sizing: border-box;float: left;position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;width: 50%;">
             <!-- <p class="lead" style="box-sizing: border-box;margin: 0px 0px 10px;font-size: 21px;">Amount Due 2/22/2014</p> -->
             <div class="table-responsive" style="box-sizing: border-box;min-height: .01%;overflow-x: auto;">
-              <table class="table" style="box-sizing: border-box;border-spacing: 0;border-collapse: collapse;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 0;margin-top: 10px;box-sizing: border-box;margin: 0px 0px 10px;color: #777;padding: 19px;border-radius: 4px;min-height: 20px;margin-bottom: 20px;background-color: #F5F5F5;border: 1px solid #E3E3E3;box-shadow: none !important;">
+              <table class="table" style="box-sizing: border-box;border-spacing: 0;border-collapse: collapse;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 0;">
                 <tr style="box-sizing: border-box;">
                   <th style="width: 50%;box-sizing: border-box;padding: 0;text-align: left;">Subtotal:</th>
                   <td style="box-sizing: border-box;padding: 0;">{{ $gross_total }}</td>
