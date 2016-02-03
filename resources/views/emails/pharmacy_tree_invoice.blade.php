@@ -46,7 +46,7 @@
 
         <!-- Table row -->
         <div class="row" style="box-sizing: border-box;margin-top:20px;">
-          <div class="col-xs-12 table-responsive" style="box-sizing: border-box;width: 100%;float: left;position: relative;min-height: .01%;padding-right: 15px;padding-left: 15px;overflow-x: auto;">
+          <div class="col-xs-12 table-responsive" style="box-sizing: border-box;width: 100%;min-height: .01%;padding-right: 15px;padding-left: 15px;overflow-x: auto;">
             <table class="table table-striped" style="box-sizing: border-box;border-spacing: 0;border-collapse: collapse;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 0;">
               <thead style="box-sizing: border-box;">
                 <tr style="box-sizing: border-box;">
