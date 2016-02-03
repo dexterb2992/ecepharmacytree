@@ -184,7 +184,7 @@ class VerifyCashPaymentController extends Controller
 	}
 
 	function emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status){
-		$res = $this->mailer->send( 'emails.sales_invoice_remastered', 
+		$res = $this->mailer->send( 'emails.pharmacy_tree_invoice', 
 			compact('email', 'recipient_name', 'recipient_address', 'recipient_contactNumber', 'payment_method', 'modeOfDelivery', 'coupon_discount', 'points_discount', 'totalAmount_final', 'gross_total', 'order_id', 'order_details', 'order_date', 'status'), function ($m) use ($email) {
 				$m->subject('Pharmacy Tree Invoice');
 				$m->to($email);
