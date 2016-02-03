@@ -201,9 +201,10 @@ class PointsRepository {
                     }
                     $limit--;
                 }
+
                 $billing->points_computation_status = 1;
                 if( $billing->save() )
-                    return json_encode(array('msg' => 'Points and Referral Commission has been updated.', 'status' => 200));
+                    return json_encode(array('msg' => 'Points and Referral Commission has been updated.', 'points_earned' => $points_earned, 'status' => 200));
 
                 return json_encode(array('msg' => 'Points and Referral Commission has not been fully updated.', 'status' => 500));
             }
