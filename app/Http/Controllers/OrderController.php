@@ -120,6 +120,7 @@ class OrderController extends Controller
             $affected = DB::update($sql);
 
             if($affected > 0){
+                dd($affected);
                 $order = Order::findOrFail($input['order_id']);
                 $patient = $order->patient()->first();
 
@@ -128,7 +129,7 @@ class OrderController extends Controller
                 } else {
                     $multilined_notif = array(1 => 'Your order is ready for pickup !', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
                 }
-                
+
                 $data = array( 'message' => json_encode($multilined_notif), 'title' => 'Pharmacy Tree', 'intent' => 'OrderDetailsActivity', 
                     'order_id' => $order->id);
 
