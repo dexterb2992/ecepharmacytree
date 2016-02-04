@@ -10,6 +10,7 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 
 use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Doctor;
+use ECEPharmacyTree\Clinic;
 use ECEPharmacyTree\User;
 use ECEPharmacyTree\ProductGroup;
 use ECEPharmacyTree\Product;
@@ -36,6 +37,7 @@ class NotificationsController extends Controller
         $product_groups = ProductGroup::where('is_new', '=', 1)->count();
         $products = Product::where('is_new', '=', 1)->count();
         $doctors = Doctor::where('is_new', '=', 1)->count();
+        $clinics = Clinic::where('is_new', '=', 1)->count();
         $promos = Promo::where('is_new', '=', 1)->count();
         $inventories = Inventory::where('is_new', '=', 1)->where('branch_id', '=', session()->get('selected_branch'))->count();
         $stock_returns = StockReturn::where('is_new', '=', 1)->with([
@@ -56,6 +58,7 @@ class NotificationsController extends Controller
             "sidebar_product_groups"    => $product_groups,
             "sidebar_products"  => $products,
             "sidebar_doctors"  => $doctors,
+            "sidebar_clinics"  => $clinics,
             "sidebar_promos"    => $promos,
             "sidebar_stock_items"   => $inventories,
             "sidebar_stock_returns" => $stock_returns,
@@ -81,6 +84,7 @@ class NotificationsController extends Controller
             'sidebar_product_groups' => 'ECEPharmacyTree\ProductGroup',
             'sidebar_products' => 'ECEPharmacyTree\Product',
             'sidebar_doctors' => 'ECEPharmacyTree\Doctor',
+            'sidebar_clinics' => 'ECEPharmacyTree\Clinic',
             'sidebar_promos' => 'ECEPharmacyTree\Promo',
             'sidebar_stock_items' => 'ECEPharmacyTree\Inventory' ,
             'sidebar_stock_returns' => 'ECEPharmacyTree\StockReturn',

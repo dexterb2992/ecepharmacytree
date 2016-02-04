@@ -77,6 +77,7 @@ class ProductController extends Controller
         $product->subcategory_id = $input['subcategory_id'];
         $product->sku = $input['sku'];
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
+        $product->is_freebie = $input['is_freebie'];
 
         if( $product->save() )
             return Redirect::to( route('Products::index') )->withFlash_message([
@@ -128,9 +129,10 @@ class ProductController extends Controller
         $product->packing = $input['packing'];
         $product->qty_per_packing = $input['qty_per_packing'];
         $product->subcategory_id = $input['subcategory_id'];
-        $product->sku = generate_sku();
+        $product->sku = $input['sku'];
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
-
+        $product->is_freebie = $input['is_freebie'];
+        
         if( $product->save() )
             return Redirect::to( route('Products::index') )->withFlash_message([
                 'type' => 'success', 'msg' => "Changes has been saved successfully."

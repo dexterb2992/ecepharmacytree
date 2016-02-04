@@ -192,8 +192,14 @@ class InventoryController extends Controller
         $new_quantity = $input["new_quantity"];
         $old_av = $inventory->available_quantity;
 
-        // get # of sold products on this inventory
-        $sold_products_count = OrderLotNumber::where('inventory_id', '=', $inventory->id)->sum('quantity');
+        // get # of sold products on this inventory based on branch_id                                       // available: 15; recived: 20;  naay gi return nga 9 & 2 -> 5 nalang ang sold qty
+        $sold_products_count = OrderLotNumber::where('inventory_id', '=', $inventory->id)->sum('quantity');  // 16
+        $data = ProductStockReturn::where('inventory_id', '=', $inventory->id)->get();
+        $returned_sold_products_count = $data->sum('quantity'); 
+        $returned_sold_defective_products_count = $data->sum('defective_quantity');
+
+        $sold_products_count = $sold_products_count - ($returned_sold_products_count - $returned_sold_defective_products_count);
+        // TODO TOMORROW: check order_lot_numbers & product_stock_returns for each inventory 
         
         if( $new_quantity < $sold_products_count ){
             return redirect()->back()->withFlash_message([

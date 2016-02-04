@@ -50,29 +50,9 @@ class PatientController extends Controller
         $members = Patient::withTrashed()->get();
         $regions = Region::all();
 
-        return view('admin.members')->withMembers($members)->withRegions($regions);
+        return view('admin.members')->withMembers($members)->withRegions($regions)->withTitle("Members");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -89,28 +69,6 @@ class PatientController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -122,10 +80,12 @@ class PatientController extends Controller
     {
         $id = Input::get('id');
         $member = Patient::findOrFail($id);
-
-        if($member->delete())
+        $name = get_person_fullname($member);
+        if($member->delete()){
+            session()->flash("flash_message", ["msg" => "$name has been blocked successfully.", "type" => "danger"]);
             return json_encode( array("status" => "success") );
-
+        }
+        session()->flash("flash_message", ["msg" => "Sorry we failed process your request. Please try again later.", "type" => "danger"]);
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 
@@ -134,9 +94,13 @@ class PatientController extends Controller
         $id = Input::get('id');
         $member = Patient::withTrashed()->findOrFail($id);
 
-        if($member->restore())
+        if($member->restore()){
+            $name = get_person_fullname($member);
+            session()->flash("flash_message", ["msg" => "$name's access has been restored successfully.", "type" => "info"]);
             return json_encode( array("status" => "success") );
+        }
 
+        session()->flash("flash_message", ["msg" => "Sorry we failed process your request. Please try again later.", "type" => "danger"]);
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

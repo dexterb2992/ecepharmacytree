@@ -37,7 +37,7 @@ class DoctorController extends Controller
         }
 
         return view('admin.doctors')->withDoctors($doctors)->withSpecialties($specialties)->withSubspecialties($subspecialties)
-        ->withSpecialty_names($specialty_names);
+        ->withSpecialty_names($specialty_names)->withTitle("Doctors");
     }
 
     /**

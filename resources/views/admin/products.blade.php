@@ -68,7 +68,13 @@
                                             <td>{{ $product->generic_name }}</td>
                                             <td>{!! Str::limit(rn2br($product->description), 150) !!}</td>
                                             <td>&#x20B1; {{ $product->unit_cost.' /'.$product->packing }}</td>
-                                            <td>&#x20B1; {{ $product->price.' /'.$product->packing }}</td>
+                                            <td>
+                                                @if( $product->is_freebie == 0 )
+                                                    &#x20B1; {{ $product->price.' /'.$product->packing }}
+                                                @else
+                                                    <span class="label label-info">FREE</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 {!! $product->qty_per_packing." ".str_auto_plural($product->unit, $product->qty_per_packing)." per ".$product->packing !!}
                                             </td>
@@ -167,7 +173,7 @@
 
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <div class="form-group">
-                                            <label for="name">Category Name <i>*</i></label>
+                                            <label for="name">Category Name <i><red>*</red></i></label>
                                             <input type="text" class="form-control" id="name" placeholder="Category name" name="name" required>
                                         </div>
                                     </div>
@@ -237,7 +243,7 @@
                                             {!! Form::select('category_id', $category_names, "null", ['class' => 'form-control select2']) !!}
                                         </div>  
                                         <div class="form-group">
-                                            <label for="name">Subcategory Name <i>*</i></label>
+                                            <label for="name">Subcategory Name <i><red>*</red></i></label>
                                             <input type="text" class="form-control" id="name" placeholder="Category name" name="name" required>
                                         </div>
                                     </div>
@@ -271,7 +277,7 @@
                             {!! Form::token() !!}
                             
                             <div class="form-group">
-                                <label for="subcategory_id">Category <i>*</i></label>
+                                <label for="subcategory_id">Category <i><red>*</red></i></label>
                                 <select class="form-control select2" name="subcategory_id" id="select_subcategory_id">
                                     @foreach($categories as $category)
                                         <optgroup label="{{ $category->name }}">
@@ -284,7 +290,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="name">Product name <i>*</i></label>
+                                <label for="name">Product name <i><red>*</red></i></label>
                                 <input type="text" class="form-control" id="name" placeholder="product name" name="name" required>
                             </div>
 
@@ -294,7 +300,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="description">Description <i>*</i></label>
+                                <label for="description">Description <i><red>*</red></i></label>
                                 <textarea class="form-control" name="description" required></textarea>
                             </div>
 
@@ -314,7 +320,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="prescription_required">Requires prescription? <i>*</i></label>
+                                <label for="prescription_required">Requires prescription? <i><red>*</red></i></label>
                                 <select class="form-control" name="prescription_required">
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
@@ -322,7 +328,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="price">Unit Cost <i>(per packing)*</i></label>
+                                <label for="price">Unit Cost <i>(per packing)<red>*</red></i></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">&#x20B1;</span>
                                     <input type="text" class="form-control number" name="unit_cost" required>
@@ -330,7 +336,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="price">Selling Price <i>(per packing)*</i></label>
+                                <label for="price">Selling Price <i>(per packing)<red>*</red></i></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">&#x20B1;</span>
                                     <input type="text" class="form-control number" name="price" required>
@@ -338,26 +344,32 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="packing">Packing <i>(Ex. box, bottle, strip, etc.)*</i></label>
+                                <label for="packing">Packing <i>(Ex. box, bottle, strip, etc.)<red>*</red></i></label>
                                 <input type="text" name="packing" class="form-control" placeholder="Ex. box, bottle, strip, etc." required>
                             </div>  
 
                             <div class="form-group">
-                                <label for="unit">Unit <i>(Ex. tablet, capsule, etc.)*</i></label>
+                                <label for="unit">Unit <i>(Ex. tablet, capsule, etc.)<red>*</red></i></label>
                                 <input type="text" class="form-control" name="unit" placeholder="Ex. tablet, capsule, etc." required>
                             </div>
 
                             <div class="form-group">
-                                <label for="qty_per_packing">Quantity per packing <i>(How many units are there in 1 packing?) *</i></label>
+                                <label for="qty_per_packing">Quantity per packing <i>(How many units are there in 1 packing?) <red>*</red></i></label>
                                 <input type="text" class="form-control number" name="qty_per_packing" title="How many units are there in 1 packing?" required>
                             </div>
 
                             <div class="form-group">
-                                <label>Default Critical Inventory Number <i>(Enter quantity by packing)</i>*</label>
+                                <label>Default Critical Inventory Number <i>(Enter quantity by packing)</i><red>*</red></label>
                                 <input class="form-control number" type="text" name="critical_stock" data-default-value="10"
                                     title="This will inform us when to notify you when any of the products is on a critical stock."/>
                             </div>
-
+                            <div class="form-group stock-return-actions">
+                                <label for="per_transaction_has_free_gifts">
+                                    <input type="checkbox" name="is_freebie" id="is_freebie" value="0" 
+                                    data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
+                                    Is Freebie? <i>(If checked, this product won't show on the customer's product listing)</i>
+                                </label>
+                            </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" name="submit">Save changes</button>

@@ -91,6 +91,12 @@
                     <i class="fa-user-md fa"></i><span id="sidebar_doctors">Doctors</span>
                 </a>
             </li>
+
+            <li class="treeview">
+                <a href="{{ route('clinics') }}">
+                    <i class="fa-hospital-o fa"></i><span id="sidebar_clinics">Clinics</span>
+                </a>
+            </li>
             
             <li class="treeview">
                 <a href="{{ route('Branches::index') }}">

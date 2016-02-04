@@ -28,6 +28,7 @@ class CreateProductsTable extends Migration
             $table->string('sku');
             $table->integer('critical_stock')->nullable();
             $table->integer('product_group_id')->default(0); // optional, foreign to product_groups
+            $table->integer('is_freebie')->default(0);
             $table->integer('is_new')->default(1);
             $table->timestamps();
             $table->softDeletes();

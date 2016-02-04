@@ -77,6 +77,10 @@ $(document).ready(function (){
         "aaSorting": [[ 2, "desc" ]]
     });
 
+    $('.table-points-log').DataTable({
+        "aaSorting": [[ 1, "desc" ]]
+    });
+
 
     $('.btn').addClass("btn-flat");
 
@@ -394,7 +398,7 @@ $(document).ready(function (){
 
         console.log("checking if hasAdditionalAddress ");
         setTimeout(function(){
-            if( window.hasAdditionalAddress == true ){
+            if( window.hasAdditionalAddress == true && $("#map").length > 0){
                 console.log("hasAdditionalAddress: yes");
                     initMap();
             }

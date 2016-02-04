@@ -10,7 +10,9 @@ use ECEPharmacyTree\Branch;
         <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">Branches</h3><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-branch" data-target="#form_edit_branch" data-action="create" data-title="branch"><i class="fa-plus fa"></i> Add New</button>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-branch" data-target="#form_edit_branch" data-action="create" data-title="branch">
+                    <i class="fa-plus fa"></i> Add New
+                </button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable">
