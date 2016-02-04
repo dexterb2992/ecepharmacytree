@@ -23,39 +23,44 @@ class SeniorCitizenController extends Controller
 
     if($request->hasFile('image')){
         $file = $request->file('image');
-
-        if ($file->getClientSize() > 5242880) {
-            $response['error'] = true;
-            $response['message'] = "Sorry, your file is too large. File limit - 5 mb";
-        } 
-
-        if(!in_array($file->getClientOriginalExtension(), $allowed)){
-            $response['error'] = true;
-            $response['message'] = 'Sorry, only JPG, JPEG, PNG files are allowed.'; 
-        }
-        
-        $ext = $file->getClientOriginalExtension();
         $filename = generate_random_string().'.'.$ext;
+        $response['target_path'] = $target_path;
+        $response['filename'] = $filename;
+        
+        $file->move($target_path, $filename);
 
-        if($file->move($target_path, $fileName)){
-            $senior_citizen = new SeniorCitizen;
-            $senior_citizen->patient_id = $id;
-            // $senior_citizen->senior_citizen_id_number = $input['senior_citizen_id_number'];
-            $senior_citizen->id_picture = $filename;
-            
-            if($senior_citizen->save()){
-                $response['message'] = 'File uploaded successfully!';
-                $response['error'] = false;
-                $response['file_path'] = $target_path . $filename;
-                $response['file_url'] = $target_path;
-                $response['server_id'] = $id;
-                $response['file_name'] = $filename;
-            }
+        // if ($file->getClientSize() > 5242880) {
+        //     $response['error'] = true;
+        //     $response['message'] = "Sorry, your file is too large. File limit - 5 mb";
+        // } 
 
-        } else {
-           $response['error'] = true;
-            $response['message'] = 'Sorry, we cannot upload the file. Please try different image';
-        }
+        // if(!in_array($file->getClientOriginalExtension(), $allowed)){
+        //     $response['error'] = true;
+        //     $response['message'] = 'Sorry, only JPG, JPEG, PNG files are allowed.'; 
+        // }
+        
+        // $ext = $file->getClientOriginalExtension();
+        // $filename = generate_random_string().'.'.$ext;
+
+        // if($file->move($target_path, $fileName)){
+        //     $senior_citizen = new SeniorCitizen;
+        //     $senior_citizen->patient_id = $id;
+        //     // $senior_citizen->senior_citizen_id_number = $input['senior_citizen_id_number'];
+        //     $senior_citizen->id_picture = $filename;
+
+        //     if($senior_citizen->save()){
+        //         $response['message'] = 'File uploaded successfully!';
+        //         $response['error'] = false;
+        //         $response['file_path'] = $target_path . $filename;
+        //         $response['file_url'] = $target_path;
+        //         $response['server_id'] = $id;
+        //         $response['file_name'] = $filename;
+        //     }
+
+        // } else {
+        //    $response['error'] = true;
+        //     $response['message'] = 'Sorry, we cannot upload the file. Please try different image';
+        // }
 
         
     } else {
