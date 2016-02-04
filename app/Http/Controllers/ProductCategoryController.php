@@ -113,8 +113,11 @@ class ProductCategoryController extends Controller
     public function destroy()
     {
         if( ProductCategory::destroy( Input::get( 'id' ) ) ){
+            session()->flash("flash_message", ["msg" => "A product category has been deleted.", "type" => "danger"]);
             return json_encode( array("status" => "success") );
         }
+            
+        session()->flash("flash_message", ["msg" => "Sorry we failed process your request. Please try again later.", "type" => "danger"]);                  
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

@@ -105,9 +105,12 @@ class ProductSubCategoryController extends Controller
     public function destroy()
     {
         $subcategory = ProductSubcategory::withTrashed()->findOrFail(Input::get('id'));
-        if( $subcategory->delete() )
+        $name = $subcategory->name;
+        if( $subcategory->delete() ){
+            session()->flash("flash_message", ["msg" => "$name has been deleted from sub-categories.", "type" => "danger"]);
             return json_encode( array("status" => "success") );
-
+        }
+        session()->flash("flash_message", ["msg" => "Sorry we failed to delete $name from sub-categories. Please try again later.", "type" => "danger"]);
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }
