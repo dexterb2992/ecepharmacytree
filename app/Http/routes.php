@@ -44,7 +44,7 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::post('upload_sc_id', 'SeniorCitizenController@store');
+Route::get('upload_sc_id', 'SeniorCitizenController@store');
 
 Route::post('saveBranchPreference', 'BranchController@saveBranchPreference');
 

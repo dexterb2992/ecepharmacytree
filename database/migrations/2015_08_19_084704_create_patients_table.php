@@ -39,6 +39,9 @@ class CreatePatientsTable extends Migration
             $table->string('referred_byDoctor')->nullable();
             $table->integer('is_new')->default(1);
             $table->longText('regId');
+            $table->integer('isSenior')->default(0);
+            $table->string('senior_citizen_id_number');
+            $table->string('senior_id_picture');
             $table->timestamps();
             $table->softDeletes();
         });
