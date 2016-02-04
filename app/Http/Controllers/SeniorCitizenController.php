@@ -40,7 +40,7 @@ class SeniorCitizenController extends Controller
         if($file->move($target_path, $fileName)){
             $senior_citizen = new SeniorCitizen;
             $senior_citizen->patient_id = $id;
-            $senior_citizen->senior_citizen_id_number = $input['senior_citizen_id_number'];
+            // $senior_citizen->senior_citizen_id_number = $input['senior_citizen_id_number'];
             $senior_citizen->id_picture = $filename;
             
             if($senior_citizen->save()){
