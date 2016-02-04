@@ -23,6 +23,7 @@ class SeniorCitizenController extends Controller
 
     if($request->hasFile('image')){
         $file = $request->file('image');
+        $ext = $request->getClientOriginalExtension();
         $filename = generate_random_string().'.'.$ext;
         $response['target_path'] = $target_path;
         $response['filename'] = $filename;
