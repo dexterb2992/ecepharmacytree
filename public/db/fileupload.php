@@ -110,7 +110,18 @@ if (isset($_FILES['image']['name'])) {
 			$response['file_url'] = $file_upload_url;
 			$response['file_name'] = $filename;
 		} else if($purpose == "senior_citizen_upload") {
-				
+				$sql = "UPDATE patients SET isSenior = 1, senior_citizen_id_number = '".$_POST['senior_citizen_id_number']."', senior_id_picture='".$filename."'";
+			if(mysql_query($sql)){
+				$response['message'] = 'File uploaded successfully!';
+				$response['error'] = false;
+				$response['file_path'] = $file_upload_url . $filename;
+				$response['file_url'] = $file_upload_url;
+				$response['server_id'] = $id;
+				$response['file_name'] = $filename;
+			} else {
+				$response['error'] = true;
+				$response['message'] = 'Failed while saving to database.';
+			}
 		} else {
         // File successfully uploaded
 			$sql = "INSERT INTO patient_prescriptions (patient_id, filename) VALUES('$id', '$filename')";
