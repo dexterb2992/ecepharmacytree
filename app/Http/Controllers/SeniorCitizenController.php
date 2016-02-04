@@ -21,14 +21,14 @@ class SeniorCitizenController extends Controller
     $new_name = "user_".$id; 
     $target_path .= $new_name . '/';
 
-    if($request->hasFile('image')){
-        $file = $request->file('image');
-        $ext = $request->getClientOriginalExtension();
-        $filename = generate_random_string().'.'.$ext;
-        $response['target_path'] = $target_path;
-        $response['filename'] = $filename;
-        $response['extension'] = $file->getClientOriginalExtension();
-        $response['size'] = $file->getClientSize();
+    // if($request->hasFile('image')){
+    //     $file = $request->file('image');
+    //     $ext = $request->getClientOriginalExtension();
+    //     $filename = generate_random_string().'.'.$ext;
+    //     $response['target_path'] = $target_path;
+    //     $response['filename'] = $filename;
+    //     $response['extension'] = $file->getClientOriginalExtension();
+    //     $response['size'] = $file->getClientSize();
         // $file->move($target_path, $filename);
 
         // if ($file->getClientSize() > 5242880) {
@@ -65,11 +65,11 @@ class SeniorCitizenController extends Controller
         // }
 
         
-    } else {
-        $response['error'] = true;
-        $response['message'] = 'No File Found';
-        return json_encode($response);
-    }
+    // } else {
+    //     $response['error'] = true;
+    //     $response['message'] = 'No File Found';
+    //     return json_encode($response);
+    // }
 }
 
 function generate_random_string($length = 10) {
