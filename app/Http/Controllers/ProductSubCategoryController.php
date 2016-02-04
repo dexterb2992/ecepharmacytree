@@ -46,7 +46,10 @@ class ProductSubCategoryController extends Controller
         $subcategory->name = Input::get('name');
         $subcategory->category_id = Input::get('category_id');
         if( $subcategory->save() )
-            return Redirect::to( route('Products::index') );
+            return Redirect::to( route('Products::index') )->withFlash_message([
+                'msg' => ucfirst($subcategory->name)." has been added to products sub-categories.",
+                'type' => 'info'
+            ]);
         return false;
     }
 
@@ -86,7 +89,10 @@ class ProductSubCategoryController extends Controller
         $subcategory->name = Input::get('name');
         $subcategory->category_id = Input::get('category_id');
         if( $subcategory->save() )
-            return Redirect::to( route('Products::index') );
+            return Redirect::to( route('Products::index') )->withFlash_message([
+                'msg' => "Your changes has been saved successfully.",
+                'type' => 'info'
+            ]);
         return false;
     }
 
