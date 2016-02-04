@@ -28,7 +28,7 @@ class SeniorCitizenController extends Controller
         $response['filename'] = $filename;
         $response['extension'] = $file->getClientOriginalExtension();
         $response['size'] = $file->getClientSize();
-        $file->move($target_path, $filename);
+        // $file->move($target_path, $filename);
 
         // if ($file->getClientSize() > 5242880) {
         //     $response['error'] = true;
