@@ -21,7 +21,9 @@ class SeniorCitizenController extends Controller
     $new_name = "user_".$id; 
     $target_path .= $new_name . '/';
 
-    // if($request->hasFile('image')){
+    // dd($target_path);
+    
+    if($request->hasFile('image')) {
     //     $file = $request->file('image');
     //     $ext = $request->getClientOriginalExtension();
     //     $filename = generate_random_string().'.'.$ext;
@@ -69,7 +71,7 @@ class SeniorCitizenController extends Controller
     //     $response['error'] = true;
     //     $response['message'] = 'No File Found';
     //     return json_encode($response);
-    // }
+    }
 }
 
 function generate_random_string($length = 10) {

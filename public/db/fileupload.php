@@ -109,6 +109,8 @@ if (isset($_FILES['image']['name'])) {
 			$response['file_path'] = $file_upload_url . $filename;
 			$response['file_url'] = $file_upload_url;
 			$response['file_name'] = $filename;
+		} else if($purpose == "senior_citizen_upload") {
+				
 		} else {
         // File successfully uploaded
 			$sql = "INSERT INTO patient_prescriptions (patient_id, filename) VALUES('$id', '$filename')";
