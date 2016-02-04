@@ -53,7 +53,10 @@ class ProductCategoryController extends Controller
         $category = new ProductCategory;
         $category->name = Input::get('name');
         if( $category->save() ){
-           return Redirect::to( route('ProductCategory::index') );
+            return Redirect::to( route('Products::index') )->withFlash_message([
+                "msg" => "New product category has been added successfully.",
+                "type" => "info"
+            ]);
         }
         return false;
     }
@@ -93,7 +96,10 @@ class ProductCategoryController extends Controller
         $category = ProductCategory::find( Input::get('id') );
         $category->name = Input::get('name');
         if( $category->save() ){
-           return Redirect::to( route('ProductCategory::index') );
+           return Redirect::to( route('Products::index') )->withFlash_message([
+                "msg" => "Product category has been updated successfully.",
+                "type" => "info"
+            ]);
         }
         return false;
     }
