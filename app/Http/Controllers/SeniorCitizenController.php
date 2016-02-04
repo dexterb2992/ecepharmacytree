@@ -26,7 +26,8 @@ class SeniorCitizenController extends Controller
         $filename = generate_random_string().'.'.$ext;
         $response['target_path'] = $target_path;
         $response['filename'] = $filename;
-        
+        $response['extension'] = $file->getClientOriginalExtension();
+        $response['size'] = $file->getClientSize();
         $file->move($target_path, $filename);
 
         // if ($file->getClientSize() > 5242880) {
