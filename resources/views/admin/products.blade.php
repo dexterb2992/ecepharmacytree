@@ -126,9 +126,9 @@
                                     @foreach($categories as $category)
                                         <tr>
                                             <td>
-                                                <span>
+                                                <!-- <span>
                                                     <input type="checkbox" name="categories[]" value="{{ $category->id }}">   
-                                                </span>
+                                                </span> -->
                                                 {{ $category->name }}
                                             </td>
                                             <td>
