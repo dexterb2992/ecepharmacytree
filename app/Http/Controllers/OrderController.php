@@ -15,9 +15,17 @@ use Input;
 use ECEPharmacyTree\Log;
 use URL;
 use ECEPharmacyTree\OrderLotNumber;
+use ECEPharmacyTree\Repositories\GCMRepository;
+
 
 class OrderController extends Controller
 {
+    protected $gcm;
+
+    function __construct(GCMRepository $gcm)
+    {
+        $this->gcm = $gcm;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -54,7 +62,7 @@ class OrderController extends Controller
     public function show_all(){
         // $orders = Order::all();
         $orders = Order::where('branch_id', session()->get('selected_branch'))
-            ->where('is_returned', '=', 0)->orderBy('id', 'DESC')->get();
+        ->where('is_returned', '=', 0)->orderBy('id', 'DESC')->get();
         $orders->load('patient');
         $orders->load('order_details');
         $orders->load('billing');
@@ -110,6 +118,24 @@ class OrderController extends Controller
             $sql = "UPDATE order_details SET qty_fulfilled = CASE id ".$when_and_thens." END WHERE id IN (".$where_ids.")";
 
             $affected = DB::update($sql);
+
+            if($affected > 0){
+                $order = Order::findOrFail($input['order_id']);
+                $patient = $order->patient()->first();
+
+                if($order->modeOfDelivery == 'delivery'){
+                    $multilined_notif = array(1 => 'Your order is ready for delivery !', 2 => 'Your order must arrive on or before specified date', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
+                } else if($order->modeOfDelivery == 'pickup'){
+                    $multilined_notif = array(1 => 'Your order is ready for pickup !', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
+                } else {
+                    $multilined_notif = array(1 => 'Your order is ready!', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
+                }
+
+                $data = array( 'message' => json_encode($multilined_notif), 'title' => 'Pharmacy Tree', 'intent' => 'OrderDetailsActivity', 
+                    'order_id' => $order->id);
+
+                $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
+            }
         }
 
         return Redirect::back();

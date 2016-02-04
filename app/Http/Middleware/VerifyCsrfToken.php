@@ -17,5 +17,6 @@ class VerifyCsrfToken extends BaseVerifier
     	'verify_cash_payment/',
         'saveBranchPreference',
         'save_user_token',
+        'upload_sc_id',
     ];
 }
