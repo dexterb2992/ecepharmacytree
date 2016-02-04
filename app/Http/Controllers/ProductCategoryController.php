@@ -58,7 +58,11 @@ class ProductCategoryController extends Controller
                 "type" => "info"
             ]);
         }
-        return false;
+        // return false;
+        return Redirect::to( route('Products::index') )->withFlash_message([
+            "msg" => "Sorry, we failed to process your request. Please try again later.",
+            "type" => "danger"
+        ]);
     }
 
     /**
