@@ -20,6 +20,7 @@ use ECEPharmacyTree\StockReturnCode;
 use ECEPharmacyTree\StockReturn;
 use ECEPharmacyTree\InventoryAdjustment;
 use ECEPharmacyTree\OrderLotNumber;
+use ECEPharmacyTree\ProductStockReturn;
 
 class InventoryController extends Controller
 {
