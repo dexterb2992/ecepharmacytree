@@ -1132,7 +1132,7 @@ $("#add_gallery").click(function (){
                         var pId = order_detail.product.id, return_status = "";
 
                         if( order_detail.quantity > order_detail.quantity_returned ){
-                            productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
+                            // productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
                             
                             var old_max_qty = 0;
                             if( $.inArray(parseInt(order_detail.product.id), maxReturnQtyProductIDs) !== -1 ){
@@ -1140,6 +1140,7 @@ $("#add_gallery").click(function (){
                                 old_max_qty = window.maxReturnQty[order_detail.product.id].qty;
                                 window.maxReturnQty[order_detail.product.id].qty =  old_max_qty + (order_detail.quantity - order_detail.quantity_returned);
                             }else{
+                                productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
                                 maxReturnQtyProductIDs.push(parseInt(order_detail.product.id));
                                 console.log("id: "+order_detail.product.id+" -> no, wala");
                                 window.maxReturnQty[order_detail.product.id] = {
