@@ -1138,7 +1138,7 @@ $("#add_gallery").click(function (){
                             if( $.inArray(parseInt(order_detail.product.id), maxReturnQtyProductIDs) !== -1 ){
                                 console.log("id: "+order_detail.product.id+" -> yes, naa");
                                 old_max_qty = window.maxReturnQty[order_detail.product.id].qty;
-                                window.maxReturnQty[order_detail.product.id].qty = window.maxReturnQty[order_detail.product.id].qty + old_max_qty;
+                                window.maxReturnQty[order_detail.product.id].qty =  old_max_qty + (order_detail.quantity - order_detail.quantity_returned);
                             }else{
                                 maxReturnQtyProductIDs.push(parseInt(order_detail.product.id));
                                 console.log("id: "+order_detail.product.id+" -> no, wala");
