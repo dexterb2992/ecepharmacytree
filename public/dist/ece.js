@@ -1129,49 +1129,53 @@ $("#add_gallery").click(function (){
                 // make sure that the order is already paid
                 // if( row.billing.payment_status == 'paid' ){
                     $.each(row.order_details, function (index, order_detail){
-                        var pId = parseInt(order_detail.product.id), return_status = "";
+                        var pId = parseInt(order_detail.product.id), return_status = "",
+                            pOrderedQty = parseFloat(order_detail.quantity), 
+                            pQtyReturned = parseFloat(order_detail.quantity_returned);
                         console.log('order_detail_id: '+order_detail.id);
                         console.log(order_detail);
-                        if( parseFloat(order_detail.quantity) > parseFloat(order_detail.quantity_returned) ){
-                            // productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                            console.log("nisulod sa if");
-                            var old_max_qty = 0;
-                            if( $.inArray(pId, maxReturnQtyProductIDs) !== -1 ){
-                                console.log("id: "+pId+" -> yes, naa");
-                                old_max_qty = window.maxReturnQty[pId].qty;
-                                window.maxReturnQty[pId].qty =  old_max_qty + (order_detail.quantity - order_detail.quantity_returned);
-                            }else{
-                                productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                                maxReturnQtyProductIDs.push(pId);
-                                console.log("id: "+pId+" -> no, wala");
-                                window.maxReturnQty[pId] = {
-                                    pId: pId, 
-                                    qty: order_detail.quantity-order_detail.quantity_returned, 
-                                    name: order_detail.product.name, 
-                                    price: order_detail.price
-                                };
-                            }
+                        if( pOrderedQty > pQtyReturned ){
+                           
+                            // console.log("nisulod sa if");
+                            // var old_max_qty = 0;
+                            // if( $.inArray(pId, maxReturnQtyProductIDs) !== -1 ){
+                            //     console.log("id: "+pId+" -> yes, naa");
+                            //     old_max_qty = window.maxReturnQty[pId].qty;
+                            //     window.maxReturnQty[pId].qty =  old_max_qty + (order_detail.quantity - order_detail.quantity_returned);
+                            // }else{
+                            //     productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
+                            //     maxReturnQtyProductIDs.push(pId);
+                            //     console.log("id: "+pId+" -> no, wala");
+                            //     window.maxReturnQty[pId] = {
+                            //         pId: pId, 
+                            //         qty: order_detail.quantity-order_detail.quantity_returned, 
+                            //         name: order_detail.product.name, 
+                            //         price: order_detail.price
+                            //     };
+                            // }
 
-                            /*window.maxReturnQty[order_detail.product.id] = {
+                            productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
+                            window.maxReturnQty[order_detail.id] = {
+                                id: order_detail.id,
                                 pId: pId, 
-                                qty: (order_detail.quantity-order_detail.quantity_returned) + old_max_qty, 
+                                qty: pOrderedQty - pQtyReturned, 
                                 name: order_detail.product.name, 
                                 price: order_detail.price
-                            };*/
+                            };
                         }else{
                             console.log("wa nisulod sa if");
                         }
 
-                        if( order_detail.quantity == order_detail.quantity_returned ){
+                        if( pOrderedQty == pQtyReturned ){
                             return_status = '<span class="label label-info" style="margin-left: 4px">Returned</span>';
-                        }else if( order_detail.quantity > order_detail.quantity_returned ){
+                        }else if( pOrderedQty > pQtyReturned ){
                             var def = order_detail.quantity - order_detail.quantity_returned;
                             return_status = '<span class="label label-warning" style="margin-left: 4px">'+def+' remaining</span>';
                         }
 
                         productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
-                                    order_detail.quantity+" "+
-                                    str_auto_plural(order_detail.product.packing, order_detail.quantity)+
+                                    pOrderedQty+" "+
+                                    str_auto_plural(order_detail.product.packing, pOrderedQty)+
                                     ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
                                     order_detail.product.name+"</a>"+return_status+",<br/>";
                     });
