@@ -1136,14 +1136,15 @@ $("#add_gallery").click(function (){
                             
                             var old_max_qty = 0;
                             if( $.inArray(parseInt(order_detail.product.id), maxReturnQtyProductIDs) !== -1 ){
-                                console.log("yes, naa");
+                                console.log("id: "+order_detail.product.id+" -> yes, naa");
                                 old_max_qty = window.maxReturnQty[order_detail.product.id].qty;
+                                window.maxReturnQty[order_detail.product.id] = window.maxReturnQty[order_detail.product.id].qty + old_max_qty;
                             }else{
                                 maxReturnQtyProductIDs.push(parseInt(order_detail.product.id));
-                                console.log("no, wala");
+                                console.log("id: "+order_detail.product.id+" -> no, wala");
                                 window.maxReturnQty[order_detail.product.id] = {
                                     pId: pId, 
-                                    qty: (order_detail.quantity-order_detail.quantity_returned) + old_max_qty, 
+                                    qty: order_detail.quantity-order_detail.quantity_returned, 
                                     name: order_detail.product.name, 
                                     price: order_detail.price
                                 };
@@ -1207,7 +1208,7 @@ $("#add_gallery").click(function (){
             
                 // var row = window.maxReturnQty[selectedProduct];
                 // console.log(row);
-                window.maxReturnQty.each(function (i, row){
+                $.each(window.maxReturnQty, function (i, row){
                     if( row.pId == selectedProduct ){
                         var refundableAmount = val * row.price;
 
