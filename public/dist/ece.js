@@ -1121,6 +1121,7 @@ $("#add_gallery").click(function (){
         var val = $(this).val(), productsHtml = "", productNames = "";
         console.log("order_id has changed. value: "+val);
         window.maxReturnQty = [];
+        window.maxReturnQtyProductIDs = [];
         $.each(window.orders, function (col, row){
             if( row.id == val ){
                 window.selectedOrder = row;
@@ -1132,18 +1133,27 @@ $("#add_gallery").click(function (){
 
                         if( order_detail.quantity > order_detail.quantity_returned ){
                             productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-
+                            maxReturnQtyProductIDs.push(order_detail.product.id);
                             var old_max_qty = 0;
-                            if( $.inArray(window.maxReturnQty, order_detail.product.id) !== -1 ){
+                            if( $.inArray(maxReturnQtyProductIDs, order_detail.product.id) !== -1 ){
+                                console.log("yes, naa");
                                 old_max_qty = window.maxReturnQty[order_detail.product.id].qty;
+                            }else{
+                                console.log("no, wala");
+                                window.maxReturnQty[order_detail.product.id] = {
+                                    pId: pId, 
+                                    qty: (order_detail.quantity-order_detail.quantity_returned) + old_max_qty, 
+                                    name: order_detail.product.name, 
+                                    price: order_detail.price
+                                };
                             }
 
-                            window.maxReturnQty[order_detail.product.id] = {
+                            /*window.maxReturnQty[order_detail.product.id] = {
                                 pId: pId, 
                                 qty: (order_detail.quantity-order_detail.quantity_returned) + old_max_qty, 
                                 name: order_detail.product.name, 
                                 price: order_detail.price
-                            };
+                            };*/
                         }
 
                         if( order_detail.quantity == order_detail.quantity_returned ){
