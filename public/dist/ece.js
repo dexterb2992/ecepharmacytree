@@ -1136,32 +1136,32 @@ $("#add_gallery").click(function (){
                         console.log(order_detail);
                         if( pOrderedQty > pQtyReturned ){
                            
-                            // console.log("nisulod sa if");
-                            // var old_max_qty = 0;
-                            // if( $.inArray(pId, maxReturnQtyProductIDs) !== -1 ){
-                            //     console.log("id: "+pId+" -> yes, naa");
-                            //     old_max_qty = window.maxReturnQty[pId].qty;
-                            //     window.maxReturnQty[pId].qty =  old_max_qty + (order_detail.quantity - order_detail.quantity_returned);
-                            // }else{
-                            //     productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
-                            //     maxReturnQtyProductIDs.push(pId);
-                            //     console.log("id: "+pId+" -> no, wala");
-                            //     window.maxReturnQty[pId] = {
-                            //         pId: pId, 
-                            //         qty: order_detail.quantity-order_detail.quantity_returned, 
-                            //         name: order_detail.product.name, 
-                            //         price: order_detail.price
-                            //     };
-                            // }
+                            console.log("nisulod sa if");
+                            var old_max_qty = 0;
+                            if( $.inArray(pId, maxReturnQtyProductIDs) !== -1 ){
+                                console.log("id: "+pId+" -> yes, naa");
+                                old_max_qty = window.maxReturnQty[pId].qty;
+                                window.maxReturnQty[pId].qty =  old_max_qty + (pOrderedQty - pQtyReturned);
+                            }else{
+                                productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
+                                maxReturnQtyProductIDs.push(pId);
+                                console.log("id: "+pId+" -> no, wala");
+                                window.maxReturnQty[pId] = {
+                                    pId: pId, 
+                                    qty: pOrderedQty - pQtyReturned, 
+                                    name: order_detail.product.name, 
+                                    price: order_detail.price
+                                };
+                            }
 
-                            productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
-                            window.maxReturnQty[pId] = {
-                                id: order_detail.id,
-                                pId: pId, 
-                                qty: pOrderedQty - pQtyReturned, 
-                                name: order_detail.product.name, 
-                                price: order_detail.price
-                            };
+                            // productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
+                            // window.maxReturnQty[pId] = {
+                            //     id: order_detail.id,
+                            //     pId: pId, 
+                            //     qty: pOrderedQty - pQtyReturned, 
+                            //     name: order_detail.product.name, 
+                            //     price: order_detail.price
+                            // };
                         }else{
                             console.log("wa nisulod sa if");
                         }
