@@ -1155,7 +1155,7 @@ $("#add_gallery").click(function (){
                             // }
 
                             productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
-                            window.maxReturnQty[order_detail.id] = {
+                            window.maxReturnQty[pId] = {
                                 id: order_detail.id,
                                 pId: pId, 
                                 qty: pOrderedQty - pQtyReturned, 
