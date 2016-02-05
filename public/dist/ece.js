@@ -1130,6 +1130,7 @@ $("#add_gallery").click(function (){
                 // if( row.billing.payment_status == 'paid' ){
                     $.each(row.order_details, function (index, order_detail){
                         var pId = order_detail.product.id, return_status = "";
+                        console.log('order_detail_id: '+order_detail.id);
 
                         if( order_detail.quantity > order_detail.quantity_returned ){
                             // productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
