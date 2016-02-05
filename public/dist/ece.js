@@ -951,6 +951,7 @@ $("#add_gallery").click(function (){
             if( data.hasOwnProperty('product') ){
                 $('#inventory_adjustment_details').html('Lot# '+data.lot_number+
                     '<br/>Product:  <b><a href="/products?q='+data.product.name+'" target="_blank">'+data.product.name+'</a></b>'+
+                    '<br/>Total sold items: <b title="Total sold products for this inventory">'+data.sold_products_count+'</b>'+
                     '<br/><small>Date added: '+data.date_added+'</small>');
                 $('#old_quantity').val(data.quantity);
                 $('#modal-add-adjustments').find('#sid').val(data.id);
@@ -1154,6 +1155,8 @@ $("#add_gallery").click(function (){
                     if( row.billing.points_discount > 0 ){
                         discounts_html+= '<br/>'+peso()+" "+row.billing.points_discount+' (Points discount) ';
                     }
+
+                    discounts_html+= '<br/><a href="/orders/'+row.id+'" target="_blank" class="glow">View details</a>';
 
                     $("#customer_name").html(row.patient.fname+" "+row.patient.lname);
                     $("#total_amount").html(peso()+' '+row.billing.total);

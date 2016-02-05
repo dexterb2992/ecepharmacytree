@@ -30,11 +30,11 @@
 								<h4>Stock Items List</h4> <br/>
 
 								<div class="pull-right">
-					                <button class="btn-info btn add-edit-btn" data-toggle="modal" data-target="#modal-add-edit-inventory" 
+					                <button class="btn-info btn add-edit-btn glow" data-toggle="modal" data-target="#modal-add-edit-inventory" 
 					                	data-target="#form_edit_inventory" data-action="create" data-title="inventory">
 					                	<i class="fa-plus fa"></i> Add New
 					                </button>
-					                <button class="btn-success btn  btn-stock-return" data-target="#modal-stock-return" data-toggle="modal">
+					                <button class="btn-success btn  btn-stock-return glow" data-target="#modal-stock-return" data-toggle="modal">
 					                	<i class="fa-refresh fa"></i> Stock Return
 					                </button>
 								</div>
@@ -44,6 +44,7 @@
 								<table class="table table-bordered table-hover datatable">
 									<thead>
 										<tr>
+											<th>ID</th>
 											<th>Lot #</th>
 											<th>SKU</th>
 											<th>Product name</th>
@@ -58,6 +59,7 @@
 										@foreach($inventories as $inventory)
 											@if(!is_null($inventory->product))
 											<tr data-pid="{{ $inventory->product_id }}" data-id="{{ $inventory->id }}">
+												<td>{{ $inventory->id }}</td>
 												<td>
 													{{ $inventory->lot_number }}
 												</td>
@@ -66,9 +68,9 @@
 														$check_stock_availability = check_stock_availability($inventory->product);
 													?>
 													@if($check_stock_availability == 'out_of_stock')
-														<i class="fa-close fa" style="color:#dd4b39;" data-toggle="tooltip" data-original-title="Out of Stock"></i>
+														<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" data-original-title="Out of Stock"></i>
 													@elseif($check_stock_availability == 'critical')
-														<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" data-original-title="Critical Stock"></i>
+														<i class="fa-warning fa" style="color:#f0ad4e;" data-toggle="tooltip" data-original-title="Critical Stock"></i>
 													@endif
 													<span> {{ $inventory->product->sku }}</span>
 												</td>
@@ -85,7 +87,7 @@
 														$total = $inventory->available_quantity * $inventory->product->qty_per_packing; 
 													?>
 													{!! '<b>'.$inventory->available_quantity." ".str_auto_plural($inventory->product->packing, $inventory->available_quantity)."</b> "
-														."( ".$total." ".str_auto_plural($inventory->product->unit, $total)." )" !!}
+														."(".$total." ".str_auto_plural($inventory->product->unit, $total).")" !!}
 												
 												</td>
 												<td>
@@ -406,14 +408,14 @@
 		        						<label>
 		        							<input type="radio" name="action" class="icheck" data-check-value="replace" value="replace" checked> Replacement 
 		        						</label>
-			        					<label data-toggle="tooltip" data-original-title="Replacement Amount">{{ peso() }}<span id="refund_amount"> - </span></label>
+			        					<label data-toggle="tooltip" data-original-title="Replacement Amount">{{ peso() }} <span id="refund_amount"> - </span></label>
 		        					</div>
 		        					<input type="hidden" name="amount_refunded" id="amount_refunded">
 		        				</div>
 			        		</div>
 			        		
 			        		<div class="modal-footer">
-			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return to Stocks</button>
+			        			<button type="submit" class="btn btn-primary btn-flat glow" name="submit">Return to Stocks</button>
 			        		</div>
 			        	{!! Form::close() !!}
 	        		</div>

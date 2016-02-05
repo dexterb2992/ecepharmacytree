@@ -93,13 +93,13 @@ function str_auto_plural($singular_noun, $quantity){
 
 	if( $pos !== false ){
 		$singular_noun = trim( substr($singular_noun, 0, $pos) );
-		$suf = trim( substr($singular_noun, $pos) );
+		$suf = " ".trim( substr($singular_noun, $pos) );
 	}
 
 	if( $quantity > 1 )	
-		return str_plural($singular_noun)." ".$suf;
+		return str_plural($singular_noun).$suf;
 
-	return str_singular($singular_noun)." ".$suf;
+	return str_singular($singular_noun).$suf;
 }
 
 function rn2br($str){
@@ -326,7 +326,7 @@ function combine_additional_address(array $addresses){
 }
 
 function peso(){
-	return 'PHP';
+	return '&#x20B1;';
 }
 
 function clean($str){

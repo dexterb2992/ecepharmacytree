@@ -144,6 +144,18 @@ class InventoryController extends Controller
                 ->format('g:ia \o\n l jS F Y');
             $inventory->date_added = $date;
             $inventory->load('product');
+
+            // get # of sold products on this inventory based on branch_id                                       // available: 15; recived: 20;  naay gi return nga 9 & 2 -> 5 nalang ang sold qty
+            $sold_products_count = OrderLotNumber::where('inventory_id', '=', $inventory->id)->sum('quantity');  // 16
+            // check order_lot_numbers & product_stock_returns for each inventory 
+            $data = ProductStockReturn::where('inventory_id', '=', $inventory->id)->get();
+            $returned_sold_products_count = $data->sum('quantity'); 
+            $returned_sold_defective_products_count = $data->sum('defective_quantity');
+
+            $sold_products_count = $sold_products_count - ($returned_sold_products_count - $returned_sold_defective_products_count);
+            
+            $inventory->sold_products_count = $sold_products_count." ".str_auto_plural($inventory->product->packing, $sold_products_count);
+
             return $inventory->toJson();
         }   
         return 'Whoops! It seems like you are lost. Let\'s go back to <a href="'.url('/').'">dashboard</a>.';
