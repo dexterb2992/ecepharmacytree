@@ -1098,9 +1098,6 @@ $("#add_gallery").click(function (){
             $.each(products[0], function (i, row){
                 productsHtml+= '<option value="'+row.id+'">'+row.name+'</option>';
             });
-            // $.each(orders[0].order_details, function (i, row){
-            //     productsHtml+= '<option value="'+row.product.id+'" data-detail-id="'+row.id+'">'+row.product.name+'</option>';
-            // });
 
             $.each(returnCodes[0], function (i, row){
                 returnCodesHtml+= '<option value="'+row.id+'">'+row.name+'</option>';
@@ -1151,6 +1148,9 @@ $("#add_gallery").click(function (){
 
                         if( order_detail.quantity == order_detail.quantity_returned ){
                             return_status = '<span class="label label-info" style="margin-left: 4px">Returned</span>';
+                        }else if( order_detail.quantity > order_detail.quantity_returned ){
+                            var def = order_detail.quantity - order_detail.quantity_returned;
+                            return_status = '<span class="label label-warning" style="margin-left: 4px">'+def+' remaining</span>';
                         }
 
                         productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
