@@ -1133,12 +1133,13 @@ $("#add_gallery").click(function (){
 
                         if( order_detail.quantity > order_detail.quantity_returned ){
                             productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                            maxReturnQtyProductIDs.push(parseInt(order_detail.product.id));
+                            
                             var old_max_qty = 0;
                             if( $.inArray(parseInt(order_detail.product.id), maxReturnQtyProductIDs) !== -1 ){
                                 console.log("yes, naa");
                                 old_max_qty = window.maxReturnQty[order_detail.product.id].qty;
                             }else{
+                                maxReturnQtyProductIDs.push(parseInt(order_detail.product.id));
                                 console.log("no, wala");
                                 window.maxReturnQty[order_detail.product.id] = {
                                     pId: pId, 
