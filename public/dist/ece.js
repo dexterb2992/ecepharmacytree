@@ -1129,22 +1129,22 @@ $("#add_gallery").click(function (){
                 // make sure that the order is already paid
                 // if( row.billing.payment_status == 'paid' ){
                     $.each(row.order_details, function (index, order_detail){
-                        var pId = order_detail.product.id, return_status = "";
+                        var pId = parseInt(order_detail.product.id), return_status = "";
                         console.log('order_detail_id: '+order_detail.id);
-
-                        if( order_detail.quantity > order_detail.quantity_returned ){
+                        console.log(order_detail);
+                        if( parseFloat(order_detail.quantity) > parseFloat(order_detail.quantity_returned) ){
                             // productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
                             console.log("nisulod sa if");
                             var old_max_qty = 0;
-                            if( $.inArray(parseInt(order_detail.product.id), maxReturnQtyProductIDs) !== -1 ){
-                                console.log("id: "+order_detail.product.id+" -> yes, naa");
-                                old_max_qty = window.maxReturnQty[order_detail.product.id].qty;
-                                window.maxReturnQty[order_detail.product.id].qty =  old_max_qty + (order_detail.quantity - order_detail.quantity_returned);
+                            if( $.inArray(pId, maxReturnQtyProductIDs) !== -1 ){
+                                console.log("id: "+pId+" -> yes, naa");
+                                old_max_qty = window.maxReturnQty[pId].qty;
+                                window.maxReturnQty[pId].qty =  old_max_qty + (order_detail.quantity - order_detail.quantity_returned);
                             }else{
                                 productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                                maxReturnQtyProductIDs.push(parseInt(order_detail.product.id));
-                                console.log("id: "+order_detail.product.id+" -> no, wala");
-                                window.maxReturnQty[order_detail.product.id] = {
+                                maxReturnQtyProductIDs.push(pId);
+                                console.log("id: "+pId+" -> no, wala");
+                                window.maxReturnQty[pId] = {
                                     pId: pId, 
                                     qty: order_detail.quantity-order_detail.quantity_returned, 
                                     name: order_detail.product.name, 
