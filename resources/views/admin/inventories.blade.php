@@ -41,6 +41,15 @@
 
 							</div>
 							<div class="box-body">
+								@if( Route::is('Inventory::all') )
+	                                <small class="">
+	                                    <a href="{{ route('Inventory::index') }}">Hide Out-of-Stock Inventories</a>
+	                                </small>
+	                            @else
+	                                <small class="">
+	                                    <a href="{{ route('Inventory::all') }}">Show Out-of-Stock Inventories</a>
+	                                </small>
+	                            @endif
 								<table class="table table-bordered table-hover datatable">
 									<thead>
 										<tr>

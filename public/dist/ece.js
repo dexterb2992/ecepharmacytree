@@ -1177,7 +1177,7 @@ $("#add_gallery").click(function (){
                                     pOrderedQty+" "+
                                     str_auto_plural(order_detail.product.packing, pOrderedQty)+
                                     ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
-                                    order_detail.product.name+"</a>"+return_status+",<br/>";
+                                    order_detail.product.name+"</a>"+return_status+"<br/>";
                     });
 
                     // let's show the discounts that the user has availed

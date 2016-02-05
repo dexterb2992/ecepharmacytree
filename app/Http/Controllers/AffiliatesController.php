@@ -26,7 +26,9 @@ class AffiliatesController extends Controller
 
         foreach ($logs as $log) {
             $earner = get_earner_from_referral_points_logs($log);
-            $log->notes = str_replace("Order#", "<br/>Order#", str_replace("You", "<b>".get_person_fullname($earner)."</b>", $log->notes));
+            // $log->notes = str_replace("Order#", "<br/>Order#", str_replace("You", "<b>".get_person_fullname($earner)."</b>", $log->notes));
+            $log->earner = get_person_fullname($earner);
+            $log->notes = str_replace("Order#", "<br/>Order#", $log->notes);
             $phpdate = strtotime( $log->created_at );
             $log->date =  date( 'jS \o\f F, Y g:i a', $phpdate );
         }
