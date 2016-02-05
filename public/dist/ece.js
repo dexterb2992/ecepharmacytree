@@ -1134,7 +1134,7 @@ $("#add_gallery").click(function (){
 
                         if( order_detail.quantity > order_detail.quantity_returned ){
                             // productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                            
+                            console.log("nisulod sa if");
                             var old_max_qty = 0;
                             if( $.inArray(parseInt(order_detail.product.id), maxReturnQtyProductIDs) !== -1 ){
                                 console.log("id: "+order_detail.product.id+" -> yes, naa");
@@ -1158,6 +1158,8 @@ $("#add_gallery").click(function (){
                                 name: order_detail.product.name, 
                                 price: order_detail.price
                             };*/
+                        }else{
+                            console.log("wa nisulod sa if");
                         }
 
                         if( order_detail.quantity == order_detail.quantity_returned ){
