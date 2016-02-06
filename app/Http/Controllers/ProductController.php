@@ -50,12 +50,14 @@ class ProductController extends Controller
     public function all_include_deleted(){
         // $products = Product::withTrashed()->get();
         $listing = DB::table('products')->paginate(200);
-        $product_count = Product::withTrashed()->count();
+        $product_count = Product::onlyTrashed()->count();
         $products = array();
         foreach ($listing as $list) {
-            array_push($products, Product::withTrashed()->find($list->id));
+            $product = Product::onlyTrashed()->find($list->id);
+            if( !is_null($product) )
+                array_push($products, $product);
         }
-
+        
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();
         $category_names = array();

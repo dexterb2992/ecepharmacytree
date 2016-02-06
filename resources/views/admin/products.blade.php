@@ -109,6 +109,7 @@
                                 </tbody>
                             </table>
                             <hr/>
+                            @if( $product_count > 0 && $product_count > 200 )
                             <div class="row">
                                 <div class="col-md-6">
                                     <span class="pagination">Total: {!! number_format($product_count, 0)." ".str_auto_plural('entry', $product_count) !!}</span>
@@ -117,6 +118,7 @@
                                     {!! $paginated_lists->render() !!}
                                 </div>
                             </div>
+                            @endif
                             
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
