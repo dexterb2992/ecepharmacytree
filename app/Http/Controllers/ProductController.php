@@ -77,7 +77,7 @@ class ProductController extends Controller
         $product->subcategory_id = $input['subcategory_id'];
         $product->sku = $input['sku'];
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
-        $product->is_freebie = $input['is_freebie'];
+        $product->is_freebie = isset($input['is_freebie']) ? $input['is_freebie'] : 0;
 
         if( $product->save() )
             return Redirect::to( route('Products::index') )->withFlash_message([
@@ -131,7 +131,7 @@ class ProductController extends Controller
         $product->subcategory_id = $input['subcategory_id'];
         $product->sku = $input['sku'];
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
-        $product->is_freebie = $input['is_freebie'];
+        $product->is_freebie = isset($input['is_freebie']) ? $input['is_freebie'] : 0;
         
         if( $product->save() )
             return Redirect::to( route('Products::index') )->withFlash_message([
