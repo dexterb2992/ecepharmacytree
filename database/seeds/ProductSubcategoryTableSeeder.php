@@ -14,7 +14,10 @@ class ProductSubcategoryTableSeeder extends Seeder
     	ProductSubcategory::truncate();
 
         $values = array(
-        	'1' => array(
+            '1' => array(
+                    'Uncategorized'
+                ),
+        	'2' => array(
         			'allergies',
 					'cough & colds',
 					'deworming agents',
@@ -23,7 +26,7 @@ class ProductSubcategoryTableSeeder extends Seeder
 					'fever & pain relief',
 					'hair & scalp'
         		),
-        	'2' => array(
+        	'3' => array(
         			'allergies',
 					'anti-infective agens',
 					'apetite enhancers',
@@ -31,25 +34,25 @@ class ProductSubcategoryTableSeeder extends Seeder
 					'blood pressure & heart medications',
 					'brain & nervous system'
         		),
-        	'3' => array(
+        	'4' => array(
         			"calcium preparations",
 					"children's supplements",
 					"food supplements",
 					"multivitamins & minerals"
         		),
-        	'4' => array(
+        	'5' => array(
         			"healthcare & monitoring"
         		),
-        	'5' => array(
+        	'6' => array(
         			"first aid/ wound care",
 					"general use",
 					"topical antiseptics/ disinfectants",
-                    "contraceptives"
-        		),
-        	'6' => array(
-        			"personal care & protection"
+                   "contraceptives"
         		),
         	'7' => array(
+        			"personal care & protection"
+        		),
+        	'8' => array(
         			"skin care",
 					"slimming supplements"
         		)
