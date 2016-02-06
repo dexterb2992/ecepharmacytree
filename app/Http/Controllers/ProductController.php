@@ -27,7 +27,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $listing = DB::table('products')->paginate(200);
+        $listing = DB::table('products')->whereRaw("deleted_at is null")->paginate(200);
         $product_count = Product::count();
         $products = array();
         foreach ($listing as $list) {
@@ -48,7 +48,14 @@ class ProductController extends Controller
     }
 
     public function all_include_deleted(){
-        $products = Product::withTrashed()->get();
+        // $products = Product::withTrashed()->get();
+        $listing = DB::table('products')->paginate(200);
+        $product_count = Product::withTrashed()->count();
+        $products = array();
+        foreach ($listing as $list) {
+            array_push($products, Product::withTrashed()->find($list->id));
+        }
+
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();
         $category_names = array();
@@ -58,7 +65,8 @@ class ProductController extends Controller
 
         return view('admin.products')->withProducts($products)
             ->withCategories($categories)->withSubcategories($subcategories)
-            ->withCategory_names($category_names)->withTitle('Products');
+            ->withCategory_names($category_names)->withTitle('Products')
+            ->withPaginated_lists($listing)->withProduct_count($product_count);
         return Redirect::to('/products')->withProducts($products);
     }
 
