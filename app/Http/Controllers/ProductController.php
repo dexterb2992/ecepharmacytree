@@ -27,7 +27,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $listing = DB::table('products')->paginate(250);
+        $listing = DB::table('products')->paginate(200);
         $product_count = Product::count();
         $products = array();
         foreach ($listing as $list) {
