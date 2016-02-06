@@ -67,7 +67,7 @@
                                             </td>
                                             <td>{{ $product->generic_name }}</td>
                                             <td>{!! Str::limit(rn2br($product->description), 150) !!}</td>
-                                            <td>&#x20B1; {!! number_format($product->unit_cost).' /'.$product->packing !!}</td>
+                                            <td>&#x20B1; {!! number_format($product->unit_cost, 2).' /'.$product->packing !!}</td>
                                             <td>
                                                 @if( $product->is_freebie == 0 )
                                                     &#x20B1; {!! number_format($product->price, 2).' /'.$product->packing !!}
