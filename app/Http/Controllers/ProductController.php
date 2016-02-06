@@ -4,6 +4,7 @@ namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
 use Input;
+use DB;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -26,7 +27,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $listing = DB::table('products')->paginate(250);
+        $product_count = Product::count();
+        $products = array();
+        foreach ($listing as $list) {
+            array_push($products, Product::find($list->id));
+        }
 
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();
@@ -37,7 +43,8 @@ class ProductController extends Controller
 
         return view('admin.products')->withProducts($products)
             ->withCategories($categories)->withSubcategories($subcategories)
-            ->withCategory_names($category_names)->withTitle('Products');
+            ->withCategory_names($category_names)->withTitle('Products')
+            ->withPaginated_lists($listing)->withProduct_count($product_count);
     }
 
     public function all_include_deleted(){

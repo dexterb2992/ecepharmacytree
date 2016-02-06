@@ -67,10 +67,10 @@
                                             </td>
                                             <td>{{ $product->generic_name }}</td>
                                             <td>{!! Str::limit(rn2br($product->description), 150) !!}</td>
-                                            <td>&#x20B1; {{ $product->unit_cost.' /'.$product->packing }}</td>
+                                            <td>&#x20B1; {!! number_format($product->unit_cost).' /'.$product->packing !!}</td>
                                             <td>
                                                 @if( $product->is_freebie == 0 )
-                                                    &#x20B1; {{ $product->price.' /'.$product->packing }}
+                                                    &#x20B1; {!! number_format($product->price, 2).' /'.$product->packing !!}
                                                 @else
                                                     <span class="label label-info">FREE</span>
                                                 @endif
@@ -108,6 +108,16 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span class="pagination">Total: {!! number_format($product_count, 0)." ".str_auto_plural('entry', $product_count) !!}</span>
+                                </div>
+                                <div class="col-md-6">
+                                    {!! $paginated_lists->render() !!}
+                                </div>
+                            </div>
+                            
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
 
