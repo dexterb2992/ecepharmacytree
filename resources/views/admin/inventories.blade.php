@@ -314,7 +314,7 @@
 
 		        					<dl class="dl-vertical">
 		        						<dt>Gross total:</dt>
-		        						<dd id="gross_total">₱ 44.5 </dd>
+		        						<dd id="gross_total"></dd>
 		        					</dl>
 		        					<br/>
 		        					<dl class="dl-vertical">
@@ -372,7 +372,7 @@
 			        		</div>
 			        		
 			        		<div class="modal-footer">
-			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return & Refund</button>
+			        			<button type="button" id="form_return_n_refund_btn_submit" class="btn btn-primary btn-flat" name="submit">Return & Refund</button>
 			        		</div>
 			        	{!! Form::close() !!}
 	        		</div>

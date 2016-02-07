@@ -1176,6 +1176,21 @@ $("#add_gallery").click(function (){
             $("#return_quantity").trigger('change');
         }
     });
+
+    // add more validation for this form here
+    $(document).on('click', "#form_return_n_refund_btn_submit", function (){
+        var hasError = false;
+        if( $("#order_id").val() == "" || $('#order_id') == null ){
+            response = true;
+        }
+
+        if( !hasError ){
+            // $("#form_return_n_refund").submit();
+            $(this).attr("type", "submit").click();
+        }else{
+            $(this).attr("type", "button");
+        }
+    });
 });
 
 //   On Stock Returns tab, you can exchange the returned product there with a new the same product.

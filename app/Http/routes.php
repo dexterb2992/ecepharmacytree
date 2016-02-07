@@ -292,3 +292,5 @@ Route::get('emailtest', function(){
 });
 
 Route::get('emailtestingservice', ['as' => 'email_testing_service', 'uses' => 'VerifyPaymentController@emailtestingservice' ]);
+
+Route::get('/update-user-points', '');
