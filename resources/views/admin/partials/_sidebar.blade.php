@@ -35,64 +35,72 @@
 
             <li class="treeview">
                 <a href="{{ route('Members::index') }}">
-                    <i class="fa fa-users"></i> <span>Members</span>
+                    <i class="fa fa-users"></i> <span id="sidebar_members">Members</span>
                 </a>
             </li>
 
-            @if(Auth::user()->isAdmin() || Auth::user()->isBranchManager())
+            @if(Auth::user()->isAdmin() || Auth::user()->isBranchAdmin())
             <li class="treeview">
                 <a href="{{ route('employees') }}">
-                    <i class="fa fa-users"></i> <span>Employees</span>
+                    <i class="fa fa-users"></i> <span id="sidebar_employees">Employees</span>
                 </a>
             </li>
+
+            <!-- <li class="treeview">
+                <a href="{{ route('prescription_approval') }}">
+                    <i class="fa fa-file-text-o"></i> <span id="sidebar_employees">Prescriptions</span>
+                </a>
+            </li> -->
 
             <li class="treeview">
                 <a href="{{ route('groups') }}">
-                    <i class="fa-bar-chart fa"></i> <span>Product Groups</span>
+                    <i class="fa-bar-chart fa"></i> <span id="sidebar_product_groups">Product Groups</span>
                 </a>
             </li>
             @endif
 
             <li class="treeview">
                 <a href="{{ route('Products::index') }}">
-                    <i class="fa-stethoscope fa"></i> <span>Products</span>
+                    <i class="fa-stethoscope fa"></i> <span id="sidebar_products">Products</span>
                 </a>
             </li>
 
-            <li class="treeview">
-                <a href="{{ route('doctors') }}">
-                    <i class="fa-user-md fa"></i><span>Doctors</span>
-                </a>
-            </li>
+           
 
             <li class="treeview">
                 <a href="{{ route('Promo::index') }}">
-                    <i class="glyphicon glyphicon-tags"></i> <span>Promo/Discounts</span>
+                    <i class="glyphicon glyphicon-tags"></i> <span id="sidebar_promos">Promo/Discounts</span>
                 </a>
             </li>
 
             <li class="treeview">
                 <a href="{{ route('Inventory::index') }}">
-                    <i class="fa-cubes fa"></i> <span>Stock Items</span>
+                    <i class="fa-cubes fa"></i> <span id="sidebar_stock_items">Stock Items</span>
                 </a>
             </li>
 
             <li class="treeview">
                 <a href="{{ route('orders') }}">
-                    <i class="fa fa-shopping-cart"></i> <span>Orders</span>
-                </a>
-            </li>
-
-            <li class="treeview">
-                <a href="#/payments">
-                    <i class="fa fa-money"></i> <span>Payments</span>
+                    <i class="fa fa-shopping-cart"></i> <span id="sidebar_orders">Orders</span>
                 </a>
             </li>
 
             @if(Auth::user()->isAdmin())
             <li class="treeview">
+                <a href="{{ route('doctors') }}">
+                    <i class="fa-user-md fa"></i><span id="sidebar_doctors">Doctors</span>
+                </a>
+            </li>
+
+            <li class="treeview">
+                <a href="{{ route('clinics') }}">
+                    <i class="fa-hospital-o fa"></i><span id="sidebar_clinics">Clinics</span>
+                </a>
+            </li>
+            
+            <li class="treeview">
                 <a href="{{ route('Branches::index') }}">
-                    <i class="fa fa-building"></i> <span>Branches</span>
+                    <i class="fa fa-building"></i> <span id="sidebar_branches">Branches</span>
                 </a>
             </li>
 

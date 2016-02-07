@@ -21,9 +21,9 @@ class CreatePatientsTable extends Migration
             $table->string('password');
             $table->string('email_address');
             $table->string('mobile_no');
-            $table->string('tel_no')->nullable();
-            $table->longText('photo')->nullable();
-            $table->string('occupation')->nullable();
+            $table->string('tel_no');
+            $table->longText('photo');
+            $table->string('occupation');
             $table->string('birthdate');
             $table->string('sex', 6);
             $table->string('civil_status', 20);
@@ -38,6 +38,10 @@ class CreatePatientsTable extends Migration
             $table->string('referred_byUser')->nullable();
             $table->string('referred_byDoctor')->nullable();
             $table->integer('is_new')->default(1);
+            $table->longText('regId');
+            $table->integer('isSenior')->default(0);
+            $table->string('senior_citizen_id_number');
+            $table->string('senior_id_picture');
             $table->timestamps();
             $table->softDeletes();
         });

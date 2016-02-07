@@ -5,7 +5,7 @@
     <div class="col-xs-12">
         <div class="box box-success">
             <div class="box-header">
-                <h3 class="box-title">Members</h3><br/>
+                <h3 class="box-title">Employees</h3><br/>
                 <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-view-employee" data-action="create" data-title="inventory"><i class="fa-plus fa"></i> Add New</button>
             </div><!-- /.box-header -->
             <div class="box-body">
@@ -38,7 +38,7 @@
                                     <i class="fa fa-edit"></i>
                                 </a>
                             </td>
-                            <td>{!! ($employee->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
+                            <td>{!! ($employee->deleted_at != null ) ? '<label class="label-danger label">deactivated</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">
 	                                @if($employee->deleted_at != null )
@@ -73,7 +73,18 @@
                 	<div class="register-box-body">
 				        <p class="login-box-msg">Register an account</p>
 				        {!! Form::open(['action' => 'UserController@create', 'method' => 'post', 'id' => 'form_add_employee', 'enctype' => "multipart/form-data"]) !!}
-				       
+				            <div class="form-group">
+                                {!! Form::label('First name') !!}
+                                {!! Form::text('fname', '', ['class' => 'form-control']) !!}
+                                {!! _error($errors->first('fname')) !!}
+                            </div>  
+
+                            <div class="form-group">
+                                {!! Form::label('Last name') !!}
+                                {!! Form::text('lname', '', ['class' => 'form-control']) !!}
+                                {!! _error($errors->first('fname')) !!}
+                            </div>  
+
 				          	<div class="form-group">
 				          		{!! Form::label('Email') !!}
 				          		{!! Form::email('email', '', ['class' => 'form-control']) !!}
@@ -83,9 +94,8 @@
 							<div class="form-group">
 								{!! Form::label('Role') !!}
 								<select class="form-control" name="access_level">
-									<option value="1">Admin</option>
-									<option value="2">Branch Manager</option>
-									<option value="3">Pharmacist</option>
+									{!! Auth::user()->access_level == 1 ? '<option value="1">Super Admin</option>' : '' !!}
+									<option value="2">Branch Admin</option>
 								</select>
 								{!! _error($errors->first('access_level')) !!}
 							</div>

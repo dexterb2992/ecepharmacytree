@@ -23,6 +23,8 @@ class CreateDoctorsTable extends Migration
             // $table->longText('photo')->nullable();
             $table->longText('affiliation')->nullable();
             $table->string('email')->nullable();
+            $table->string('username');
+            $table->string('password');
             $table->string('referral_id');
             $table->double('points')->default(0);
             $table->integer('is_new')->default(1);

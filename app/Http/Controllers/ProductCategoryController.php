@@ -53,9 +53,16 @@ class ProductCategoryController extends Controller
         $category = new ProductCategory;
         $category->name = Input::get('name');
         if( $category->save() ){
-           return Redirect::to( route('ProductCategory::index') );
+            return Redirect::to( route('Products::index') )->withFlash_message([
+                "msg" => "New product category has been added successfully.",
+                "type" => "info"
+            ]);
         }
-        return false;
+        // return false;
+        return Redirect::to( route('Products::index') )->withFlash_message([
+            "msg" => "Sorry, we failed to process your request. Please try again later.",
+            "type" => "danger"
+        ]);
     }
 
     /**
@@ -93,7 +100,10 @@ class ProductCategoryController extends Controller
         $category = ProductCategory::find( Input::get('id') );
         $category->name = Input::get('name');
         if( $category->save() ){
-           return Redirect::to( route('ProductCategory::index') );
+           return Redirect::to( route('Products::index') )->withFlash_message([
+                "msg" => "Product category has been updated successfully.",
+                "type" => "info"
+            ]);
         }
         return false;
     }
@@ -107,8 +117,11 @@ class ProductCategoryController extends Controller
     public function destroy()
     {
         if( ProductCategory::destroy( Input::get( 'id' ) ) ){
+            session()->flash("flash_message", ["msg" => "A product category has been deleted.", "type" => "danger"]);
             return json_encode( array("status" => "success") );
         }
+            
+        session()->flash("flash_message", ["msg" => "Sorry we failed process your request. Please try again later.", "type" => "danger"]);                  
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

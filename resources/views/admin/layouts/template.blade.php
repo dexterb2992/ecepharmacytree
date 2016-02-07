@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PharmacyTree - <?php echo isset($title) ? $title : ''?> | @yield('title') </title>
+    <title>PharmacyTree - <?php echo isset($title) ? $title : ''?>  @yield('title') </title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
@@ -21,6 +21,7 @@
             <!-- jQuery 2.1.4 -->
             {!! HTML::script('plugins/jQuery/jQuery-2.1.4.min.js') !!}
             @include('admin.partials._header');
+
             @include('admin.partials._sidebar');
 
             <div class="content-wrapper">
@@ -28,12 +29,14 @@
                 <section class="content-header">
                     <h1>
                         {{ isset($title) ? $title : '' }}
-                        <small>Control panel</small>
+                        @if(Auth::check())<small>Control panel</small>@endif
                     </h1>
+                    @if(Auth::check())
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i></a></li>
                         <li class="active">{{ isset($title) ? $title : '' }}</li>
                     </ol>
+                    @endif
                 </section>
           
                 <!-- Main content -->
@@ -42,17 +45,13 @@
                     <p><span class="text-muted">You're logged in at Branch: </span>
                         <span class="text-aqua text-bold">
                             <?php $branches_count = Branch::all()->count(); ?>
+                            
                             @if( Auth::check() && Auth::user()->isAdmin() && $branches_count > 1)
-                                @if( Session::has('selected_branch') )
-                                    {{ Branch::find(Session::get('selected_branch'))->name }}
-                                @else
-                                    {!! Session::put('selected_branch', Auth::user()->branch->id) !!}
-                                    {{ Branch::find(Session::get('selected_branch'))->name }}
-                                @endif
-                            @else
-                                {{ Auth::check() ? Auth::user()->branch->name : '' }}
+                                <span id="session_branch_name"></span>                                
+                                <small><i>[<a href="{{ url('change-branch') }}">Change</a>]</i></small>
+                            @elseif( Auth::check() && !Auth::user()->isAdmin())
+                                <span id="session_branch_name">{{ Auth::user()->branch->name }}</span> 
                             @endif
-                            <small><i>[<a href="{{ url('change-branch') }}">Change</a>]</i></small>
                         </span>
                     </p>
                     @endif
@@ -72,7 +71,7 @@
 
         @if(Session::has("flash_message"))
         <script type="text/javascript">
-            $("div.alert").not(".alert-important").delay(5000).slideUp(function(){
+            $("div.alert").not(".alert-important").delay(8000).slideUp(function(){
                 $(this).remove();
             });
         </script>

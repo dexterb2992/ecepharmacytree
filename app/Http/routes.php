@@ -44,19 +44,49 @@ Route::get('home', function(){
 	return redirect('/');
 });
 
-Route::get('try', function(){
+Route::get('upload_sc_id', 'SeniorCitizenController@store');
+
+Route::post('saveBranchPreference', 'BranchController@saveBranchPreference');
+
+Route::get('check_basket', 'BasketController@check_basket');
+
+// Route::get('try/{referral_id}', function($referral_id){
+	// global $uplines;
+	// $uplines = array();
+	// pre(get_uplines($referral_id));
+	// pre(compute_points1($referral_id));
+	// dd($referral_id);
+	// pre(compute_points($referral_id));
+	// dd(compute_points($referral_id));
+	// $all_patients = ECEPharmacyTree\Patient::all();
+	// dd($all_patients);
+	// $patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
+	// $patient = ECEPharmacyTree\Patient::find($referral_id);
+	// dd($patient->upline());
 	// pre(check_stock_availability());
 	// $today = Carbon\Carbon::today('Asia/Manila')->addHours(23 );
 	// return ECEPharmacyTree\Promo::where('end_date', '>=', $today)->get();
 	// $orders = ECEPharmacyTree\Order::with('billing')->get();
 	// dd($orders);
-	return view('errors.500');
+	// return view('errors.500');
 	// return view('emails.register')->withRole('Branch Manager')
 	// ->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
 	// ->withBranch_name("ECE Marketing - Davao");
+// });
+Route::get('compute-referral-points/{referral_id}', 'PointsController@store');
+Route::get('test', function (){
+	
 });
 
-Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin']);
+Route::get('compute_basket_points', 'BasketController@compute_basket_points');
+
+Route::get('get_clinic_records', 'ApiController@getClinicRecords');
+
+Route::get("get-selected-branch", 'BranchController@show_selected_branch');
+
+
+Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
+Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin', 'middleware' => 'admin']);
 
 // Routes used for /profile
 Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
@@ -88,19 +118,21 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'aut
 	Route::post('delete', ['as' => 'remove', 'uses' => 'BranchController@destroy']);
 });
 
-Route::get('change-branch', 'BranchController@get_which_branch');
+
 
 Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products::'], function (){
 	/**
 	 * Routes for Products and Product Categories & SubCategories
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'ProductController@index']);
+	Route::get('with-deleted', ['as' => 'all', 'uses' => 'ProductController@all_include_deleted']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'ProductController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
-
 	Route::post('/all', ['as' => 'get_all', 'uses' => 'ProductController@show_all']);
+	Route::post('deactivate', ['as' => 'deactivate', 'uses' => 'ProductController@restore']);
+
 
 	Route::get('gallery/{product_id}', ['as' => 'gallery', 'uses' => 'ProductsGalleryController@show']);
 	Route::get('gallery/primary/{product_id}', ['as' => 'gallery_primary', 'uses' => 'ProductsGalleryController@get_primary']);
@@ -150,7 +182,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'Inventory::', 'middleware' => 'a
 	 * Routes for inventories
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'InventoryController@index']);
-	Route::get('all', ['as' => 'index', 'uses' => 'InventoryController@show_all']);
+	Route::get('all', ['as' => 'all', 'uses' => 'InventoryController@show_all']);
 	Route::post('adjustment', ['as' => 'adjustment', 'uses' => 'InventoryController@add_adjustments']);
 	Route::get('{id}', ['get', 'uses' => 'InventoryController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'InventoryController@store']);
@@ -184,6 +216,7 @@ Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@sh
 
 Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
 Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
+Route::post('doctors/delete', ['as' => 'delete_doctor', 'uses' => 'DoctorController@delete' ]);
 
 Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
 Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
@@ -243,7 +276,8 @@ Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 
 
 Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
 Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
-Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
+// Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
+Route::post('mark_as_paid', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
 Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
 Route::post('orders/all', ['as' => 'all_orders', 'uses' => 'OrderController@show_all']);
 
@@ -275,6 +309,10 @@ Route::get('api/{type}/{what}', function ($type, $what){
 	}else if( $type == 'check' ){
 		if( $what == 'sku' )
 			return does_sku_exist(Input::get('sku')) ? 'true' : 'false';
+	}else if( $type == 'str_singular' ){
+		return str_singular($what);
+	}else if( $type == "get-downlines" ){
+		return get_all_downlines($what);
 	}
 });
 
@@ -284,6 +322,8 @@ Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
 Route::post('stock-return-codes/all', 'StockReturnController@stock_return_codes');
 Route::post('stock-return', 'StockReturnController@store');
+Route::post('get-stock-returns/{id}', 'StockReturnController@show_all_returned_products');
+Route::post('update-defective-stocks', 'StockReturnController@udate_defective_stocks');
 
 Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
 
@@ -293,4 +333,14 @@ Route::get('emailtest', function(){
 
 Route::get('emailtestingservice', ['as' => 'email_testing_service', 'uses' => 'VerifyPaymentController@emailtestingservice' ]);
 
-Route::get('/update-user-points', '');
+Route::post('notify', 'NotificationsController@index');
+Route::post('read-notification', 'NotificationsController@update');
+Route::get('read-notification', 'NotificationsController@update');
+
+Route::get('populate-address/{barangay_id}', ['as' => 'populate_address', 'uses' => 'LocationController@populate_address_by_barangay']);
+
+Route::post('save_user_token', 'PatientController@save_user_token');
+
+Route::post('lot-numbers', 'InventoryController@get_lot_numbers');
+Route::get('lot-numbers', 'InventoryController@get_lot_numbers');
+

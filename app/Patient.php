@@ -4,6 +4,7 @@ namespace ECEPharmacyTree;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes; 
+use ECEPharmacyTree\Doctor;
 
 class Patient extends Model
 {
@@ -28,12 +29,21 @@ class Patient extends Model
     	return $this->hasMany('ECEPharmacyTree\Order');
     }
 
-     public function payments(){
+    public function payments(){
         return $this->hasMany('ECEPharmacyTree\Order');
     }
 
+    public function barangay(){
+        return $this->belongsTo('ECEPharmacyTree\Barangay', 'address_barangay_id');
+    }
+
     public function full_address(){
-        return ucfirst($patient->address_street).', '
-            .ucfirst($patient->address_barangay).', '.ucfirst($patient->address_city_municipality);
+        if( !is_null($this->address_barangay_id) ){
+            return $this->optional_address.", ".$this->barangay->name.", "
+                .$this->barangay->municipality->name.", ".$this->barangay->municipality->province->name.", "
+                .$this->barangay->municipality->province->region->name;
+        }else{
+            return $this->optional_address;
+        }
     }
 }

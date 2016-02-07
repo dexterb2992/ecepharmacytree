@@ -15,4 +15,12 @@ class Barangay extends Model
     public function branches(){
     	return $this->hasMany('ECEPharmacyTree\Branch');
     }
+
+    public function patients(){
+    	return $this->hasMany('ECEPharmacyTree\Patient', 'id');
+    }
+
+    public function clinics(){
+        return $this->hasMany('ECEPharmacyTree\Clinic');
+    }
 }

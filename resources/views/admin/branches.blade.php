@@ -10,7 +10,9 @@ use ECEPharmacyTree\Branch;
         <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">Branches</h3><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-branch" data-target="#form_edit_branch" data-action="create" data-title="branch"><i class="fa-plus fa"></i> Add New</button>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-branch" data-target="#form_edit_branch" data-action="create" data-title="branch">
+                    <i class="fa-plus fa"></i> Add New
+                </button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable">
@@ -116,7 +118,7 @@ use ECEPharmacyTree\Branch;
 
                             <div class="form-group"> 
                                 <label for="additional_address">Additional address (<i>Be more specific with the address as you can as possible</i>)</label>
-                                <input type="text" class="form-control" id="additional_address" placeholder="Street" name="additional_address" required>
+                                <input type="text" class="form-control" id="additional_address" placeholder="Street (Start typing to load google map)" name="additional_address" required>
                             </div>
                             <div class="form-group">
                                 <label for="additional_address">Set the place (Please drag the marker to the appropriate location of the branch)</label>

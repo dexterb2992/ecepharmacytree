@@ -76,16 +76,17 @@ $.fn.hasParent = function(a) {
  function updateInventoryProductQty(){
  	var unit = "", packing = "", qtyPerPacking = 1, totalQty = 0, qty = 0;
  	var el = $("#inventory_quantity");
- 	var selectedOption = $("#inventories_product_id").children('option:selected');
+    // var selectedOption = $("#inventories_product_id").children('option:selected');
+ 	var selectedOption = $("#inventories_product_id option:selected");
  	
  	qty = el.val() == "" ? 0 : el.val();
 
- 	qtyPerPacking = selectedOption.data("qty-per-packing");
+ 	qtyPerPacking = selectedOption.attr("data-qty-per-packing");
 
  	totalQty = qty*qtyPerPacking;
 
- 	unit = str_auto_plural( selectedOption.data("unit"), totalQty );
- 	packing = str_auto_plural( selectedOption.data("packing"),  qty);
+ 	unit = str_auto_plural( selectedOption.attr("data-unit"), totalQty );
+ 	packing = str_auto_plural( selectedOption.attr("data-packing"),  qty);
 
  	$("#total_quantity_in_unit").html( totalQty+" "+unit+" ( "+qty+" "+packing+" )" );
  	$(".add-on-product-packing").html(packing);
@@ -124,7 +125,7 @@ $.fn.hasParent = function(a) {
         }
 
         if( typeof min !== 'undefined' ){
-            if( val <  parseFloat(min) ){
+            if( val <  parseFloat(min) || $(this).val() == "" ){
                 $(this).val(min);
             }
         }
@@ -155,21 +156,30 @@ function _clear_form_data(form){
 }
 
 function _error(element, error_msg){
-    if( element.parents('.input-group').length ){ // has parent
-        if( element.parent('.input-group').next('.label-danger').length ){
-            element.parent('.input-group').next('.label-danger').html(error_msg);
-        }else{
-            element.parent('.input-group').after('<div class="label label-danger">'+error_msg+'</label>');
-        }
-    }else{
-       if( element.next('.label-danger').length ){
-            element.next('.label-danger').html(error_msg);
-        }else{
-            element.after('<div class="label label-danger">'+error_msg+'</label>');
-        } 
-    }
+    
+    try{
+        if( element.parent('.input-group').length ){ // has parent
+            if( element.parent('.input-group').next('.label-danger').length ){
+                element.parent('.input-group').next('.label-danger').html(error_msg);
+            }else{
+                element.parent('.input-group').after('<div class="label label-danger">'+error_msg+'</label>');
+            }
 
-	
+            element.parent('.input-group').next('div.label-danger').fadeIn().delay(5000).fadeOut(400);
+        }else{
+           if( element.next('.label-danger').length ){
+                element.next('.label-danger').html(error_msg);
+            }else{
+                element.after('<div class="label label-danger">'+error_msg+'</label>');
+            } 
+
+            element.next('div.label-danger').fadeIn().delay(5000).fadeOut(400);
+        }
+
+        
+    }catch(Exception){
+        console.log(Exception);
+    }
 }
 
 function formfinder(form, name, fieldType){
@@ -439,3 +449,119 @@ function calculateStockReturnAmount(){
     $("#refund_amount").html(total_amount);
 }
 
+var getSessionBranch_Retries = 0;
+function getSessionBranch(){
+    $.ajax({
+        url: '/get-selected-branch',
+        type: 'get',
+        dataType: 'json',
+        beforeSend: function (){
+            console.log("getting session branch now..");
+        },
+        success: function (data){
+            console.log(data);
+            if( !data.error ){
+                $("#session_branch_name").html(data.name);
+            }else{
+                $("#session_branch_name").html(data.error);
+                if( getSessionBranch_Retries < 10 ){
+                    getSessionBranch();
+                    getSessionBranch_Retries++;
+                }
+            }
+        },
+        error: function (shr, status, data){
+            console.log("Error getting session branch. "+data+" Status "+shr.status);
+        },
+        complete: function (){
+            console.log("getting session branch completed.");
+        }
+    });
+}
+
+function address_populator_helper(options, selected_id){
+    var output = "";
+    $.each(options, function (i, row){
+        if( selected_id == row.id ){
+            output+= "<option value='"+row.id+"' selected>"+row.name+"</option>";
+        }else{
+            output+= "<option value='"+row.id+"'>"+row.name+"</option>";
+        }
+    });
+    return output;
+}
+
+
+function checkLotNumber($this){
+    console.log("triggered change on inventory_lot_number");
+    var found = false,
+        selectedRow = [];
+    $.each(window.lotnumbers_library, function (i, row){
+        if( row.lot_number == $this.val() ){
+            console.log("found row: ");
+            console.log(row);
+            found = true;
+            selectedRow = row;
+        }
+    });
+
+    if( found === true ){
+        $("#inventories_product_id").select2("destroy").children("option").removeAttr("selected").attr("disabled", "disabled");
+        $("#inventories_product_id option[value='"+selectedRow.product_id+"']").attr("selected", "selected").removeAttr("disabled");
+        $("#inventories_product_id").attr("readonly", "readonly").select2().trigger("change");
+        $("#form_edit_inventory input[name='expiration_date']").val(selectedRow.expiration).attr("readonly", "readonly");
+    }else{
+        $("#form_edit_inventory input[name='expiration_date']").removeAttr("readonly").val("");
+        $("#inventories_product_id").select2("destroy").children("option").removeAttr("selected").removeAttr("disabled");
+        $("#inventories_product_id").removeAttr("readonly").select2().trigger("change");
+    }
+}
+
+window.lotnumbers_source = [];
+window.lotnumbers_library = [];
+var getLotNumber_Retries = 0;
+function getLotNumbers(){
+    $.ajax({
+        url: '/lot-numbers',
+        type: 'post',
+        dataType: 'json',
+        data: {_token: $("input[name='_token']").val()},
+        beforeSend: function (){
+            console.log("getting lot numbers now..");
+        },
+        success: function (data){
+            console.log(data);
+            if( !data.error ){
+                $.each(data, function (i, row){
+                    window.lotnumbers_source.push(row.lot_number);
+                    window.lotnumbers_library.push({
+                        "lot_number" : row.lot_number, 
+                        "expiration" : row.expiration_date,
+                        "product_id" : row.product_id
+                    });
+                });
+                $("#inventory_lot_number").autocomplete({ 
+                    source: window.lotnumbers_source,
+                    change: function (){
+                        checkLotNumber( $(this) );
+                    },
+                    select: function (){
+                        checkLotNumber( $(this) );
+                    }
+                });
+                // $( ".inventory_lot_number" ).autocomplete( "option", "appendTo", ".eventInsForm" );
+            }else{
+                if( getLotNumber_Retries < 10 ){
+                    getLotNumbers();
+                    getLotNumber_Retries++;
+                }
+            }
+        },
+        error: function (shr, status, data){
+            console.log("Error getting lot numbers branch. "+data+" Status "+shr.status);
+        },
+        complete: function (){
+            console.log("getting session lot numbers completed.");
+        }
+    });
+}

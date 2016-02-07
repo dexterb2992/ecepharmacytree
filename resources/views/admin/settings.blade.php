@@ -25,7 +25,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label>Level limit</label>
+							<label>Level limit<small></label>
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 							<input class="form-control number" type="text" name="level_limit" value="{{ $settings->level_limit }}" />
 						</div>
@@ -49,11 +49,11 @@
 							</div>
 						</div>
 
-						<div class="box-header with-border">
+						<div class="box-header with-border" style="display:none;">
 							<h3 class="box-title" style="margin-left: -10px;">Inventory Settings</h3>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" style="display:none;">
 							<label>Promo Auto Suggest  
 								<small><i>
 									(How many weeks/months before a stock's expiration should the system will suggest to add that stock for promotion?)
@@ -90,7 +90,7 @@
 							</div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" style="display:none;">
 							<label>Nearest Distance Location <small><i>(Measured in Kilometer, this is to identify the farthest/maximum distance between user location and ECE branch.)</i></small></label>
 							<div class="input-group">
 								<input type="text" name="nearest_location_distance" class="number form-control" value="{{ $settings->nearest_location_distance }}">

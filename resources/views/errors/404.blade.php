@@ -1,4 +1,5 @@
 @extends('admin.layouts.template')
+@section('title', '404 Page not found.')
 @section('content')
   <div class="error-page">
     <h2 class="headline text-yellow"> 404</h2>

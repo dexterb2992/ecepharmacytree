@@ -40,6 +40,6 @@ class CreateClinicTreatmentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('treatments');
+        Schema::drop('clinic_treatments');
     }
 }

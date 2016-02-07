@@ -37,11 +37,12 @@
 				<tr>
 					<td>
 						<div style="font-size: 14px;color:black !important;">
+							<span>Hi {{ $fname.' '.$lname }},</span><br/>
 							<b style="color:black;">{{ Auth::user()->fname." ".Auth::user()->lname }}</b> has added you as {{ $role }} at {{ $branch_name }}. <br/>
 							<span style="color:black;">Please login using this credentials:</span>
 							<br/><br/>
-							<span style="color:black;">Email:</span><code>{{ $email }}</code><br/>
-							<span style="color:black;">Password:</span><code>{{ $password }}</code>
+							<span style="color:black;">Email: </span><code>{{ $email }}</code><br/>
+							<span style="color:black;">Password: </span><code>{{ $password }}</code>
 							<br/><br/>
 							<div style="text-align: center;">
 								<a style="-webkit-box-shadow: none;

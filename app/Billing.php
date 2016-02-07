@@ -12,4 +12,8 @@ class Billing extends Model
     public function order(){
     	return $this->belongsTo('ECEPharmacyTree\Order');
     }
+
+    public function referral_commission_activities(){
+    	return $this->hasMany('ECEPharmacyTree\ReferralCommissionActivityLog');
+    }
 }

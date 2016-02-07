@@ -4,6 +4,9 @@ $(document).ready(function (){
     window.global_free_gift_product_ids = [];
     window.global_free_gift_quantities = []; // quantities from database
 
+    window.global_per_transaction_free_gift_product_ids = [];
+    window.global_per_transaction_quantities = [];
+
     /* Morris.js Charts */
     // Sales chart
     try{
@@ -55,7 +58,7 @@ $(document).ready(function (){
         donut.redraw();
     });
 
-    $('.datatable:not(.table-referrals)').DataTable({
+    $('.datatable').DataTable({
         "paging": true,
         "lengthChange": false,
         "searching": true,
@@ -64,10 +67,20 @@ $(document).ready(function (){
         "autoWidth": false
     });
 
-    $('.table-referrals').DataTable({
+    $('.table-orders').DataTable({
+        "iDisplayLength": -1,
+        "aaSorting": [[ 0, "desc" ]]
+    });
+
+    $('.table-referrals, #tbl_stock_returns').DataTable({
         "iDisplayLength": -1,
         "aaSorting": [[ 2, "desc" ]]
     });
+
+    $('.table-points-log').DataTable({
+        "aaSorting": [[ 1, "desc" ]]
+    });
+
 
     $('.btn').addClass("btn-flat");
 
@@ -143,7 +156,8 @@ $(document).ready(function (){
         console.log('target: '+target+" id: "+target+" mainurl: "+mainurl);
         _clear_form_data(form);
         url = mainurl+action;
-
+        window.hasAdditionalAddress = false;
+        window.responseBarangayId = 0;
         if( action == "edit" ){
             title = "Edit "+dataTitle;
             url = $this.data("url");
@@ -165,15 +179,52 @@ $(document).ready(function (){
 
                     $.each(data, function (i, row){ // loop through all object elements 
                         // just add your custom conditions here 
+                        if( i == "barangay_id" ){
+                            window.responseBarangayId = row;
+                            // let's populate address here
+                            $.ajax({
+                                url: '/populate-address/'+window.responseBarangayId,
+                                type: 'get',
+                                dataType: 'json'
+                            }).done(function (data){
+                                console.log(data);
+                                if( data.hasOwnProperty('provinces') && data.hasOwnProperty('municipalities') 
+                                    && data.hasOwnProperty('barangays') && data.hasOwnProperty('selected') ){
+
+                                    var provinces = address_populator_helper(data.provinces, data.selected.province_id);
+                                    var municipalities = address_populator_helper(data.municipalities, data.selected.municipality_id);
+                                    var barangays = address_populator_helper(data.barangays, data.selected.barangay_id);
+
+
+                                    $("select[name='province_id'], select[name='municipality_id'], select[name='barangay_id'], select[name='region_id']").select2('destroy');
+
+                                    $("select[name='region_id'] option[value='"+data.selected.region_id+"']").attr("selected", "selected");
+
+                                    $("select[name='province_id']").html(provinces).select2();
+                                    $("select[name='municipality_id']").html(municipalities).select2();
+                                    $("select[name='barangay_id']").html(barangays).select2();
+                                    $("select[name='region_id']").select2();
+                                }
+                            });
+                        }
+
+
+                        form.find("textarea[name='"+i+"']").val(row);
+
                         if( i == "description" ){
                             var str = row+"";
                             var reg = /\\r?\\n/g; // remove extra slashes
                             var newRow = str.replace(reg, '\n');
+
+                            form.find("textarea[name='"+i+"']").val(newRow);
                         }
 
+                        if( i == "additional_address" ){
+                            window.hasAdditionalAddress = true;
+                        }
 
                         form.find("input[name='"+i+"']").val(row);
-                        form.find("textarea[name='"+i+"']").val(newRow);
+                        
                         var cbox = form.find('input[name="'+i+'"][type="checkbox"]');
                         if( cbox.length > 0 ){
                             if( row == 1 ){
@@ -187,11 +238,20 @@ $(document).ready(function (){
                             }
                         }
 
+                        var radio = form.find('input[name="'+i+'"][type="radio"][data-check-value="'+row+'"]');
+                        if( radio.length > 0 ){
+                            radio.attr("checked", "checked");
+                            radio.iCheck('uncheck');
+                            radio.iCheck('check');
+                            radio.trigger("change");
+                        }
+
                         if(row == "") {
                             form.find("img[name='"+i+"']").attr('src', 'img/nophoto.jpg');
                         } else {
                             form.find("img[name='"+i+"']").attr('src', 'db/uploads/user_'+data.id+'/'+row);
                         }
+
 
                         if( i == "start_date" ) 
                             start_date = row;
@@ -217,23 +277,25 @@ $(document).ready(function (){
                     });
 
                     // search for select dropdown with array names ex. names[]
-                    $.each(data, function (i, row){
-                        form.find("input[name='"+i+"[]']").val(row); 
-                        var does_array_select_exists = form.find("select[name='"+i+"[]']");
+                        $.each(data, function (i, row){
+                            form.find("input[name='"+i+"[]']").val(row); 
+                            var does_array_select_exists = form.find("select[name='"+i+"[]']");
 
-                        if( does_array_select_exists.length > 0 ){
-                            $.each(row, function (a, b){
-                                var lets_check = form.find("select[name='"+i+"[]'] option[value='"+b.id+"']");
-                                if( lets_check.length > 0 ){
-                                    $(lets_check).attr("selected", "selected");
+                            if( does_array_select_exists.length > 0 ){
+                                $.each(row, function (a, b){
+                                    var lets_check = form.find("select[name='"+i+"[]'] option[value='"+b.id+"']");
+                                    if( lets_check.length > 0 ){
+                                        $(lets_check).attr("selected", "selected");
+                                    }
+                                });
+
+                                if( does_array_select_exists.hasClass('select2') ){
+                                    does_array_select_exists.select2();
                                 }
-                            });
-
-                            if( does_array_select_exists.hasClass('select2') ){
-                                does_array_select_exists.select2();
                             }
-                        }
-                    });
+                        });
+
+
 
                 }catch(Exception){
                     console.log(Exception);
@@ -241,44 +303,69 @@ $(document).ready(function (){
 
 
                 form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing");
-                form.find('#inventories_product_id').attr("disabled", "disabled");
+                form.find('#inventories_product_id, #inventory_quantity').attr("disabled", "disabled");
                 updateInventoryProductQty();
 
                 // add your conditions & magic codes here when form fields has been filled 
 
+                    if( $this.hasClass('promo-product-details') ){
+                        window.global_free_gift_product_ids = [];
+                        window.global_free_gift_quantities = [];
 
-                if( $this.hasClass('promo-product-details') ){
-                    window.global_free_gift_product_ids = [];
-                    window.global_free_gift_quantities = [];
+                        console.log("promo details");
+                        if( data.has_free_gifts == 1 ){
+                            console.log("fetch for free gifts now.");
+                            $.ajax({
+                                url: '/promos/details/gifts',
+                                type: 'post',
+                                dataType: 'json',
+                                data: { id: data.id, _token: _token }
+                            }).done(function (data){
+                                console.log(data);
+                                var products_list = $("#promo_details_gifts");
+                                var htmls = "";
+                                $.each(data, function (i, row){
+                                    $("#promo_details_gifts option[value='"+row.product.id+"']").attr("selected", "selected");
+                                    htmls+= generate_gift_qty_form(row.product.id, row.product.name, row.quantity_free, 'gift_quantities');
+                                    window.global_free_gift_product_ids.push(row.product.id);
+                                    window.global_free_gift_quantities.push({"id" : row.product.id, "quantity" : row.quantity_free});
+                                });
+                                $(".selected-products-qty-div").html(htmls);
+                                $("#promo_details_gifts").select2();
+                                
+                                $("#form_promo_product_info").find('input.gift_quantities').each(function (i, row){
+                                    $(row).attr("data-min", 1);
+                                });
+                                allowNumericOnly( $('.number') );
+                            });
+                        }
+                    }
 
-                    console.log("promo details");
-                    if( data.has_free_gifts == 1 ){
-                        console.log("fetch for free gifts now.");
-                        $.ajax({
-                            url: '/promos/details/gifts',
-                            type: 'post',
-                            dataType: 'json',
-                            data: { id: data.id, _token: _token }
-                        }).done(function (data){
-                            console.log(data);
-                            var products_list = $("#promo_details_gifts");
-                            var htmls = "";
-                            $.each(data, function (i, row){
-                                $("#promo_details_gifts option[value='"+row.product.id+"']").attr("selected", "selected");
-                                htmls+= generate_gift_qty_form(row.product.id, row.product.name, row.quantity_free, 'gift_quantities');
-                                window.global_free_gift_product_ids.push(row.product.id);
-                                window.global_free_gift_quantities.push({"id" : row.product.id, "quantity" : row.quantity_free});
-                            });
-                            $(".selected-products-qty-div").html(htmls);
-                            $("#promo_details_gifts").select2();
-                            
-                            $("#form_promo_product_info").find('input.gift_quantities').each(function (i, row){
-                                $(row).attr("data-min", 1);
-                            });
-                            allowNumericOnly( $('.number') );
+                    if( data.hasOwnProperty('per_transaction_has_free_gifts') ){
+                        var products_list = $("#promo_details_per_transaction_gifts");
+                        var htmls = "";
+                        $.each(data.free_gifts, function (i, row){
+                            $("#promo_details_per_transaction_gifts option[value='"+row.id+"']").attr("selected", "selected");
+                            htmls+= generate_gift_qty_form(row.id, row.name, row.quantity_free, 'per_transaction_gift_quantities');
+                            window.global_per_transaction_quantities.push(row.id);
+                            window.global_per_transaction_free_gift_product_ids.push({"id" : row.id, "quantity" : row.quantity_free});
+                        });
+                        $(".per-transaction-selected-products-qty-div").html(htmls);
+                        $("#promo_details_per_transaction_gifts").select2();
+                        
+                        $("#form_promo_product_info").find('input.per_transaction_gift_quantities').each(function (i, row){
+                            $(row).attr("data-min", 1);
                         });
                     }
-                }
+
+                    if( data.hasOwnProperty("specific_promo_product_ids") ){
+                        var products_list = $("#specific_promo_product_ids");
+                        var htmls = "";
+                        $.each(data.free_gifts, function (i, row){
+                            $("#specific_promo_product_ids option[value='"+row.id+"']").attr("selected", "selected");
+                        });
+                        $("#specific_promo_product_ids").select2();
+                    }
 
 
             });
@@ -289,12 +376,12 @@ $(document).ready(function (){
             $(modal).modal('show');
 
         } else if(action == "fulfill_items") {
-
-        }else{
+            
+        } else {
             title = "Add new "+dataTitle;
 
             _clear_form_data(form);
-            form.find('#inventories_product_id').removeAttr("disabled");
+            form.find('#inventories_product_id, #inventory_quantity').removeAttr("disabled").trigger("change");
             updateInventoryProductQty();
         }
 
@@ -302,9 +389,22 @@ $(document).ready(function (){
         form.attr("action", mainurl+action);
 
         form.find(".modal-title").html(title);
-
+        
         $(modal).modal('show');
-        $(form).find("select#select_subcategory_id").select2();
+        
+
+        $("select.select2").select2();
+        $('.data-show').trigger('change click');
+
+        console.log("checking if hasAdditionalAddress ");
+        setTimeout(function(){
+            if( window.hasAdditionalAddress == true && $("#map").length > 0){
+                console.log("hasAdditionalAddress: yes");
+                    initMap();
+            }
+        },1000);
+        
+
     });
 
 
@@ -370,7 +470,7 @@ $(document).ready(function (){
             showAlert(title, msg, alertType, type);
         }else{
             $.ajax({
-                url : '/branches/deactivate',
+                url : mainurl+'deactivate',
                 type : 'post',
                 dataType : 'json',
                 data : { id : id, _token : _token }
@@ -851,6 +951,7 @@ $("#add_gallery").click(function (){
             if( data.hasOwnProperty('product') ){
                 $('#inventory_adjustment_details').html('Lot# '+data.lot_number+
                     '<br/>Product:  <b><a href="/products?q='+data.product.name+'" target="_blank">'+data.product.name+'</a></b>'+
+                    '<br/>Total sold items: <b title="Total sold products for this inventory">'+data.sold_products_count+'</b>'+
                     '<br/><small>Date added: '+data.date_added+'</small>');
                 $('#old_quantity').val(data.quantity);
                 $('#modal-add-adjustments').find('#sid').val(data.id);
@@ -973,58 +1074,6 @@ $("#add_gallery").click(function (){
         }
     });
 
-    $('#promo_details_gifts').change(function (){
-        var $this = $(this);
-        var htmls = "";
-        var dropdown_values = $this.val();
-        
-        if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
-            $.each(dropdown_values, function (i, row){
-                dropdown_values[i] = parseInt(row);
-            });
-
-            $.each(dropdown_values, function (i, row){
-                if( $.inArray( row, window.global_free_gift_product_ids) === -1 ){
-                    window.global_free_gift_product_ids.push(row);
-
-                    var check = getArrayIndexForKey(window.global_free_gift_quantities, "id", row);
-                    if( check === -1 ){ // make sure the product doesn't exist yet
-                        window.global_free_gift_quantities.push({"id" : row, "quantity" : 0});
-                    }
-
-                    // htmls+= generate_gift_qty_form(row, $this.children("option[value='"+row+"']").text());
-                }
-
-            });
-        }
-
-        // if wala sa select tas naa sa global_free_gift_qty, remove
-        $.each(window.global_free_gift_product_ids, function (i, row){
-            if( $.inArray(row, dropdown_values) === -1 ){ // means value is found in global_free_gift_qty and not in select
-                console.log("means value is found in global_free_gift_qty and not in select");
-                console.log("global_free_gift_quantities:");
-                console.log(global_free_gift_product_ids);
-                console.log("dropdown_values:");
-                console.log(dropdown_values);
-                var index =  window.global_free_gift_product_ids.indexOf(row);
-                console.log("index: "+index+" row: "+row);
-                if (index > -1) {
-                    window.global_free_gift_product_ids.splice(index, 1); // 
-                }
-            }
-        });
-
-
-        $.each(window.global_free_gift_quantities, function (i, row){
-            if( $.inArray(row.id, global_free_gift_product_ids) !== -1 ){
-                htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'gift_quantities');
-            }
-        
-        });
-
-        $(".selected-products-qty-div").html(htmls);
-        allowNumericOnly( $('.number') );
-    });
 
     $('.data-show').bind('change click', function(){
         dataShowTarget($(this), $(this).val());
@@ -1038,7 +1087,12 @@ $("#add_gallery").click(function (){
         ).done(function(orders, products, returnCodes){
             window.orders = orders[0];
             $.each(orders[0], function (i, row){
-                ordersHtml+= '<option value="'+row.id+'" data-pname="'+row.patient.fname+' '+row.patient.lname+'">#'+row.id+'</option>';
+                if( row.billing.payment_status == 'paid' ){
+                    ordersHtml+= '<option value="'+row.id+'" data-pname="'+row.patient.fname+' '+row.patient.lname+'">#'+row.id+'</option>';
+                }else{
+                    ordersHtml+= '<option value="'+row.id+'" data-pname="'+row.patient.fname+' '+row.patient.lname+'">#'+row.id+'('+row.billing.payment_status+')</option>';
+
+                }
             });
 
             $.each(products[0], function (i, row){
@@ -1067,27 +1121,84 @@ $("#add_gallery").click(function (){
         var val = $(this).val(), productsHtml = "", productNames = "";
         console.log("order_id has changed. value: "+val);
         window.maxReturnQty = [];
+        window.maxReturnQtyProductIDs = [];
         $.each(window.orders, function (col, row){
             if( row.id == val ){
                 window.selectedOrder = row;
 
                 // make sure that the order is already paid
-                if( row.billing.payment_status == 'paid' ){
+                // if( row.billing.payment_status == 'paid' ){
                     $.each(row.order_details, function (index, order_detail){
-                        var pId = order_detail.product.id;
+                        var pId = parseInt(order_detail.product.id), return_status = "",
+                            pOrderedQty = parseFloat(order_detail.quantity), 
+                            pQtyReturned = parseFloat(order_detail.quantity_returned);
+                        console.log('order_detail_id: '+order_detail.id);
+                        console.log(order_detail);
+                        if( pOrderedQty > pQtyReturned ){
+                           
+                            console.log("nisulod sa if");
+                            var old_max_qty = 0;
+                            if( $.inArray(pId, maxReturnQtyProductIDs) !== -1 ){
+                                console.log("id: "+pId+" -> yes, naa");
+                                old_max_qty = window.maxReturnQty[pId].qty;
+                                window.maxReturnQty[pId].qty =  old_max_qty + (pOrderedQty - pQtyReturned);
+                            }else{
+                                productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
+                                maxReturnQtyProductIDs.push(pId);
+                                console.log("id: "+pId+" -> no, wala");
+                                window.maxReturnQty[pId] = {
+                                    pId: pId, 
+                                    qty: pOrderedQty - pQtyReturned, 
+                                    name: order_detail.product.name, 
+                                    price: order_detail.price
+                                };
+                            }
+
+                            // productsHtml+= '<option value="'+pId+'" data-id="'+order_detail.id+'">'+order_detail.product.name+'</option>';
+                            // window.maxReturnQty[pId] = {
+                            //     id: order_detail.id,
+                            //     pId: pId, 
+                            //     qty: pOrderedQty - pQtyReturned, 
+                            //     name: order_detail.product.name, 
+                            //     price: order_detail.price
+                            // };
+                        }else{
+                            console.log("wa nisulod sa if");
+                        }
+
+                        if( pOrderedQty == pQtyReturned ){
+                            return_status = '<span class="label label-info" style="margin-left: 4px">Returned</span>';
+                        }else if( pOrderedQty > pQtyReturned ){
+                            var def = order_detail.quantity - order_detail.quantity_returned;
+                            return_status = '<span class="label label-warning" style="margin-left: 4px">'+def+' remaining</span>';
+                        }
+
                         productNames+= "<i class='fa fa-caret-right'></i> ("+peso()+order_detail.price+" x "+
-                                order_detail.quantity+" "+
-                                str_auto_plural(order_detail.product.packing, order_detail.quantity)+
-                                ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
-                                order_detail.product.name+"</a>,<br/>";
-                        productsHtml+= '<option value="'+pId+'">'+order_detail.product.name+'</option>';
-                        window.maxReturnQty[order_detail.product.id] = {pId: pId, qty: order_detail.quantity, name: order_detail.product.name, price: order_detail.price};
+                                    pOrderedQty+" "+
+                                    str_auto_plural(order_detail.product.packing, pOrderedQty)+
+                                    ') <a href="/products?q='+order_detail.product.name+'" target="_blank">'+
+                                    order_detail.product.name+"</a>"+return_status+"<br/>";
                     });
+
+                    // let's show the discounts that the user has availed
+                    var discounts_html = "";
+                    if( row.billing.coupon_discount > 0 ){
+                        discounts_html+= peso()+" "+row.billing.coupon_discount+' (Coupon discount) ';
+                    }
+
+                    if( row.billing.points_discount > 0 ){
+                        discounts_html+= '<br/>'+peso()+" "+row.billing.points_discount+' (Points discount) ';
+                    }
+
+                    discounts_html+= '<br/><a href="/orders/'+row.id+'" target="_blank" class="glow">View details</a>';
+
                     $("#customer_name").html(row.patient.fname+" "+row.patient.lname);
                     $("#total_amount").html(peso()+' '+row.billing.total);
+                    $("#gross_total").html(peso()+' '+row.billing.gross_total);
+                    $("#all_less").html(discounts_html);
                     $("#refund_amount").html(window.selectedOrder.billing.total);
                     $('#amount_refunded').val(window.selectedOrder.billing.total);
-                }
+                // }
                 
             }
         });
@@ -1105,7 +1216,7 @@ $("#add_gallery").click(function (){
             
                 // var row = window.maxReturnQty[selectedProduct];
                 // console.log(row);
-                window.maxReturnQty.each(function (i, row){
+                $.each(window.maxReturnQty, function (i, row){
                     if( row.pId == selectedProduct ){
                         var refundableAmount = val * row.price;
 
@@ -1142,7 +1253,7 @@ $("#add_gallery").click(function (){
 
                 // add max qty to the newly appended textviews
                 $("#form_return_n_refund").find('input.products_return_qtys').each(function (i, row){
-                    $(row).attr("data-max", window.maxReturnQty[$(row).data("id")].qty);
+                    $(row).attr("data-max", window.maxReturnQty[$(row).data("id")].qty).attr("data-min", 1);
                     $(row).on("keyup change", function (){
                         calculateStockReturnAmount();
                     });
@@ -1177,6 +1288,7 @@ $("#add_gallery").click(function (){
         }
     });
 
+<<<<<<< HEAD
     // add more validation for this form here
     $(document).on('click', "#form_return_n_refund_btn_submit", function (){
         var hasError = false;
@@ -1190,6 +1302,409 @@ $("#add_gallery").click(function (){
         }else{
             $(this).attr("type", "button");
         }
+=======
+
+
+    // Adding promo validation & codes here
+        $('#promo_details_gifts').change(function (){
+            var $this = $(this);
+            var htmls = "";
+            var dropdown_values = $this.val();
+            
+            if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
+                $.each(dropdown_values, function (i, row){
+                    dropdown_values[i] = parseInt(row);
+                });
+
+                $.each(dropdown_values, function (i, row){
+                    if( $.inArray( row, window.global_free_gift_product_ids) === -1 ){
+                        window.global_free_gift_product_ids.push(row);
+
+                        var check = getArrayIndexForKey(window.global_free_gift_quantities, "id", row);
+                        if( check === -1 ){ // make sure the product doesn't exist yet
+                            window.global_free_gift_quantities.push({"id" : row, "quantity" : 1});
+                        }
+
+                        // htmls+= generate_gift_qty_form(row, $this.children("option[value='"+row+"']").text());
+                    }
+
+                });
+            }
+
+            // if wala sa select tas naa sa global_free_gift_qty, remove
+            $.each(window.global_free_gift_product_ids, function (i, row){
+                if( $.inArray(row, dropdown_values) === -1 ){ // means value is found in global_free_gift_qty and not in select
+                    console.log("means value is found in global_free_gift_qty and not in select");
+                    console.log("global_free_gift_quantities:");
+                    console.log(global_free_gift_product_ids);
+                    console.log("dropdown_values:");
+                    console.log(dropdown_values);
+                    var index =  window.global_free_gift_product_ids.indexOf(row);
+                    console.log("index: "+index+" row: "+row);
+                    if (index > -1) {
+                        window.global_free_gift_product_ids.splice(index, 1); // 
+                    }
+                }
+            });
+
+
+            $.each(window.global_free_gift_quantities, function (i, row){
+                if( $.inArray(row.id, global_free_gift_product_ids) !== -1 ){
+                    htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'gift_quantities');
+                }
+            
+            });
+
+            $(".selected-products-qty-div").html(htmls);
+            allowNumericOnly( $('.number') );
+        });
+
+        $('#promo_details_per_transaction_gifts').change(function (){
+            var $this = $(this);
+            var htmls = "";
+            var dropdown_values = $this.val();
+            
+            if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
+                $.each(dropdown_values, function (i, row){
+                    dropdown_values[i] = parseInt(row);
+                });
+
+                $.each(dropdown_values, function (i, row){
+                    // if( $.inArray( row, window.global_free_gift_product_ids) === -1 ){
+                    if( $.inArray( row, window.global_per_transaction_free_gift_product_ids) === -1 ){
+                        window.global_per_transaction_free_gift_product_ids.push(row);
+
+                        var check = getArrayIndexForKey(window.global_per_transaction_quantities, "id", row);
+                        if( check === -1 ){ // make sure the product doesn't exist yet
+                            window.global_per_transaction_quantities.push({"id" : row, "quantity" : 1}); // set default to 1
+                        }
+
+                        // htmls+= generate_gift_qty_form(row, $this.children("option[value='"+row+"']").text());
+                    }
+
+                });
+            }
+
+            // if wala sa select tas naa sa global_free_gift_qty, remove
+            $.each(window.global_per_transaction_free_gift_product_ids, function (i, row){
+                if( $.inArray(row, dropdown_values) === -1 ){ // means value is found in global_free_gift_qty and not in select
+                    console.log("means value is found in global_free_gift_qty and not in select");
+                    console.log("global_per_transaction_free_gift_product_ids:");
+                    console.log(global_per_transaction_free_gift_product_ids);
+                    console.log("dropdown_values:");
+                    console.log(dropdown_values);
+                    var index =  window.global_per_transaction_free_gift_product_ids.indexOf(row);
+                    console.log("index: "+index+" row: "+row);
+                    if (index > -1) {
+                        window.global_per_transaction_free_gift_product_ids.splice(index, 1); // 
+                    }
+                }
+            });
+
+
+            $.each(window.global_per_transaction_quantities, function (i, row){
+                if( $.inArray(row.id, global_per_transaction_free_gift_product_ids) !== -1 ){
+                    htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'per_transaction_gift_quantities');
+                }
+            
+            });
+
+            $(".per-transaction-selected-products-qty-div").html(htmls);
+            allowNumericOnly( $('.number') );
+        });
+        
+        // validation on promo details of each product
+            $(document).on("submit", "#form_promo_product_info", function (e){
+                var $this = $(this);
+                var hasError = false;
+
+                var minimum_purchase = $this.find("input[name='minimum_purchase']"),
+                    quantity_required = $this.find("input[name='quantity_required']"),
+                    has_free_gifts = $this.find("input[name='has_free_gifts']"),
+                    promo_details_gifts = $this.find('#promo_details_gifts'),
+                    percentage_discount = $this.find('input[name="percentage_discount"]'),
+                    peso_discount = $this.find('input[name="peso_discount"]');
+
+                if( minimum_purchase.is(":visible") === true && (minimum_purchase.val() == "" ||  minimum_purchase.val() == "0" ) ){
+                    hasError = true;
+                    _error(minimum_purchase, "This field is required.");
+                    console.log("error 1");
+                }
+
+                if( quantity_required.is(":visible") === true && (quantity_required.val() == "" ||  quantity_required.val() == "0" ) ){
+                    hasError = true;
+                    _error(quantity_required, "This field is required.");
+                    console.log("error 2");
+                }
+
+                if( quantity_required.is(":visible") === false &&  minimum_purchase.is(":visible") === false ){
+                    hasError = true;
+                    _error($this.find('label[for="discount_detail_minimum_type"]:last'), "This field is required.");
+                    console.log("error 3");
+                }
+
+                if(  quantity_required.is(":visible") === true && (has_free_gifts.val() == 1 || has_free_gifts.val() == 0) &&  
+                    (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) ){
+                    hasError = true;
+                    _error(promo_details_gifts, "Please select atleast one product.");
+                    console.log("error 4");
+                }
+
+                // if(  quantity_required.is(":visible") === true && ( has_free_gifts.val() == 0 || has_free_gifts.val() == 1 ) ){
+                //     hasError = true;
+                //     _error(has_free_gifts, "This field is required.");
+                //     console.log("error 5");
+                // }
+
+                // when no offer is selected
+                if( quantity_required.is(":visible") === false && (promo_details_gifts.val() == "" || promo_details_gifts.val() === null) &&
+                    (peso_discount.val() == "" || peso_discount.val() == 0) && (percentage_discount.val() == "" || percentage_discount.val() == 0)
+                ){
+                    hasError = true;
+                    $("#specific_product_offers").next('div.label-danger').html("Please specify the discount to continue.").fadeIn().delay(5000).fadeOut(400);
+                    console.log("error 5");
+                }
+
+                $.each($(document).find('#form_promo_product_info input.gift_quantities'), function (i, row){
+                    if( $(row).val() == "" || $(row).val() == 0 ){
+                        hasError = true;
+                        _error($(row), "This field is required.");
+                    }
+                });
+
+                if( hasError === true ){
+                    e.preventDefault();
+                    return false;
+                }
+            });
+    
+        // validation for Add new Promo
+            $(document).on("click", "#btn_create_edit_promo", function (e){
+                
+                var $this = $("#form_edit_promo");
+                var hasError = false;
+
+                var date_range = $this.find("input[name='date_range']"), 
+                    long_title = $this.find("input[name='long_title']"),
+                    start_date = $this.find("input[name='start_date']"),
+                    end_date = $this.find("input[name='end_date']"),
+                    offer_type = $this.find('select[name="offer_type"]'),
+                    generic_redemption_code = $this.find('input[name="generic_redemption_code"]');
+
+                if( long_title.val() == "" ){
+                    hasError = true;
+                    _error(long_title, "This field is required.");
+                }
+
+                if( date_range.val() == "" ){
+                    hasError = true;
+                    _error(date_range, "This field is required.");
+                }
+
+                if( start_date.val() == "Invalid date" || end_date.val() == "Invalid date" ){
+                    hasError = true;
+                    _error(date_range, "Invalid date.");
+                }
+
+                if( offer_type.val() == "GENERIC_CODE" && generic_redemption_code.val() == ""){
+                    hasError = true;
+                    _error(generic_redemption_code, "This field is required.");
+                }
+
+
+
+                var product_applicability = "";
+                console.log("product_applicability: " +product_applicability);
+                if( $("#per_transaction_outer_div").is(":visible") === true ){
+                    product_applicability = 'PER_TRANSACTION';
+                }else if( $("#specific_products_outer_div").is(":visible") === true ){
+                    product_applicability = 'SPECIFIC_PRODUCTS';
+                }
+
+                
+                
+                if( product_applicability === "PER_TRANSACTION" ){
+                    // if Per Transaction
+                    var minimum_purchase_amount = $this.find("input[name='minimum_purchase_amount']"),
+                        is_free_delivery = $this.find("input[name='is_free_delivery']:checked"),
+                        peso_discount = $this.find('input[name="peso_discount"]'),
+                        percentage_discount = $this.find('input[name="percentage_discount"]'),
+                        promo_details_per_transaction_gifts = $this.find("#promo_details_per_transaction_gifts"),
+                        per_transaction_has_free_gifts = $this.find('input[name="per_transaction_has_free_gifts"]:checked');
+
+                        console.log("minimum_purchase_amount: "+minimum_purchase_amount.val());
+                        console.log("is_free_delivery: "+is_free_delivery.val());
+                        console.log("peso_discount: "+peso_discount.val());
+                        console.log("percentage_discount: "+percentage_discount.val());
+                        console.log("promo_details_per_transaction_gifts: "+promo_details_per_transaction_gifts.val());
+                        console.log("per_transaction_has_free_gifts: "+per_transaction_has_free_gifts.val());
+
+                    if( minimum_purchase_amount.val() == 0 || minimum_purchase_amount.val() == "" ){
+                        hasError = true;
+                        _error(minimum_purchase_amount, "Please provide a minimum purchase amount.");
+                    }
+
+                    if( promo_details_per_transaction_gifts.is(":visible") === true && (promo_details_per_transaction_gifts.val() === null 
+                            || promo_details_per_transaction_gifts == "") ){
+                        hasError = true;
+                        _error(promo_details_per_transaction_gifts, "Please select atleast one product.");
+                    }
+
+                    if( per_transaction_has_free_gifts.val() != 1 && is_free_delivery.val() != 1 && (
+                        peso_discount.val() == "" || percentage_discount == "" 
+                        )){
+                            hasError = true;
+                        $("#per_transaction_promo_offers").next('div.label-danger').html("Please add atleast one offer (Free Gifts, Free Delivery, Discount) to continue.").fadeIn().delay(5000).fadeOut(400);
+                    }
+
+
+                }else if(product_applicability === "SPECIFIC_PRODUCTS"){
+                    // If Specific Products
+                    var specific_promo_product_ids = $this.find("#specific_promo_product_ids");
+                    console.log("specific_promo_product_ids: ");
+                    console.log(specific_promo_product_ids);
+
+                    if( specific_promo_product_ids.val() === null || specific_promo_product_ids.val() == "" ){
+                        hasError = true;
+                        _error(specific_promo_product_ids, "Please select atleast one product which will be included on this promo.");
+                    }
+                }else{
+                    hasError = true;
+                    _error($this.find("label#label_for_product_applicability"), "This field is required.");
+                }
+
+                if( hasError === true ){
+                    $(this).attr("type", "button");
+                    e.preventDefault();
+                    return false;
+                }else{
+                    console.log("submitting form now...");
+                    $(this).attr("type", "submit");
+                    $("#form_edit_promo").submit();
+                }
+            });
+
+    getSessionBranch();
+
+    // get lot numbers
+    if( $("#inventory_lot_number").length > 0 ){
+        getLotNumbers();
+    }
+
+
+    $("#inventory_lot_number").bind("change keyup",function(){
+        checkLotNumber( $(this) );
+    });
+
+    $(".classify-returned-products").click(function (){
+        var $this = $(this), id = $this.attr("data-id");
+
+        $.ajax({
+            url: '/get-stock-returns/'+id,
+            type: 'post',
+            data: {_token: $("input[name='_token']").val() }
+        }).done(function (data){
+            if( !data.error ){
+                var html = "";
+
+                if( data.length > 0 ){
+                    $.each(data, function (i, row){
+                        var option = "", max_removable = 0;
+                        max_removable = row.quantity - row.defective_quantity;
+                        if( row.quantity > row.defective_quantity ){
+                            option = '<input type="text" class="number returned-item-qty" value="'+max_removable+'" data-max="'+max_removable+'" data-min="1" placeholder="Defective quantity" name="damaged_qty">'+
+                                    '<a href="#!" class="btn-xxs btn-danger btn btn-flat btn-defective-qty" data-id="'+row.id+'">Mark as defective</a></div>';
+                        }else{
+                            option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
+                                ' marked as defective)</span>';
+                        }
+
+                        html+= '<li>'+
+                                '<div class="row" style="margin-right: 0px;">'+
+                                    '<div class="col-md-7">'+
+                                        '<span class="handle">'+
+                                            '<i class="fa fa-arrows"></i>'+
+                                        '</span>'+
+                                        '<span class="product-list-items" title="'+row.product.name+'">'+row.product.name+'</span>'+
+                                    '</div>'+
+                                    '<div class="col-md-5">'+option+
+                                '</div>'+
+                            '</li>';
+                    });
+                }else{
+                    html = "Sorry, we can't find anything.";
+                }
+                if( data.error ){
+                    html = data.error;
+                }
+                
+                $("#returned_stocks_lists").html(html);
+                $("#modal-stock-return-details").modal("show");
+                allowNumericOnly($(".number"));
+            }
+
+        });
+
+    });
+
+    $(document).on("click", ".btn-defective-qty", function (){
+        var $this = $(this), txtbox = $this.prev("input"), qty = txtbox.val();
+        $.ajax({
+            url: "/update-defective-stocks",
+            type: "post",
+            dataType: "json",
+            data: {
+                _token: $("input[name='_token']").val(),
+                id: $this.attr("data-id"),
+                defective_quantity: qty
+            },
+            beforeSend: function (){
+                $this.addClass("disabled").html("Loading..");
+            }
+        }).done(function (data){
+            $this.removeClass("disabled").html("Mark as defective");
+            var alert = '';
+            if( data.status == 200 ){
+                var option = "", row = data.data;
+
+                alert = '<br/><span class="label label-success">Successfully removed '+qty+' '+
+                        str_auto_plural(row.product.packing, qty)+' of '+row.product.name+' from the inventory</span>';
+                   
+                $("#returned_stocks_lists_request_status").append(alert);
+                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
+                    $(this).prev('br').remove();
+                    $(this).remove();
+                });
+
+                if( row.defective_quantity == row.quantity ){
+                    txtbox.fadeOut();
+                    $this.fadeOut(function (){
+                        option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
+                                ' marked as defective)</span>';
+                        if( txtbox.next('span').length > 0 ){
+                            txtbox.next('span').remove().after(option);
+                        }else{
+                            txtbox.after(option);
+                        }
+                    });
+                }else{
+                    var max_removable = row.quantity - row.defective_quantity;
+                    txtbox.attr("data-max", max_removable).val(max_removable);
+                }
+            }else if(data.error){
+                alert = '<br/><span class="label label-danger">'+data.error+'</span>';
+                console.log(alert);
+                $("#returned_stocks_lists_request_status").append(alert);
+                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
+                    $(this).remove();
+                });
+            }
+            
+
+        });
+>>>>>>> ec16cc5645f4d8dbc0de605ceb1e5c5a1314d1c7
     });
 });
 

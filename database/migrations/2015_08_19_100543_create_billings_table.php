@@ -23,6 +23,8 @@ class CreateBillingsTable extends Migration
             $table->string('payment_status')->default('pending');
             $table->string('payment_method');
             $table->integer('is_new')->default(1);
+            $table->integer('points_computation_status')->default(0); // if 1, it means the points from this sale has been saved to the user's points
+            $table->string('or_txn_number');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -16,7 +16,7 @@ class CreateClinicsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('contact_no', 30);
-            $table->string('addition_address');
+            $table->string('additional_address');
             $table->integer('barangay_id')->unsigned();
             $table->foreign('barangay_id')->references('id')->on('barangays')->onDelete('cascade');
             $table->string('latitude')->nullable();

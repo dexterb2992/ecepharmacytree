@@ -16,13 +16,13 @@ class CreateOrderPreferenceTable extends Migration
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->string('order_receiving_option');
-            $table->string('address_for_delivery');
-            $table->string('recipient_for_delivery');
+            $table->string('mode_of_delivery');
+            $table->string('recipient_address');
+            $table->string('recipient_name');
+            $table->string('recipient_contactNumber');
             $table->string('payment_method');
-            $table->integer('is_new')->default(1);
+            $table->integer('branch_id');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

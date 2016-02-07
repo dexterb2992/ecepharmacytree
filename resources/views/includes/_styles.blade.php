@@ -51,5 +51,8 @@
 <!-- Custom Context Menu -->
 {!! HTML::style('plugins/contextmenu/jquery.contextmenu.css') !!}
 
+{!! HTML::style('plugins/jQueryUI/jquery-ui.theme.css') !!}
+{!! HTML::style('plugins/jQueryUI/jquery-ui.css') !!}
+
 <!-- PharmacyTree custom css -->
 {!! HTML::style('dist/ece.css') !!}

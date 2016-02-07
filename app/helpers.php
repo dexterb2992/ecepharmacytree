@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use ECEPharmacyTree\ReferralCommissionActivityLog;
 
 function pre($str){
 	echo '<pre>';
@@ -86,19 +87,19 @@ function generate_lot_number(){
 	generate_lot_number();
 }
 
-function str_auto_plural($str, $quantity){
-	$pos = strpos($str, "(");
+function str_auto_plural($singular_noun, $quantity){
+	$pos = strpos($singular_noun, "(");
 	$suf = "";
 
 	if( $pos !== false ){
-		$str = trim( substr($str, 0, $pos) );
-		$suf = trim( substr($str, $pos) );
+		$singular_noun = trim( substr($singular_noun, 0, $pos) );
+		$suf = " ".trim( substr($singular_noun, $pos) );
 	}
 
 	if( $quantity > 1 )	
-		return str_plural($str)." ".$suf;
+		return str_plural($singular_noun).$suf;
 
-	return str_singular($str)." ".$suf;
+	return str_singular($singular_noun).$suf;
 }
 
 function rn2br($str){
@@ -107,12 +108,12 @@ function rn2br($str){
 }
 
 function get_person_fullname($person, $reversed = false){
-	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : '';
-	$fname = ucfirst($person->fname)." ";
-	$lname = ucfirst($person->lname);
+	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : ' ';
+	$fname = !empty($person->fname) ? ucfirst($person->fname)." " : '';
+	$lname = !empty($person->lname) ? ucfirst($person->lname) : '';
     if( $reversed )
         return $lname.", ".$fname.$mname;
-    return $fname." ".$mname." ".$lname;
+    return $fname."".$mname." ".$lname;
 }
 
 
@@ -126,46 +127,7 @@ function get_patient_referrals($patient){
 	return $count1 + $count2;
 }
 
-function get_all_downlines($referral_id){
-	$settings = ECEPharmacyTree\Setting::first();
-	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
 
-	if( empty($patients) )
-		$patients = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
-
-	$downlines = array();
-	$downlines = $patients;
-
-	foreach($patients as $key => $patient){
-		
-		$child_downlines = get_all_downlines( $patient["referral_id"] );
-
-		$downlines[$key]["downlines"] = $child_downlines;
-
-	}
-
-	return $downlines;
-
-}
-
-function extract_downlines($downlines = array()){
-	$res = "";
-	foreach($downlines as $key => $downline){
-		$res.= '<li class="bg-teal-active">'
-		.'<span data-original-title="'.$downline["fname"]." ".$downline["lname"].'" data-toggle="tooltip">'
-		.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'</span>'
-		."<br/>(".$downline["referral_id"].")";
-		if( count($downline['downlines']) > 0 ){
-			$new_dls = extract_downlines($downline['downlines']);
-			$res.= '<ul>'.$new_dls.'</ul>';
-		}
-
-		$res.= '</li>';
-
-	}
-
-	return $res;
-}
 
 function get_recent_settings(){
 	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
@@ -226,9 +188,8 @@ function validate_reminder_token($token){
  */
 function get_role($role){
 	$roles = [
-	1 => 'Administrator',
-	2 => 'Branch Manager',
-	3 => 'Pharmacist',
+	1 => 'Super Admin',
+	2 => 'Branch Admin',
 	1001 => 'Developer'
 	];
 
@@ -365,7 +326,7 @@ function combine_additional_address(array $addresses){
 }
 
 function peso(){
-	return '&#x20B1;';
+	return 'PHP ';
 }
 
 function clean($str){
@@ -374,4 +335,130 @@ function clean($str){
 
 function check_stock_expiration(){
 	//<i class="glyphicon glyphicon-tags"></i>
+}
+
+function get_all_downlines($referral_id){
+	$referral_id = trim($referral_id);
+	$settings = ECEPharmacyTree\Setting::first();
+	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
+
+	if( empty($patients) )
+		$patients = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
+
+	$downlines = array();
+	$downlines = $patients;
+
+	foreach($patients as $key => $patient){
+		
+		$child_downlines = get_all_downlines( $patient["referral_id"] );
+
+		$downlines[$key]["downlines"] = $child_downlines;
+
+	}
+
+	return $downlines;
+
+}
+
+function extract_downlines($downlines = array()){
+	$res = "";
+	foreach($downlines as $key => $downline){
+		$res.= '<li class="bg-teal-active">'
+		.'<span data-original-title="'.$downline["fname"]." ".$downline["lname"].'" data-toggle="tooltip">'
+		.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'</span>'
+		."<br/>(".$downline["referral_id"].")";
+		if( count($downline['downlines']) > 0 ){
+			$new_dls = extract_downlines($downline['downlines']);
+			$res.= '<ul>'.$new_dls.'</ul>';
+		}
+
+		$res.= '</li>';
+
+	}
+
+	return $res;
+}
+
+global $x, $uplines;
+$x = 0;
+$uplines = array();
+
+function get_uplines($referral_id, $is_one = false, $generate_clickable_html = false){
+	global $x, $uplines;
+
+	$user = ECEPharmacyTree\Patient::where('referral_id', '=', $referral_id)->first();
+
+	// get the first upline
+	if( !empty($user) ){
+		$parent = [];
+		if( trim($user->referred_byDoctor) == "" || trim($user->referred_byDoctor) == null ){
+			$parent = ECEPharmacyTree\Patient::where('referral_id', '=', $user->referred_byUser)->first();
+		}else{
+			$parent = ECEPharmacyTree\Doctor::where('referral_id', '=', $user->referred_byDoctor)->first();
+		}	
+		
+
+		if( !empty($parent) ){
+			$uplines[$x] = $parent;
+			$final_uplines = $uplines;
+			$x++;
+			// check if parent has a parent
+			if( !empty(trim($parent->referred_byDoctor)) xor !empty(trim($parent->referred_byUser)) ){
+				get_uplines($parent->referral_id);
+			}else{
+				// reset the global variables
+				$x = 0;
+			}
+		}
+	}
+
+	if( !empty($uplines) ){
+		// dd($uplines);
+	}
+
+	if( $is_one ){
+		if( count($uplines) > 0  ){
+			if( $generate_clickable_html ){
+				$prefix = isset($uplines[0]->sub_specialty_id) ? "<i class='fa fa-user-md'></i>" : '';
+				$id_prefix = isset($uplines[0]->sub_specialty_id) ? "d" : 'p';
+				$html = "<a href='javascript:void(0);' data-id='$id_prefix{$uplines[0]->id}' class='show-downlines'>$prefix "
+					.get_person_fullname($uplines[0]).
+				"</a>";
+				return $html;
+				
+			}
+			return $uplines[0];
+			
+		}
+		return "No referrer.";
+		
+	}
+	
+	return $uplines;
+	
+}
+
+
+function compute_points($sales_amount){
+	$settings = get_recent_settings();
+	$points_per_one_hundred = (double)$settings->points;
+	$points_earned = $sales_amount * ( $points_per_one_hundred/100);
+	
+	return $points_earned;
+}
+
+function get_session_branch_name(){
+	if( session()->get('selected_branch') != 0 ){
+		return ECEPharmacyTree\Branch::find(session()->get('selected_branch'))->first()->name;
+	}
+	return "No branch selected.";
+}
+
+function get_earner_from_referral_points_logs(ReferralCommissionActivityLog $log){
+	if( $log->to_upline_type == "patient" ){
+		$earner = ECEPharmacyTree\Patient::find($log->to_upline_id);
+	}else{
+		$earner = ECEPharmacyTree\Doctor::find($log->to_upline_id);
+	}
+	return $earner;
 }

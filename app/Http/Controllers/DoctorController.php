@@ -37,7 +37,7 @@ class DoctorController extends Controller
         }
 
         return view('admin.doctors')->withDoctors($doctors)->withSpecialties($specialties)->withSubspecialties($subspecialties)
-        ->withSpecialty_names($specialty_names);
+        ->withSpecialty_names($specialty_names)->withTitle("Doctors");
     }
 
     /**
@@ -137,6 +137,14 @@ class DoctorController extends Controller
     public function destroy()
     {
         if( Specialty::destroy( Input::get( 'id' ) ) ){
+            return json_encode( array("status" => "success") );
+        }
+        return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+    }
+
+    public function delete()
+    {
+        if( Doctor::destroy( Input::get( 'id' ) ) ){
             return json_encode( array("status" => "success") );
         }
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );

@@ -12,7 +12,7 @@ class ProvinceTableSeeder extends Seeder
      */
     public function run()
     {
-        Province::where('id', '>', 0)->delete();
+        Province::truncate();
 
         $columns = ['id', 'name', 'region_id'];
         $provinces = extract_db_to_array(public_path()."/db-src/provinces.dex", $columns);

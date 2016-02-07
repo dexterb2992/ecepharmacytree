@@ -46,7 +46,10 @@ class ProductSubCategoryController extends Controller
         $subcategory->name = Input::get('name');
         $subcategory->category_id = Input::get('category_id');
         if( $subcategory->save() )
-            return Redirect::to( route('Products::index') );
+            return Redirect::to( route('Products::index') )->withFlash_message([
+                'msg' => ucfirst($subcategory->name)." has been added to products sub-categories.",
+                'type' => 'info'
+            ]);
         return false;
     }
 
@@ -86,7 +89,10 @@ class ProductSubCategoryController extends Controller
         $subcategory->name = Input::get('name');
         $subcategory->category_id = Input::get('category_id');
         if( $subcategory->save() )
-            return Redirect::to( route('Products::index') );
+            return Redirect::to( route('Products::index') )->withFlash_message([
+                'msg' => "Your changes has been saved successfully.",
+                'type' => 'info'
+            ]);
         return false;
     }
 
@@ -99,9 +105,12 @@ class ProductSubCategoryController extends Controller
     public function destroy()
     {
         $subcategory = ProductSubcategory::withTrashed()->findOrFail(Input::get('id'));
-        if( $subcategory->delete() )
+        $name = $subcategory->name;
+        if( $subcategory->delete() ){
+            session()->flash("flash_message", ["msg" => "$name has been deleted from sub-categories.", "type" => "danger"]);
             return json_encode( array("status" => "success") );
-
+        }
+        session()->flash("flash_message", ["msg" => "Sorry we failed to delete $name from sub-categories. Please try again later.", "type" => "danger"]);
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

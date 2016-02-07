@@ -4,6 +4,7 @@ namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
 use Input;
+use DB;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -26,7 +27,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $listing = DB::table('products')->whereRaw("deleted_at is null")->paginate(200);
+        $product_count = Product::count();
+        $products = array();
+        foreach ($listing as $list) {
+            array_push($products, Product::find($list->id));
+        }
 
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();
@@ -37,17 +43,33 @@ class ProductController extends Controller
 
         return view('admin.products')->withProducts($products)
             ->withCategories($categories)->withSubcategories($subcategories)
-            ->withCategory_names($category_names)->withTitle('Products');
+            ->withCategory_names($category_names)->withTitle('Products')
+            ->withPaginated_lists($listing)->withProduct_count($product_count);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
+    public function all_include_deleted(){
+        // $products = Product::withTrashed()->get();
+        $listing = DB::table('products')->paginate(200);
+        $product_count = Product::onlyTrashed()->count();
+        $products = array();
+        foreach ($listing as $list) {
+            $product = Product::onlyTrashed()->find($list->id);
+            if( !is_null($product) )
+                array_push($products, $product);
+        }
+        
+        $categories = ProductCategory::orderBy('name')->get();
+        $subcategories = ProductSubcategory::orderBy('name')->get();
+        $category_names = array();
+        foreach ($categories as $category) {
+            $category_names[$category->id] = $category->name;
+        }
+
+        return view('admin.products')->withProducts($products)
+            ->withCategories($categories)->withSubcategories($subcategories)
+            ->withCategory_names($category_names)->withTitle('Products')
+            ->withPaginated_lists($listing)->withProduct_count($product_count);
+        return Redirect::to('/products')->withProducts($products);
     }
 
     /**
@@ -64,6 +86,7 @@ class ProductController extends Controller
         $product->generic_name = ucfirst( $input['generic_name'] );
         $product->description = ucfirst( $input['description'] );
         $product->prescription_required = $input['prescription_required'];
+        $product->unit_cost = $input['unit_cost'];
         $product->price = $input['price'];
         $product->unit = str_singular( $input['unit'] );
         $product->packing = $input['packing'];
@@ -71,6 +94,7 @@ class ProductController extends Controller
         $product->subcategory_id = $input['subcategory_id'];
         $product->sku = $input['sku'];
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
+        $product->is_freebie = isset($input['is_freebie']) ? $input['is_freebie'] : 0;
 
         if( $product->save() )
             return Redirect::to( route('Products::index') )->withFlash_message([
@@ -90,6 +114,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         if( isset( $product->id ) )
             return $product->toJson();
+        return [];
         // return Redirect::to( route('products') );
     }
 
@@ -97,6 +122,8 @@ class ProductController extends Controller
         $products = Product::all();
         return $products;
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -113,14 +140,16 @@ class ProductController extends Controller
         $product->generic_name = ucfirst( $input['generic_name'] );
         $product->description = ucfirst( $input['description'] );
         $product->prescription_required = $input['prescription_required'];
+        $product->unit_cost = $input['unit_cost'];
         $product->price = $input['price'];
         $product->unit = str_singular( $input['unit'] );
         $product->packing = $input['packing'];
         $product->qty_per_packing = $input['qty_per_packing'];
         $product->subcategory_id = $input['subcategory_id'];
-        $product->sku = generate_sku();
+        $product->sku = $input['sku'];
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
-
+        $product->is_freebie = isset($input['is_freebie']) ? $input['is_freebie'] : 0;
+        
         if( $product->save() )
             return Redirect::to( route('Products::index') )->withFlash_message([
                 'type' => 'success', 'msg' => "Changes has been saved successfully."
@@ -138,8 +167,30 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail(Input::get("id"));
         if( $product->delete() ){
+            session()->flash("flash_message", ["msg" => "$product->name has been deleted.", "type" => "danger"]);
+            sleep(1);
             return json_encode( array("status" => "success") );
         }
+        
+        session()->flash("flash_message", ["msg" => "Sorry we failed process your request. Please try again later.", "type" => "danger"]);                  
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+    }
+
+    public function restore(){
+
+        if( Request::ajax() ){
+            $product = Product::withTrashed()->findOrFail( Input::get('id') );
+
+            if( $product->restore() )  {
+                session()->flash("flash_message", ["msg" => "$product->name has been restored.", "type" => "info"]);
+                sleep(1);
+                return json_encode( array("status" => "success") );
+            }
+            return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
+
+        }
+
+        session()->flash("flash_message", array("msg" => "Error 403. Forbidden..You are not allowed to access this feature.", "type" => "danger"));
+        return json_encode( array("status" => "403", "msg" => "Error 403. Forbidden..You are not allowed to access this feature.") );
     }
 }

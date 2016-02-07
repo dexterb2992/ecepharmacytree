@@ -15,36 +15,6 @@ use ECEPharmacyTree\Barangay;
 
 class LocationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -94,37 +64,28 @@ class LocationController extends Controller
         return $response = decode_utf8($response);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    public function populate_address_by_barangay($barangay_id){
+        $barangay = Barangay::findOrFail($barangay_id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $barangays = Barangay::where('municipality_id', '=', $barangay->municipality->id)->get();
+        $municipalities = Municipality::where('province_id', '=', $barangay->municipality->province->id)->get();
+        $provinces = Province::where('region_id', '=', $barangay->municipality->province->region->id)->get();
+
+        $selected = [
+            "barangay_id" => $barangay->id,
+            "municipality_id" => $barangay->municipality->id,
+            "province_id" => $barangay->municipality->province->id,
+            "region_id" => $barangay->municipality->province->region->id
+        ];
+
+        $response = array(
+            "barangays" => $barangays,
+            "municipalities" => $municipalities,
+            "provinces" => $provinces,
+            "selected" => $selected
+        );
+
+        return json_encode($response);
     }
 }

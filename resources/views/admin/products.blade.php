@@ -29,6 +29,16 @@
                             <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-product" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
                         </div><!-- /.box-header -->
                         <div class="box-body">
+                            @if( Route::is('Products::all') )
+                                <small class="">
+                                    <a href="{{ route('Products::index') }}">Hide Deleted Products</a>
+                                </small>
+                            @else
+                                <small class="">
+                                    <a href="{{ route('Products::all') }}">Show Deleted Products</a>
+                                </small>
+                            @endif
+                            
                             <table class="table table-bordered table-hover datatable products-table">
                                 <thead>
                                     <tr>
@@ -36,6 +46,7 @@
                                         <th>Name</th>
                                         <th>Generic Name</th>
                                         <th>Description</th>
+                                        <th>Unit Cost</th>
                                         <th>Selling Price/Packing</th>
                                         <th>Packing</th>
                                         <th>Category</th>
@@ -44,7 +55,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach($products as $product)
-                                        <tr data-id="{{ $product->id }}">
+                                        <tr data-id="{{ $product->id }}" class="{!! !is_null($product->deleted_at) ? 'danger' : '' !!}">
                                             <td>
                                                 <a href="javascript:void(0)" class="products-gallery-toggler" data-target="#modal-products-gallery">
                                                     <img data-toggle="tooltip" data-original-title="Click to view gallery" src="{{ !empty($product->galleries[0]) ? url('images/50x50/'.$product->galleries[0]->filename) : url('images/50x50/nophoto.jpg') }}">
@@ -56,7 +67,14 @@
                                             </td>
                                             <td>{{ $product->generic_name }}</td>
                                             <td>{!! Str::limit(rn2br($product->description), 150) !!}</td>
-                                            <td>&#x20B1; {{ $product->price.' /'.$product->packing }}</td>
+                                            <td>&#x20B1; {!! number_format($product->unit_cost, 2).' /'.$product->packing !!}</td>
+                                            <td>
+                                                @if( $product->is_freebie == 0 )
+                                                    &#x20B1; {!! number_format($product->price, 2).' /'.$product->packing !!}
+                                                @else
+                                                    <span class="label label-info">FREE</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 {!! $product->qty_per_packing." ".str_auto_plural($product->unit, $product->qty_per_packing)." per ".$product->packing !!}
                                             </td>
@@ -66,21 +84,42 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group pull-right">
-                                                    <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
-                                                    data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Remove">
-                                                        <i class="fa fa-trash-o"></i>
-                                                    </span>
-                                                    <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
-                                                     data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
-                                                     data-id="{{ $product->id }}" title="Edit" data-toggle="tooltip" data-original-title="Edit">
-                                                        <i class="fa fa-edit"></i>
-                                                    </span>
+                                                    @if(is_null($product->deleted_at))
+                                                        <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
+                                                        data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Remove">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </span>
+
+                                                        <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
+                                                         data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
+                                                         data-id="{{ $product->id }}" title="View|Edit" data-toggle="tooltip" data-original-title="View|Edit">
+                                                            <i class="fa fa-edit"></i>
+                                                        </span>
+                                                    @else
+                                                        <span class="btn btn-primary btn-xs action-icon restore-product" data-action="reactivate" data-title="Restore product" 
+                                                        data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Restore">
+                                                            <i class="fa fa-refresh"></i>
+                                                        </span>
+                                                    @endif
+                                                    
                                                 </div>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            <hr/>
+                            @if( $product_count > 0 && $product_count > 200 )
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span class="pagination">Total: {!! number_format($product_count, 0)." ".str_auto_plural('entry', $product_count) !!}</span>
+                                </div>
+                                <div class="col-md-6">
+                                    {!! $paginated_lists->render() !!}
+                                </div>
+                            </div>
+                            @endif
+                            
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
 
@@ -105,9 +144,9 @@
                                     @foreach($categories as $category)
                                         <tr>
                                             <td>
-                                                <span>
+                                                <!-- <span>
                                                     <input type="checkbox" name="categories[]" value="{{ $category->id }}">   
-                                                </span>
+                                                </span> -->
                                                 {{ $category->name }}
                                             </td>
                                             <td>
@@ -120,13 +159,13 @@
                                     @endforeach
                                 </tbody>
                                 <tfoot>
-                                    <tr>
+                                    <!-- <tr>
                                         <td colspan="2">
                                             <span class="form-group">
                                                 <button class="btn-danger btn" disabled><i class="fa-warning fa"></i> Remove all selected</button>
                                             </span>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tfoot>
                             </table>
                         </div><!-- /.box-body -->
@@ -146,7 +185,7 @@
 
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <div class="form-group">
-                                            <label for="name">Category Name <i>*</i></label>
+                                            <label for="name">Category Name <i><red>*</red></i></label>
                                             <input type="text" class="form-control" id="name" placeholder="Category name" name="name" required>
                                         </div>
                                     </div>
@@ -199,7 +238,7 @@
                     </div><!-- /.box -->
 
                     <!-- Modal for Create/Edit SubCategory -->
-                    <div class="modal fade" id="modal-add-edit-subcategory" tabindex="-1">
+                    <div class="modal fade" id="modal-add-edit-subcategory">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- form start -->
@@ -213,10 +252,10 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <div class="form-group">
                                             <label for="category">Select Category</label>
-                                            {!! Form::select('category_id', $category_names, "null", ['class' => 'form-control']) !!}
+                                            {!! Form::select('category_id', $category_names, "null", ['class' => 'form-control select2']) !!}
                                         </div>  
                                         <div class="form-group">
-                                            <label for="name">Subcategory Name <i>*</i></label>
+                                            <label for="name">Subcategory Name <i><red>*</red></i></label>
                                             <input type="text" class="form-control" id="name" placeholder="Category name" name="name" required>
                                         </div>
                                     </div>
@@ -236,7 +275,7 @@
         </div><!-- nav-tabs-custom -->
 
         <!-- Modal for Create/Edit product -->
-        <div class="modal fade" id="modal-add-edit-product" tabindex="-1">
+        <div class="modal fade" id="modal-add-edit-product">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- form start -->
@@ -250,8 +289,8 @@
                             {!! Form::token() !!}
                             
                             <div class="form-group">
-                                <label for="subcategory_id">Category <i>*</i></label>
-                                <select class="form-control" name="subcategory_id" id="select_subcategory_id">
+                                <label for="subcategory_id">Category <i><red>*</red></i></label>
+                                <select class="form-control select2" name="subcategory_id" id="select_subcategory_id">
                                     @foreach($categories as $category)
                                         <optgroup label="{{ $category->name }}">
                                             @foreach($category->subcategories as $subcategory)
@@ -263,7 +302,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="name">Product name <i>*</i></label>
+                                <label for="name">Product name <i><red>*</red></i></label>
                                 <input type="text" class="form-control" id="name" placeholder="product name" name="name" required>
                             </div>
 
@@ -273,7 +312,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="description">Description <i>*</i></label>
+                                <label for="description">Description <i><red>*</red></i></label>
                                 <textarea class="form-control" name="description" required></textarea>
                             </div>
 
@@ -293,7 +332,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="prescription_required">Requires prescription? <i>*</i></label>
+                                <label for="prescription_required">Requires prescription? <i><red>*</red></i></label>
                                 <select class="form-control" name="prescription_required">
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
@@ -301,7 +340,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="price">Selling Price <i>(per packing)*</i></label>
+                                <label for="price">Unit Cost <i>(per packing)<red>*</red></i></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">&#x20B1;</span>
+                                    <input type="text" class="form-control number" name="unit_cost" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price">Selling Price <i>(per packing)<red>*</red></i></label>
                                 <div class="input-group">
                                     <span class="input-group-addon">&#x20B1;</span>
                                     <input type="text" class="form-control number" name="price" required>
@@ -309,26 +356,32 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="packing">Packing <i>(Ex. box, bottle, strip, etc.)*</i></label>
+                                <label for="packing">Packing <i>(Ex. box, bottle, strip, etc.)<red>*</red></i></label>
                                 <input type="text" name="packing" class="form-control" placeholder="Ex. box, bottle, strip, etc." required>
                             </div>  
 
                             <div class="form-group">
-                                <label for="unit">Unit <i>(Ex. tablet, capsule, etc.)*</i></label>
+                                <label for="unit">Unit <i>(Ex. tablet, capsule, etc.)<red>*</red></i></label>
                                 <input type="text" class="form-control" name="unit" placeholder="Ex. tablet, capsule, etc." required>
                             </div>
 
                             <div class="form-group">
-                                <label for="qty_per_packing">Quantity per packing <i>(How many units are there in 1 packing?) *</i></label>
+                                <label for="qty_per_packing">Quantity per packing <i>(How many units are there in 1 packing?) <red>*</red></i></label>
                                 <input type="text" class="form-control number" name="qty_per_packing" title="How many units are there in 1 packing?" required>
                             </div>
 
                             <div class="form-group">
-                                <label>Default Critical Inventory Number <i>(Enter quantity by packing)</i>*</label>
+                                <label>Default Critical Inventory Number <i>(Enter quantity by packing)</i><red>*</red></label>
                                 <input class="form-control number" type="text" name="critical_stock" data-default-value="10"
                                     title="This will inform us when to notify you when any of the products is on a critical stock."/>
                             </div>
-
+                            <div class="form-group stock-return-actions">
+                                <label for="per_transaction_has_free_gifts">
+                                    <input type="checkbox" name="is_freebie" id="is_freebie" value="0" 
+                                    data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
+                                    Is Freebie? <i>(If checked, this product won't show on the customer's product listing)</i>
+                                </label>
+                            </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
@@ -342,7 +395,7 @@
 </div><!-- /.row -->
 
 <!-- Modal for Products Photo Gallery -->
-<div class="modal fade" id="modal-products-gallery" tabindex="-1">
+<div class="modal fade" id="modal-products-gallery">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

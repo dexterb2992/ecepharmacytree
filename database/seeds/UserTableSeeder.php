@@ -10,7 +10,7 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         // TestDummy::times(20)->create('App\Post');
-        User::where("id", ">", "0")->delete();
+        User::truncate();
 
     	$user = new User;
     	$user->id = 1;
