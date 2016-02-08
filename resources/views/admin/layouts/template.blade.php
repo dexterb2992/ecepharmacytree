@@ -20,6 +20,7 @@
         <div class="wrapper">
             <!-- jQuery 2.1.4 -->
             {!! HTML::script('plugins/jQuery/jQuery-2.1.4.min.js') !!}
+            
             @include('admin.partials._header');
 
             @include('admin.partials._sidebar');

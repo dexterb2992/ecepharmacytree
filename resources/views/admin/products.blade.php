@@ -1,4 +1,6 @@
-<?php use Illuminate\Support\Str; ?>
+<?php 
+    use Illuminate\Support\Str;      
+?>
 @extends('admin.layouts.template')
 @section('content')
 
@@ -54,7 +56,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($products as $product)
+                                    @foreach($products->items() as $product)
                                         <tr data-id="{{ $product->id }}" class="{!! !is_null($product->deleted_at) ? 'danger' : '' !!}">
                                             <td>
                                                 <a href="javascript:void(0)" class="products-gallery-toggler" data-target="#modal-products-gallery">
@@ -108,16 +110,11 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <hr/>
-                            @if( $product_count > 0 && $product_count > 200 )
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <span class="pagination">Total: {!! number_format($product_count, 0)." ".str_auto_plural('entry', $product_count) !!}</span>
-                                </div>
-                                <div class="col-md-6">
-                                    {!! $paginated_lists->render() !!}
-                                </div>
-                            </div>
+                            
+                            {!! render_pagination($products) !!}
+
+                            @if( isset($source) )
+                            <a href="{{ url(route('Products::index')) }}">Go back</a>
                             @endif
                             
                         </div><!-- /.box-body -->
@@ -252,7 +249,7 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <div class="form-group">
                                             <label for="category">Select Category</label>
-                                            {!! Form::select('category_id', $category_names, "null", ['class' => 'form-control select2']) !!}
+                                            {!! Form::select('category_id', $category_names, "null", ['class' => 'select2']) !!}
                                         </div>  
                                         <div class="form-group">
                                             <label for="name">Subcategory Name <i><red>*</red></i></label>
@@ -290,7 +287,7 @@
                             
                             <div class="form-group">
                                 <label for="subcategory_id">Category <i><red>*</red></i></label>
-                                <select class="form-control select2" name="subcategory_id" id="select_subcategory_id">
+                                <select class="select2" name="subcategory_id" id="select_subcategory_id">
                                     @foreach($categories as $category)
                                         <optgroup label="{{ $category->name }}">
                                             @foreach($category->subcategories as $subcategory)
@@ -379,7 +376,7 @@
                                 <label for="per_transaction_has_free_gifts">
                                     <input type="checkbox" name="is_freebie" id="is_freebie" value="0" 
                                     data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
-                                    Is Freebie? <i>(If checked, this product won't show on the customer's product listing)</i>
+                                    Is Freebie? <i>(If checked, this product won't show on the customer's product products)</i>
                                 </label>
                             </div>
                         <div class="modal-footer">

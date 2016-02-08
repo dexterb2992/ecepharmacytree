@@ -1,5 +1,5 @@
 <!-- Advance textfields -->
-{!! HTML::style('plugins/select2/select2.min.css') !!}
+{!! HTML::style('http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.4/select2.css') !!}
 
 <!-- Bootstrap 3.3.4 -->
 {!! HTML::style('bootstrap/css/bootstrap.min.css') !!}

@@ -295,15 +295,25 @@ $(document).ready(function (){
                             }
                         });
 
-
-
+                    
                 }catch(Exception){
                     console.log(Exception);
                 }
 
+                if( data.hasOwnProperty('product') ){
+                    form.find('input#inventory_quantity').attr("unit", data.product.unit).attr("data-qty-per-packing", data.product.qty_per_packing);
+                }else{
+                    form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing", data.qty_per_packing);
+                }
+                
+                // form.find('#inventories_product_id, #inventory_quantity').attr("disabled", "disabled");
+                form.find('#inventory_quantity').attr("disabled", "disabled");
+                
+                // hide select2 and replace with label
+                $("#inventories_product_id").prev(".select2-container").fadeOut(function (){
+                    $("#inventories_product_id").next('.temp_name').html(data.product.name).show();
+                });
 
-                form.find('input#inventory_quantity').attr("unit", data.unit).attr("data-qty-per-packing");
-                form.find('#inventories_product_id, #inventory_quantity').attr("disabled", "disabled");
                 updateInventoryProductQty();
 
                 // add your conditions & magic codes here when form fields has been filled 
@@ -324,14 +334,18 @@ $(document).ready(function (){
                                 console.log(data);
                                 var products_list = $("#promo_details_gifts");
                                 var htmls = "";
+                                var _details_gifts = [];
                                 $.each(data, function (i, row){
-                                    $("#promo_details_gifts option[value='"+row.product.id+"']").attr("selected", "selected");
+                                    _details_gifts.push(row.product.id);
+                                    // $("#promo_details_gifts option[value='"+row.product.id+"']").attr("selected", "selected");
                                     htmls+= generate_gift_qty_form(row.product.id, row.product.name, row.quantity_free, 'gift_quantities');
                                     window.global_free_gift_product_ids.push(row.product.id);
                                     window.global_free_gift_quantities.push({"id" : row.product.id, "quantity" : row.quantity_free});
                                 });
                                 $(".selected-products-qty-div").html(htmls);
-                                $("#promo_details_gifts").select2();
+                                // $("#promo_details_gifts").select2();
+                                $("#promo_details_gifts").val( _details_gifts.join(',') );
+                                init_specific_product_list( $("#promo_details_gifts") );
                                 
                                 $("#form_promo_product_info").find('input.gift_quantities').each(function (i, row){
                                     $(row).attr("data-min", 1);
@@ -344,14 +358,19 @@ $(document).ready(function (){
                     if( data.hasOwnProperty('per_transaction_has_free_gifts') ){
                         var products_list = $("#promo_details_per_transaction_gifts");
                         var htmls = "";
+                        var _free_gifts = [];
                         $.each(data.free_gifts, function (i, row){
-                            $("#promo_details_per_transaction_gifts option[value='"+row.id+"']").attr("selected", "selected");
+                            // $("#promo_details_per_transaction_gifts option[value='"+row.id+"']").attr("selected", "selected");
+                            _free_gifts.push(row.id);
                             htmls+= generate_gift_qty_form(row.id, row.name, row.quantity_free, 'per_transaction_gift_quantities');
                             window.global_per_transaction_quantities.push(row.id);
                             window.global_per_transaction_free_gift_product_ids.push({"id" : row.id, "quantity" : row.quantity_free});
                         });
                         $(".per-transaction-selected-products-qty-div").html(htmls);
-                        $("#promo_details_per_transaction_gifts").select2();
+                        // $("#promo_details_per_transaction_gifts").select2();
+                        $("#promo_details_per_transaction_gifts").val(_free_gifts.join(','));
+
+                        init_specific_product_list( $("#promo_details_per_transaction_gifts") );
                         
                         $("#form_promo_product_info").find('input.per_transaction_gift_quantities').each(function (i, row){
                             $(row).attr("data-min", 1);
@@ -359,12 +378,13 @@ $(document).ready(function (){
                     }
 
                     if( data.hasOwnProperty("specific_promo_product_ids") ){
-                        var products_list = $("#specific_promo_product_ids");
-                        var htmls = "";
-                        $.each(data.free_gifts, function (i, row){
-                            $("#specific_promo_product_ids option[value='"+row.id+"']").attr("selected", "selected");
-                        });
-                        $("#specific_promo_product_ids").select2();
+                        // var products_list = $("#specific_promo_product_ids");
+                        // var htmls = "";
+                        // $.each(data.free_gifts, function (i, row){
+                        //     $("#specific_promo_product_ids option[value='"+row.id+"']").attr("selected", "selected");
+                        // });
+                        // $("#specific_promo_product_ids").select2();
+                        init_specific_product_list( $("#specific_promo_product_ids") );
                     }
 
 
@@ -379,7 +399,9 @@ $(document).ready(function (){
             
         } else {
             title = "Add new "+dataTitle;
-
+            $("#inventories_product_id").next('.temp_name').html("").fadeOut(function (){
+                $("#inventories_product_id").prev(".select2-container").show();
+            });
             _clear_form_data(form);
             form.find('#inventories_product_id, #inventory_quantity').removeAttr("disabled").trigger("change");
             updateInventoryProductQty();
@@ -513,11 +535,16 @@ $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
     }
 });
 
-$("#inventories_product_id").change(function (){
-    var packing = $(this).children('option:selected').attr("data-packing");
-    $(document).find("#outer_packing").html(packing);
-    $(document).find(".add-on-product-packing").html( str_plural(packing) );
-    console.log("packing: "+packing);
+$("#inventories_product_id").on("change", function (){
+    var $this = $(this);
+    console.log("change is triggered "+$this.val());
+        
+    products_trigger_change($this);
+
+    // var packing = $(this).children('option:selected').attr("data-packing");
+    // $(document).find("#outer_packing").html(packing);
+    // $(document).find(".add-on-product-packing").html( str_plural(packing) );
+    // console.log("packing: "+packing);
 });
 
 
@@ -531,7 +558,7 @@ $("#inventory_quantity").keyup(function (){
 
 $("select.sort-by").change(function (){
    $("input[type='search']:visible").val( $(this).val() ).trigger("keyup");
-})
+});
 
 $("#date_range").change(function (){
     var dates = $(this).val();
@@ -1288,28 +1315,12 @@ $("#add_gallery").click(function (){
         }
     });
 
-<<<<<<< HEAD
-    // add more validation for this form here
-    $(document).on('click', "#form_return_n_refund_btn_submit", function (){
-        var hasError = false;
-        if( $("#order_id").val() == "" || $('#order_id') == null ){
-            response = true;
-        }
-
-        if( !hasError ){
-            // $("#form_return_n_refund").submit();
-            $(this).attr("type", "submit").click();
-        }else{
-            $(this).attr("type", "button");
-        }
-=======
-
 
     // Adding promo validation & codes here
         $('#promo_details_gifts').change(function (){
             var $this = $(this);
             var htmls = "";
-            var dropdown_values = $this.val();
+            var dropdown_values = $this.val().split(",");
             
             if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
                 $.each(dropdown_values, function (i, row){
@@ -1350,7 +1361,13 @@ $("#add_gallery").click(function (){
 
             $.each(window.global_free_gift_quantities, function (i, row){
                 if( $.inArray(row.id, global_free_gift_product_ids) !== -1 ){
-                    htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'gift_quantities');
+                    var res = window.select2_all_products.filter(function (n){
+                        return n.id == row.id;
+                    });
+                    if( res.length > 0 ){
+                        // htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'gift_quantities');
+                        htmls+= generate_gift_qty_form(row.id, res[0].text, row.quantity, 'gift_quantities');
+                    }
                 }
             
             });
@@ -1362,7 +1379,7 @@ $("#add_gallery").click(function (){
         $('#promo_details_per_transaction_gifts').change(function (){
             var $this = $(this);
             var htmls = "";
-            var dropdown_values = $this.val();
+            var dropdown_values = $this.val().split(",");
             
             if( (dropdown_values !== null) && (dropdown_values.length > 0) ){
                 $.each(dropdown_values, function (i, row){
@@ -1404,7 +1421,12 @@ $("#add_gallery").click(function (){
 
             $.each(window.global_per_transaction_quantities, function (i, row){
                 if( $.inArray(row.id, global_per_transaction_free_gift_product_ids) !== -1 ){
-                    htmls+= generate_gift_qty_form(row.id, $this.children("option[value='"+row.id+"']").text(), row.quantity, 'per_transaction_gift_quantities');
+                    var res = window.select2_all_products.filter(function (n){
+                        return n.id == row.id;
+                    });
+                    if( res.length > 0 ){
+                        htmls+= generate_gift_qty_form(row.id, res[0].text, row.quantity, 'per_transaction_gift_quantities');
+                    }
                 }
             
             });
@@ -1704,8 +1726,27 @@ $("#add_gallery").click(function (){
             
 
         });
->>>>>>> ec16cc5645f4d8dbc0de605ceb1e5c5a1314d1c7
     });
+
+    $("#btn_sidebar_search_form").click(function (){
+        var url = $("#sidebar_search_form").attr("action"),
+            keyword = $("#sidebar_search_form").find('input[name="q"]').val();
+        window.location.href = url+'/q='+keyword;
+    });
+
+    $("#sidebar_search_form").keypress(function(e) {
+        if(e.which == 13) {
+            var url = $("#sidebar_search_form").attr("action"),
+            keyword = $("#sidebar_search_form").find('input[name="q"]').val();
+            window.location.href = url+'/q='+keyword;
+        }
+    });
+
+
+
+   
+
+	
 });
 
 //   On Stock Returns tab, you can exchange the returned product there with a new the same product.

@@ -30,8 +30,8 @@
 								<h4>Stock Items List</h4> <br/>
 
 								<div class="pull-right">
-					                <button class="btn-info btn add-edit-btn glow" data-toggle="modal" data-target="#modal-add-edit-inventory" 
-					                	data-target="#form_edit_inventory" data-action="create" data-title="inventory">
+					                <button class="btn-info btn add-edit-btn glow" data-toggle="modal" data-modal-target="#modal-add-edit-inventory" 
+					                	data-action="create" data-title="inventory">
 					                	<i class="fa-plus fa"></i> Add New
 					                </button>
 					                <button class="btn-success btn  btn-stock-return glow" data-target="#modal-stock-return" data-toggle="modal">
@@ -65,7 +65,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										@foreach($inventories as $inventory)
+										@foreach($inventories->items() as $inventory)
 											@if(!is_null($inventory->product))
 											<tr data-pid="{{ $inventory->product_id }}" data-id="{{ $inventory->id }}">
 												<td>{{ $inventory->id }}</td>
@@ -84,7 +84,7 @@
 													<span> {{ $inventory->product->sku }}</span>
 												</td>
 												<td>
-													<a href="{{ route('Products::index').'?q='.$inventory->product->name }}" target="_blank" class="show-product-info" data-id="{{ $inventory->product->id }}">
+													<a href="{!! url('search/products/q='.$inventory->product->name) !!}" target="_blank" class="show-product-info" data-id="{{ $inventory->product->id }}">
 														{{ $inventory->product->name }}
 													</a>
 												</td>
@@ -139,6 +139,7 @@
 										@endforeach
 									</tbody>
 								</table>
+								{!! render_pagination($inventories) !!}
 							</div>
 						</div>
 					</div>
@@ -220,7 +221,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										@foreach($logs as $log)
+										@foreach($logs->items() as $log)
 											<tr>
 												<td>{{ get_person_fullname($log->user) }}</td>
 												<td>{!! $log->action !!}</td>
@@ -235,6 +236,7 @@
 										@endforeach	
 									</tbody>
 								</table>
+								{!! render_pagination($logs) !!}
 							</div>
 						</div>
 					</div>
@@ -255,11 +257,10 @@
 	                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
 	                            <div class="form-group">
 	                            	<label for="product_id">Product</label>
-	                            	<select class="form-control select2" name="product_id" id="inventories_product_id">
-	                            		@foreach($products as $product)
-	                            			<option value="{{ $product->id }}" data-packing="{{ $product->packing }}" data-unit="{{ $product->unit }}" data-qty-per-packing="{{ $product->qty_per_packing }}">{{ $product->name }}</option>
-	                            		@endforeach
-	                            	</select>
+	                            	<!-- <select class="form-control" name="product_id" id="inventories_product_id"> -->
+	                            	<input type="hidden" id="inventories_product_id" style="width:100%;" name="product_id" placeholder="Start typing, scroll for more results"/>
+	                            	<div class="temp_name" style="display:none;"></div>
+	                            	<!-- </select> -->
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="lot_number">Lot Number</label>
@@ -268,12 +269,12 @@
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received 
-	                            		<small>(<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</small>
+	                            		<small>(<i>per <span id="outer_packing"> - </span></i>)</small>
 	                            	</label>
 	                            	<div class="input-group">
 		                            	<input type="text" id="inventory_quantity" name="quantity" data-min="1" class="number form-control" placeholder="Add quantity by product's packing" title="Add quantity by product's packing" required>
 		                            	<div class="input-group-addon">
-		                            		<span class="add-on-product-packing" name="packing">{{ head( $products->toArray() )["packing"] }}</span>
+		                            		<span class="add-on-product-packing" name="packing"> - </span>
 		                            	</div>
 	                            	</div>
 	                            	<span id="total_quantity_in_unit"></span>
@@ -348,7 +349,7 @@
 		        			<div class="modal-body">
 		        				<div class="form-group">
 		        					<label>Order No.</label>
-									<select class="form-control select2" name="order_id" id="order_id"></select>	        					
+									<select class="select2" name="order_id" id="order_id"></select>	        					
 		        				</div>
 
 		        				<div class="oder-details">
@@ -403,7 +404,7 @@
 
 		        				<div class="form-group">
 		        					<label>Reason</label>
-		        					<select class="form-control select2" name="return_code" id="return_code"></select>
+		        					<select class="select2" name="return_code" id="return_code"></select>
 		        				</div>
 
 		        				<div class="form-group">

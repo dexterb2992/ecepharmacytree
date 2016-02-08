@@ -27,12 +27,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $listing = DB::table('products')->whereRaw("deleted_at is null")->paginate(200);
-        $product_count = Product::count();
-        $products = array();
-        foreach ($listing as $list) {
-            array_push($products, Product::find($list->id));
-        }
+        $products = Product::whereRaw("deleted_at is null")->paginate(100);
 
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();
@@ -43,8 +38,34 @@ class ProductController extends Controller
 
         return view('admin.products')->withProducts($products)
             ->withCategories($categories)->withSubcategories($subcategories)
-            ->withCategory_names($category_names)->withTitle('Products')
-            ->withPaginated_lists($listing)->withProduct_count($product_count);
+            ->withCategory_names($category_names)->withTitle('Products');
+    }
+
+    public function search($name){
+        // dd($name);
+        $products = Product::whereRaw("name like '%$name%'")->paginate(100);
+
+        $categories = ProductCategory::orderBy('name')->get();
+        $subcategories = ProductSubcategory::orderBy('name')->get();
+        $category_names = array();
+        foreach ($categories as $category) {
+            $category_names[$category->id] = $category->name;
+        }
+
+        return view('admin.products')->withProducts($products)
+            ->withCategories($categories)->withSubcategories($subcategories)
+            ->withCategory_names($category_names)->withTitle('Products')->withSource("search");
+    }
+
+    public function get_json(){
+        $input = Input::all();
+        if( isset($input['action']) && $input['action'] == "get_count" ){
+            $count = Product::all()->count();
+            if( $input['cached_count'] == $count )
+                return json_encode(array('status' => 200));
+        }
+        $products = Product::select('id', 'name', 'packing', 'unit', 'qty_per_packing')->get();
+        return $products;
     }
 
     public function all_include_deleted(){
@@ -151,7 +172,7 @@ class ProductController extends Controller
         $product->is_freebie = isset($input['is_freebie']) ? $input['is_freebie'] : 0;
         
         if( $product->save() )
-            return Redirect::to( route('Products::index') )->withFlash_message([
+            return Redirect::back()->withFlash_message([
                 'type' => 'success', 'msg' => "Changes has been saved successfully."
             ]);
         return false;

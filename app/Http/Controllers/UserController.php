@@ -330,7 +330,7 @@ class UserController extends Controller
     }
 
     public function dashboard(){
-        $recently_added_products = Product::latest()->limit(4)->get();
+        $recently_added_products = Product::latest()->limit(9)->get();
         return view('dashboard')->withRecently_added_products($recently_added_products)->withTitle("Dashboard");
     }
 

@@ -183,11 +183,11 @@ use Illuminate\Support\Str;
                             <!-- the container for a Specific Products Promo -->
                                 <div class="form-group" style="display:none;" id="specific_products_outer_div">
                                     <label>Products<red>*</red>(<small><i>Select those products that will be applied with this promo.</i></small>)</label>
-                                    <select class="form-control select2" id="specific_promo_product_ids" name="product_id[]" multiple>
-                                        @foreach($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <!-- <select class="form-control select2" id="specific_promo_product_ids" name="product_id[]" multiple> -->
+                                       
+                                    <!-- </select> -->
+                                    <input type="hidden" class="products-multiple-select2" id="specific_promo_product_ids" name="product_id" placeholder="Start typing, scroll to load more">
+
                                 </div>
 
                             <!-- the container for a Per Transaction Promo -->
@@ -222,11 +222,10 @@ use Illuminate\Support\Str;
 
                                         <div class="form-group" style="display:none;" id="per_transaction_gift_products_outer_div">
                                             <label>Select product/s to use as free gift</label>
-                                            <select class="form-control select2" id="promo_details_per_transaction_gifts" name="per_transaction_product_id[]" multiple>
-                                                @foreach($products as $product)
-                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <!-- <select class="select2" id="promo_details_per_transaction_gifts" name="per_transaction_product_id[]" multiple> -->
+                                                
+                                            <!-- </select> -->
+                                            <input type="hidden" id="promo_details_per_transaction_gifts" name="per_transaction_product_id" class="products-multiple-select2">
 
                                             <div class="per-transaction-selected-products-qty-div form-horizontal"></div>
                                         </div>
@@ -324,11 +323,10 @@ use Illuminate\Support\Str;
                                 </div>
                                 <div class="form-group" style="display:none;" id="gift_products_outer_div">
                                     <label>Select product/s to use as free gift</label>
-                                    <select class="form-control select2" id="promo_details_gifts" name="product_id[]" multiple>
-                                        @foreach($products as $product)
-                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <!-- <select class="form-control select2" id="promo_details_gifts" name="product_id[]" multiple> -->
+                                        
+                                    <!-- </select> -->
+                                    <input type="hidden" id="promo_details_gifts" name="product_id" class="products-multiple-select2">
 
                                     <div class="selected-products-qty-div form-horizontal"></div>
                                 </div>

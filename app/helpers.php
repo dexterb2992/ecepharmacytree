@@ -52,7 +52,8 @@ function does_sku_exist($sku){
 }
 
 function generate_sku(){
-	$sku = strtoupper( generate_random_string(3, 2, true).generate_random_string(3, 1, true) );
+	// $sku = strtoupper( generate_random_string(3, 2, true).generate_random_string(3, 1, true) );
+	$sku = strtoupper( generate_random_string(16, 0, true) );
 
 	if( !does_sku_exist($sku) )
 		return $sku;
@@ -461,4 +462,21 @@ function get_earner_from_referral_points_logs(ReferralCommissionActivityLog $log
 		$earner = ECEPharmacyTree\Doctor::find($log->to_upline_id);
 	}
 	return $earner;
+}
+
+function render_pagination($pagination){
+	$html = '<hr/>';
+    if( $pagination->total() > 0 && $pagination->total() > 200 ){
+    	$html.= '
+	    	<div class="row">
+		        <div class="col-md-4">
+		            <span class="pagination">Total: '.number_format($pagination->total(), 0)." ".str_auto_plural('entry', $pagination->total()).'</span>
+		        </div>
+		        <div class="col-md-8">
+		            '.$pagination->render().'
+		        </div>
+		    </div>
+    	';
+    }
+    return $html;
 }

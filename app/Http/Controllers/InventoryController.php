@@ -28,9 +28,9 @@ class InventoryController extends Controller
     public function index()
     {   
         $inventories = Inventory::where('available_quantity', '>', 0)
-            ->where('branch_id', session()->get('selected_branch'))->get();
-        $products = Product::all();
-        $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->get();
+            ->where('branch_id', session()->get('selected_branch'))->paginate(100);
+        // $products = Product::all();
+        $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->paginate(100);
         $reason_codes = StockReturnCode::all();
         $orders = Order::where('branch_id', session()->get('selected_branch'))->get();
         // $stock_returns = StockReturn::all();
@@ -55,20 +55,20 @@ class InventoryController extends Controller
         }
 
         return view('admin.inventories')->withInventories($inventories)
-            ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs)
+            // ->withProducts($products)
+            ->withTitle('Stocks Receiving')->withLogs($logs)
             ->withOrders($orders)
             ->withReason_codes($reason_codes)
             ->withStock_returns($stock_returns);
     }
 
     public function show_all(){
-        $inventories = Inventory::where('branch_id', session()->get('selected_branch'))->get();
-        $products = Product::all();
-        $orders = Order::where('branch_id', session()->get('selected_branch'))->get();
-        $logs = Log::where('table', 'inventories')->where('branch_id', '=', session()->get('selected_branch'))
-            ->orderBy('id', 'desc')->get();
+        $inventories = Inventory::where('branch_id', session()->get('selected_branch'))->paginate(100);
+        // $products = Product::all();
+        $logs = Log::where('table', 'inventories')->orderBy('id', 'desc')->paginate(100);
         $reason_codes = StockReturnCode::all();
-
+        $orders = Order::where('branch_id', session()->get('selected_branch'))->get();
+        // $stock_returns = StockReturn::all();
         $stock_returns = DB::table('stock_returns')
             ->join('orders', function ($join) {
                 $join->on('orders.id', '=', 'stock_returns.order_id');
@@ -82,7 +82,7 @@ class InventoryController extends Controller
         }
 
         $stock_returns = $new_stock_returns;
-
+        
         foreach ($stock_returns as $stock_return) {
             $stock_return->load('order');
             $stock_return->load('inventory');
@@ -90,7 +90,8 @@ class InventoryController extends Controller
         }
 
         return view('admin.inventories')->withInventories($inventories)
-            ->withProducts($products)->withTitle('Stocks Receiving')->withLogs($logs)
+            // ->withProducts($products)
+            ->withTitle('Stocks Receiving')->withLogs($logs)
             ->withOrders($orders)
             ->withReason_codes($reason_codes)
             ->withStock_returns($stock_returns);
@@ -101,9 +102,8 @@ class InventoryController extends Controller
         // Note: the quantity that will be saved will be 
         //  per product packing
 
-
-
         $input = Input::all();
+        
         $inventory = new Inventory;
         $inventory->product_id = $input["product_id"];
 
@@ -144,6 +144,7 @@ class InventoryController extends Controller
                 ->format('g:ia \o\n l jS F Y');
             $inventory->date_added = $date;
             $inventory->load('product');
+            $inventory->inventories_product_id = $inventory->product->id;
 
             // get # of sold products on this inventory based on branch_id                                       // available: 15; recived: 20;  naay gi return nga 9 & 2 -> 5 nalang ang sold qty
             $sold_products_count = OrderLotNumber::where('inventory_id', '=', $inventory->id)->sum('quantity');  // 16
@@ -167,14 +168,14 @@ class InventoryController extends Controller
         $inventory = Inventory::findOrFail( $input["id"] );
         $inventory->product_id = $input["product_id"];
         
-        $inventory->quantity = $input["quantity"]; // q1 = 4, av = 2, update: q2 = 5;
+        /*$inventory->quantity = $input["quantity"]; // q1 = 4, av = 2, update: q2 = 5;
                                                    // def = q2-q1 = 1, av += def
         $def_q = $input["quantity"] - $inventory->quantity;
         $old_av = $inventory->available_quantity;
         
         $new_av = $old_av + $def_q;
 
-        $inventory->available_quantity = $new_av >= 1 ? $new_av : 0;
+        $inventory->available_quantity = $new_av >= 1 ? $new_av : 0;*/
 
         $inventory->lot_number = $input['lot_number'];
 
@@ -188,7 +189,7 @@ class InventoryController extends Controller
                 'branch_id' => session()->get('selected_branch')
             ]);
             return Redirect::to( route('Inventory::index') )->withFlash_message([
-                'type' => 'success',
+                'type' => 'info',
                 'msg' => "Inventory information for ".$inventory->product->name." with Lot # $inventory->lot_number has been updated."
             ]);
         }
@@ -293,7 +294,8 @@ class InventoryController extends Controller
                 ->join('products', function ($join){           
                     $join->on('inventories.product_id', '=', 'products.id');
                 })->whereRaw('inventories.branch_id= '.session()->get("selected_branch").' and products.deleted_at is null')
-                ->get();
+                ->select('products.name as product_name', 'inventories.id', 'inventories.product_id', 
+                    'inventories.lot_number', 'inventories.expiration_date')->get();
                 // pre(DB::getQueryLog());
             return $lot_numbers;
         }

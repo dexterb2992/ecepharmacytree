@@ -98,7 +98,11 @@ class PromoRepository {
                 foreach ($promo->discounts as $discount) {
                     $discount->delete();
                 }
-                foreach ($input['product_id'] as $key => $value) {
+
+                $productIDs = explode(',', $input['product_id']);
+
+                // foreach ($input['product_id'] as $key => $value) {
+                foreach ($productIDs as $key => $value) {
                     $dfp = new DiscountsFreeProduct;
                     $dfp->promo_id = $promo->id;
                     $dfp->product_id = $value;
@@ -210,9 +214,11 @@ class PromoRepository {
                     $promo->free_gifts = json_decode($promo->free_gifts);
                 }
                 foreach ($promo->discounts as $discount) {
-                    $product_ids[] = ['id' => $discount->product_id];
+                    // $product_ids[] = ['id' => $discount->product_id];
+                    $product_ids[] = $discount->product_id;
                 }
-                $promo->product_id = $product_ids;
+                // $promo->product_id = $product_ids;
+                $promo->product_id = implode(',', $product_ids);
                 $promo->specific_promo_product_ids = $product_ids;
             }
 

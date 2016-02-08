@@ -29,7 +29,7 @@ class PromoController extends Controller
     public function index()
     {
         $today =  Carbon::today('Asia/Manila');
-        $products = Product::all();
+        // $products = Product::all();
 
         $promos = Promo::where('end_date', '>=', $today)
             ->with([
@@ -48,8 +48,8 @@ class PromoController extends Controller
             }
         }
 
-        return view('admin.promo')->withPromos($promos)->withTitle('Promotions and Discounts')
-            ->withProducts($products);
+        return view('admin.promo')->withPromos($promos)->withTitle('Promotions and Discounts');
+            // ->withProducts($products);
         // return view('admin.promo');
     }
 
@@ -63,7 +63,7 @@ class PromoController extends Controller
     public function store()
     {
         $input = Input::all();
-
+        // dd($input);
         $check_response = $this->promo->check($input);
         if( $check_response['is_allowed'] == false ){
             session()->flash("flash_message", ["msg" => $check_response['msg'], "type" => "important"]);
