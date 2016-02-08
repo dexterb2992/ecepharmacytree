@@ -365,7 +365,7 @@ use Illuminate\Support\Str;
                                     </div>
 
                                     <div class="form-group">
-                                        <label>For every minimum quantity/purchase, this promo will be applied.</label><br/>
+                                        <label>For every minimum purchase, this promo will be applied.</label><br/>
                                         <label for="is_every">
                                             <input type="radio" name="is_every" value="0" 
                                                 data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
