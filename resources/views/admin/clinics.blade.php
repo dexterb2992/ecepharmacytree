@@ -6,7 +6,9 @@
         <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">Clinics</h3><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-clinic" data-target="#form_add_edit_clinics" data-action="create" data-title="clinic"><i class="fa-plus fa"></i> Add New</button>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-add-edit-clinic" data-target="#form_add_edit_clinic" data-action="create" data-title="clinic">
+                    <i class="fa-plus fa"></i> Add New
+                </button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable">
@@ -23,7 +25,7 @@
                             <tr data-id="{{ $clinic->id }}">
                                <td>{{ $clinic->name }}</td>
                                <td>{{ $clinic->contact_no }}</td>
-                                <td>{{ ucfirst($clinic->address_street).', '.ucfirst($clinic->address_barangay).', '.ucfirst($clinic->address_city_municipality) }}</td>
+                                <td>{{ $clinic->full_address() }}</td>
                                 <td>
                                     <div class="tools">
                                         <a href="javascript:void(0);" class="add-edit-btn" data-action="edit" data-modal-target="#modal-add-edit-clinic" data-title="product info" data-target="#form_add_edit_clinic" data-id="{{ $clinic->id }}" title="Edit">
@@ -54,12 +56,12 @@
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     
                             <div class="form-group">
-                                <label for="name">Clinic Name</label>
+                                <label for="name">Clinic Name<red>*</red></label>
                                 <input type="text" class="form-control" id="name" placeholder="Clinic Name" name="name" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="name">Contact Number</label>
+                                <label for="name">Contact Number<red>*</red></label>
                                 <input type="text" class="form-control" id="contact_no" placeholder="Contact Number" name="contact_no" required>
                             </div>
 

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Illuminate\Database\Seeder\BarangayTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\BranchTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\UserTableSeeder::class);
+        $this->call(Illuminate\Database\Seeder\ProductGroupTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\ProductCategoryTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\ProductSubcategoryTableSeeder::class);
         $this->call(Illuminate\Database\Seeder\ProductTableSeeder::class);

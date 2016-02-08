@@ -50,8 +50,10 @@
 <!-- DataTables -->
  {!! HTML::script('plugins/datatables/dataTables.bootstrap.min.js') !!}
 
-<!-- Select2 -->
-{!! HTML::script('plugins/select2/select2.full.min.js') !!}
+<!-- Select2 & Lodash -->
+{!! HTML::script('http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js') !!}
+{!! HTML::script('//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.js') !!}
+
 
 <!-- Bootstrap Typeahead -->
 {!! HTML::script('plugins/typeahead/bootstrap-typeahead.js') !!}
@@ -78,6 +80,8 @@
 {!! HTML::script('plugins/contextmenu/jquery.contextmenu.js') !!}
 
 <!-- PharmacyTree js -->
+{!! HTML::script('dist/ece.improvise.js') !!}
+{!! HTML::script('dist/init.ece.js') !!}
 {!! HTML::script('dist/fn.ece.js') !!}
 {!! HTML::script('dist/ece.js') !!}
 {!! HTML::script('dist/ece.notification.js') !!}

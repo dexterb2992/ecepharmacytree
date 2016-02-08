@@ -124,9 +124,10 @@ use Illuminate\Support\Str;
 	            			<h3>Points Activity Log</h3> <br/>
 	            		</div>
 	            		<div class="box-body">
-	            			<table class="table table-bordered table-hover datatable">
+	            			<table class="table table-bordered table-hover table-points-log">
 								<thead>
 									<tr>
+										<th>Name</th>
 										<th>Activity</th>
 										<th>Date</th>
 									</tr>
@@ -134,8 +135,13 @@ use Illuminate\Support\Str;
 								<tbody>
 									@foreach($logs as $log)
 									<tr>
+										<td><b>{{ $log->earner }}</b></td>
 										<td>{!! $log->notes !!}</td>
-										<td>{{ $log->date }}</td>
+										<td>
+											<span data-toggle="tooltip" data-original-title="{{ $log->date }}">
+												{{ $log->created_at }}
+											</span>
+										</td>
 									</tr>
 									@endforeach
 								</tbody>

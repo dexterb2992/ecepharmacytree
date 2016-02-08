@@ -50,33 +50,8 @@ Route::post('saveBranchPreference', 'BranchController@saveBranchPreference');
 
 Route::get('check_basket', 'BasketController@check_basket');
 
-// Route::get('try/{referral_id}', function($referral_id){
-	// global $uplines;
-	// $uplines = array();
-	// pre(get_uplines($referral_id));
-	// pre(compute_points1($referral_id));
-	// dd($referral_id);
-	// pre(compute_points($referral_id));
-	// dd(compute_points($referral_id));
-	// $all_patients = ECEPharmacyTree\Patient::all();
-	// dd($all_patients);
-	// $patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
-	// $patient = ECEPharmacyTree\Patient::find($referral_id);
-	// dd($patient->upline());
-	// pre(check_stock_availability());
-	// $today = Carbon\Carbon::today('Asia/Manila')->addHours(23 );
-	// return ECEPharmacyTree\Promo::where('end_date', '>=', $today)->get();
-	// $orders = ECEPharmacyTree\Order::with('billing')->get();
-	// dd($orders);
-	// return view('errors.500');
-	// return view('emails.register')->withRole('Branch Manager')
-	// ->withEmail('dexterb2992@gmail.com')->withPassword(generate_random_string(6))
-	// ->withBranch_name("ECE Marketing - Davao");
-// });
 Route::get('compute-referral-points/{referral_id}', 'PointsController@store');
-Route::get('test', function (){
-	
-});
+
 
 Route::get('compute_basket_points', 'BasketController@compute_basket_points');
 
@@ -119,6 +94,8 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'aut
 });
 
 
+Route::get('products-json', ['as' => 'json', 'uses' => 'ProductController@get_json'] );
+Route::get('search/products/q={name}', ['as' => 'product_search', 'uses' => 'ProductController@search']);
 
 Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products::'], function (){
 	/**
@@ -130,7 +107,7 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('create', ['as' => 'create', 'uses' => 'ProductController@store']);
 	Route::post('edit', ['as' => 'edit', 'uses' => 'ProductController@update']);
 	Route::post('delete', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
-	Route::post('/all', ['as' => 'get_all', 'uses' => 'ProductController@show_all']);
+	Route::post('all', ['as' => 'get_all', 'uses' => 'ProductController@show_all']);
 	Route::post('deactivate', ['as' => 'deactivate', 'uses' => 'ProductController@restore']);
 
 
@@ -182,7 +159,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'Inventory::', 'middleware' => 'a
 	 * Routes for inventories
 	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'InventoryController@index']);
-	Route::get('all', ['as' => 'index', 'uses' => 'InventoryController@show_all']);
+	Route::get('all', ['as' => 'all', 'uses' => 'InventoryController@show_all']);
 	Route::post('adjustment', ['as' => 'adjustment', 'uses' => 'InventoryController@add_adjustments']);
 	Route::get('{id}', ['get', 'uses' => 'InventoryController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'InventoryController@store']);
@@ -343,3 +320,142 @@ Route::post('save_user_token', 'PatientController@save_user_token');
 
 Route::post('lot-numbers', 'InventoryController@get_lot_numbers');
 Route::get('lot-numbers', 'InventoryController@get_lot_numbers');
+
+Route::get('try', function (){
+	?>
+	<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.4/select2.css">
+	<style type="text/css">
+		.select2-container{
+		    width: 200px;
+		}
+	</style>
+	<input id="inventories_product_id" type="hidden" value="10" >
+	<input id="e24" type="hidden" value="10" >
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.js"></script>
+	<script type="text/javascript">
+		var data = [];
+
+		// for(var i = 0; i < 10000; i++){
+		//     data.push({id: ""+i, text: ""+i+"dexter"});
+		// }
+
+		$.ajax({
+			url: '/products-json',
+			type: 'get',
+			dataType: 'json'
+		}).done(function (response){
+			var data = [];
+			$.each(response, function (i,row){
+				data.push({id: row.id, text: row.name});
+			});
+			$("#inventories_product_id").select2({
+			  initSelection: function(element, callback) {
+			    var selection = _.find(data, function(metric){ 
+			      return metric.id === element.val();
+			    })
+			    callback(selection);
+			  },
+			  query: function(options){
+			    var pageSize = 100;
+			    var startIndex  = (options.page - 1) * pageSize;
+			    var filteredData = data;
+
+			    if( options.term && options.term.length > 0 ){
+			      if( !options.context ){
+			        var term = options.term.toLowerCase();
+			        options.context = data.filter( function(metric){
+			          return ( metric.text.toLowerCase().indexOf(term) !== -1 );
+			        });
+			      }
+			      filteredData = options.context;
+			    }
+
+			    options.callback({
+			      context: filteredData,
+			      results: filteredData.slice(startIndex, startIndex + pageSize),
+			      more: (startIndex + pageSize) < filteredData.length
+			    });
+			  },
+			  placeholder: "Select a metric"
+			});
+		});
+
+		// Function to shuffle the demo data 
+var shuffle = function (str) {
+    return str.split('').sort(function () {
+      return 0.5 - Math.random();
+    }).join('');
+  };
+
+// For demonstration purposes we first make
+// a huge array of demo data (20 000 items)
+// HEADS UP; for the _.map function i use underscore (actually lo-dash) here
+var mockData = function () {
+    var array = _.map(_.range(1, 20000), function (i) {
+        return {
+          id  : i,
+          text: shuffle('te ststr ing to shuffle') + ' ' + i
+        };
+      });
+    return array;
+  };
+
+$(function () {
+  // create demo data
+  var dummyData = mockData();
+  // set initial value(s)
+  $('#e24').val([
+    dummyData[75].text, dummyData[1897].text
+  ]);
+
+  // init select 2
+  $('#e24').select2({
+    data             : dummyData,
+    // init selected from elements value
+    initSelection    : function (element, callback) {
+      var initialData = [];
+      $(element.val().split(",")).each(function () {
+        initialData.push({
+          id  : this,
+          text: this
+        });
+      });
+      callback(initialData);
+    },
+
+    // NOT NEEDED: These are just css for the demo data
+    dropdownCssClass : 'capitalize',
+    containerCssClass: 'capitalize',
+
+    // configure as multiple select
+    multiple         : true,
+
+    // NOT NEEDED: text for loading more results
+    formatLoadMore   : 'Loading more...',
+    
+    // query with pagination
+    query            : function (q) {
+      var pageSize,
+        results;
+      pageSize = 20; // or whatever pagesize
+      results  = [];
+      if (q.term && q.term !== "") {
+        // HEADS UP; for the _.filter function i use underscore (actually lo-dash) here
+        results = _.filter(this.data, function (e) {
+          return (e.text.toUpperCase().indexOf(q.term.toUpperCase()) >= 0);
+        });
+      } else if (q.term === "") {
+        results = this.data;
+      }
+      q.callback({
+        results: results.slice((q.page - 1) * pageSize, q.page * pageSize),
+        more   : results.length >= q.page * pageSize
+      });
+    }
+  });
+});
+	</script>
+	<?php
+});

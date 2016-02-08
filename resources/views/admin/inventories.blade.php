@@ -30,20 +30,30 @@
 								<h4>Stock Items List</h4> <br/>
 
 								<div class="pull-right">
-					                <button class="btn-info btn add-edit-btn" data-toggle="modal" data-target="#modal-add-edit-inventory" 
-					                	data-target="#form_edit_inventory" data-action="create" data-title="inventory">
+					                <button class="btn-info btn add-edit-btn glow" data-toggle="modal" data-modal-target="#modal-add-edit-inventory" 
+					                	data-action="create" data-title="inventory">
 					                	<i class="fa-plus fa"></i> Add New
 					                </button>
-					                <button class="btn-success btn  btn-stock-return" data-target="#modal-stock-return" data-toggle="modal">
+					                <button class="btn-success btn  btn-stock-return glow" data-target="#modal-stock-return" data-toggle="modal">
 					                	<i class="fa-refresh fa"></i> Stock Return
 					                </button>
 								</div>
 
 							</div>
 							<div class="box-body">
+								@if( Route::is('Inventory::all') )
+	                                <small class="">
+	                                    <a href="{{ route('Inventory::index') }}">Hide Out-of-Stock Inventories</a>
+	                                </small>
+	                            @else
+	                                <small class="">
+	                                    <a href="{{ route('Inventory::all') }}">Show Out-of-Stock Inventories</a>
+	                                </small>
+	                            @endif
 								<table class="table table-bordered table-hover datatable">
 									<thead>
 										<tr>
+											<th>ID</th>
 											<th>Lot #</th>
 											<th>SKU</th>
 											<th>Product name</th>
@@ -55,9 +65,10 @@
 										</tr>
 									</thead>
 									<tbody>
-										@foreach($inventories as $inventory)
+										@foreach($inventories->items() as $inventory)
 											@if(!is_null($inventory->product))
 											<tr data-pid="{{ $inventory->product_id }}" data-id="{{ $inventory->id }}">
+												<td>{{ $inventory->id }}</td>
 												<td>
 													{{ $inventory->lot_number }}
 												</td>
@@ -66,14 +77,14 @@
 														$check_stock_availability = check_stock_availability($inventory->product);
 													?>
 													@if($check_stock_availability == 'out_of_stock')
-														<i class="fa-close fa" style="color:#dd4b39;" data-toggle="tooltip" data-original-title="Out of Stock"></i>
+														<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" data-original-title="Out of Stock"></i>
 													@elseif($check_stock_availability == 'critical')
-														<i class="fa-warning fa" style="color:#dd4b39;" data-toggle="tooltip" data-original-title="Critical Stock"></i>
+														<i class="fa-warning fa" style="color:#f0ad4e;" data-toggle="tooltip" data-original-title="Critical Stock"></i>
 													@endif
 													<span> {{ $inventory->product->sku }}</span>
 												</td>
 												<td>
-													<a href="{{ route('Products::index').'?q='.$inventory->product->name }}" target="_blank" class="show-product-info" data-id="{{ $inventory->product->id }}">
+													<a href="{!! url('search/products/q='.$inventory->product->name) !!}" target="_blank" class="show-product-info" data-id="{{ $inventory->product->id }}">
 														{{ $inventory->product->name }}
 													</a>
 												</td>
@@ -85,7 +96,7 @@
 														$total = $inventory->available_quantity * $inventory->product->qty_per_packing; 
 													?>
 													{!! '<b>'.$inventory->available_quantity." ".str_auto_plural($inventory->product->packing, $inventory->available_quantity)."</b> "
-														."( ".$total." ".str_auto_plural($inventory->product->unit, $total)." )" !!}
+														."(".$total." ".str_auto_plural($inventory->product->unit, $total).")" !!}
 												
 												</td>
 												<td>
@@ -128,6 +139,7 @@
 										@endforeach
 									</tbody>
 								</table>
+								{!! render_pagination($inventories) !!}
 							</div>
 						</div>
 					</div>
@@ -209,7 +221,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										@foreach($logs as $log)
+										@foreach($logs->items() as $log)
 											<tr>
 												<td>{{ get_person_fullname($log->user) }}</td>
 												<td>{!! $log->action !!}</td>
@@ -224,6 +236,7 @@
 										@endforeach	
 									</tbody>
 								</table>
+								{!! render_pagination($logs) !!}
 							</div>
 						</div>
 					</div>
@@ -244,11 +257,10 @@
 	                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
 	                            <div class="form-group">
 	                            	<label for="product_id">Product</label>
-	                            	<select class="form-control select2" name="product_id" id="inventories_product_id">
-	                            		@foreach($products as $product)
-	                            			<option value="{{ $product->id }}" data-packing="{{ $product->packing }}" data-unit="{{ $product->unit }}" data-qty-per-packing="{{ $product->qty_per_packing }}">{{ $product->name }}</option>
-	                            		@endforeach
-	                            	</select>
+	                            	<!-- <select class="form-control" name="product_id" id="inventories_product_id"> -->
+	                            	<input type="hidden" id="inventories_product_id" style="width:100%;" name="product_id" placeholder="Start typing, scroll for more results"/>
+	                            	<div class="temp_name" style="display:none;"></div>
+	                            	<!-- </select> -->
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="lot_number">Lot Number</label>
@@ -257,12 +269,12 @@
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received 
-	                            		<small>(<i>per <span id="outer_packing">{{ head( $products->toArray() )["packing"] }}</span></i>)</small>
+	                            		<small>(<i>per <span id="outer_packing"> - </span></i>)</small>
 	                            	</label>
 	                            	<div class="input-group">
 		                            	<input type="text" id="inventory_quantity" name="quantity" data-min="1" class="number form-control" placeholder="Add quantity by product's packing" title="Add quantity by product's packing" required>
 		                            	<div class="input-group-addon">
-		                            		<span class="add-on-product-packing" name="packing">{{ head( $products->toArray() )["packing"] }}</span>
+		                            		<span class="add-on-product-packing" name="packing"> - </span>
 		                            	</div>
 	                            	</div>
 	                            	<span id="total_quantity_in_unit"></span>
@@ -337,7 +349,7 @@
 		        			<div class="modal-body">
 		        				<div class="form-group">
 		        					<label>Order No.</label>
-									<select class="form-control select2" name="order_id" id="order_id"></select>	        					
+									<select class="select2" name="order_id" id="order_id"></select>	        					
 		        				</div>
 
 		        				<div class="oder-details">
@@ -392,7 +404,7 @@
 
 		        				<div class="form-group">
 		        					<label>Reason</label>
-		        					<select class="form-control select2" name="return_code" id="return_code"></select>
+		        					<select class="select2" name="return_code" id="return_code"></select>
 		        				</div>
 
 		        				<div class="form-group">
@@ -406,14 +418,18 @@
 		        						<label>
 		        							<input type="radio" name="action" class="icheck" data-check-value="replace" value="replace" checked> Replacement 
 		        						</label>
-			        					<label data-toggle="tooltip" data-original-title="Replacement Amount">{{ peso() }}<span id="refund_amount"> - </span></label>
+			        					<label data-toggle="tooltip" data-original-title="Replacement Amount">{{ peso() }} <span id="refund_amount"> - </span></label>
 		        					</div>
 		        					<input type="hidden" name="amount_refunded" id="amount_refunded">
 		        				</div>
 			        		</div>
 			        		
 			        		<div class="modal-footer">
-			        			<button type="submit" class="btn btn-primary btn-flat" name="submit">Return to Stocks</button>
+<<<<<<< HEAD
+			        			<button type="button" id="form_return_n_refund_btn_submit" class="btn btn-primary btn-flat" name="submit">Return & Refund</button>
+=======
+			        			<button type="submit" class="btn btn-primary btn-flat glow" name="submit">Return to Stocks</button>
+>>>>>>> ec16cc5645f4d8dbc0de605ceb1e5c5a1314d1c7
 			        		</div>
 			        	{!! Form::close() !!}
 	        		</div>

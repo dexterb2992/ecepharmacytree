@@ -140,7 +140,8 @@ class StockReturnController extends Controller
                         
 
                         // save the flags to order_details
-                        $order_detail = OrderDetail::where('order_id', '=', $order->id)->where('product_id', '=', $inventory->product_id )->first();
+                        $order_detail = OrderDetail::where('order_id', '=', $order->id)
+                            ->where('product_id', '=', $inventory->product_id )->where('quantity', '>', 'quantity_returned')->first();
                         // $order_detail->quantity_returned+= $returned_qty;
                         
                         if( $order_detail->quantity_returned < $order_detail->quantity ){

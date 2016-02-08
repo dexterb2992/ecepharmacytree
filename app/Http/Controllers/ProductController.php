@@ -4,6 +4,7 @@ namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
 use Input;
+use DB;
 
 use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
@@ -26,7 +27,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::whereRaw("deleted_at is null")->paginate(100);
 
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();
@@ -40,8 +41,10 @@ class ProductController extends Controller
             ->withCategory_names($category_names)->withTitle('Products');
     }
 
-    public function all_include_deleted(){
-        $products = Product::withTrashed()->get();
+    public function search($name){
+        // dd($name);
+        $products = Product::whereRaw("name like '%$name%'")->paginate(100);
+
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();
         $category_names = array();
@@ -51,7 +54,42 @@ class ProductController extends Controller
 
         return view('admin.products')->withProducts($products)
             ->withCategories($categories)->withSubcategories($subcategories)
-            ->withCategory_names($category_names)->withTitle('Products');
+            ->withCategory_names($category_names)->withTitle('Products')->withSource("search");
+    }
+
+    public function get_json(){
+        $input = Input::all();
+        if( isset($input['action']) && $input['action'] == "get_count" ){
+            $count = Product::all()->count();
+            if( $input['cached_count'] == $count )
+                return json_encode(array('status' => 200));
+        }
+        $products = Product::select('id', 'name', 'packing', 'unit', 'qty_per_packing')->get();
+        return $products;
+    }
+
+    public function all_include_deleted(){
+        // $products = Product::withTrashed()->get();
+        $listing = DB::table('products')->paginate(200);
+        $product_count = Product::onlyTrashed()->count();
+        $products = array();
+        foreach ($listing as $list) {
+            $product = Product::onlyTrashed()->find($list->id);
+            if( !is_null($product) )
+                array_push($products, $product);
+        }
+        
+        $categories = ProductCategory::orderBy('name')->get();
+        $subcategories = ProductSubcategory::orderBy('name')->get();
+        $category_names = array();
+        foreach ($categories as $category) {
+            $category_names[$category->id] = $category->name;
+        }
+
+        return view('admin.products')->withProducts($products)
+            ->withCategories($categories)->withSubcategories($subcategories)
+            ->withCategory_names($category_names)->withTitle('Products')
+            ->withPaginated_lists($listing)->withProduct_count($product_count);
         return Redirect::to('/products')->withProducts($products);
     }
 
@@ -77,6 +115,7 @@ class ProductController extends Controller
         $product->subcategory_id = $input['subcategory_id'];
         $product->sku = $input['sku'];
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
+        $product->is_freebie = isset($input['is_freebie']) ? $input['is_freebie'] : 0;
 
         if( $product->save() )
             return Redirect::to( route('Products::index') )->withFlash_message([
@@ -128,11 +167,12 @@ class ProductController extends Controller
         $product->packing = $input['packing'];
         $product->qty_per_packing = $input['qty_per_packing'];
         $product->subcategory_id = $input['subcategory_id'];
-        $product->sku = generate_sku();
+        $product->sku = $input['sku'];
         $product->critical_stock = $input["critical_stock"] != "" ? $input["critical_stock"] : null;
-
+        $product->is_freebie = isset($input['is_freebie']) ? $input['is_freebie'] : 0;
+        
         if( $product->save() )
-            return Redirect::to( route('Products::index') )->withFlash_message([
+            return Redirect::back()->withFlash_message([
                 'type' => 'success', 'msg' => "Changes has been saved successfully."
             ]);
         return false;

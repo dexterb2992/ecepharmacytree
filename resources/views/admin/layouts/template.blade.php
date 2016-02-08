@@ -20,6 +20,7 @@
         <div class="wrapper">
             <!-- jQuery 2.1.4 -->
             {!! HTML::script('plugins/jQuery/jQuery-2.1.4.min.js') !!}
+            
             @include('admin.partials._header');
 
             @include('admin.partials._sidebar');
@@ -71,7 +72,7 @@
 
         @if(Session::has("flash_message"))
         <script type="text/javascript">
-            $("div.alert").not(".alert-important").delay(5000).slideUp(function(){
+            $("div.alert").not(".alert-important").delay(8000).slideUp(function(){
                 $(this).remove();
             });
         </script>

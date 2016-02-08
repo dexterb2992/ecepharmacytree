@@ -14,13 +14,14 @@ class ProductCategoryTableSeeder extends Seeder
         ProductCategory::truncate();
 
 		$values = array(
-			1 => 'over-the-counter-medicines',
-			2 => 'prescription drugs',
-			3 => 'vitamins & supplements',
-			4 => 'medical devices',
-			5 => 'sexual wellness',
-			6 => 'health and beauty',
-			7 => 'medical supplies'
+			1=> 'Uncategorized',
+			2 => 'over-the-counter-medicines',
+			3 => 'prescription drugs',
+			4 => 'vitamins & supplements',
+			5 => 'medical devices',
+			6 => 'sexual wellness',
+			7 => 'health and beauty',
+			8 => 'medical supplies'
 		);
 
 		foreach ($values as $key => $value) {
