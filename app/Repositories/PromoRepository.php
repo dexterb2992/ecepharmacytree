@@ -120,6 +120,7 @@ class PromoRepository {
             $dfps = DiscountsFreeProduct::where('promo_id', $input['id'])->delete();
 
             if( isset($input['product_id']) && (count($input['product_id']) > 0) && ($input["product_applicability"] == 'SPECIFIC_PRODUCTS') ){
+                $product_ids = explode(',', $input['product_id']);
                 foreach ($input['product_id'] as $key => $value) {
                     $dfp = new DiscountsFreeProduct;
                     $dfp->promo_id = $input['id'];
