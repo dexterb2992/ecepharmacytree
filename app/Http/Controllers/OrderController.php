@@ -149,7 +149,7 @@ class OrderController extends Controller
 
     function emailtestingservice($email, $order_id){   
         $res = $this->mailer->send( 'emails.order_ready_email', 
-            compact('email', 'order_id',), function ($m) use ($email) {
+            compact('email', 'order_id'), function ($m) use ($email) {
                 $m->subject('Your order is ready');
                 $m->to($email);
             });
