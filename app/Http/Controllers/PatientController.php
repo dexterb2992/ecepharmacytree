@@ -13,6 +13,7 @@ use ECEPharmacyTree\Province;
 use ECEPharmacyTree\Municipality;
 use ECEPharmacyTree\Barangay;
 use Response;
+use Carbon\Carbon;
 
 
 class PatientController extends Controller
@@ -37,6 +38,15 @@ class PatientController extends Controller
         // $this->sendGoogleCloudMessage($data, $to_token);
 
         return Response::json($response);
+    }
+
+    function getUserAge(){
+        $input = Input::all();
+
+        $bdate = Patient::findOrFail($input['patient_id'])->birthdate;
+        $date = Carbon::createFromFormat('Y/m/d', $bdate)->age;
+
+        return $date;
     }
 
 
