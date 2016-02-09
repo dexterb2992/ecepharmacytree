@@ -64,8 +64,10 @@ class BasketRepository {
 		$flag = true;
 
 		$baskets = Basket::where("patient_id", $id)->get();
-		foreach($baskets as $basket){
-			if(!$basket->basket_promo()->first()->delete()){
+		
+		foreach($baskets as $basket) 
+		{
+			if(!$basket->basket_promo()->first()->delete())
 				$flag = false;
 		}
 
