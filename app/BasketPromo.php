@@ -11,4 +11,8 @@ class BasketPromo extends Model
     // public function subcategories(){
     // 	return $this->hasMany('ECEPharmacyTree\ProductSubcategory', 'category_id');
     // }
+
+    function basket(){
+    	return $this->belongsTo('ECEPharmacyTree\Basket', 'basket_id');
+    }
 }
