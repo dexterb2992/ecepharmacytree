@@ -34,7 +34,7 @@ class OrderController extends Controller
     public function index()
     {
 
-        $orders = Order::where('branch_id', session()->get('selected_branch'))->orderBy('id', 'DESC')->get();
+        $orders = Order::where('branch_id', session()->get('selected_branch'))->orderBy('id', 'DESC')->paginate(100);
 
 
         // $this->firstOrderFirstServeSort($orders);
@@ -62,7 +62,7 @@ class OrderController extends Controller
     public function show_all(){
         // $orders = Order::all();
         $orders = Order::where('branch_id', session()->get('selected_branch'))
-        ->where('is_returned', '=', 0)->orderBy('id', 'DESC')->get();
+        ->where('is_returned', '=', 0)->orderBy('id', 'DESC')->paginate(100);
         $orders->load('patient');
         $orders->load('order_details');
         $orders->load('billing');
