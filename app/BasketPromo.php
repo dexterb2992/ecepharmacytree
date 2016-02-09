@@ -12,7 +12,7 @@ class BasketPromo extends Model
     // 	return $this->hasMany('ECEPharmacyTree\ProductSubcategory', 'category_id');
     // }
 
-    function basket(){
-    	return $this->belongsTo('ECEPharmacyTree\Basket', 'basket_id');
-    }
+    // function basket(){
+    // 	return $this->belongsTo('ECEPharmacyTree\Basket', 'basket_id');
+    // }
 }

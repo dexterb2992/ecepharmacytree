@@ -24,8 +24,8 @@ class Basket extends Model
         return $this->belongsTo('ECEPharmacyTree\PatientPrescription', 'prescription_id');
     }
 
-    function basket_promo(){
-        return $this->belongsTo('ECEPharmacyTree\BasketPromo');
-    }
+    // function basket_promo(){
+    //     return $this->belongsTo('ECEPharmacyTree\BasketPromo');
+    // }
 
 }
