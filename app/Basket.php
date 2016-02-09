@@ -25,7 +25,7 @@ class Basket extends Model
     }
 
     function basket_promo(){
-        return $this->hasOne('ECEPharmacyTree\BasketPromo', 'id');
+        return $this->belongsTo('ECEPharmacyTree\BasketPromo');
     }
 
 }

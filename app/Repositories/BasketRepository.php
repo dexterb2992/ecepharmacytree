@@ -67,7 +67,9 @@ class BasketRepository {
 		
 		foreach($baskets as $basket) 
 		{
-			if(!$basket->basket_promo()->first()->delete())
+			$basket_promo = BasketPromo::findOrFail($basket->id);
+
+			if(!$basket_promo()->delete())
 				$flag = false;
 		}
 
