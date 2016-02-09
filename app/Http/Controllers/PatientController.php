@@ -45,7 +45,7 @@ class PatientController extends Controller
         $input = Input::all();
 
         $patient = Patient::findOrFail($input['patient_id']);
-        $age = Carbon::createFromFormat('Y/m/d', $patient->birthdate)->age;
+        $age = Carbon::createFromFormat('Y-m-d', $patient->birthdate)->age;
 
         $response['age'] = $age;
         $response['isSenior'] = $patient->isSenior;
