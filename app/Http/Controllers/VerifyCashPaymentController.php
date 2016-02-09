@@ -162,6 +162,7 @@ class VerifyCashPaymentController extends Controller
 				$billing->payment_method = $payment_method;
 				$billing->points_discount = $points_discount;
 				$billing->coupon_discount = $coupon_discount;
+				$billing->senior_discount = $senior_discount;
 
 				if($billing->save()) {
 					$billing_id = $billing->id;
