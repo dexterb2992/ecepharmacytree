@@ -58,4 +58,19 @@ class BasketRepository {
 		return json_encode($response);
 
 	}
+
+	function flush_user_basket_promos($id){
+		$response = array();
+		$flag = true;
+
+		$baskets = Basket::where("patient_id", $id)->get();
+		foreach($baskets as $basket){
+			if(!$basket->basket_promo()->first()->delete()){
+				$flag = false;
+		}
+
+		$response['success'] = $flag;
+
+		return json_encode($response);
+	}
 }
