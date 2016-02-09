@@ -466,7 +466,7 @@ function get_earner_from_referral_points_logs(ReferralCommissionActivityLog $log
 
 function render_pagination($pagination){
 	$html = '<hr/>';
-    if( $pagination->total() > 0 && $pagination->total() > 200 ){
+    if( $pagination->total() > 0 && $pagination->total() > 100 ){
     	$html.= '
 	    	<div class="row">
 		        <div class="col-md-4">
