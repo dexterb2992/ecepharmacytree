@@ -73,7 +73,7 @@ class PromoController extends Controller
         $response = $this->promo->save($input);
 
         if( $response ){
-            session()->flash("flash_message", ["msg" => "New promo has been added successfully.", "type" => "success"]);
+            session()->flash("flash_message", ["msg" => "New promo has been added successfully.", "type" => "info"]);
             return Redirect::to( route('Promo::index') );
         }
         
@@ -143,7 +143,7 @@ class PromoController extends Controller
         
         if( $this->promo->update_details(Input::all()) )
             return Redirect::back()->withFlash_message([
-                'type' => 'success',
+                'type' => 'info',
                 'msg' => "Promo details has been successfully saved."
             ]);
 

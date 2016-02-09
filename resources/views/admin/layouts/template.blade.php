@@ -34,7 +34,7 @@
                     </h1>
                     @if(Auth::check())
                     <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i></a></li>
+                        <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i></a></li>
                         <li class="active">{{ isset($title) ? $title : '' }}</li>
                     </ol>
                     @endif

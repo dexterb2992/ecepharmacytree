@@ -78,7 +78,12 @@ class PointsRepository {
                 //pre("uncomputed billing.");
                 // points computation
                 // $points_earned = compute_points($billing->gross_total);
-            $sales_amount = $billing->gross_total;
+            $delivery_charge = isset($billing->order->delivery_charge) ? $billing->order->delivery_charge : 0;
+            $sales_amount = (double) $billing->gross_total - $delivery_charge;
+
+            // fiter $sales_amount 
+            $sales_amount = $sales_amount > 0 ? $sales_amount : 0;
+
             $points_per_order_detail = 0;
 
             foreach ($billing->order->order_details as $order_detail) {

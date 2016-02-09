@@ -7,7 +7,9 @@
         <div class="box box-success">
             <div class="box-header">
                 <h4 class="box-title">Product Groups</h4><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-product-groups" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-product-groups" data-target="#form_edit_product_groups" data-action="create" data-title="product">
+                    <i class="fa-plus fa"></i> Add New
+                </button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable products-table">
@@ -29,9 +31,23 @@
                                 <td>{{ ucfirst($group->name) }}</td>
                                 <td>{{ $group->points }}</td>
                                 <td>
+                                    <?php $x = 0; ?>
                                     @if(count($group->products) > 0)
                                         @foreach($group->products as $product)
-                                            <a href="{{ route('Products::index').'?q='.$product->name }}" data-toggle="tooltip" data-original-title="{{ $product->name }}" target="_blank" class="btn btn-xs btn-success">{{ $product->name }}</a>
+                                            @if($x < 4)
+                                                <a href="{{ route('product_search').'?q='.$product->name }}" data-toggle="tooltip" data-original-title="{{ $product->name }}" target="_blank" class="btn btn-xs btn-success">{{ $product->name }}</a>
+                                            @else
+                                                <div class="more_{{ $group->id }}" style="display:none;">
+                                                    <a href="{{ route('product_search').'?q='.$product->name }}" data-toggle="tooltip" data-original-title="{{ $product->name }}" target="_blank" class="btn btn-xs btn-success">{{ $product->name }}</a>
+                                                </div>
+                                                @if($x == count($group->products)-1)
+                                                    <span data-toggle="tooltip" data-target=".more_{{ $group->id }}" data-original-title="Expand to show more products"
+                                                        class="btn btn-xs bg-purple show-hide-more-products" >
+                                                        <i class="fa-eye fa"></i>
+                                                    </span>
+                                                @endif
+                                            @endif
+                                            <?php $x++; ?>
                                         @endforeach
                                     @else
                                         <span class="label label-default">No product is associated with this group</span>
@@ -89,11 +105,10 @@
 
                     <div class="form-group">    
                         {!! Form::label("Products Involved") !!}
-                        <select class="form-control select2" name="products_involved[]" multiple>
-                            @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->name }}</option>
-                            @endforeach
-                        </select>
+                        <!-- <select class="form-control select2" name="products_involved[]" multiple> -->
+                            
+                        <!-- </select> -->
+                        <input type="hidden" id="product_groups_products_involved" name="products_involved" class="products-multiple-select2">
                     </div>
                     
                 </div>

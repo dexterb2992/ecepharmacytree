@@ -95,7 +95,7 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'aut
 
 
 Route::get('products-json', ['as' => 'json', 'uses' => 'ProductController@get_json'] );
-Route::get('search/products/q={name}', ['as' => 'product_search', 'uses' => 'ProductController@search']);
+Route::get('search/products', ['as' => 'product_search', 'uses' => 'ProductController@search']);
 
 Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products::'], function (){
 	/**

@@ -1,3 +1,26 @@
+var cache_products = function (callback){
+    $.ajax({
+        url: '/products-json',
+        type: 'get',
+        dataType: 'json',
+        assync: false
+    }).done(function (data){
+        localStorage.clear();
+
+        localStorage.products = JSON.stringify(data);
+        window.products = data;
+        window.select2_all_products = [];
+        $.each(window.products, function (i, row){
+            window.select2_all_products.push({id: row.id, text: row.name});
+        });
+        localStorage.select2_all_products = JSON.stringify(window.select2_all_products);
+
+        if( typeof callback === 'function' && callback() ){
+            callback();
+        }
+    });
+};
+
 var cache_list_of_products = function (){
 	// for caching list of products to improve performance
 	if( typeof(localStorage.products) ===  'undefined' && typeof(localStorage.select2_all_products) === 'undefined'){
@@ -31,46 +54,49 @@ var cache_list_of_products = function (){
 
 var init_products_list = function (){
 	// to improve select2 performance when handling large amount of data
+    if( typeof(localStorage.select2_all_products) === 'undefined' ){
+        cache_products('init_products_list');
+    }else{
+        var data = window.select2_all_products;
 
-    var data = window.select2_all_products;
+        // set initial value
+        if( data.length > 0 ){
+            $("#inventories_product_id").val(data[0].id).attr('data-packing', data[0].packing).attr('data-unit', data[0].unit).attr('data-qty-per-packing', data[0].qty_per_packing);
+        }
 
-    // set initial value
-    if( data.length > 0 ){
-        $("#inventories_product_id").val(data[0].id).attr('data-packing', data[0].packing).attr('data-unit', data[0].unit).attr('data-qty-per-packing', data.qty_per_packing);
-    }
+        $("#inventories_product_id").select2({
+            initSelection: function(element, callback) {
+                var selection = _.find(data, function(metric){
+                    return metric.id === element.val();
+                });
+                callback(selection);
+            },
+            query: function(options){
+                var pageSize = 100;
+                var startIndex  = (options.page - 1) * pageSize;
+                var filteredData = data;
 
-    $("#inventories_product_id").select2({
-        initSelection: function(element, callback) {
-            var selection = _.find(data, function(metric){
-                return metric.id === element.val();
-            });
-            callback(selection);
-        },
-        query: function(options){
-            var pageSize = 100;
-            var startIndex  = (options.page - 1) * pageSize;
-            var filteredData = data;
-
-            if( options.term && options.term.length > 0 ){
-                if( !options.context ){
-                    var term = options.term.toLowerCase();
-                    options.context = data.filter( function(metric){
-                        return ( metric.text.toLowerCase().indexOf(term) !== -1 );
-                    });
+                if( options.term && options.term.length > 0 ){
+                    if( !options.context ){
+                        var term = options.term.toLowerCase();
+                        options.context = data.filter( function(metric){
+                            return ( metric.text.toLowerCase().indexOf(term) !== -1 );
+                        });
+                    }
+                    filteredData = options.context;
                 }
-                filteredData = options.context;
-            }
 
-            options.callback({
-                context: filteredData,
-                results: filteredData.slice(startIndex, startIndex + pageSize),
-                more: (startIndex + pageSize) < filteredData.length
-            });
-        },
-        placeholder: "Select a product"
-    });
+                options.callback({
+                    context: filteredData,
+                    results: filteredData.slice(startIndex, startIndex + pageSize),
+                    more: (startIndex + pageSize) < filteredData.length
+                });
+            },
+            placeholder: "Select a product"
+        });
 
-	$('#inventories_product_id').removeClass("select2-offscreen");
+        $('#inventories_product_id').removeClass("select2-offscreen");
+    }
 };
 
 var init_specific_product_list = function ($_element){
@@ -142,6 +168,21 @@ var init_specific_product_list = function ($_element){
             });
         }
     });
+};
+
+
+var find_product_object_from_cache = function(id){
+    var result = window.products.filter(function (n){
+        return n.id == id;
+    });
+
+    if( result.length == 1 ){
+        return result;  // use result[0] when getting data
+    }else if( result > 1 ){
+        return result;
+    }else if( result < 0 ){
+        return false;
+    }
 };
 
 

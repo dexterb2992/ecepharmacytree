@@ -17,7 +17,7 @@
         <?php 
             $currentURI = pathinfo(Request::url());
         ?>
-        <div action="/search/products" method="get" class="sidebar-form" id="sidebar_search_form">
+        <form action="/search/products" method="get" class="sidebar-form" id="sidebar_search_form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search for products..." />
                 <span class="input-group-btn">
@@ -26,7 +26,7 @@
                     </a>
                 </span>
             </div>
-        </div>
+        </form>
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">

@@ -169,7 +169,7 @@ class PromoRepository {
             $dfp->discount_detail_discount_type = "peso_discount";
         }
 
-
+        unset($dfp->product_id);
 
         return $dfp;
     }

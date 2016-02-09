@@ -20,10 +20,11 @@ class ProductGroupController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        // $products = Product::all();
         $product_groups = ProductGroup::all();
 
-        return view('admin.product-groups')->withProducts($products)
+        return view('admin.product-groups')
+            // ->withProducts($products)
             ->withTitle('Product Groups')->withProduct_groups($product_groups);
     }
 
@@ -44,6 +45,8 @@ class ProductGroupController extends Controller
             $group->points = $input['points'];
             if( $group->save() )
                 if( isset($input['products_involved']) && count($input['products_involved']) > 0 ){
+                    $products_involved = explode(',', $input['products_involved']);
+                    // foreach ($input['products_involved'] as $key => $value) {
                     foreach ($input['products_involved'] as $key => $value) {
                         $product = Product::find($value);
                         $product->product_group_id = $group->id;
@@ -85,7 +88,14 @@ class ProductGroupController extends Controller
     {
         if( Request::ajax() ){
             $product_group = ProductGroup::findOrFail($id);
-            $product_group->products_involved = $product_group->products;
+            // $products_involved = $product_group->products;
+            $products_involved = [];
+            foreach ($product_group->products as $product) {
+                $products_involved[] = $product->id;
+            }
+
+            $product_group->products_involved = implode(',', $products_involved);
+
             return $product_group;
         }
 

@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($orders as $order )
+                        @foreach($orders->items() as $order )
                         <?php $carbon_date = Carbon\Carbon::parse($order->created_at); ?>
                         <tr data-id="{{ $order->id }}">
                             <td><a href="{{ 'orders/'.$order->id }}">{{ '#'.$order->id }}</a></td>
@@ -39,6 +39,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {!! render_pagination($orders) !!}
             </div><!-- /.box-body -->
         </div><!-- /.box -->
 
