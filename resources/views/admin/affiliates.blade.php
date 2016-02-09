@@ -137,8 +137,9 @@ use Illuminate\Support\Str;
 									<tr>
 										<td><b>{{ $log->earner }}</b></td>
 										<td>
+											<span class="label label-info">{{ $log->created_at->diffForHumans() }}</span><br/>
 											{!! $log->notes !!}
-											<span class="label label-info">{{ $log->created_at->diffForHumans() }}</span>
+
 										</td>
 										<td>
 											<span data-toggle="tooltip" data-original-title="{{ $log->date }}">
