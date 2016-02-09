@@ -96,6 +96,14 @@
                                 @endif
                                 @endif
 
+                                 @if($order->billing()->first()->senior_discount > 0)
+                                <?php $order_total -= $order->billing()->first()->senior_discount; ?>
+                                <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
+                                  <td colspan="2" class="alignright" width="75%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">Senior Discount</td>
+                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ $order->billing()->first()->senior_discount }}</td>
+                                </tr>
+                                @endif
+
                                 @if($order->billing()->first()->points_discount > 0)
                                 <?php $order_total -= $order->billing()->first()->points_discount; ?>
                                 <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
