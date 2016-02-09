@@ -62,7 +62,7 @@
         @endif
         <!-- <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr> -->
         <tr><td class="borderless"></td><td class="borderless next-heading">Total</td><td class="borderless next-heading">&#8369; {{ $order->billing()->first()->total }}</td></tr>
-        <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order_total }}</td></tr>
+        <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order->billing()->first()->total}}</td></tr>
 
         @if($order->billing()->first()->payment_status == "paid")
         <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> Payment has been accepted.</h2></td><td></td><td></td></tr>
