@@ -73,6 +73,6 @@ class BasketRepository {
 
 		$response['success'] = $flag;
 
-		return json_encode($response);
+		return $response;
 	}
 }
