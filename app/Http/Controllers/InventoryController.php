@@ -124,7 +124,7 @@ class InventoryController extends Controller
                 'branch_id' => session()->get('selected_branch')
             ]);
             return Redirect::to( route('Inventory::index') )->withFlash_message([
-                "type" => "success",
+                "type" => "info",
                 "msg" => "A new stock for $product->name with Lot# $inventory->lot_number has been added successfully."
             ]);
         }

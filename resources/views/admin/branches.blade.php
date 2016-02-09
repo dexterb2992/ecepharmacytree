@@ -86,7 +86,7 @@ use ECEPharmacyTree\Branch;
                             </div>
                             <div class="form-group">
                                 <label for="address_province">Region<red>*</red></label>
-                                <select class="form-control select2" name="region_id" id="address_region">
+                                <select class="select2" name="region_id" id="address_region">
                                     <option value="0">- Select Region - </option>
                                     @foreach($regions as $region)
                                     <option value="{{ $region->id }}">{{ $region->name.' ('.$region->code.')' }}</option>
@@ -96,7 +96,7 @@ use ECEPharmacyTree\Branch;
 
                             <div class="form-group">
                                 <label for="address_province">Province<red>*</red></label>
-                                <select class="form-control select2" id="address_province" name="province_id" required>
+                                <select class="select2" id="address_province" name="province_id" required>
                                     <option value="0">- Select Province -</option>
                                 </select>
                                 <!-- <input type="text" class="form-control" id="address_province" placeholder="Province" name="address_province" required> -->
@@ -104,14 +104,14 @@ use ECEPharmacyTree\Branch;
 
                             <div class="form-group">
                                 <label for="address_city_municipality">Municipality<red>*</red></label>
-                                <select class="form-control select2" name="municipality_id" id="address_city_municipality">
+                                <select class="select2" name="municipality_id" id="address_city_municipality">
                                     <option value="0">- Select Municipality -</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="address_barangay">Barangay<red>*</red></label>
-                                <select class="form-control select2" name="barangay_id" id="address_barangay">
+                                <select class="select2" name="barangay_id" id="address_barangay">
                                     <option value="0">- Select Barangay -</option>
                                 </select>
                             </div>

@@ -317,6 +317,14 @@ $(document).ready(function (){
                 updateInventoryProductQty();
 
                 // add your conditions & magic codes here when form fields has been filled 
+                    if( data.hasOwnProperty('has_free_gifts') ){
+                        if( data.has_free_gifts == 0 ){
+                            $(".selected-products-qty-div").html("");
+                            $("#promo_details_gifts").val("");
+                            init_specific_product_list( $("#promo_details_gifts") );
+                        }
+                    }
+
 
                     if( $this.hasClass('promo-product-details') ){
                         window.global_free_gift_product_ids = [];
@@ -345,6 +353,7 @@ $(document).ready(function (){
                                 $(".selected-products-qty-div").html(htmls);
                                 // $("#promo_details_gifts").select2();
                                 $("#promo_details_gifts").val( _details_gifts.join(',') );
+
                                 init_specific_product_list( $("#promo_details_gifts") );
                                 
                                 $("#form_promo_product_info").find('input.gift_quantities').each(function (i, row){

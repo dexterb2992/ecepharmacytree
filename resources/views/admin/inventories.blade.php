@@ -84,7 +84,7 @@
 													<span> {{ $inventory->product->sku }}</span>
 												</td>
 												<td>
-													<a href="{!! url('search/products/q='.$inventory->product->name) !!}" target="_blank" class="show-product-info" data-id="{{ $inventory->product->id }}">
+													<a href="{!! url('search/products?q='.$inventory->product->name) !!}" target="_blank" class="show-product-info" data-id="{{ $inventory->product->id }}">
 														{{ $inventory->product->name }}
 													</a>
 												</td>

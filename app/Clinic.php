@@ -22,4 +22,8 @@ class Clinic extends Model
             return $this->additional_address;
         }
     }
+
+    public function doctors(){
+        return $this->belongsToMany('ECEPharmacyTree\Doctor');
+    }
 }
