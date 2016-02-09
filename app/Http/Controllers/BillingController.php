@@ -55,6 +55,7 @@ class BillingController extends Controller
                 $data = array('title' => 'Pharmacy Tree', 'intent' => 'ReferralFragment', 
                     'order_id' => $order->id, 'text' => 'You acquired '.$message->points_earned.' from your payment. Order #'.$order->id);
 
+                $this->emailtestingservice($patient->email_address, $order->id, $message->points_earned);
                 $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
 
                 return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'success', 'msg' => $message->msg ]);
@@ -63,5 +64,13 @@ class BillingController extends Controller
         
         return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'danger', 'msg' => 'Sorry. Unable to mark payment.' ]);
 
+    }
+
+    function emailtestingservice($email, $order_id, $points){   
+        $res = $this->mailer->send( 'emails.points_received_email', 
+            compact('email', 'order_id', 'points'), function ($m) use ($email) {
+                $m->subject('You received points');
+                $m->to($email);
+            });
     }
 }

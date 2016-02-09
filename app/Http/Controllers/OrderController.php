@@ -138,11 +138,21 @@ class OrderController extends Controller
                 $data = array( 'text' => $msg, 'title' => 'Pharmacy Tree', 'intent' => 'OrderDetailsActivity', 
                     'order_id' => $order->id);
 
+
+                $this->emailtestingservice($patient->email_address, $order->id);
                 $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
             }
         }
 
         return Redirect::back();
+    }
+
+    function emailtestingservice($email, $order_id){   
+        $res = $this->mailer->send( 'emails.order_ready_email', 
+            compact('email', 'order_id',), function ($m) use ($email) {
+                $m->subject('Your order is ready');
+                $m->to($email);
+            });
     }
 
     function deductInventory($product_id, $quantity, $branch_id, $order_id) {
