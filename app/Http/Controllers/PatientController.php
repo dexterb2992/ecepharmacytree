@@ -40,13 +40,19 @@ class PatientController extends Controller
         return Response::json($response);
     }
 
-    function getUserAge(){
+    function getSeniorValidity(){
+        $response = array();
         $input = Input::all();
 
-        $bdate = Patient::findOrFail($input['patient_id'])->birthdate;
-        $date = Carbon::createFromFormat('Y/m/d', $bdate)->age;
+        $patient = Patient::findOrFail($input['patient_id']);
+        $age = Carbon::createFromFormat('Y/m/d', $patient->birthdate)->age;
 
-        return $date;
+        $response['age'] = $age;
+        $response['isSenior'] = $patient->isSenior;
+        $response['senior_citizen_id_number'] = $patient->senior_citizen_id_number;
+        $response['senior_id_picture'] = $patient->senior_id_picture;
+
+        return json_encode($response);
     }
 
 

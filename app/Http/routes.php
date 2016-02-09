@@ -40,7 +40,7 @@ Route::controllers([
 
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
 
-Route::get('getUserAge', 'PatientController@getUserAge');
+Route::get('getSeniorValidity', 'PatientController@getSeniorValidity');
 
 Route::get('home', function(){
 	return redirect('/');
