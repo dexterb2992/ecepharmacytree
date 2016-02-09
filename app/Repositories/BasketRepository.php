@@ -63,7 +63,7 @@ class BasketRepository {
 		$response = array();
 		$flag = true;
 
-		dd($id);
+		// dd($id);
 
 		$baskets = Basket::where("patient_id", $id)->get();
 		
@@ -77,6 +77,6 @@ class BasketRepository {
 
 		// $response['success'] = $flag;
 
-		return $response;
+		return $baskets;
 	}
 }
