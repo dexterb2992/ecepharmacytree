@@ -11,7 +11,7 @@
 		<body class="login-page">
 		    <div class="login-box">
 		      <div class="login-logo">
-		        <a href="{{ url('/') }}"><b>ECE </b>Pharmacy Tree</a>
+		        <a href="{{ url('/') }}">Pharmacy Tree</a>
 		      </div><!-- /.login-logo -->
 		      <div class="login-box-body">
 		        <p class="login-box-msg">Reset your password</p>
