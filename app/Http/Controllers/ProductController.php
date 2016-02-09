@@ -41,9 +41,10 @@ class ProductController extends Controller
             ->withCategory_names($category_names)->withTitle('Products');
     }
 
-    public function search($name){
-        // dd($name);
-        $products = Product::whereRaw("name like '%$name%'")->paginate(100);
+    public function search(){
+        $input = Input::all();
+        $keyword = isset($input['q']) ? $input['q'] : '';
+        $products = Product::whereRaw("name like '%$keyword%'")->paginate(100);
 
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();

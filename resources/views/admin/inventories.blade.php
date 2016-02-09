@@ -397,7 +397,7 @@
 		        				<div id="if_only_specific_products_to_return" style="display:none;">
 			        				<div class="form-group">
 			        					<label>Product to return</label>
-			        					<select class="form-control" name="return_product_id[]" id="return_product_id" multiple></select>
+			        					<select name="return_product_id[]" id="return_product_id" multiple></select>
 			        					<div class="selected-products-qty-div form-horizontal"></div>
 			        				</div>
 			        			</div>
@@ -425,11 +425,7 @@
 			        		</div>
 			        		
 			        		<div class="modal-footer">
-<<<<<<< HEAD
-			        			<button type="button" id="form_return_n_refund_btn_submit" class="btn btn-primary btn-flat" name="submit">Return & Refund</button>
-=======
 			        			<button type="submit" class="btn btn-primary btn-flat glow" name="submit">Return to Stocks</button>
->>>>>>> ec16cc5645f4d8dbc0de605ceb1e5c5a1314d1c7
 			        		</div>
 			        	{!! Form::close() !!}
 	        		</div>

@@ -579,29 +579,6 @@ function getLotNumbers(){
     });
 }
 
-var cache_products = function (callback){
-    $.ajax({
-        url: '/products-json',
-        type: 'get',
-        dataType: 'json',
-        assync: false
-    }).done(function (data){
-        localStorage.clear();
-
-        localStorage.products = JSON.stringify(data);
-        window.products = data;
-        window.select2_all_products = [];
-        $.each(window.products, function (i, row){
-            window.select2_all_products.push({id: row.id, text: row.name});
-        });
-        localStorage.select2_all_products = JSON.stringify(window.select2_all_products);
-
-        if( typeof callback === 'function' && callback() ){
-            callback();
-        }
-    });
-};
-
 var products_trigger_change = function($this){
     var result = window.products.filter(function(n){
         return n.id == $this.val();

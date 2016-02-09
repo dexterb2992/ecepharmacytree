@@ -1728,19 +1728,19 @@ $("#add_gallery").click(function (){
         });
     });
 
-    $("#btn_sidebar_search_form").click(function (){
-        var url = $("#sidebar_search_form").attr("action"),
-            keyword = $("#sidebar_search_form").find('input[name="q"]').val();
-        window.location.href = url+'/q='+keyword;
-    });
+    // $("#btn_sidebar_search_form").click(function (){
+    //     var url = $("#sidebar_search_form").attr("action"),
+    //         keyword = $("#sidebar_search_form").find('input[name="q"]').val();
+    //     window.location.href = url+'/q='+keyword;
+    // });
 
-    $("#sidebar_search_form").keypress(function(e) {
-        if(e.which == 13) {
-            var url = $("#sidebar_search_form").attr("action"),
-            keyword = $("#sidebar_search_form").find('input[name="q"]').val();
-            window.location.href = url+'/q='+keyword;
-        }
-    });
+    // $("#sidebar_search_form").keypress(function(e) {
+    //     if(e.which == 13) {
+    //         var url = $("#sidebar_search_form").attr("action"),
+    //         keyword = $("#sidebar_search_form").find('input[name="q"]').val();
+    //         window.location.href = url+'/q='+keyword;
+    //     }
+    // });
 
 
 
