@@ -16,15 +16,18 @@ use ECEPharmacyTree\Log;
 use URL;
 use ECEPharmacyTree\OrderLotNumber;
 use ECEPharmacyTree\Repositories\GCMRepository;
+use Illuminate\Mail\Mailer;
 
 
 class OrderController extends Controller
 {
     protected $gcm;
+    protected $mailer;
 
-    function __construct(GCMRepository $gcm)
+    function __construct(GCMRepository $gcm, Mailer $mailer)
     {
         $this->gcm = $gcm;
+        $this->mailer = $mailer;
     }
     /**
      * Display a listing of the resource.

@@ -10,18 +10,20 @@ use ECEPharmacyTree\Billing;
 use Input;
 use ECEPharmacyTree\Repositories\PointsRepository;
 use ECEPharmacyTree\Repositories\GCMRepository;
-
+use Illuminate\Mail\Mailer;
 
 class BillingController extends Controller
 {
 
     protected $points;
     protected $gcm;
+    protected $mailer;
 
-    function __construct(PointsRepository $points, GCMRepository $gcm)
+    function __construct(PointsRepository $points, GCMRepository $gcm, Mailer $mailer)
     {
         $this->points = $points;
         $this->gcm = $gcm;
+        $this->mailer = $mailer;
     }
 
 
