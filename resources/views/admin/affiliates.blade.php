@@ -127,24 +127,22 @@ use Illuminate\Support\Str;
 	            			<table class="table table-bordered table-hover table-points-log">
 								<thead>
 									<tr>
+										<th>ID</th>
 										<th>Name</th>
 										<th>Activity</th>
-										<th>Date</th>
 									</tr>
 								</thead>
 								<tbody>
 									@foreach($logs as $log)
 									<tr>
+										<td>{{ $log->id }}</td>
 										<td><b>{{ $log->earner }}</b></td>
 										<td>
-											<span class="label label-info">{{ $log->created_at->diffForHumans() }}</span><br/>
+											<span class="label label-info" data-toggle="tooltip" data-original-title="{{ $log->date }}">
+												{{ $log->created_at->diffForHumans() }}
+											</span><br/>
 											{!! $log->notes !!}
 
-										</td>
-										<td>
-											<span data-toggle="tooltip" data-original-title="{{ $log->date }}">
-												{{ $log->created_at }}
-											</span>
 										</td>
 									</tr>
 									@endforeach

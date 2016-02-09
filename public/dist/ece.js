@@ -78,7 +78,7 @@ $(document).ready(function (){
     });
 
     $('.table-points-log').DataTable({
-        "aaSorting": [[ 1, "desc" ]]
+        "aaSorting": [[ 0, "desc" ]]
     });
 
 
