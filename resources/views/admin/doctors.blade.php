@@ -33,7 +33,7 @@
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
-                                    @foreach($doctors as $doctor)
+                                    @foreach($doctors->items() as $doctor)
                                     <tr>
                                         <td>{{ $doctor->prc_no }}</td>
                                         <td>{{ get_person_fullname($doctor) }}</td>
@@ -61,6 +61,7 @@
                                     </tr> -->
                                 </tfoot>
                             </table>
+                            {!! render_pagination($doctors) !!}
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
 
@@ -85,7 +86,7 @@
 
                                         <div class="form-group">
                                         <label for="sub_specialty_id">Specialty</label>
-                                            <select class="form-control select2" name="sub_specialty_id">
+                                            <select class="select2" name="sub_specialty_id">
                                                 @foreach($specialties as $specialty)
                                                 <optgroup label="{{ $specialty->name }}">
                                                     @foreach($specialty->subspecialties as $subspecialty)
@@ -259,7 +260,7 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <div class="form-group">
                                             <label for="specialty">Select specialty</label>
-                                            {!! Form::select('specialty_id', $specialty_names, "null", ['class' => 'form-control select2']) !!}
+                                            {!! Form::select('specialty_id', $specialty_names, "null", ['class' => 'select2']) !!}
                                         </div>  
                                         <div class="form-group">
                                             <label for="name">Subspecialty Name <i>*</i></label>
