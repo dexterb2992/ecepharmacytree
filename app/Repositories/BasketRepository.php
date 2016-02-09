@@ -71,7 +71,7 @@ class BasketRepository {
 		{
 			$basket_promo = BasketPromo::where("basket_id", $basket->id)->first();
 
-			if(!$basket_promo()->delete())
+			if(!$basket_promo->delete())
 				$flag = false;
 		}
 
