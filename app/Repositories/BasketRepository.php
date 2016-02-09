@@ -67,15 +67,15 @@ class BasketRepository {
 
 		$baskets = Basket::where("patient_id", $id)->get();
 		
-		// foreach($baskets as $basket) 
-		// {
-		// 	$basket_promo = BasketPromo::findOrFail($basket->id);
+		foreach($baskets as $basket) 
+		{
+			$basket_promo = BasketPromo::where("basket_id", $basket->id)->first();
 
-		// 	if(!$basket_promo()->delete())
-		// 		$flag = false;
-		// }
+			if(!$basket_promo()->delete())
+				$flag = false;
+		}
 
-		// $response['success'] = $flag;
+		$response['success'] = $flag;
 
 		return $baskets;
 	}
