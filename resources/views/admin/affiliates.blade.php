@@ -59,7 +59,7 @@ use Illuminate\Support\Str;
 											<td>
 												<span class="label-primary label">
 													<i class="fa fa-clock-o"></i>
-													{{ Carbon::parse($doctor->created_at)->diffForHumans() }}
+													{{ $doctor->created_at->diffForHumans() }}
 												</span>
 											</td>
 										</tr>
@@ -88,7 +88,7 @@ use Illuminate\Support\Str;
 											<td>
 												<span class="label-primary label">
 													<i class="fa fa-clock-o"></i>
-													{{ Carbon::parse($patient->created_at)->diffForHumans() }}
+													{{ $patient->created_at->diffForHumans() }}
 												</span>
 											</td>
 										</tr>
@@ -136,7 +136,10 @@ use Illuminate\Support\Str;
 									@foreach($logs as $log)
 									<tr>
 										<td><b>{{ $log->earner }}</b></td>
-										<td>{!! $log->notes !!}</td>
+										<td>
+											{!! $log->notes !!}
+											<span class="label label-info">{{ $log->created_at->diffForHumans() }}</span>
+										</td>
 										<td>
 											<span data-toggle="tooltip" data-original-title="{{ $log->date }}">
 												{{ $log->created_at }}
