@@ -34,6 +34,7 @@ class BasketController extends Controller
 
     function flush_user_basket_promos(){
         $input = Input::all();
-        $return $this->basket->flush_user_basket_promos($input['patient_id']);
+
+        return $this->basket->flush_user_basket_promos($input['patient_id']);
     }
 }
