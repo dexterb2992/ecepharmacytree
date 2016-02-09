@@ -43,21 +43,21 @@
         <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
         <tr><td class="borderless"></td><td class="borderless type-subdued">Subtotal</td><td class="borderless">&#8369; {{ $gross_total }}</td></tr>
         @if($order->billing()->first()->senior_discount > 0)
-        <tr><td class="borderless"></td><td class="borderless type-subdued">Senior Discount</td><td class="borderless next-heading">&#8369; {{ $order->billing()->first()->senior_discount }}</td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Senior Discount</td><td class="borderless">&#8369; {{ $order->billing()->first()->senior_discount }}</td></tr>
         @endif
         @if($order->billing()->first()->coupon_discount > 0)
-        <tr><td class="borderless"></td><td class="borderless type-subdued">Coupon Discount</td><td class="borderless next-heading">&#8369; {{ $order->billing()->first()->coupon_discount }}</td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Coupon Discount</td><td class="borderless">&#8369; {{ $order->billing()->first()->coupon_discount }}</td></tr>
         @endif
         @if($order->billing()->first()->points_discount > 0)
-        <tr><td class="borderless"></td><td class="borderless type-subdued">Points Discount</td><td class="borderless next-heading">&#8369; {{ $order->billing()->first()->points_discount }}</td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Points Discount</td><td class="borderless">&#8369; {{ $order->billing()->first()->points_discount }}</td></tr>
         @endif
         @if($order->modeOfDelivery == 'delivery')
         @if($order->promo_type == 'free_delivery')
-        <tr><td class="borderless"></td><td class="borderless type-subdued">Delivery Charge</td><td class="borderless next-heading"> {{ 'Free' }}</td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Delivery Charge</td><td class="borderless"> {{ 'Free' }}</td></tr>
         @else
         <?php $order_total += $order->delivery_charge; ?>
         <?php $gross_total += $order->delivery_charge; ?>
-        <tr><td class="borderless"></td><td class="borderless type-subdued">Delivery Charge</td><td class="borderless next-heading">&#8369; {{ $order->delivery_charge }}</td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Delivery Charge</td><td class="borderless">&#8369; {{ $order->delivery_charge }}</td></tr>
         @endif
         @endif
         <!-- <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr> -->
