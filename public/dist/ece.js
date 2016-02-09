@@ -325,7 +325,6 @@ $(document).ready(function (){
                         }
                     }
 
-
                     if( $this.hasClass('promo-product-details') ){
                         window.global_free_gift_product_ids = [];
                         window.global_free_gift_quantities = [];
@@ -387,13 +386,11 @@ $(document).ready(function (){
                     }
 
                     if( data.hasOwnProperty("specific_promo_product_ids") ){
-                        // var products_list = $("#specific_promo_product_ids");
-                        // var htmls = "";
-                        // $.each(data.free_gifts, function (i, row){
-                        //     $("#specific_promo_product_ids option[value='"+row.id+"']").attr("selected", "selected");
-                        // });
-                        // $("#specific_promo_product_ids").select2();
                         init_specific_product_list( $("#specific_promo_product_ids") );
+                    }
+
+                    if( data.hasOwnProperty('products_involved') ){
+                         init_specific_product_list( $("#product_groups_products_involved") );
                     }
 
 
@@ -411,6 +408,10 @@ $(document).ready(function (){
             $("#inventories_product_id").next('.temp_name').html("").fadeOut(function (){
                 $("#inventories_product_id").prev(".select2-container").show();
             });
+            // clear select2 values 
+            $('input.products-multiple-select2').val("");
+            init_specific_product_list( $('input.products-multiple-select2') );
+
             _clear_form_data(form);
             form.find('#inventories_product_id, #inventory_quantity').removeAttr("disabled").trigger("change");
             updateInventoryProductQty();
@@ -425,13 +426,14 @@ $(document).ready(function (){
         
 
         $("select.select2").select2();
+       
         $('.data-show').trigger('change click');
 
         console.log("checking if hasAdditionalAddress ");
         setTimeout(function(){
             if( window.hasAdditionalAddress == true && $("#map").length > 0){
                 console.log("hasAdditionalAddress: yes");
-                    initMap();
+                initMap();
             }
         },1000);
         
@@ -867,9 +869,9 @@ $("#add_gallery").click(function (){
         e.preventDefault();
         var files = e.originalEvent.dataTransfer.files;
 
-            //We need to send dropped files to Server
-            handleFileUpload(files,obj);
-        });
+        //We need to send dropped files to Server
+        handleFileUpload(files,obj);
+    });
 
     $(document).on('dragenter', function (e) {
         e.stopPropagation();
@@ -880,7 +882,7 @@ $("#add_gallery").click(function (){
       e.stopPropagation();
       e.preventDefault();
       obj.css('border', '2px dotted #0B85A1');
-  });
+    });
 
     $(document).on('drop', function (e) {
         e.stopPropagation();
@@ -986,7 +988,7 @@ $("#add_gallery").click(function (){
         }).done(function (data){
             if( data.hasOwnProperty('product') ){
                 $('#inventory_adjustment_details').html('Lot# '+data.lot_number+
-                    '<br/>Product:  <b><a href="/products?q='+data.product.name+'" target="_blank">'+data.product.name+'</a></b>'+
+                    '<br/>Product:  <b><a href="/search/products?q='+data.product.name+'" target="_blank">'+data.product.name+'</a></b>'+
                     '<br/>Total sold items: <b title="Total sold products for this inventory">'+data.sold_products_count+'</b>'+
                     '<br/><small>Date added: '+data.date_added+'</small>');
                 $('#old_quantity').val(data.quantity);
@@ -1732,30 +1734,8 @@ $("#add_gallery").click(function (){
                     $(this).remove();
                 });
             }
-            
-
         });
     });
-
-    // $("#btn_sidebar_search_form").click(function (){
-    //     var url = $("#sidebar_search_form").attr("action"),
-    //         keyword = $("#sidebar_search_form").find('input[name="q"]').val();
-    //     window.location.href = url+'/q='+keyword;
-    // });
-
-    // $("#sidebar_search_form").keypress(function(e) {
-    //     if(e.which == 13) {
-    //         var url = $("#sidebar_search_form").attr("action"),
-    //         keyword = $("#sidebar_search_form").find('input[name="q"]').val();
-    //         window.location.href = url+'/q='+keyword;
-    //     }
-    // });
-
-
-
-   
-
-	
 });
 
 //   On Stock Returns tab, you can exchange the returned product there with a new the same product.

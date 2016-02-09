@@ -7,7 +7,9 @@
         <div class="box box-success">
             <div class="box-header">
                 <h4 class="box-title">Product Groups</h4><br/>
-                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-product-groups" data-target="#form_edit_product" data-action="create" data-title="product"><i class="fa-plus fa"></i> Add New</button>
+                <button class="btn-info btn pull-right add-edit-btn" data-modal-target="#modal-product-groups" data-target="#form_edit_product_groups" data-action="create" data-title="product">
+                    <i class="fa-plus fa"></i> Add New
+                </button>
             </div><!-- /.box-header -->
             <div class="box-body">
                 <table class="table table-bordered table-hover datatable products-table">
@@ -106,7 +108,7 @@
                         <!-- <select class="form-control select2" name="products_involved[]" multiple> -->
                             
                         <!-- </select> -->
-                        <input type="hidden" name="products_involved" class="products-multiple-select2">
+                        <input type="hidden" id="product_groups_products_involved" name="products_involved" class="products-multiple-select2">
                     </div>
                     
                 </div>

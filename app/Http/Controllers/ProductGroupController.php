@@ -88,9 +88,12 @@ class ProductGroupController extends Controller
     {
         if( Request::ajax() ){
             $product_group = ProductGroup::findOrFail($id);
-            $products_involved = $product_group->products->pull('id');
+            // $products_involved = $product_group->products;
+            $products_involved = [];
+            foreach ($product_group->products as $product) {
+                $products_involved[] = $product->id;
+            }
 
-            dd($products_involved);
             $product_group->products_involved = implode(',', $products_involved);
 
             return $product_group;
