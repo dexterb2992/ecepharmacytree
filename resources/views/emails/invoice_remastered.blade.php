@@ -50,10 +50,10 @@
                                 <?php $product_total = $order_detail->price * $order_detail->quantity; ?>
                                 <tr style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                   <td width="55%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;padding: 5px 0;border-top: #eee 1px solid;">{{ $order_detail->product_name }}</td>
-                                  <td width="20%" class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;padding: 5px 0;border-top: #eee 1px solid;">&#8369; {{ money_format($order_detail->price).' x '.$order_detail->quantity }}</td>
+                                  <td width="20%" class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;padding: 5px 0;border-top: #eee 1px solid;">&#8369; {{ money_format_($order_detail->price).' x '.$order_detail->quantity }}</td>
                                   <td width="25%" class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;padding: 5px 0;border-top: #eee 1px solid;">
                                     @if($order_detail->promo_id > 0)
-                                    <p style="text-decoration:line-through;margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">&#8369; {{ money_format($product_total) }}</p>
+                                    <p style="text-decoration:line-through;margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">&#8369; {{ money_format_($product_total) }}</p>
                                     <b>
                                       @if($order_detail->promo_type == 'peso_discount')
                                       <?php $product_total -= $order_detail->peso_discount; ?>
@@ -66,7 +66,7 @@
                                       @endif
                                     </b>
                                     @else
-                                    <b>&#8369; {{ money_format($product_total) }}</b>
+                                    <b>&#8369; {{ money_format_($product_total) }}</b>
                                     @endif
                                   </td>
                                 </tr>
@@ -77,7 +77,7 @@
 
                                 <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                   <td colspan="2" class="alignright" width="75%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-top: 2px solid #333;font-weight: 700;">Gross Total</td>
-                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-top: 2px solid #333;font-weight: 700;">₱ {{ money_format($order->billing()->first()->gross_total) }}</td>
+                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-top: 2px solid #333;font-weight: 700;">₱ {{ money_format_($order->billing()->first()->gross_total) }}</td>
                                 </tr>
 
                                 @if($order->modeOfDelivery == 'delivery')
@@ -91,7 +91,7 @@
                                 <?php $gross_total += $order->delivery_charge; ?>
                                 <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                   <td colspan="2" class="alignright" width="75%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">Delivery Charge</td>
-                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ money_format($order->delivery_charge) }}</td>
+                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ money_format_($order->delivery_charge) }}</td>
                                 </tr>
                                 @endif
                                 @endif
@@ -100,7 +100,7 @@
                                 <?php $order_total -= $order->billing()->first()->senior_discount; ?>
                                 <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                   <td colspan="2" class="alignright" width="75%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">Senior Discount</td>
-                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ money_format($order->billing()->first()->senior_discount) }}</td>
+                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ money_format_($order->billing()->first()->senior_discount) }}</td>
                                 </tr>
                                 @endif
 
@@ -108,7 +108,7 @@
                                 <?php $order_total -= $order->billing()->first()->points_discount; ?>
                                 <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                   <td colspan="2" class="alignright" width="75%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">Points Discount</td>
-                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ money_format($order->billing()->first()->points_discount) }}</td>
+                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ money_format_($order->billing()->first()->points_discount) }}</td>
                                 </tr>
                                 @endif
 
@@ -116,13 +116,13 @@
                                 <?php $order_total -= $order->billing()->first()->coupon_discount; ?>
                                 <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                   <td colspan="2" class="alignright" width="75%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">Coupon Discount</td>
-                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ money_format($order->billing()->first()->coupon_discount) }}</td>
+                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;font-weight: 700;">₱ {{ money_format_($order->billing()->first()->coupon_discount) }}</td>
                                 </tr>
                                 @endif
 
                                 <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                 <td colspan="2" class="alignright" width="75%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-bottom: 2px solid #333;font-weight: 700;">Total</td>
-                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-bottom: 2px solid #333;font-weight: 700;">₱ {{ money_format($order->billing()->first()->total) }}</td>
+                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-bottom: 2px solid #333;font-weight: 700;">₱ {{ money_format_($order->billing()->first()->total) }}</td>
                                 </tr>
                               </table>
                             </td>

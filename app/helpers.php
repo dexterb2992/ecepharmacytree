@@ -14,13 +14,13 @@ function pre($str){
 // 	return $value;
 // }
 
-// function money_format($value){
-// 	return $value;
-// }
-
-function srsly(){
-	return '>?';
+function money_format_($value){
+	return number_format((float)$value, 2, '.', '');
 }
+
+// function srsly(){
+// 	return '>?';
+// }
 
 function generate_random_string($length = 10, $is_number = 0, $is_sku = false) {
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
