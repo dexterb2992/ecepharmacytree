@@ -14,8 +14,12 @@ function pre($str){
 // 	return $value;
 // }
 
-function money_format($value){
-	return $value;
+// function money_format($value){
+// 	return $value;
+// }
+
+function srsly(){
+	return '>?';
 }
 
 function generate_random_string($length = 10, $is_number = 0, $is_sku = false) {
