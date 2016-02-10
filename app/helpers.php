@@ -9,6 +9,10 @@ function pre($str){
 	echo '</pre>';
 }
 
+function money_format($value){
+	return number_format((float)  $value, 2, '.', '');
+}
+
 /**
  * @var $is_number
  * 			0 = alphanumeric characters
