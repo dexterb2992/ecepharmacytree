@@ -38,6 +38,11 @@ Route::controllers([
 	]);
 
 
+Route::get('test_num', function(){
+	$value = 100;
+	return number_format((float)$value, 2, '.', '');
+	// return 
+});
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
 
 Route::get('getSeniorValidity', 'PatientController@getSeniorValidity');

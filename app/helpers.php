@@ -10,7 +10,7 @@ function pre($str){
 }
 
 function money_format($value){
-	return number_format((float)$value, 2, '.', '');
+	// return number_format((float)$value, 2, '.', '');
 }
 
 function generate_random_string($length = 10, $is_number = 0, $is_sku = false) {
