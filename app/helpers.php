@@ -14,6 +14,10 @@ function pre($str){
 // 	return $value;
 // }
 
+function money_format($value){
+	return $value;
+}
+
 function generate_random_string($length = 10, $is_number = 0, $is_sku = false) {
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	if( $is_number  == 1) {
