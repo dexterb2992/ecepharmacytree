@@ -25,7 +25,7 @@ class PointsRepository {
         foreach($basket_items as $basket_item) {
             $amount = (double)($basket_item->products()->first()->price * $basket_item->quantity);
            
-            if($basket_item->products()->first()->product_group_id > 0){
+            if($basket_item->products->first()->product_group_id > 0){
                 $group = ProductGroup::find($basket_item->products()->first()->product_group_id);
                 $points_per_one_hundred = (double)$group->points;
             } else {
