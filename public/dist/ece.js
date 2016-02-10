@@ -1121,8 +1121,9 @@ $("#add_gallery").click(function (){
 
         var ordersHtml = "", productsHtml = "", returnCodesHtml = "";
         $.when(
-            ajaxCalls("orders"), ajaxCalls("products"), ajaxCalls("stockReturnCodes") 
-        ).done(function(orders, products, returnCodes){
+            // ajaxCalls("orders"), ajaxCalls("products"), ajaxCalls("stockReturnCodes") 
+            ajaxCalls("orders"), ajaxCalls("stockReturnCodes") 
+        ).done(function(orders, returnCodes){
             window.orders = orders[0];
             $.each(orders[0], function (i, row){
                 if( row.billing.payment_status == 'paid' ){
@@ -1133,7 +1134,8 @@ $("#add_gallery").click(function (){
                 }
             });
 
-            $.each(products[0], function (i, row){
+            // $.each(products[0], function (i, row){
+            $.each(window.products, function (i, row){
                 productsHtml+= '<option value="'+row.id+'">'+row.name+'</option>';
             });
 
