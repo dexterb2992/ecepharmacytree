@@ -1807,8 +1807,6 @@ $("#add_gallery").click(function (){
                                     // prevent selecting another option
                                     var attr = select.attr('multiple');
 
-                                    // For some browsers, `attr` is undefined; for others,
-                                    // `attr` is false.  Check for both.
                                     if (typeof attr !== typeof undefined && attr !== false) {
                                        
                                         select.select2('destroy');                                      
@@ -1821,8 +1819,6 @@ $("#add_gallery").click(function (){
 
                                     var attr = select.attr('multiple');
 
-                                    // For some browsers, `attr` is undefined; for others,
-                                    // `attr` is false.  Check for both.
                                     if (typeof attr !== typeof undefined && attr !== false) {
                                         // do nothing
                                     }else{                                        
@@ -1839,7 +1835,7 @@ $("#add_gallery").click(function (){
                         column2 = $(document.createElement('span')).addClass("col-md-2"),
                         label = $(document.createElement("label")).text("Select Lot number for the replacement"),
                         small = $(document.createElement("small")).text("Note: These lot numbers are exclusive for "+product_name+" only."),
-                        btn = $(document.createElement("button")).text("Submit")
+                        btn = $(document.createElement("button")).text("Submit").attr("data-target", '#s_'+product_stock_return_id+"_p_"+product_id)
                                 .addClass("btn btn-xxs btn-flat btn-success submit-replacement").attr("data-id", product_stock_return_id),
                         btn_cancel =  $(document.createElement("button")).text("Cancel")
                                 .addClass("btn btn-xxs btn-flat btn-warning submit-replacement").attr("data-id", product_stock_return_id),
@@ -1849,6 +1845,18 @@ $("#add_gallery").click(function (){
                         btn_cancel.click(function (){
                             parentRow.next(".replacement-form").fadeOut(function(){
                                 $this.fadeIn();
+                            });
+                        });
+
+                        btn.click(function (){
+                            var lot_num = select.val();
+                            $.ajax({
+                                url: '/replace-returned-product',
+                                type: 'post',
+                                dataType: 'json',
+                                data: { 'inventory_ids': lot_num, 'product_stock_return_id': product_stock_return_id, _token: $('input[name="_token"]').val() }
+                            }).done(function (data){
+                                console.log(data);
                             });
                         });
 

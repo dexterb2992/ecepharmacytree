@@ -329,6 +329,7 @@ Route::post('save_user_token', 'PatientController@save_user_token');
 Route::post('lot-numbers', 'InventoryController@get_lot_numbers');
 Route::get('lot-numbers', 'InventoryController@get_lot_numbers');
 Route::post('get-product-lotnumbers', 'InventoryController@get_product_lot_numbers');
+Route::post('replace-returned-product', 'StockReturnController@replace');
 
 Route::get('try', function (){
 	?>

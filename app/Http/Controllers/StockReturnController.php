@@ -277,4 +277,61 @@ class StockReturnController extends Controller
         return json_encode(["status" => 500, "error" => "Sorry. we can't process your request right now."]);
     }
 
+
+    public function replace(){
+        $input = Input::all();
+        $ProductStockReturn = ProductStockReturn::find($input['product_stock_return_id']);
+
+        $max_replaceable = $ProductStockReturn->quantity;
+
+        $inventories = [];
+        $remaining_replaceable = $max_replaceable;
+
+        if( is_array($input["inventory_ids"]) ){
+            foreach ($input["inventory_ids"] as $key => $value) {
+                $inventory = Inventory::find($value);
+                $inventories[] = $inventory;
+            }
+            // dd($inventories);
+            usort($inventories, "cmp_available_quantity"); // this will sort the array to ascending
+            // dd($inventories);
+        }
+
+        foreach ($inventories as $inventory) {
+            // $qty = $inventory
+            $qty_replaced = 0;
+            if( $remaining_replaceable > 0 ){
+                if( $inventory->available_quantity <= $max_replaceable ){
+                    $remaining_replaceable-= $inventory->available_quantity;
+                    $qty_replaced = $inventory->available_quantity;
+
+                    $inventory->available_quantity = 0;
+
+                }else{
+                    $inventory->available_quantity = $inventory->available_quantity - $remaining_replaceable;
+                    $qty_replaced = $remaining_replaceable;
+                }
+
+                if( $inventory->save() ){
+                    $log = "Replaced $qty_replaced "
+                            .str_auto_plural($ProductStockReturn->product->packing, $qty_replaced)
+                            ." of {$ProductStockReturn->product->name} from <a href='".route('Inventory::index')."?q=$inventory->lot_number'>
+                                Lot# $inventory->lot_number </a> 
+                            Reference <a href='".route('orders')."?q=#{$ProductStockReturn->stock_return->order->id}'>
+                                Order# {$ProductStockReturn->stock_return->order->id}
+                            </a>";
+                            
+
+                    Log::create([
+                        'user_id' => Auth::user()->id,
+                        'action'  => $log,
+                        'table' => 'inventories',
+                        'branch_id' => session()->get('selected_branch')
+                    ]);
+                }
+            }
+            
+        }
+        
+    }
 }

@@ -440,7 +440,7 @@
 	        		<div class="modal-content">
 	        			<div class="modal-header">
 	        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        			<h4 class="alert alert-warning align-center glow" style="margin-top: -2px;margin-right: -4px;">
+		        			<h4 class="alert alert-warning align-center" style="margin-top: -2px;margin-right: -4px;">
 		        				Replace/Remove the newly returned items from inventory
 		        			</h4>
 	        			</div>

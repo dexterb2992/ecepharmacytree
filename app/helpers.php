@@ -486,3 +486,9 @@ function render_pagination($pagination){
     }
     return $html;
 }
+
+function cmp_available_quantity($a, $b)
+{
+    return strcmp($a->available_quantity, $b->available_quantity);
+}
+
