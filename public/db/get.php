@@ -86,7 +86,7 @@ switch ($request) {
     /* Requires Parameters */
 
     case 'get_nocode_promos':
-    $sql = "SELECT pr.id as pr_promo_id, pr.product_applicability, pr.minimum_purchase_amount, pr.is_free_delivery as pr_free_delivery, pr.percentage_discount as pr_percentage, pr.peso_discount as pr_peso, pr.long_title, pr.start_date, pr.end_date, dfp.*, fp.product_id as free_product_id, p.name, p.packing as free_product_packing, fp.quantity_free FROM promos as pr left join discounts_free_products as dfp on pr.id = dfp.promo_id left join free_products as fp on dfp.id = fp.dfp_id left join products as p on fp.product_id = p.id where offer_type = 'NO_CODE' AND pr.deleted_at IS NULL AND '".$dateonly."' >= pr.start_date AND '".$dateonly."' <= pr.end_date";
+    $sql = "SELECT pr.id as pr_promo_id, pr.product_applicability, pr.minimum_purchase_amount, pr.is_free_delivery as pr_free_delivery, pr.percentage_discount as pr_percentage, pr.peso_discount as pr_peso, pr.long_title, pr.start_date, pr.end_date, dfp.*, fp.product_id as free_product_id, p.name, p.packing as free_product_packing,  p.price AS free_prod_price, fp.quantity_free FROM promos as pr left join discounts_free_products as dfp on pr.id = dfp.promo_id left join free_products as fp on dfp.id = fp.dfp_id left join products as p on fp.product_id = p.id where offer_type = 'NO_CODE' AND pr.deleted_at IS NULL AND '".$dateonly."' >= pr.start_date AND '".$dateonly."' <= pr.end_date";
  
     $result = mysql_query($sql) or returnError(mysql_error()); 
     $tbl = "promos";
@@ -258,13 +258,16 @@ switch ($request) {
     exit(0);
     break;
 
+    case 'get_uname_pword_from_clinic':
+    $result = mysql_query("SELECT cpd.*, cpr.*, ct.*, cm.med_name, pr.clinic_patient_record_id as pr_record_id, cpr.id as cpr_id FROM clinic_patient_doctor as  cpd INNER JOIN clinic_patients_records as cpr ON cpd.clinic_patients_id = cpr.patient_id INNER JOIN clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id INNER JOIN clinic_medicines as cm on ct.medicine_id = cm.id LEFT JOIN patient_records AS pr ON cpr.id = pr.clinic_patient_record_id WHERE cpd.patient_id = ".$_GET['patient_id']." order by cpr_id ASC");
+    $tbl = "clinic_patient_doctor";
+    break;
+
     case 'get_clinic_records':
     $username = $_GET['username'];
     $password = $_GET['password'];
     $patient_id = $_GET['patient_id'];
-    // $resp = array();
 
-    // $resultskie = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id LEFT JOIN clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or die(mysql_error());
     $resultskie = mysql_query("SELECT cpd.*, cpr.created_at as cpr_created_at, cpr.*, ct.*, cm.med_name, cpr.id as cpr_id from clinic_patient_doctor as cpd inner join clinic_patients_records as cpr on cpd.clinic_patients_id = cpr.patient_id INNER JOIN clinic_treatments as ct on cpr.id = ct.clinic_patients_record_id INNER JOIN clinic_medicines as cm  on cm.id = ct.medicine_id where BINARY cpd.username = '".$username."' and BINARY cpd.password = '".$password."' and ( cpd.patient_id = 0 or cpd.patient_id = ".$patient_id.")") or die(mysql_error());
     $result = $resultskie;
     $tbl = "records";
@@ -286,18 +289,6 @@ switch ($request) {
             $response['success_update'] = 0;
         } 
     }
-//     $result_latest_updated_at = mysql_query("SELECT * FROM ".$tbl." order by updated_at DESC limit 1") or returnError(mysql_error());
-
-// if(mysql_num_rows($result_latest_updated_at) > 0){
-//     $result_latest_updated_at_array = mysql_fetch_assoc($result_latest_updated_at);
-//     $latest_updated_at = $result_latest_updated_at_array['updated_at'];
-// }
-
-// $response["success"]          = 1;
-// $response["latest_updated_at"] = "$latest_updated_at";
-//     $response['server_timestamp'] = $datenow;
-//     echo json_encode($response);
-//     exit(0);
     break;
 
     case 'google_distance_matrix':
