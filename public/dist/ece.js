@@ -1650,17 +1650,17 @@ $("#add_gallery").click(function (){
                         }else{
                             option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
                                 row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
-                                ' marked as defective)</span>';
+                                ' marked as defective)</span> ';
                         }
 
                         if( row.quantity > row.replacement.quantity ){
-                            option+= '<a href="javascript:void(0);" data-max-replaceable="'+row.quantity+'" class="btn-xxs btn-primary btn btn-flat btn-replace-qty" data-product-id="'+row.product.id+'" data-id="'+row.id+'">Replace</a>';
+                            option+= ' <a href="javascript:void(0);" data-max-replaceable="'+row.quantity+'" class="btn-xxs btn-primary btn btn-flat btn-replace-qty" data-product-id="'+row.product.id+'" data-id="'+row.id+'">Replace</a>';
 
                         }else{
-                            option = '<span class="">('+row.replacement.quantity+' '+str_auto_plural(row.product.packing, row.replacement.quantity)+
+                            option = ' <span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+
                                 ' returned, '+
-                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
-                                ' marked as defective)</span>';
+                                row.replacement.quantity+' '+str_auto_plural(row.product.packing, row.replacement.quantity)+
+                                ' replaced)</span>';
                         }
 
                         html+= '<li>'+
@@ -1754,7 +1754,8 @@ $("#add_gallery").click(function (){
         var $this = $(this),
             product_id = $this.attr("data-product-id"),
             product_stock_return_id = $this.attr("data-id"),
-            replaceable_qty = $this.attr("data-max-replaceable");
+            replaceable_qty = $this.attr("data-max-replaceable"),
+            product_name = "";
 
         // get all lot numbers associated with the productID
         $.ajax({
@@ -1765,22 +1766,29 @@ $("#add_gallery").click(function (){
         }).done(function (data){
             console.log(data);
             if( !data.error && data.data.length > 0 ){
+                var product_name = data.data[0].product_name;
                 var parentRow = $this.parent("div").parent("div.row");
+
+                $this.fadeOut();
 
                 if( parentRow.next(".replacement-form").length < 1 ){
                     // create a new element, we use $(document.createElement('element')) for fastest performance
                     // refer here http://jsperf.com/jquery-vs-createelement to prove to yourself
 
                     var options = [];
+                    var lotnumbers = [];
+
                     $.each(data.data, function (i, row){
                         options.push( 
                             $(document.createElement("option")).val(row.id)
                                 .text(row.lot_number+"("+row.available_quantity+" available)")
                                 .attr("data-available-quantity", row.available_quantity) 
                         );
+
+                        lotnumbers[row.id] = row.available_quantity;
                     });
 
-                    var select = $(document.createElement('select')).attr("multiple", "multiple")
+                    var select = $(document.createElement('select')).attr("multiple", "multiple").attr("id", 's_'+product_stock_return_id+"_p_"+product_id)
                                     .addClass("stock-return-replacement").attr("data-id", product_stock_return_id).append(options);               
                     var newRow = $(document.createElement('span')).addClass("replacement-form").addClass("row");
 
@@ -1788,21 +1796,67 @@ $("#add_gallery").click(function (){
                         // console.log($(this).val());
                         if( $(this).val() != null ){
                             $.each($(this).val(), function (i, row){
-                                if( replaceable_qty >= $(this).children("option:selected").attr("data-max-replaceable") ){
+                                console.log(row);
+                                // var max = select.children("option[value='"+row+"']").attr("data-max-replaceable");
+                                var max = lotnumbers[row];
+                                console.log("max: "+max);
+
+                                if( replaceable_qty <=  max){
                                     // prevent selecting another option
-                                    select.select2('destroy');
-                                    select.removeAttr("multiple").select2();
+                                    var attr = select.attr('multiple');
+
+                                    // For some browsers, `attr` is undefined; for others,
+                                    // `attr` is false.  Check for both.
+                                    if (typeof attr !== typeof undefined && attr !== false) {
+                                       
+                                        select.select2('destroy');                                      
+                                        select.removeAttr("multiple").select2();
+                                    }
+                                    console.log("yes");
+                                    
                                 }else{
-                                    select.select2('destroy');
-                                    select.attr("multiple", "multiple").select2();
+                                    console.log("no");
+
+                                    var attr = select.attr('multiple');
+
+                                    // For some browsers, `attr` is undefined; for others,
+                                    // `attr` is false.  Check for both.
+                                    if (typeof attr !== typeof undefined && attr !== false) {
+                                        // do nothing
+                                    }else{                                        
+                                        select.select2('destroy');
+                                        select.attr("multiple", "multiple").select2();
+                                    }
+                                    
                                 }
                             });
                         }
                     });
+                    
+                    var column1 = $(document.createElement('span')).addClass("col-md-10"),
+                        column2 = $(document.createElement('span')).addClass("col-md-2"),
+                        label = $(document.createElement("label")).text("Select Lot number for the replacement"),
+                        small = $(document.createElement("small")).text("Note: These lot numbers are exclusive for "+product_name+" only."),
+                        btn = $(document.createElement("button")).text("Submit")
+                                .addClass("btn btn-xxs btn-flat btn-success submit-replacement").attr("data-id", product_stock_return_id),
+                        btn_cancel =  $(document.createElement("button")).text("Cancel")
+                                .addClass("btn btn-xxs btn-flat btn-warning submit-replacement").attr("data-id", product_stock_return_id),
+                        hr = $(document.createElement("hr")),
+                        br = $(document.createElement("br"));
 
-                    newRow.append(select);
-                    parentRow.after(newRow);
+                        btn_cancel.click(function (){
+                            parentRow.next(".replacement-form").fadeOut(function(){
+                                $this.fadeIn();
+                            });
+                        });
+
+                    column1.append(label,br,small,select);
+                    column2.append(btn, btn_cancel)
+                    newRow.append(column1, column2);
+                    parentRow.after(newRow,hr);
                     select.select2();
+                }else{
+                    parentRow.next(".replacement-form").fadeIn();
                 }
             }
         });
