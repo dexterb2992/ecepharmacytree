@@ -157,6 +157,8 @@ class StockReturnController extends Controller
                             $sr_detail->quantity = $input_value;
 
                             $sr_detail->inventory_id = $inventory->id;
+                            // set default value for replacement
+                            $sr_detail->replacement = json_encode( array("inventory_id" => 0, "quantity" => 0) );
 
                             $activity_log[] ="$input_value ".str_auto_plural($inventory->product->packing, $input_value)
                                         ." to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
@@ -236,6 +238,7 @@ class StockReturnController extends Controller
         $products_returned = $stock_return->product_stock_returns;
         foreach ($products_returned as $pr) {
             $pr->load('product');
+            $pr->replacement = json_decode( $pr->replacement );
         }
         return $products_returned;
     }

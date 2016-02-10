@@ -305,4 +305,25 @@ class InventoryController extends Controller
             "status" => 403
         ) );
     }
+
+    public function get_product_lot_numbers(){
+        if( Request::ajax() ){
+            $product_id = Input::get('product_id');
+            DB::enableQueryLog();
+            $lot_numbers = DB::table('inventories')
+                ->join('products', function ($join){           
+                    $join->on('inventories.product_id', '=', 'products.id');
+                })->whereRaw("inventories.branch_id= ".session()->get("selected_branch")." 
+                    and products.deleted_at is null and products.id='$product_id'")
+                ->select('products.name as product_name', 'inventories.id', 'inventories.product_id', 
+                    'inventories.lot_number', 'inventories.expiration_date', 'inventories.available_quantity')->get();
+
+            return json_encode( array("status" => 200, "data" => $lot_numbers) );
+        }
+
+        return json_encode( array(
+            "error" => "Sorry, you don't have permission to do this action.",
+            "status" => 403
+        ) );
+    }
 }
