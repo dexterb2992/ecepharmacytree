@@ -77,7 +77,7 @@ $(document).ready(function (){
         "aaSorting": [[ 2, "desc" ]]
     });
 
-    $('.table-points-log').DataTable({
+    $('.table-points-log, #tbl_inventory_logs').DataTable({
         "aaSorting": [[ 0, "desc" ]]
     });
 
@@ -1646,22 +1646,32 @@ $("#add_gallery").click(function (){
                         max_removable = row.quantity - row.defective_quantity;
                         if( row.quantity > row.defective_quantity ){
                             option = '<input type="text" class="number returned-item-qty" value="'+max_removable+'" data-max="'+max_removable+'" data-min="1" placeholder="Defective quantity" name="damaged_qty">'+
-                                    '<a href="#!" class="btn-xxs btn-danger btn btn-flat btn-defective-qty" data-id="'+row.id+'">Mark as defective</a></div>';
+                                    '<a href="javascript:void(0);" class="btn-xxs btn-danger btn btn-flat btn-defective-qty" data-id="'+row.id+'">Mark as defective</a> ';
                         }else{
                             option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
                                 row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
                                 ' marked as defective)</span>';
                         }
 
+                        if( row.quantity > row.replacement.quantity ){
+                            option+= '<a href="javascript:void(0);" data-max-replaceable="'+row.quantity+'" class="btn-xxs btn-primary btn btn-flat btn-replace-qty" data-product-id="'+row.product.id+'" data-id="'+row.id+'">Replace</a>';
+
+                        }else{
+                            option = '<span class="">('+row.replacement.quantity+' '+str_auto_plural(row.product.packing, row.replacement.quantity)+
+                                ' returned, '+
+                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
+                                ' marked as defective)</span>';
+                        }
+
                         html+= '<li>'+
                                 '<div class="row" style="margin-right: 0px;">'+
-                                    '<div class="col-md-7">'+
+                                    '<div class="col-md-6">'+
                                         '<span class="handle">'+
                                             '<i class="fa fa-arrows"></i>'+
                                         '</span>'+
                                         '<span class="product-list-items" title="'+row.product.name+'">'+row.product.name+'</span>'+
                                     '</div>'+
-                                    '<div class="col-md-5">'+option+
+                                    '<div class="col-md-6">'+option+'</div>'+
                                 '</div>'+
                             '</li>';
                     });
@@ -1725,6 +1735,9 @@ $("#add_gallery").click(function (){
                 }else{
                     var max_removable = row.quantity - row.defective_quantity;
                     txtbox.attr("data-max", max_removable).val(max_removable);
+                    option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                qty+' '+str_auto_plural(row.product.packing, qty)+
+                                ' marked as defective)</span>';
                 }
             }else if(data.error){
                 alert = '<br/><span class="label label-danger">'+data.error+'</span>';
@@ -1736,7 +1749,62 @@ $("#add_gallery").click(function (){
             }
         });
     });
-});
 
-//   On Stock Returns tab, you can exchange the returned product there with a new the same product.
-//    if the product returned is marked as defective, this should not be added back to the inventory. 
+    $(document).on("click", ".btn-replace-qty", function (){
+        var $this = $(this),
+            product_id = $this.attr("data-product-id"),
+            product_stock_return_id = $this.attr("data-id"),
+            replaceable_qty = $this.attr("data-max-replaceable");
+
+        // get all lot numbers associated with the productID
+        $.ajax({
+            url: '/get-product-lotnumbers',
+            type: 'post',
+            data: { _token: $('input[name="_token"]').val(), product_id: product_id },
+            dataType: 'json'
+        }).done(function (data){
+            console.log(data);
+            if( !data.error && data.data.length > 0 ){
+                var parentRow = $this.parent("div").parent("div.row");
+
+                if( parentRow.next(".replacement-form").length < 1 ){
+                    // create a new element, we use $(document.createElement('element')) for fastest performance
+                    // refer here http://jsperf.com/jquery-vs-createelement to prove to yourself
+
+                    var options = [];
+                    $.each(data.data, function (i, row){
+                        options.push( 
+                            $(document.createElement("option")).val(row.id)
+                                .text(row.lot_number+"("+row.available_quantity+" available)")
+                                .attr("data-available-quantity", row.available_quantity) 
+                        );
+                    });
+
+                    var select = $(document.createElement('select')).attr("multiple", "multiple")
+                                    .addClass("stock-return-replacement").attr("data-id", product_stock_return_id).append(options);               
+                    var newRow = $(document.createElement('span')).addClass("replacement-form").addClass("row");
+
+                    select.on("change", function (){
+                        // console.log($(this).val());
+                        if( $(this).val() != null ){
+                            $.each($(this).val(), function (i, row){
+                                if( replaceable_qty >= $(this).children("option:selected").attr("data-max-replaceable") ){
+                                    // prevent selecting another option
+                                    select.select2('destroy');
+                                    select.removeAttr("multiple").select2();
+                                }else{
+                                    select.select2('destroy');
+                                    select.attr("multiple", "multiple").select2();
+                                }
+                            });
+                        }
+                    });
+
+                    newRow.append(select);
+                    parentRow.after(newRow);
+                    select.select2();
+                }
+            }
+        });
+    });
+});

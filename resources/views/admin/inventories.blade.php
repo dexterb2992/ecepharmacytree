@@ -212,9 +212,10 @@
 								<h4>Stocks Activity Logs</h4> <br/>
 							</div>
 							<div class="box-body">
-								<table class="table table-bordered table-hover datatable" id="tbl_inventory_logs">
+								<table class="table table-bordered table-hover" id="tbl_inventory_logs">
 									<thead>
 										<tr>
+											<th>ID</th>
 											<th>User</th>
 											<th>Action</th>
 											<th>Date</th>
@@ -223,6 +224,7 @@
 									<tbody>
 										@foreach($logs->items() as $log)
 											<tr>
+												<td>{{ $log->id }}</td>
 												<td>{{ get_person_fullname($log->user) }}</td>
 												<td>{!! $log->action !!}</td>
 												<td>
@@ -439,14 +441,12 @@
 	        			<div class="modal-header">
 	        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		        			<h4 class="alert alert-warning align-center glow" style="margin-top: -2px;margin-right: -4px;">
-		        				Remove the newly returned items from inventory
+		        				Replace/Remove the newly returned items from inventory
 		        			</h4>
 	        			</div>
 	        			<div class="modal-body">
 	        				<span id="returned_stocks_lists_request_status"></span>
-	        				<ul class="todo-list" id="returned_stocks_lists">
-			                    
-			                </ul>
+	        				<ul class="todo-list" id="returned_stocks_lists"></ul>
 	        			</div>
 	        			<div class="modal-footer"></div>
 	        		</div>
