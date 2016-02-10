@@ -38,11 +38,10 @@ Route::controllers([
 	]);
 
 
-Route::get('test_num', function(){
-	$value = 100;
-	return $value;
-	// return 
-});
+// Route::get('test_num', function(){
+// 	$value = 100;
+// 	return $value;
+// });
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
 
 Route::get('getSeniorValidity', 'PatientController@getSeniorValidity');
