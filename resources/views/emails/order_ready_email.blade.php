@@ -25,7 +25,7 @@
 											If you chose pickup, you must pickup the order at your selected branch within 7 days, otherwise order will be cancelled.<br style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
 																		
 											Thank you for choosing Pharmacy Tree. <br style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
-											We are happy to server you.<br style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
+											We are happy to serve you.<br style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
 										</td>
 									</tr>
 								</table>
