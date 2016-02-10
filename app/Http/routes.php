@@ -40,9 +40,13 @@ Route::controllers([
 
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
 
+Route::get('getSeniorValidity', 'PatientController@getSeniorValidity');
+
 Route::get('home', function(){
 	return redirect('/');
 });
+
+Route::post('flush_user_basket_promos', 'BasketController@flush_user_basket_promos');
 
 Route::get('upload_sc_id', 'SeniorCitizenController@store');
 

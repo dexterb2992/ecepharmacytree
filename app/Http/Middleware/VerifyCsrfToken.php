@@ -18,5 +18,6 @@ class VerifyCsrfToken extends BaseVerifier
         'saveBranchPreference',
         'save_user_token',
         'upload_sc_id',
+        'flush_user_basket_promos',
     ];
 }

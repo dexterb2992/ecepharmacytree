@@ -10,18 +10,20 @@ use ECEPharmacyTree\Billing;
 use Input;
 use ECEPharmacyTree\Repositories\PointsRepository;
 use ECEPharmacyTree\Repositories\GCMRepository;
-
+use Illuminate\Mail\Mailer;
 
 class BillingController extends Controller
 {
 
     protected $points;
     protected $gcm;
+    protected $mailer;
 
-    function __construct(PointsRepository $points, GCMRepository $gcm)
+    function __construct(PointsRepository $points, GCMRepository $gcm, Mailer $mailer)
     {
         $this->points = $points;
         $this->gcm = $gcm;
+        $this->mailer = $mailer;
     }
 
 
@@ -50,11 +52,12 @@ class BillingController extends Controller
                 $order = $billing->order()->first();
                 $patient = $order->patient()->first();
 
-                $multilined_notif = array(1 => 'Congratulations '.get_person_fullname($patient).' ! ', 2 => 'You just acquired '.$message->points_earned.' points.', 3 => 'Thank you for your order. Ref#'.$order->id.'.');
+                // $multilined_notif = array(1 => 'Congratulations '.get_person_fullname($patient).' ! ', 2 => 'You just acquired '.$message->points_earned.' points.', 3 => 'Thank you for your order. Ref#'.$order->id.'.');
 
-                $data = array( 'message' => json_encode($multilined_notif), 'title' => 'Pharmacy Tree', 'intent' => 'ReferralFragment', 
-                    'order_id' => $order->id);
+                $data = array('title' => 'Pharmacy Tree', 'intent' => 'ReferralFragment', 
+                    'order_id' => $order->id, 'text' => 'You acquired '.$message->points_earned.' from your payment. Order #'.$order->id);
 
+                $this->emailtestingservice($patient->email_address, $order->id, $message->points_earned);
                 $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
 
                 return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'success', 'msg' => $message->msg ]);
@@ -63,5 +66,13 @@ class BillingController extends Controller
         
         return redirect()->route('get_order', $input['order_id'])->withFlash_message(['type' => 'danger', 'msg' => 'Sorry. Unable to mark payment.' ]);
 
+    }
+
+    function emailtestingservice($email, $order_id, $points){   
+        $res = $this->mailer->send( 'emails.points_received_email', 
+            compact('email', 'order_id', 'points'), function ($m) use ($email) {
+                $m->subject('You received points');
+                $m->to($email);
+            });
     }
 }

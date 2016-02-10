@@ -16,15 +16,18 @@ use ECEPharmacyTree\Log;
 use URL;
 use ECEPharmacyTree\OrderLotNumber;
 use ECEPharmacyTree\Repositories\GCMRepository;
+use Illuminate\Mail\Mailer;
 
 
 class OrderController extends Controller
 {
     protected $gcm;
+    protected $mailer;
 
-    function __construct(GCMRepository $gcm)
+    function __construct(GCMRepository $gcm, Mailer $mailer)
     {
         $this->gcm = $gcm;
+        $this->mailer = $mailer;
     }
     /**
      * Display a listing of the resource.
@@ -124,21 +127,35 @@ class OrderController extends Controller
                 $patient = $order->patient()->first();
 
                 if($order->modeOfDelivery == 'delivery'){
-                    $multilined_notif = array(1 => 'Your order is ready for delivery !', 2 => 'Your order must arrive on or before specified date', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
+                    // $multilined_notif = array(1 => 'Your order is ready for delivery !', 2 => 'Your order must arrive on or before specified date', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
+                    $msg = "Your order is ready for delivery!";
                 } else if($order->modeOfDelivery == 'pickup'){
-                    $multilined_notif = array(1 => 'Your order is ready for pickup !', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
+                    // $multilined_notif = array(1 => 'Your order is ready for pickup !', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
+                    $msg = "Your order is ready for pickup!";
                 } else {
-                    $multilined_notif = array(1 => 'Your order is ready!', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
+                    $msg = "Your order is ready!";
+
+                    // $multilined_notif = array(1 => 'Your order is ready!', 2 => 'You may now visit your selected ECE branch.', 3 => 'Thank you for your order.', 4 => 'Order#'.$order->id);
                 }
 
-                $data = array( 'message' => json_encode($multilined_notif), 'title' => 'Pharmacy Tree', 'intent' => 'OrderDetailsActivity', 
+                $data = array( 'text' => $msg, 'title' => 'Pharmacy Tree', 'intent' => 'OrderDetailsActivity', 
                     'order_id' => $order->id);
 
+
+                $this->emailtestingservice($patient->email_address, $order->id);
                 $this->gcm->sendGoogleCloudMessage($data, $patient->regId);
             }
         }
 
         return Redirect::back();
+    }
+
+    function emailtestingservice($email, $order_id){   
+        $res = $this->mailer->send( 'emails.order_ready_email', 
+            compact('email', 'order_id'), function ($m) use ($email) {
+                $m->subject('Your order is ready');
+                $m->to($email);
+            });
     }
 
     function deductInventory($product_id, $quantity, $branch_id, $order_id) {
