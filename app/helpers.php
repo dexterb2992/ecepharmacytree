@@ -9,9 +9,9 @@ function pre($str){
 	echo '</pre>';
 }
 
-// function money_format($value){
-// 	return number_format((float)  $value, 2, '.', '');
-// }
+function money_format($value){
+	return number_format((float)$value, 2, '.', '');
+}
 
 function generate_random_string($length = 10, $is_number = 0, $is_sku = false) {
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
