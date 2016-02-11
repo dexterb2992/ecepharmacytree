@@ -1,5 +1,4 @@
 <?php
-
 namespace ECEPharmacyTree\Http\Controllers;
 
 use Request;
