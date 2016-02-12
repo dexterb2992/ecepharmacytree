@@ -398,9 +398,9 @@ function extract_downlines($downlines = array()) {
 		// .$downline["fname"]." ".$downline["lname"]
 		// ." (".$downline["referral_id"].")";
 		if( count($downline['downlines']) > 0 ){
-			$data .= array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
-			array_push($arr, $data);
-			extract_downlines($downline['downlines']);
+			// $data .= array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
+			$new_data = extract_downlines($downline['downlines']);
+			array_push($arr, $new_data);
 			// $res.= '<ul>'.$new_dls.'</ul>';
 		}
 
