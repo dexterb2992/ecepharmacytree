@@ -387,12 +387,12 @@ function extract_downlines($downlines = array()){
 	return $res;
 }
 
-function extract_for_json_downlines($downlines){
+function extract_for_json_downlines(json_decode($downlines)){
 	$res = "";
 	$arr = array();
 	foreach($downlines as $downline){
 		array_push($arr, $downline);
-		dd($downline->downlines);
+		dd($downline->dowlines);
 		if(count($downline->downlines) > 0 ){
 			$new_dls = extract_downlines($downlines);
 			$downline->downline_level = 1;
