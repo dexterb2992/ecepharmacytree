@@ -377,10 +377,11 @@ function get_all_downlines_revision($referral_id){
 
 	$downlines = array();
 	// $downlines = $patients;
-	$downlines = array("fname" => $patients["fname"], "lname" => $patients["lname"], "created_at" => $patients["created_at"]);
+	// $downlines = array("fname" => $patients["fname"], "lname" => $patients["lname"], "created_at" => $patients["created_at"]);
 
 	foreach($patients as $key => $patient){
-		
+		$n_dl = array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]);
+		array_push($downlines, $n_dl);
 		$child_downlines = get_all_downlines_revision( $patient["referral_id"] );
 		array_push($downlines, $child_downlines);
 		// $downlines[$key]["downlines"] = $child_downlines;
