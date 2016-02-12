@@ -386,9 +386,9 @@ function get_all_downlines($referral_id){
 	return $res;
 }*/
 
-function extract_downlines($downlines = array()){
+function extract_downlines($downlines = array()) {
 	// $res = "";
-	// $arr = array();
+	$arr = array();
 
 	foreach($downlines as $key => $downline){
 		array_push($arr, $downline);
