@@ -380,7 +380,7 @@ function get_all_downlines_revision($referral_id){
 
 	foreach($patients as $key => $patient){
 		
-		$child_downlines = get_all_downlines( $patient["referral_id"] );
+		$child_downlines = get_all_downlines_revision( $patient["referral_id"] );
 		array_push($downlines, $child_downlines);
 		// $downlines[$key]["downlines"] = $child_downlines;
 
