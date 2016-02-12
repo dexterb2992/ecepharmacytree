@@ -392,6 +392,24 @@ function get_all_downlines_revision($referral_id, $downlines = array()){
 
 }
 
+function simple_downlines($referral_id, $arr = array())
+{
+	$referral_id = trim($referral_id);
+	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
+
+	foreach($patients as $patient){
+		$json = array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]);
+		array_push($arr, $json);
+		if(!empty(simple_downlines($patient['referral_id'], $arr))){
+			return simple_downlines($patient['referral_id'], $arr);
+		} else {
+			break;
+		}
+	}
+
+	return $arr;
+}
+
 /*function extract_downlines($downlines = array()){
 	$res = "";
 	foreach($downlines as $key => $downline){
