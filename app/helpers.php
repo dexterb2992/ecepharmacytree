@@ -396,6 +396,7 @@ function simple_downlines($referral_id)
 {
 	$referral_id = trim($referral_id);
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
+	$json_arr;
 
 	foreach($patients as $patient){
 		$json = json_encode(array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]));
