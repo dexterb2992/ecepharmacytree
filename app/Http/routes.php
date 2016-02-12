@@ -305,7 +305,7 @@ Route::get('api/{type}/{what}', function ($type, $what){
 		// $response['latest_updated_at'] = '';
 		return extract_for_json_downlines(get_all_downlines($what));
 	} else if($type == 'get-dl') {
-		return get_all_downlines($what);
+		return dd(get_all_downlines($what));
 	}
 });
 
