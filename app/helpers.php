@@ -390,11 +390,18 @@ function extract_downlines($downlines = array()){
 function extract_for_json_downlines($downlines = array()){
 	$res = "";
 	$arr = array();
+	$arr2 = array();
+	$arr3 = array();
+
 	foreach($downlines as $downline){
+		
 		array_push($arr, $downline);
+
 		if(count($downline['downlines']) > 0 ){
-			array_push($arr, $downline['downlines']);
-			unset($downline['downlines']);
+			array_push($arr, $downline);			
+			extract_for_json_downlines($downline['downlines']);
+			// array_push($arr, $downline['downlines']);
+			// unset($downline['downlines']);
 			// extract_for_json_downlines($downlines);
 			// $downline['level_dl'] = 1;10
 			// $downline->downline_level = 1;
