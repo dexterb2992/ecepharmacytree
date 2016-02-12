@@ -388,11 +388,11 @@ function get_all_downlines($referral_id){
 
 function extract_downlines($downlines = array()) {
 	// $res = "";
-	$data = array();
+	// $data = array();
 	$arr = array();
 
 	foreach($downlines as $key => $downline){
-		$data .= array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
+		$data = array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
 		array_push($arr, $data);
 		// $res.= '<li>'
 		// .$downline["fname"]." ".$downline["lname"]
