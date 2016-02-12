@@ -368,7 +368,7 @@ function get_all_downlines($referral_id){
 
 }
 
-function extract_downlines($downlines = array()){
+/*function extract_downlines($downlines = array()){
 	$res = "";
 	foreach($downlines as $key => $downline){
 		$res.= '<li class="bg-teal-active">'
@@ -385,13 +385,30 @@ function extract_downlines($downlines = array()){
 	}
 
 	return $res;
+}*/
+
+function extract_downlines($downlines = array()){
+	$res = "";
+	foreach($downlines as $key => $downline){
+		$res.= '<li>'
+		.$downline["fname"]." ".$downline["lname"].
+		.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'<br>'
+		."<br/>(".$downline["referral_id"].")";
+		if( count($downline['downlines']) > 0 ){
+			$new_dls = extract_downlines($downline['downlines']);
+			$res.= '<ul>'.$new_dls.'</ul>';
+		}
+
+		$res.= '</li>';
+
+	}
+
+	return $res;
 }
 
-function extract_for_json_downlines($downlines = array()){
+/*function extract_for_json_downlines($downlines = array()){
 	$res = "";
 	$arr = array();
-	$arr2 = array();
-	$arr3 = array();
 
 	foreach($downlines as $downline){
 		
@@ -410,7 +427,7 @@ function extract_for_json_downlines($downlines = array()){
 
 	return $arr;
 }
-
+*/
 global $x, $uplines;
 $x = 0;
 $uplines = array();
