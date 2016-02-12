@@ -78,7 +78,7 @@ function generate_referral_id(){
 
 function generate_lot_number(){
 	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')
-		->withTrashed()->first();
+	->withTrashed()->first();
 
 	if(!isset($inventory->lot_number)){
 		$new_lot_number = 1000;
@@ -87,7 +87,7 @@ function generate_lot_number(){
 	}
 
 	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)
-		->withTrashed()->first();
+	->withTrashed()->first();
 	if( $check === null )
 		return $new_lot_number;
 
@@ -118,9 +118,9 @@ function get_person_fullname($person, $reversed = false){
 	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : ' ';
 	$fname = !empty($person->fname) ? ucfirst($person->fname)." " : '';
 	$lname = !empty($person->lname) ? ucfirst($person->lname) : '';
-    if( $reversed )
-        return $lname.", ".$fname.$mname;
-    return $fname."".$mname." ".$lname;
+	if( $reversed )
+		return $lname.", ".$fname.$mname;
+	return $fname."".$mname." ".$lname;
 }
 
 
@@ -324,12 +324,12 @@ function decode_utf8($arrays = array()){
 
 function combine_additional_address(array $addresses){
 
-    foreach ($addresses as $key => $value) {
-    	if( trim($value) == "" ){
-    		unset($addresses[$key]);
-    	}
-    }
-    return implode(', ', $addresses);
+	foreach ($addresses as $key => $value) {
+		if( trim($value) == "" ){
+			unset($addresses[$key]);
+		}
+	}
+	return implode(', ', $addresses);
 }
 
 function peso(){
@@ -391,12 +391,14 @@ function extract_downlines($downlines = array()) {
 	$arr = array();
 
 	foreach($downlines as $key => $downline){
-		array_push($arr, $downline);
+		$data = array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
+		array_push($arr, $data);
 		// $res.= '<li>'
 		// .$downline["fname"]." ".$downline["lname"]
 		// ." (".$downline["referral_id"].")";
 		if( count($downline['downlines']) > 0 ){
-			array_push($arr, $downline);
+			$data = array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
+			array_push($arr, $data);
 			extract_downlines($downline['downlines']);
 			// $res.= '<ul>'.$new_dls.'</ul>';
 		}
@@ -473,7 +475,7 @@ function get_uplines($referral_id, $is_one = false, $generate_clickable_html = f
 				$prefix = isset($uplines[0]->sub_specialty_id) ? "<i class='fa fa-user-md'></i>" : '';
 				$id_prefix = isset($uplines[0]->sub_specialty_id) ? "d" : 'p';
 				$html = "<a href='javascript:void(0);' data-id='$id_prefix{$uplines[0]->id}' class='show-downlines'>$prefix "
-					.get_person_fullname($uplines[0]).
+				.get_person_fullname($uplines[0]).
 				"</a>";
 				return $html;
 				
@@ -516,23 +518,23 @@ function get_earner_from_referral_points_logs(ReferralCommissionActivityLog $log
 
 function render_pagination($pagination){
 	$html = '<hr/>';
-    if( $pagination->total() > 0 && $pagination->total() > 100 ){
-    	$html.= '
-	    	<div class="row">
-		        <div class="col-md-4">
-		            <span class="pagination">Total: '.number_format($pagination->total(), 0)." ".str_auto_plural('entry', $pagination->total()).'</span>
-		        </div>
-		        <div class="col-md-8">
-		            '.$pagination->render().'
-		        </div>
-		    </div>
-    	';
-    }
-    return $html;
+	if( $pagination->total() > 0 && $pagination->total() > 100 ){
+		$html.= '
+		<div class="row">
+			<div class="col-md-4">
+				<span class="pagination">Total: '.number_format($pagination->total(), 0)." ".str_auto_plural('entry', $pagination->total()).'</span>
+			</div>
+			<div class="col-md-8">
+				'.$pagination->render().'
+			</div>
+		</div>
+		';
+	}
+	return $html;
 }
 
 function cmp_available_quantity($a, $b)
 {
-    return strcmp($a->available_quantity, $b->available_quantity);
+	return strcmp($a->available_quantity, $b->available_quantity);
 }
 
