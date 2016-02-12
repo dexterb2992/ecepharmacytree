@@ -387,15 +387,15 @@ function extract_downlines($downlines = array()){
 	return $res;
 }
 
-function extract_for_json_downlines($downlines){
+function extract_for_json_downlines($downlines = array()){
 	$res = "";
 	$arr = array();
 	foreach($downlines as $downline){
 		array_push($arr, $downline);
-		dd($downline->downlines);
-		if(count($downline->downlines) > 0 ){
+		dd($downline['downlines']);
+		if(count($downline['downlines']) > 0 ){
 			extract_for_json_downlines($downlines);
-			$downline->downline_level = 1;
+			// $downline->downline_level = 1;
 		}
 	}
 
