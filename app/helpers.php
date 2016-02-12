@@ -391,7 +391,7 @@ function extract_downlines($downlines = array()){
 	$res = "";
 	foreach($downlines as $key => $downline){
 		$res.= '<li>'
-		.$downline["fname"]." ".$downline["lname"].
+		.$downline["fname"]." ".$downline["lname"]
 		.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'<br>'
 		."<br/>(".$downline["referral_id"].")";
 		if( count($downline['downlines']) > 0 ){
