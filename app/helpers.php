@@ -395,7 +395,7 @@ function extract_for_json_downlines($downlines = array()){
 		if(count($downline['downlines']) > 0 ){
 			array_push($arr, $downline['downlines']);
 			unset($downline['downlines']);
-			extract_for_json_downlines($downlines);
+			// extract_for_json_downlines($downlines);
 			// $downline['level_dl'] = 1;10
 			// $downline->downline_level = 1;
 		}
