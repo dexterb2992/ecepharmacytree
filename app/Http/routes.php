@@ -303,7 +303,7 @@ Route::get('api/{type}/{what}', function ($type, $what){
 		// $response['success'] = 1;
 		// $response['server_timestamp'] = Carbon\Carbon::now();
 		// $response['latest_updated_at'] = '';
-		return dd(extract_downlines(get_all_downlines($what), array()));
+		return extract_downlines(get_all_downlines($what), array());
 	} else if($type == 'get-dl') {
 		return dd(get_all_downlines($what));
 	}
