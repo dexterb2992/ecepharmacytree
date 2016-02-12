@@ -299,11 +299,11 @@ Route::get('api/{type}/{what}', function ($type, $what){
 	}else if( $type == 'str_singular' ){
 		return str_singular($what);
 	}else if( $type == "get-downlines" ){
-		$response['downlines'] = get_all_downlines($what);
-		$response['success'] = 1;
-		$response['server_timestamp'] = Carbon\Carbon::now();
-		$response['latest_updated_at'] = '';
-		return json_encode($response);
+		// $response['downlines'] = get_all_downlines($what);
+		// $response['success'] = 1;
+		// $response['server_timestamp'] = Carbon\Carbon::now();
+		// $response['latest_updated_at'] = '';
+		return get_all_downlines($what);
 	}
 });
 
