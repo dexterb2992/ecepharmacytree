@@ -400,8 +400,9 @@ function extract_downlines($downlines = array(), $arr = array()) {
 		if( count($downline['downlines']) > 0 ){
 			// $conter += 1;
 			// $data .= array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
+			echo $count($downline['downlines']);
 			$new_data = extract_downlines($downline['downlines'], $arr);
-			array_push($arr, $new_data[count($downline['downlines']) - 1]);
+			array_push($arr, $new_data);
 			// $res.= '<ul>'.$new_dls.'</ul>';
 		} 
 
