@@ -386,10 +386,10 @@ function get_all_downlines($referral_id){
 	return $res;
 }*/
 
-function extract_downlines($downlines = array()) {
+function extract_downlines($downlines = array(), $arr = array()) {
 	// $res = "";
 	// $data = array();
-	$arr = array();
+	// $arr = array();
 
 	foreach($downlines as $key => $downline){
 		$data = array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
@@ -399,7 +399,7 @@ function extract_downlines($downlines = array()) {
 		// ." (".$downline["referral_id"].")";
 		if( count($downline['downlines']) > 0 ){
 			// $data .= array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
-			$new_data = extract_downlines($downline['downlines']);
+			$new_data = extract_downlines($downline['downlines'], $arr);
 			array_push($arr, $new_data);
 			// $res.= '<ul>'.$new_dls.'</ul>';
 		}
