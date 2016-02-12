@@ -392,19 +392,21 @@ function get_all_downlines($referral_id){
 
 // }
 
-function simple_downlines($referral_id)
+function simple_downlines($referral_id, $fucking_array = array())
 {
+	$wtf_array = $fucking_array;
+
 	$referral_id = trim($referral_id);
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
-	$json_arr = array();
+	
 
 	foreach($patients as $patient){
-		$json = json_encode(array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]));
-		$json_arr[] = json_decode($json);
-		$json_arr[] = json_decode(simple_downlines($patient['referral_id']));
+		$json = array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]);
+		array_push($wtf_array, $json);
+		$json_arr = simple_downlines($patient['referral_id'], $wtf_array);
 	}
 
-	return json_encode($json_arr);
+	return $wtf_array;
 }
 
 /*function extract_downlines($downlines = array()){
