@@ -387,19 +387,19 @@ function extract_downlines($downlines = array()){
 	return $res;
 }
 
-function extract_for_json_downlines(json_decode($downlines)){
+function extract_for_json_downlines($downlines){
 	$res = "";
 	$arr = array();
 	foreach($downlines as $downline){
 		array_push($arr, $downline);
-		dd($downline->dowlines);
+		dd($downline->downlines);
 		if(count($downline->downlines) > 0 ){
-			$new_dls = extract_downlines($downlines);
+			extract_for_json_downlines($downlines);
 			$downline->downline_level = 1;
 		}
 	}
 
-	return json_encode($arr);
+	return $arr;
 }
 
 global $x, $uplines;
