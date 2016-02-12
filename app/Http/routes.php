@@ -283,6 +283,8 @@ Route::get('locations/get/{get_location}/where-{parent_location}/{parent_locatio
 Route::get('locations/search/{get_location}/{location_name}', 'LocationController@search');
 
 Route::get('api/{type}/{what}', function ($type, $what){
+	$response = array();
+
 	if( $type == 'generate' ){
 		if( $what == "sku" )
 			return generate_sku();
@@ -297,7 +299,11 @@ Route::get('api/{type}/{what}', function ($type, $what){
 	}else if( $type == 'str_singular' ){
 		return str_singular($what);
 	}else if( $type == "get-downlines" ){
-		return get_all_downlines($what);
+		$response['downlines'] = get_all_downlines($what);
+		$response['success'] = 1;
+		$response['server_timestamp'] = Carbon\Carbon::now();
+		$response['latest_updated_at'] = '';
+		return json_encode($response);
 	}
 });
 
