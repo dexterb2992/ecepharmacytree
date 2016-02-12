@@ -367,6 +367,29 @@ function get_all_downlines($referral_id){
 
 }
 
+function get_all_downlines_revision($referral_id){
+	$referral_id = trim($referral_id);
+	$settings = ECEPharmacyTree\Setting::first();
+	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
+
+	if( empty($patients) )
+		$patients = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
+
+	$downlines = array();
+	$downlines = $patients;
+
+	foreach($patients as $key => $patient){
+		
+		$child_downlines = get_all_downlines( $patient["referral_id"] );
+		array_push($downlines, $child_downlines);
+		// $downlines[$key]["downlines"] = $child_downlines;
+
+	}
+
+	return $downlines;
+
+}
+
 /*function extract_downlines($downlines = array()){
 	$res = "";
 	foreach($downlines as $key => $downline){
@@ -400,7 +423,7 @@ function extract_downlines($downlines = array(), $arr = array()) {
 		if( count($downline['downlines']) > 0 ){
 			// $conter += 1;
 			// $data .= array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
-			echo count($downline['downlines']);
+			// echo count($downline['downlines']);
 			$new_data = extract_downlines($downline['downlines'], $arr);
 			array_push($arr, $new_data);
 			// $res.= '<ul>'.$new_dls.'</ul>';
