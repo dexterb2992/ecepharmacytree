@@ -2,7 +2,6 @@
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use ECEPharmacyTree\ReferralCommissionActivityLog;
-use Response;
 
 function pre($str){
 	echo '<pre>';
@@ -387,7 +386,7 @@ function get_all_downlines($referral_id){
 	return $res;
 }*/
 
-function extract_downlines($downlines = array(), $arr = array()){
+function extract_downlines($downlines = array()){
 	// $res = "";
 	// $arr = array();
 
@@ -398,7 +397,7 @@ function extract_downlines($downlines = array(), $arr = array()){
 		// ." (".$downline["referral_id"].")";
 		if( count($downline['downlines']) > 0 ){
 			array_push($arr, $downline);
-			extract_downlines($downline['downlines'], $arr);
+			extract_downlines($downline['downlines']);
 			// $res.= '<ul>'.$new_dls.'</ul>';
 		}
 
