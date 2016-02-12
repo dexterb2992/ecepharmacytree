@@ -386,6 +386,20 @@ function extract_downlines($downlines = array()){
 	return $res;
 }
 
+function extract_for_json_downlines($downlines){
+	$res = "";
+	$arr = array();
+	foreach($downlines as $downline){
+		array_push($arr, $downline);
+		if(count($downline['downlines']) > 0 ){
+			$new_dls = extract_downlines($downlines);
+			$downline->downline_level = 1;
+		}
+	}
+
+	return $arr;
+}
+
 global $x, $uplines;
 $x = 0;
 $uplines = array();

@@ -303,7 +303,7 @@ Route::get('api/{type}/{what}', function ($type, $what){
 		// $response['success'] = 1;
 		// $response['server_timestamp'] = Carbon\Carbon::now();
 		// $response['latest_updated_at'] = '';
-		return get_all_downlines($what);
+		return extract_for_json_downlines(get_all_downlines($what));
 	}
 });
 
