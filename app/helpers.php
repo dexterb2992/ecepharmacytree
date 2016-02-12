@@ -376,7 +376,8 @@ function get_all_downlines_revision($referral_id){
 		$patients = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
 
 	$downlines = array();
-	$downlines = $patients;
+	// $downlines = $patients;
+	$downlines = array("fname" => $patients["fname"], "lname" => $patients["lname"], "created_at" => $patients["created_at"]);
 
 	foreach($patients as $key => $patient){
 		
