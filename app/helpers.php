@@ -367,30 +367,30 @@ function get_all_downlines($referral_id){
 
 }
 
-function get_all_downlines_revision($referral_id){
-	$referral_id = trim($referral_id);
-	$settings = ECEPharmacyTree\Setting::first();
-	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
+// function get_all_downlines_revision($referral_id){
+// 	$referral_id = trim($referral_id);
+// 	$settings = ECEPharmacyTree\Setting::first();
+// 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
 
-	if( empty($patients) )
-		$patients = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
+// 	if( empty($patients) )
+// 		$patients = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
 
-	// $downlines = array();
-	// $downlines = $patients;
-	// $downlines = array("fname" => $patients["fname"], "lname" => $patients["lname"], "created_at" => $patients["created_at"]);
+// 	// $downlines = array();
+// 	// $downlines = $patients;
+// 	// $downlines = array("fname" => $patients["fname"], "lname" => $patients["lname"], "created_at" => $patients["created_at"]);
 
-	foreach($patients as $key => $patient){
-		$n_dl = json_encode(array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]));
-		array_push($downlines, $n_dl);
-		$child_downlines = get_all_downlines_revision( $patient["referral_id"], $downlines );
-		array_push($downlines, $child_downlines);
-		// $downlines[$key]["downlines"] = $child_downlines;
+// 	foreach($patients as $key => $patient){
+// 		$n_dl = json_encode(array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]));
+// 		array_push($downlines, $n_dl);
+// 		$child_downlines = get_all_downlines_revision( $patient["referral_id"], $downlines );
+// 		array_push($downlines, $child_downlines);
+// 		// $downlines[$key]["downlines"] = $child_downlines;
 
-	}
+// 	}
 
-	return $downlines;
+// 	return $downlines;
 
-}
+// }
 
 function simple_downlines($referral_id)
 {
