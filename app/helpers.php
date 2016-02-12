@@ -387,22 +387,26 @@ function get_all_downlines($referral_id){
 	return $res;
 }*/
 
-function extract_downlines($downlines = array()){
-	$res = "";
+function extract_downlines($downlines = array(), $arr = array()){
+	// $res = "";
+	// $arr = array();
+
 	foreach($downlines as $key => $downline){
-		$res.= '<li>'
-		.$downline["fname"]." ".$downline["lname"]
-		."<br/>(".$downline["referral_id"].")";
+		array_push($arr, $downline);
+		// $res.= '<li>'
+		// .$downline["fname"]." ".$downline["lname"]
+		// ." (".$downline["referral_id"].")";
 		if( count($downline['downlines']) > 0 ){
-			$new_dls = extract_downlines($downline['downlines']);
-			$res.= '<ul>'.$new_dls.'</ul>';
+			array_push($arr, $downline);
+			extract_downlines($downline['downlines'], $arr);
+			// $res.= '<ul>'.$new_dls.'</ul>';
 		}
 
-		$res.= '</li>';
+		// $res.= '</li>';
 
 	}
 
-	return $res;
+	return $arr;
 }
 
 /*function extract_for_json_downlines($downlines = array()){
