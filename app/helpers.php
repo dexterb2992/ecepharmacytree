@@ -367,7 +367,7 @@ function get_all_downlines($referral_id){
 
 }
 
-function get_all_downlines_revision($referral_id, $downlines = array()){
+function get_all_downlines_revision($referral_id){
 	$referral_id = trim($referral_id);
 	$settings = ECEPharmacyTree\Setting::first();
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
@@ -380,7 +380,7 @@ function get_all_downlines_revision($referral_id, $downlines = array()){
 	// $downlines = array("fname" => $patients["fname"], "lname" => $patients["lname"], "created_at" => $patients["created_at"]);
 
 	foreach($patients as $key => $patient){
-		$n_dl = array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]);
+		$n_dl = json_encode(array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]));
 		array_push($downlines, $n_dl);
 		$child_downlines = get_all_downlines_revision( $patient["referral_id"], $downlines );
 		array_push($downlines, $child_downlines);
@@ -392,22 +392,18 @@ function get_all_downlines_revision($referral_id, $downlines = array()){
 
 }
 
-function simple_downlines($referral_id, $arr = array())
+function simple_downlines($referral_id)
 {
 	$referral_id = trim($referral_id);
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
 
 	foreach($patients as $patient){
-		$json = array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]);
-		array_push($arr, $json);
-		if(!empty(simple_downlines($patient['referral_id'], $arr))){
-			return simple_downlines($patient['referral_id'], $arr);
-		} else {
-			break;
-		}
+		$json = json_encode(array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]));
+		$json_arr[] = json_decode($json);
+		$json_arr[] = json_decode(simple_downlines($patient['referral_id']));
 	}
 
-	return $arr;
+	return json_encode($json_arr);
 }
 
 /*function extract_downlines($downlines = array()){
