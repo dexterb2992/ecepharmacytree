@@ -391,7 +391,7 @@ function extract_for_json_downlines($downlines){
 	$arr = array();
 	foreach($downlines as $downline){
 		array_push($arr, $downline);
-		dd($downline);
+		dd($downline->downlines);
 		if(count($downline->downlines) > 0 ){
 			$new_dls = extract_downlines($downlines);
 			$downline->downline_level = 1;
