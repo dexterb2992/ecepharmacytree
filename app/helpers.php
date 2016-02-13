@@ -388,13 +388,13 @@ function extract_downlines($downlines = array()){
 
 function simple_downlines($referral_id, $fucking_array = array(), $initial = 0) //1
 {
-	static $counter = 0;
+	static $counter = 1;
 	$wtf_array = $fucking_array;
 	$referral_id = trim($referral_id);
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
 
-	// if($initial == 0)
-	// 	$counter = 0;
+	if($initial == 0)
+		$counter = 0;
 	if(count($patients) > 1) 
 		$counter = $counter;
 	else
@@ -405,7 +405,7 @@ function simple_downlines($referral_id, $fucking_array = array(), $initial = 0) 
 
 		array_push($wtf_array, $json);
 
-		$json_arr = simple_downlines($patient['referral_id'], $wtf_array); //cnb801
+		$json_arr = simple_downlines($patient['referral_id'], $wtf_array, $counter); //cnb801
 		$wtf_array = $json_arr;
 	}
 
