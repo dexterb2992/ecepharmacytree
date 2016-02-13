@@ -401,8 +401,6 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) 
 	foreach($patients as $patient) {
 		if(count($patients) > 1){
 			$counter = $counter;
-		} else if($counter == 0 ){
-			$counter = 0;
 		} else {
 			$counter += 1;
 		}
