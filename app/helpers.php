@@ -398,9 +398,8 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) 
 	$referral_id = trim($referral_id);
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
 
-	if($counter == 0)
-		$counter = 0;
-	else if(count($patients) > 1) 
+
+	if(count($patients) > 1) 
 		$counter = $counter;
 	else
 		$counter += 1;
