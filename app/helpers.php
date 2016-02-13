@@ -78,7 +78,7 @@ function generate_referral_id(){
 
 function generate_lot_number(){
 	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')
-	->withTrashed()->first();
+		->withTrashed()->first();
 
 	if(!isset($inventory->lot_number)){
 		$new_lot_number = 1000;
@@ -87,7 +87,7 @@ function generate_lot_number(){
 	}
 
 	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)
-	->withTrashed()->first();
+		->withTrashed()->first();
 	if( $check === null )
 		return $new_lot_number;
 
@@ -118,9 +118,9 @@ function get_person_fullname($person, $reversed = false){
 	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : ' ';
 	$fname = !empty($person->fname) ? ucfirst($person->fname)." " : '';
 	$lname = !empty($person->lname) ? ucfirst($person->lname) : '';
-	if( $reversed )
-		return $lname.", ".$fname.$mname;
-	return $fname."".$mname." ".$lname;
+    if( $reversed )
+        return $lname.", ".$fname.$mname;
+    return $fname."".$mname." ".$lname;
 }
 
 
@@ -324,12 +324,12 @@ function decode_utf8($arrays = array()){
 
 function combine_additional_address(array $addresses){
 
-	foreach ($addresses as $key => $value) {
-		if( trim($value) == "" ){
-			unset($addresses[$key]);
-		}
-	}
-	return implode(', ', $addresses);
+    foreach ($addresses as $key => $value) {
+    	if( trim($value) == "" ){
+    		unset($addresses[$key]);
+    	}
+    }
+    return implode(', ', $addresses);
 }
 
 function peso(){
@@ -367,30 +367,24 @@ function get_all_downlines($referral_id){
 
 }
 
-// function get_all_downlines_revision($referral_id){
-// 	$referral_id = trim($referral_id);
-// 	$settings = ECEPharmacyTree\Setting::first();
-// 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get()->toArray(); // Primary Level
+function extract_downlines($downlines = array()){
+	$res = "";
+	foreach($downlines as $key => $downline){
+		$res.= '<li class="bg-teal-active">'
+		.'<span data-original-title="'.$downline["fname"]." ".$downline["lname"].'" data-toggle="tooltip">'
+		.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'</span>'
+		."<br/>(".$downline["referral_id"].")";
+		if( count($downline['downlines']) > 0 ){
+			$new_dls = extract_downlines($downline['downlines']);
+			$res.= '<ul>'.$new_dls.'</ul>';
+		}
 
-// 	if( empty($patients) )
-// 		$patients = ECEPharmacyTree\Patient::where('referred_byDoctor', '=', $referral_id)->get()->toArray(); // Primary Level Downline of Doctor
+		$res.= '</li>';
 
-// 	// $downlines = array();
-// 	// $downlines = $patients;
-// 	// $downlines = array("fname" => $patients["fname"], "lname" => $patients["lname"], "created_at" => $patients["created_at"]);
+	}
 
-// 	foreach($patients as $key => $patient){
-// 		$n_dl = json_encode(array("fname" => $patient["fname"], "lname" => $patient["lname"], "created_at" => $patient["created_at"]));
-// 		array_push($downlines, $n_dl);
-// 		$child_downlines = get_all_downlines_revision( $patient["referral_id"], $downlines );
-// 		array_push($downlines, $child_downlines);
-// 		// $downlines[$key]["downlines"] = $child_downlines;
-
-// 	}
-
-// 	return $downlines;
-
-// }
+	return $res;
+}
 
 function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) //1
 {
@@ -417,74 +411,6 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) 
 	return $wtf_array;
 }
 
-/*function extract_downlines($downlines = array()){
-	$res = "";
-	foreach($downlines as $key => $downline){
-		$res.= '<li class="bg-teal-active">'
-		.'<span data-original-title="'.$downline["fname"]." ".$downline["lname"].'" data-toggle="tooltip">'
-		.Str::limit($downline["fname"]." ".$downline["lname"], 15, '').'</span>'
-		."<br/>(".$downline["referral_id"].")";
-		if( count($downline['downlines']) > 0 ){
-			$new_dls = extract_downlines($downline['downlines']);
-			$res.= '<ul>'.$new_dls.'</ul>';
-		}
-
-		$res.= '</li>';
-
-	}
-
-	return $res;
-}*/
-
-function extract_downlines($downlines = array(), $arr = array()) {
-	// $res = "";
-	// $data = array();
-	// $arr = array();
-
-	foreach($downlines as $key => $downline){
-		// $data = array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
-		// array_push($arr, $data);
-		// $res.= '<li>'
-		// .$downline["fname"]." ".$downline["lname"]
-		// ." (".$downline["referral_id"].")";
-		if( count($downline['downlines']) > 0 ){
-			// $conter += 1;
-			// $data .= array("fname" => $downline["fname"], "lname" => $downline["lname"], "created_at" => $downline['created_at']);
-			// echo count($downline['downlines']);
-			$new_data = extract_downlines($downline['downlines'], $arr);
-			array_push($arr, $new_data);
-			// $res.= '<ul>'.$new_dls.'</ul>';
-		} 
-
-		// $res.= '</li>';
-
-	}
-
-	return $arr;
-}
-
-/*function extract_for_json_downlines($downlines = array()){
-	$res = "";
-	$arr = array();
-
-	foreach($downlines as $downline){
-		
-		array_push($arr, $downline);
-
-		if(count($downline['downlines']) > 0 ){
-			array_push($arr, $downline);			
-			extract_for_json_downlines($downline['downlines']);
-			// array_push($arr, $downline['downlines']);
-			// unset($downline['downlines']);
-			// extract_for_json_downlines($downlines);
-			// $downline['level_dl'] = 1;10
-			// $downline->downline_level = 1;
-		}
-	}
-
-	return $arr;
-}
-*/
 global $x, $uplines;
 $x = 0;
 $uplines = array();
@@ -528,7 +454,7 @@ function get_uplines($referral_id, $is_one = false, $generate_clickable_html = f
 				$prefix = isset($uplines[0]->sub_specialty_id) ? "<i class='fa fa-user-md'></i>" : '';
 				$id_prefix = isset($uplines[0]->sub_specialty_id) ? "d" : 'p';
 				$html = "<a href='javascript:void(0);' data-id='$id_prefix{$uplines[0]->id}' class='show-downlines'>$prefix "
-				.get_person_fullname($uplines[0]).
+					.get_person_fullname($uplines[0]).
 				"</a>";
 				return $html;
 				
@@ -571,23 +497,23 @@ function get_earner_from_referral_points_logs(ReferralCommissionActivityLog $log
 
 function render_pagination($pagination){
 	$html = '<hr/>';
-	if( $pagination->total() > 0 && $pagination->total() > 100 ){
-		$html.= '
-		<div class="row">
-			<div class="col-md-4">
-				<span class="pagination">Total: '.number_format($pagination->total(), 0)." ".str_auto_plural('entry', $pagination->total()).'</span>
-			</div>
-			<div class="col-md-8">
-				'.$pagination->render().'
-			</div>
-		</div>
-		';
-	}
-	return $html;
+    if( $pagination->total() > 0 && $pagination->total() > 100 ){
+    	$html.= '
+	    	<div class="row">
+		        <div class="col-md-4">
+		            <span class="pagination">Total: '.number_format($pagination->total(), 0)." ".str_auto_plural('entry', $pagination->total()).'</span>
+		        </div>
+		        <div class="col-md-8">
+		            '.$pagination->render().'
+		        </div>
+		    </div>
+    	';
+    }
+    return $html;
 }
 
 function cmp_available_quantity($a, $b)
 {
-	return strcmp($a->available_quantity, $b->available_quantity);
+    return strcmp($a->available_quantity, $b->available_quantity);
 }
 
