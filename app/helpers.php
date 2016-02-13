@@ -392,7 +392,7 @@ function get_all_downlines($referral_id){
 
 // }
 
-function simple_downlines($referral_id, $fucking_array = array(), $old_ref_id)
+function simple_downlines($referral_id, $fucking_array = array(), $old_ref_id = "")
 {
 	$wtf_array = $fucking_array;
 	$referral_id = trim($referral_id);
