@@ -398,10 +398,11 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) 
 		$counter += 1;
 	
 	foreach($patients as $patient) {
+		
 		if(count($wtf_array) == 0)
-			$counter = 0;
-
-		$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $counter);
+			$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => 0);
+		else 
+			$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $counter);
 
 		array_push($wtf_array, $json);
 
