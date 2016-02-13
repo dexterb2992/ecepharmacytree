@@ -401,12 +401,17 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) 
 	foreach($patients as $patient) {
 		if(count($patients) > 1){
 			$counter = $counter;
+		} else if($counter == 0 ){
+			$counter = 0;
+		} else {
+			$counter += 1;
 		}
+
 		$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $counter);
 
 		array_push($wtf_array, $json);
 
-		$json_arr = simple_downlines($patient['referral_id'], $wtf_array, $counter += 1); //cnb801
+		$json_arr = simple_downlines($patient['referral_id'], $wtf_array, $counter); //cnb801
 		$wtf_array = $json_arr;
 	}
 
