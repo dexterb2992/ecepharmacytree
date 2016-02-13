@@ -394,8 +394,12 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) 
 
 	if(count($patients) > 1) 
 		$counter = $counter;
-	else if(count($patients) == 1)
-		$counter += 1;
+	else {
+		if(count($wtf_array) == 0)
+			$counter = 0;
+		else
+			$counter += 1;
+	}
 	
 
 	foreach($patients as $patient) {
