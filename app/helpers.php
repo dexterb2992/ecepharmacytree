@@ -399,11 +399,13 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) 
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
 
 	foreach($patients as $patient) {
-		if(count($patients) > 1){
+		if($counter == 0)
+			$counter = 0;
+		else if(count($patients) > 1) 
 			$counter = $counter;
-		} else {
+		else if(count($patients) == 1)
 			$counter += 1;
-		}
+		
 
 		$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $counter);
 
