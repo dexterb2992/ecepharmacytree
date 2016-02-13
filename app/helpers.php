@@ -400,7 +400,7 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 0) 
 
 	foreach($patients as $patient) {
 		if(count($patients) > 1){
-			$counter -= 1;
+			$counter = $counter;
 		}
 		$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $counter);
 
