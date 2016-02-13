@@ -397,10 +397,10 @@ function simple_downlines($referral_id, $fucking_array = array())
 	$wtf_array = $fucking_array;
 	$referral_id = trim($referral_id);
 	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
-	$counter += 1;
 
 	foreach($patients as $patient){
-		$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $patient['id'], 'refferal_id1' => $referral_id, 'referral_id2' => $patient['referral_id'], 'refer_by_user' => $patient['referred_byUser']);
+		$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $patient['id'], 'refer_by_user' => $patient['referred_byUser']);
+		
 		array_push($wtf_array, $json);
 
 		$json_arr = simple_downlines($patient['referral_id'], $wtf_array);
