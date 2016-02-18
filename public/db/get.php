@@ -27,38 +27,63 @@ $pre_response = array(
     "message" => ""
     );
 switch ($request) {
-    /* Doesnt require parameter*/
     case 'get_products':
-        // get all products from products table
     $result = mysql_query("call get_products(".$_GET['branch_id'].",".$_GET['patient_id'].")") or returnError(mysql_error());
     $tbl = "products";
     break;
+
+    case 'get_categorized_products':
+    $result = mysql_query("call get_categorized_products(".$_GET['branch_id'].",".$_GET['patient_id'].",".$_GET['cat_id'].")") or returnError(mysql_error());
+    $tbl = "products";
+    break;
+
+    case 'get_favorite_products':
+    $result = mysql_query("SELECT p.*, cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(inv.available_quantity), 0) as available_quantity, IFNULL( bk.quantity, -1) as in_cart FROM products AS p INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id AND inv.branch_id = ".$_GET['branch_id']." LEFT JOIN baskets as bk on p.id = bk.product_id and bk.patient_id = ".$_GET['patient_id']." WHERE p.id IN (".$_GET['list_of_ids'].") GROUP BY p.id ORDER BY p.name ASC") or returnError(mysql_error());
+    $tbl = "products";
+    break;
+
+    case 'get_selected_product_with_image':
+    $result = mysql_query("SELECT p.*, pg.filename, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM products as p left join products_gallery as pg on p.id = pg.product_id left join inventories as inv on p.id = inv.product_id AND inv.branch_id = ".$_GET['branch_id']." WHERE p.id = ".$_GET['product_id']) or returnError(mysql_error());  
+    $tbl = "products";
+    break;
+
+    case 'get_searched_products':
+    $result = mysql_query("SELECT * FROM products WHERE name LIKE '%".$_GET['keyword']."%'") or returnError(mysql_error());
+    $tbl = "products";
+    break;
+
     case 'get_doctors':
     $result = mysql_query("SELECT * FROM doctors WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "doctors";
     break;
+
     case 'get_patients':
     $result = mysql_query("SELECT * from patients where (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "patients";
     break;
+
     case 'get_clinics':
     $result = mysql_query("SELECT * FROM clinics WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "clinics";
     break;
+
     case 'get_clinic_doctor':
     $result = mysql_query("SELECT * FROM clinic_doctor WHERE is_active = 1") or returnError(mysql_error());
     $tbl = "clinic_doctor";
     break;
+
     case 'get_doctor_specialties':
     $result = mysql_query("SELECT * FROM specialties WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "specialties";
     break;
+
     case 'get_doctor_sub_specialties':
     $result = mysql_query("SELECT * FROM sub_specialties WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
     $tbl = "sub_specialties";
     break;
+
     case 'get_product_categories':
-    $result = mysql_query("SELECT * FROM product_categories WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysql_error());
+    $result = mysql_query("SELECT * FROM product_categories WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') ORDER BY name ASC") or returnError(mysql_error());
     $tbl = "product_categories";
     break;
 
@@ -207,11 +232,6 @@ switch ($request) {
     case 'get_clinic_patients';
     $result = mysql_query("SELECT cpd.*, cpd.id as cpd_id, cp.*, b.municipality_id, m.province_id, p.region_id FROM clinic_patients as cp inner join clinic_patient_doctor as cpd on cp.id = cpd.clinic_patients_id inner join barangays as b on cp.address_barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE BINARY cpd.username = '".$_GET['username']."' and BINARY cpd.password= '".$_GET['password']."'") or returnError(mysql_error());  
     $tbl = "clinic_patients";
-    break;
-
-    case 'get_selected_product_with_image':
-    $result = mysql_query("SELECT p.*, pg.filename, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM products as p left join products_gallery as pg on p.id = pg.product_id left join inventories as inv on p.id = inv.product_id AND inv.branch_id = ".$_GET['branch_id']." WHERE p.id = ".$_GET['product_id']) or returnError(mysql_error());  
-    $tbl = "products";
     break;
 
     case 'get_patient_points':
