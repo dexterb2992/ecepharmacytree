@@ -27,38 +27,64 @@ $pre_response = array(
     "message" => ""
     );
 switch ($request) {
-    /* Doesnt require parameter*/
     case 'get_products':
         // get all products from products table
     $result = mysqli_query($conn, "call get_products(".$_GET['branch_id'].",".$_GET['patient_id'].")") or returnError(mysqli_error($conn));
     $tbl = "products";
     break;
+
+    case 'get_categorized_products':
+    $result = mysql_query("call get_categorized_products(".$_GET['branch_id'].",".$_GET['patient_id'].",".$_GET['cat_id'].")") or returnError(mysql_error());
+    $tbl = "products";
+    break;
+
+    case 'get_favorite_products':
+    $result = mysql_query("SELECT p.*, cat.id AS cat_id, cat.name AS cat_name, IFNULL(SUM(inv.available_quantity), 0) as available_quantity, IFNULL( bk.quantity, -1) as in_cart FROM products AS p INNER JOIN product_subcategories AS sub ON p.subcategory_id = sub.id INNER JOIN product_categories AS cat ON sub.category_id = cat.id LEFT JOIN inventories AS inv ON p.id = inv.product_id AND inv.branch_id = ".$_GET['branch_id']." LEFT JOIN baskets as bk on p.id = bk.product_id and bk.patient_id = ".$_GET['patient_id']." WHERE p.id IN (".$_GET['list_of_ids'].") GROUP BY p.id ORDER BY p.name ASC") or returnError(mysql_error());
+    $tbl = "products";
+    break;
+
+    case 'get_selected_product_with_image':
+    $result = mysql_query("SELECT p.*, pg.filename, IFNULL(SUM(DISTINCT inv.available_quantity), 0) as available_quantity FROM products as p left join products_gallery as pg on p.id = pg.product_id left join inventories as inv on p.id = inv.product_id AND inv.branch_id = ".$_GET['branch_id']." WHERE p.id = ".$_GET['product_id']) or returnError(mysql_error());  
+    $tbl = "products";
+    break;
+
+    case 'get_searched_products':
+    $result = mysql_query("SELECT * FROM products WHERE name LIKE '%".$_GET['keyword']."%'") or returnError(mysql_error());
+    $tbl = "products";
+    break;
+
     case 'get_doctors':
     $result = mysqli_query( $conn,"SELECT * FROM doctors WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysqli_error($conn));
     $tbl = "doctors";
     break;
+
     case 'get_patients':
     $result = mysqli_query($conn, "SELECT * from patients where (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysqli_error($conn));
     $tbl = "patients";
     break;
+
     case 'get_clinics':
     $result = mysqli_query($conn, "SELECT c.*, b.name as address_barangay, m.name as address_city_municipality, p.name as address_province, r.name as address_region FROM clinics as c inner join barangays as b on c.barangay_id = b.id inner join municipalities as m on b.municipality_id = m.id inner join provinces as p on m.province_id = p.id inner join regions as r on p.region_id = r.id WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysqli_error($conn));
     $tbl = "clinics";
     break;
+
     case 'get_clinic_doctor':
     $result = mysqli_query($conn, "SELECT * FROM clinic_doctor WHERE is_active = 1") or returnError(mysqli_error($conn));
     $tbl = "clinic_doctor";
     break;
+
     case 'get_doctor_specialties':
     $result = mysqli_query($conn, "SELECT * FROM specialties WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysqli_error($conn));
     $tbl = "specialties";
     break;
+
     case 'get_doctor_sub_specialties':
     $result = mysqli_query($conn, "SELECT * FROM sub_specialties WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysqli_error($conn));
     $tbl = "sub_specialties";
     break;
+
     case 'get_product_categories':
-    $result = mysqli_query($conn, "SELECT * FROM product_categories WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysqli_error($conn));
+    $result = mysqli_query($conn, "SELECT * FROM product_categories WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00') ORDER BY name ASC") or returnError(mysqli_error($conn));
     $tbl = "product_categories";
     break;
 
