@@ -34,7 +34,7 @@ switch ($request) {
     break;
 
     case 'get_categorized_products':
-    $result = mysql_query("call get_categorized_products(".$_GET['branch_id'].",".$_GET['patient_id'].",".$_GET['cat_id'].")") or returnError(mysql_error());
+    $result = mysqli_query($conn, "call get_categorized_products(".$_GET['branch_id'].",".$_GET['patient_id'].",".$_GET['cat_id'].")") or returnError(mysqli_error($conn));
     $tbl = "products";
     break;
 
