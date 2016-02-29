@@ -14,7 +14,7 @@ class DB_CONNECT {
     // destructor
     function __destruct() {
         // closing db connection
-        $this->close();
+        $this->close($this->connect());
     }
 
     /**
@@ -24,17 +24,17 @@ class DB_CONNECT {
         // import database connection variables
 
         // Connecting to mysql database
-        //$con=mysqli_connect("sql208.0fees.us","0fe_15099609","trusted143","0fe_15099609_ece_pharmacy_tree");
+        $con = mysqli_connect("localhost","homestead","secret","ece_pharmacy_tree");
         
         //Check connection
-        //if (mysqli_connect_errno()) {
-          //echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        //}
+        if (mysqli_connect_errno()) {
+          echo json_encode(array("mysql_connection_error" => "Failed to connect to MySQL: " . mysqli_connect_error() ));
+        }
 
-        $con = mysql_connect("localhost", "root", "01gwapoko01") or die(mysql_error());
+        // $con = mysql_connect("localhost", "homestead", "secret") or die(mysql_error());
 
         // Selecing database
-        $db = mysql_select_db("ece_pharmacy_tree") or die(mysql_error()) or die(mysql_error());
+        // $db = mysql_select_db("ece_pharmacy_tree") or die(mysql_error()) or die(mysql_error());
 
         // returing connection cursor
         return $con;
@@ -43,9 +43,9 @@ class DB_CONNECT {
     /**
      * Function to close db connection
      */
-    function close() {
+    function close($con) {
         // closing db connection
-        mysql_close();
+        mysqli_close($con);
     }
 
 }
