@@ -9,12 +9,18 @@ function pre($str){
 	echo '</pre>';
 }
 
-/**
- * @var $is_number
- * 			0 = alphanumeric characters
- *			1 = numbers only
- *			2 = letters only
- */
+// function money_format($value){
+// 	// return number_format((float)$value, 2, '.', '');
+// 	return $value;
+// }
+
+function money_format_($value){
+	return number_format((float)$value, 2, '.', '');
+}
+
+// function srsly(){
+// 	return '>?';
+// }
 
 function generate_random_string($length = 10, $is_number = 0, $is_sku = false) {
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -466,7 +472,7 @@ function get_earner_from_referral_points_logs(ReferralCommissionActivityLog $log
 
 function render_pagination($pagination){
 	$html = '<hr/>';
-    if( $pagination->total() > 0 && $pagination->total() > 200 ){
+    if( $pagination->total() > 0 && $pagination->total() > 100 ){
     	$html.= '
 	    	<div class="row">
 		        <div class="col-md-4">
@@ -480,3 +486,9 @@ function render_pagination($pagination){
     }
     return $html;
 }
+
+function cmp_available_quantity($a, $b)
+{
+    return strcmp($a->available_quantity, $b->available_quantity);
+}
+

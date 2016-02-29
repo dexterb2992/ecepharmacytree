@@ -77,8 +77,8 @@ $(document).ready(function (){
         "aaSorting": [[ 2, "desc" ]]
     });
 
-    $('.table-points-log').DataTable({
-        "aaSorting": [[ 1, "desc" ]]
+    $('.table-points-log, #tbl_inventory_logs').DataTable({
+        "aaSorting": [[ 0, "desc" ]]
     });
 
 
@@ -317,6 +317,13 @@ $(document).ready(function (){
                 updateInventoryProductQty();
 
                 // add your conditions & magic codes here when form fields has been filled 
+                    if( data.hasOwnProperty('has_free_gifts') ){
+                        if( data.has_free_gifts == 0 ){
+                            $(".selected-products-qty-div").html("");
+                            $("#promo_details_gifts").val("");
+                            init_specific_product_list( $("#promo_details_gifts") );
+                        }
+                    }
 
                     if( $this.hasClass('promo-product-details') ){
                         window.global_free_gift_product_ids = [];
@@ -345,6 +352,7 @@ $(document).ready(function (){
                                 $(".selected-products-qty-div").html(htmls);
                                 // $("#promo_details_gifts").select2();
                                 $("#promo_details_gifts").val( _details_gifts.join(',') );
+
                                 init_specific_product_list( $("#promo_details_gifts") );
                                 
                                 $("#form_promo_product_info").find('input.gift_quantities').each(function (i, row){
@@ -378,13 +386,11 @@ $(document).ready(function (){
                     }
 
                     if( data.hasOwnProperty("specific_promo_product_ids") ){
-                        // var products_list = $("#specific_promo_product_ids");
-                        // var htmls = "";
-                        // $.each(data.free_gifts, function (i, row){
-                        //     $("#specific_promo_product_ids option[value='"+row.id+"']").attr("selected", "selected");
-                        // });
-                        // $("#specific_promo_product_ids").select2();
                         init_specific_product_list( $("#specific_promo_product_ids") );
+                    }
+
+                    if( data.hasOwnProperty('products_involved') ){
+                         init_specific_product_list( $("#product_groups_products_involved") );
                     }
 
 
@@ -402,6 +408,10 @@ $(document).ready(function (){
             $("#inventories_product_id").next('.temp_name').html("").fadeOut(function (){
                 $("#inventories_product_id").prev(".select2-container").show();
             });
+            // clear select2 values 
+            $('input.products-multiple-select2').val("");
+            init_specific_product_list( $('input.products-multiple-select2') );
+
             _clear_form_data(form);
             form.find('#inventories_product_id, #inventory_quantity').removeAttr("disabled").trigger("change");
             updateInventoryProductQty();
@@ -416,13 +426,14 @@ $(document).ready(function (){
         
 
         $("select.select2").select2();
+       
         $('.data-show').trigger('change click');
 
         console.log("checking if hasAdditionalAddress ");
         setTimeout(function(){
             if( window.hasAdditionalAddress == true && $("#map").length > 0){
                 console.log("hasAdditionalAddress: yes");
-                    initMap();
+                initMap();
             }
         },1000);
         
@@ -858,9 +869,9 @@ $("#add_gallery").click(function (){
         e.preventDefault();
         var files = e.originalEvent.dataTransfer.files;
 
-            //We need to send dropped files to Server
-            handleFileUpload(files,obj);
-        });
+        //We need to send dropped files to Server
+        handleFileUpload(files,obj);
+    });
 
     $(document).on('dragenter', function (e) {
         e.stopPropagation();
@@ -871,7 +882,7 @@ $("#add_gallery").click(function (){
       e.stopPropagation();
       e.preventDefault();
       obj.css('border', '2px dotted #0B85A1');
-  });
+    });
 
     $(document).on('drop', function (e) {
         e.stopPropagation();
@@ -977,7 +988,7 @@ $("#add_gallery").click(function (){
         }).done(function (data){
             if( data.hasOwnProperty('product') ){
                 $('#inventory_adjustment_details').html('Lot# '+data.lot_number+
-                    '<br/>Product:  <b><a href="/products?q='+data.product.name+'" target="_blank">'+data.product.name+'</a></b>'+
+                    '<br/>Product:  <b><a href="/search/products?q='+data.product.name+'" target="_blank">'+data.product.name+'</a></b>'+
                     '<br/>Total sold items: <b title="Total sold products for this inventory">'+data.sold_products_count+'</b>'+
                     '<br/><small>Date added: '+data.date_added+'</small>');
                 $('#old_quantity').val(data.quantity);
@@ -1110,8 +1121,9 @@ $("#add_gallery").click(function (){
 
         var ordersHtml = "", productsHtml = "", returnCodesHtml = "";
         $.when(
-            ajaxCalls("orders"), ajaxCalls("products"), ajaxCalls("stockReturnCodes") 
-        ).done(function(orders, products, returnCodes){
+            // ajaxCalls("orders"), ajaxCalls("products"), ajaxCalls("stockReturnCodes") 
+            ajaxCalls("orders"), ajaxCalls("stockReturnCodes") 
+        ).done(function(orders, returnCodes){
             window.orders = orders[0];
             $.each(orders[0], function (i, row){
                 if( row.billing.payment_status == 'paid' ){
@@ -1122,7 +1134,8 @@ $("#add_gallery").click(function (){
                 }
             });
 
-            $.each(products[0], function (i, row){
+            // $.each(products[0], function (i, row){
+            $.each(window.products, function (i, row){
                 productsHtml+= '<option value="'+row.id+'">'+row.name+'</option>';
             });
 
@@ -1635,22 +1648,32 @@ $("#add_gallery").click(function (){
                         max_removable = row.quantity - row.defective_quantity;
                         if( row.quantity > row.defective_quantity ){
                             option = '<input type="text" class="number returned-item-qty" value="'+max_removable+'" data-max="'+max_removable+'" data-min="1" placeholder="Defective quantity" name="damaged_qty">'+
-                                    '<a href="#!" class="btn-xxs btn-danger btn btn-flat btn-defective-qty" data-id="'+row.id+'">Mark as defective</a></div>';
+                                    '<a href="javascript:void(0);" class="btn-xxs btn-danger btn btn-flat btn-defective-qty" data-id="'+row.id+'">Mark as defective</a> ';
                         }else{
                             option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
                                 row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
-                                ' marked as defective)</span>';
+                                ' marked as defective)</span> ';
+                        }
+
+                        if( row.quantity > row.replacement.quantity ){
+                            option+= ' <a href="javascript:void(0);" data-max-replaceable="'+row.quantity+'" class="btn-xxs btn-primary btn btn-flat btn-replace-qty" data-product-id="'+row.product.id+'" data-id="'+row.id+'">Replace</a>';
+
+                        }else{
+                            option = ' <span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+
+                                ' returned, '+
+                                row.replacement.quantity+' '+str_auto_plural(row.product.packing, row.replacement.quantity)+
+                                ' replaced)</span>';
                         }
 
                         html+= '<li>'+
                                 '<div class="row" style="margin-right: 0px;">'+
-                                    '<div class="col-md-7">'+
+                                    '<div class="col-md-6">'+
                                         '<span class="handle">'+
                                             '<i class="fa fa-arrows"></i>'+
                                         '</span>'+
                                         '<span class="product-list-items" title="'+row.product.name+'">'+row.product.name+'</span>'+
                                     '</div>'+
-                                    '<div class="col-md-5">'+option+
+                                    '<div class="col-md-6">'+option+'</div>'+
                                 '</div>'+
                             '</li>';
                     });
@@ -1714,6 +1737,9 @@ $("#add_gallery").click(function (){
                 }else{
                     var max_removable = row.quantity - row.defective_quantity;
                     txtbox.attr("data-max", max_removable).val(max_removable);
+                    option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                qty+' '+str_auto_plural(row.product.packing, qty)+
+                                ' marked as defective)</span>';
                 }
             }else if(data.error){
                 alert = '<br/><span class="label label-danger">'+data.error+'</span>';
@@ -1723,31 +1749,126 @@ $("#add_gallery").click(function (){
                     $(this).remove();
                 });
             }
-            
-
         });
     });
 
-    $("#btn_sidebar_search_form").click(function (){
-        var url = $("#sidebar_search_form").attr("action"),
-            keyword = $("#sidebar_search_form").find('input[name="q"]').val();
-        window.location.href = url+'/q='+keyword;
+    $(document).on("click", ".btn-replace-qty", function (){
+        var $this = $(this),
+            product_id = $this.attr("data-product-id"),
+            product_stock_return_id = $this.attr("data-id"),
+            replaceable_qty = $this.attr("data-max-replaceable"),
+            product_name = "";
+
+        // get all lot numbers associated with the productID
+        $.ajax({
+            url: '/get-product-lotnumbers',
+            type: 'post',
+            data: { _token: $('input[name="_token"]').val(), product_id: product_id },
+            dataType: 'json'
+        }).done(function (data){
+            console.log(data);
+            if( !data.error && data.data.length > 0 ){
+                var product_name = data.data[0].product_name;
+                var parentRow = $this.parent("div").parent("div.row");
+
+                $this.fadeOut();
+
+                if( parentRow.next(".replacement-form").length < 1 ){
+                    // create a new element, we use $(document.createElement('element')) for fastest performance
+                    // refer here http://jsperf.com/jquery-vs-createelement to prove to yourself
+
+                    var options = [];
+                    var lotnumbers = [];
+
+                    $.each(data.data, function (i, row){
+                        options.push( 
+                            $(document.createElement("option")).val(row.id)
+                                .text(row.lot_number+"("+row.available_quantity+" available)")
+                                .attr("data-available-quantity", row.available_quantity) 
+                        );
+
+                        lotnumbers[row.id] = row.available_quantity;
+                    });
+
+                    var select = $(document.createElement('select')).attr("multiple", "multiple").attr("id", 's_'+product_stock_return_id+"_p_"+product_id)
+                                    .addClass("stock-return-replacement").attr("data-id", product_stock_return_id).append(options);               
+                    var newRow = $(document.createElement('span')).addClass("replacement-form").addClass("row");
+
+                    select.on("change", function (){
+                        // console.log($(this).val());
+                        if( $(this).val() != null ){
+                            $.each($(this).val(), function (i, row){
+                                console.log(row);
+                                // var max = select.children("option[value='"+row+"']").attr("data-max-replaceable");
+                                var max = lotnumbers[row];
+                                console.log("max: "+max);
+
+                                if( replaceable_qty <=  max){
+                                    // prevent selecting another option
+                                    var attr = select.attr('multiple');
+
+                                    if (typeof attr !== typeof undefined && attr !== false) {
+                                       
+                                        select.select2('destroy');                                      
+                                        select.removeAttr("multiple").select2();
+                                    }
+                                    console.log("yes");
+                                    
+                                }else{
+                                    console.log("no");
+
+                                    var attr = select.attr('multiple');
+
+                                    if (typeof attr !== typeof undefined && attr !== false) {
+                                        // do nothing
+                                    }else{                                        
+                                        select.select2('destroy');
+                                        select.attr("multiple", "multiple").select2();
+                                    }
+                                    
+                                }
+                            });
+                        }
+                    });
+                    
+                    var column1 = $(document.createElement('span')).addClass("col-md-10"),
+                        column2 = $(document.createElement('span')).addClass("col-md-2"),
+                        label = $(document.createElement("label")).text("Select Lot number for the replacement"),
+                        small = $(document.createElement("small")).text("Note: These lot numbers are exclusive for "+product_name+" only."),
+                        btn = $(document.createElement("button")).text("Submit").attr("data-target", '#s_'+product_stock_return_id+"_p_"+product_id)
+                                .addClass("btn btn-xxs btn-flat btn-success submit-replacement").attr("data-id", product_stock_return_id),
+                        btn_cancel =  $(document.createElement("button")).text("Cancel")
+                                .addClass("btn btn-xxs btn-flat btn-warning submit-replacement").attr("data-id", product_stock_return_id),
+                        hr = $(document.createElement("hr")),
+                        br = $(document.createElement("br"));
+
+                        btn_cancel.click(function (){
+                            parentRow.next(".replacement-form").fadeOut(function(){
+                                $this.fadeIn();
+                            });
+                        });
+
+                        btn.click(function (){
+                            var lot_num = select.val();
+                            $.ajax({
+                                url: '/replace-returned-product',
+                                type: 'post',
+                                dataType: 'json',
+                                data: { 'inventory_ids': lot_num, 'product_stock_return_id': product_stock_return_id, _token: $('input[name="_token"]').val() }
+                            }).done(function (data){
+                                console.log(data);
+                            });
+                        });
+
+                    column1.append(label,br,small,select);
+                    column2.append(btn, btn_cancel)
+                    newRow.append(column1, column2);
+                    parentRow.after(newRow,hr);
+                    select.select2();
+                }else{
+                    parentRow.next(".replacement-form").fadeIn();
+                }
+            }
+        });
     });
-
-    $("#sidebar_search_form").keypress(function(e) {
-        if(e.which == 13) {
-            var url = $("#sidebar_search_form").attr("action"),
-            keyword = $("#sidebar_search_form").find('input[name="q"]').val();
-            window.location.href = url+'/q='+keyword;
-        }
-    });
-
-
-
-   
-
-	
 });
-
-//   On Stock Returns tab, you can exchange the returned product there with a new the same product.
-//    if the product returned is marked as defective, this should not be added back to the inventory. 

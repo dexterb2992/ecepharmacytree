@@ -13,6 +13,7 @@ use ECEPharmacyTree\Province;
 use ECEPharmacyTree\Municipality;
 use ECEPharmacyTree\Barangay;
 use Response;
+use Carbon\Carbon;
 
 
 class PatientController extends Controller
@@ -37,6 +38,21 @@ class PatientController extends Controller
         // $this->sendGoogleCloudMessage($data, $to_token);
 
         return Response::json($response);
+    }
+
+    function getSeniorValidity(){
+        $response = array();
+        $input = Input::all();
+
+        $patient = Patient::findOrFail($input['patient_id']);
+        $age = Carbon::createFromFormat('Y-m-d', $patient->birthdate)->age;
+
+        $response['age'] = $age;
+        $response['isSenior'] = $patient->isSenior;
+        $response['senior_citizen_id_number'] = $patient->senior_citizen_id_number;
+        $response['senior_id_picture'] = $patient->senior_id_picture;
+
+        return json_encode($response);
     }
 
 

@@ -38,11 +38,19 @@ Route::controllers([
 	]);
 
 
+// Route::get('test_num', function(){
+// 	$value = 100;
+// 	return $value;
+// });
 Route::get('/', ['as' => 'dashboard', 'middleware' => 'auth', 'uses' => 'UserController@dashboard']);
+
+Route::get('getSeniorValidity', 'PatientController@getSeniorValidity');
 
 Route::get('home', function(){
 	return redirect('/');
 });
+
+Route::post('flush_user_basket_promos', 'BasketController@flush_user_basket_promos');
 
 Route::get('upload_sc_id', 'SeniorCitizenController@store');
 
@@ -95,7 +103,7 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'aut
 
 
 Route::get('products-json', ['as' => 'json', 'uses' => 'ProductController@get_json'] );
-Route::get('search/products/q={name}', ['as' => 'product_search', 'uses' => 'ProductController@search']);
+Route::get('search/products', ['as' => 'product_search', 'uses' => 'ProductController@search']);
 
 Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products::'], function (){
 	/**
@@ -320,6 +328,8 @@ Route::post('save_user_token', 'PatientController@save_user_token');
 
 Route::post('lot-numbers', 'InventoryController@get_lot_numbers');
 Route::get('lot-numbers', 'InventoryController@get_lot_numbers');
+Route::post('get-product-lotnumbers', 'InventoryController@get_product_lot_numbers');
+Route::post('replace-returned-product', 'StockReturnController@replace');
 
 Route::get('try', function (){
 	

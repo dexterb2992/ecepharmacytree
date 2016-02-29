@@ -97,7 +97,7 @@ class BranchController extends Controller
         $branch->mobile_numbers = $input['mobile_numbers'];
 
         if( $branch->save() )
-            session()->flash("flash_message", array("msg" => "New branch has been added successfully.", "type" => "success"));
+            session()->flash("flash_message", array("msg" => "New branch has been added successfully.", "type" => "info"));
         return Redirect::to( route('Branches::index') );
         
         session()->flash("flash_message", array("msg" => "An error occured while processing your request. Please try again later.", "type" => "danger"));
@@ -116,16 +116,6 @@ class BranchController extends Controller
         return $branch->toJson();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit()
-    {
-
-    }
 
     /**
      * Update the specified resource in storage.
@@ -144,8 +134,9 @@ class BranchController extends Controller
         
         // $branch->address_zip = $input["address_zip"];
         if( $branch->save() ) 
-            session()->flash("flash_message", array("msg" => "Branch information has been updated successfully.", "type" => "success"));
-        return Redirect::to( route('Branches::index') );
+            return Redirect::to( route('Branches::index') )->withFlash_message([
+                "msg" => "Branch information has been updated successfully.", "type" => "info"
+            ]);
         
         return Redirect::back()->withInput()->withErrors()
         ->withFlash_message([
@@ -180,9 +171,9 @@ class BranchController extends Controller
             $branch->status = $branch->status == 0 ? 1 : 0;
             if( $branch->save() ) 
                 if( $branch->status == 0 ){
-                    $flash_message = ["msg" => "Branch has been deactivated.", "type" => "warning"];
+                    $flash_message = ["msg" => "$branch->name Branch has been deactivated.", "type" => "warning"];
                 }else{
-                    $flash_message = ["msg" => "Branch has been activated.", "type" => "info"];
+                    $flash_message = ["msg" => "$branch->name Branch has been activated.", "type" => "info"];
 
                 }
                 

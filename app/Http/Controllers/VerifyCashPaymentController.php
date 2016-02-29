@@ -46,6 +46,7 @@ class VerifyCashPaymentController extends Controller
 		$status = $input['status'];
 		$coupon_discount  = $input['coupon_discount'];
 		$points_discount = $input['points_discount'];
+		$senior_discount = $input['senior_discount'];
 		$email = $input['email'];
 		$promo_id = $input['promo_id'];
 		$promo_type = $input['promo_type'];
@@ -151,7 +152,7 @@ class VerifyCashPaymentController extends Controller
 
 			if(count($results) == $counter) {
 				$gross_total = $undiscounted_total + $delivery_charge;
-				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount + $delivery_charge;
+				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount - $senior_discount + $delivery_charge;
 
 				$billing = new Billing;
 				$billing->order_id = $order_id;
@@ -161,6 +162,7 @@ class VerifyCashPaymentController extends Controller
 				$billing->payment_method = $payment_method;
 				$billing->points_discount = $points_discount;
 				$billing->coupon_discount = $coupon_discount;
+				$billing->senior_discount = $senior_discount;
 
 				if($billing->save()) {
 					$billing_id = $billing->id;

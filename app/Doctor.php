@@ -15,4 +15,8 @@ class Doctor extends Model
     	return $this->belongsTo('ECEPharmacyTree\SubSpecialty', 'sub_specialty_id');
     }
 
+    public function clinics(){
+    	return $this->belongsToMany('ECEPharmacyTree\Clinic');
+    }
+
 }

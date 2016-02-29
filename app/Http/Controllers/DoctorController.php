@@ -27,7 +27,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        $doctors = Doctor::all();
+        $doctors = Doctor::paginate(100);
         $specialties = Specialty::all();
         $subspecialties = SubSpecialty::all();
 

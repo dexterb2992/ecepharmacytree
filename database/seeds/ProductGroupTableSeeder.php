@@ -14,8 +14,8 @@ class ProductGroupTableSeeder extends Seeder
         ProductGroup::truncate();
 
 		$values = array(
-			array('id' => 1, "name" => "Group G"),
-			array('id' => 2, "name" => "Group B")
+			array('id' => 1, "name" => "Group G", "points" => 0.5),
+			array('id' => 2, "name" => "Group B", "points" => 1)
 		);
 		ProductGroup::insert($values);
     }

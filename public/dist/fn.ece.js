@@ -511,17 +511,22 @@ function checkLotNumber($this){
     });
 
     if( found === true ){
-        // $("#inventories_product_id").select2("destroy").children("option").removeAttr("selected").attr("disabled", "disabled");
-        // $("#inventories_product_id option[value='"+selectedRow.product_id+"']").attr("selected", "selected").removeAttr("disabled");
-        // $("#inventories_product_id").attr("readonly", "readonly").select2().trigger("change");
+        var prod = find_product_object_from_cache(selectedRow.product_id);
+
+        if( prod != false ){
+            $("#inventories_product_id").val(prod[0].id).attr('data-packing', prod[0].packing).attr('data-unit', prod[0].unit).attr('data-qty-per-packing', prod[0].qty_per_packing);
+
+        }
+
         $("#inventories_product_id").val(selectedRow.product_id);
         $("#inventories_product_id").prev("div.select2-container").find(".select2-chosen").html(selectedRow.product_name);
         $("#form_edit_inventory input[name='expiration_date']").val(selectedRow.expiration).attr("readonly", "readonly");
     }else{
         $("#form_edit_inventory input[name='expiration_date']").removeAttr("readonly").val("");
-        // $("#inventories_product_id").select2("destroy").children("option").removeAttr("selected").removeAttr("disabled");
-        // $("#inventories_product_id").removeAttr("readonly").select2().trigger("change");
     }
+
+
+    products_trigger_change( $("#inventories_product_id") );
 }
 
 window.lotnumbers_source = [];
@@ -574,24 +579,6 @@ function getLotNumbers(){
     });
 }
 
-var cache_products = function (){
-    $.ajax({
-        url: '/products-json',
-        type: 'get',
-        dataType: 'json',
-        assync: false
-    }).done(function (data){
-        localStorage.products = JSON.stringify(data);
-        window.products = data;
-        window.select2_all_products = [];
-        $.each(window.products, function (i, row){
-            window.select2_all_products.push({id: row.id, text: row.name});
-        });
-        localStorage.select2_all_products = JSON.stringify(window.select2_all_products);
-
-    });
-};
-
 var products_trigger_change = function($this){
     var result = window.products.filter(function(n){
         return n.id == $this.val();
@@ -606,7 +593,10 @@ var products_trigger_change = function($this){
         var packing = result[0].packing;
         $(document).find("#outer_packing").html(packing);
         $(document).find(".add-on-product-packing").html( str_plural(packing) );
+
     } else {
       // multiple items found
     }
+
+    updateInventoryProductQty();
 };

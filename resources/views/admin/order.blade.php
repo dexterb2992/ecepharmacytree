@@ -40,39 +40,29 @@
         <?php $gross_total += $order_detail->price * $order_detail->quantity; ?>
         @endforeach
 
+        <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Subtotal</td><td class="borderless">&#8369; {{ $order->billing()->first()->gross_total }}</td></tr>
+        @if($order->billing()->first()->senior_discount > 0)
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Senior Discount</td><td class="borderless">&#8369; {{ $order->billing()->first()->senior_discount }}</td></tr>
+        @endif
+        @if($order->billing()->first()->coupon_discount > 0)
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Coupon Discount</td><td class="borderless">&#8369; {{ $order->billing()->first()->coupon_discount }}</td></tr>
+        @endif
+        @if($order->billing()->first()->points_discount > 0)
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Points Discount</td><td class="borderless">&#8369; {{ $order->billing()->first()->points_discount }}</td></tr>
+        @endif
         @if($order->modeOfDelivery == 'delivery')
         @if($order->promo_type == 'free_delivery')
-        <tr><td>Delivery Charge</td><td></td><td>{{ 'Free' }}</td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Delivery Charge</td><td class="borderless"> {{ 'Free' }}</td></tr>
         @else
         <?php $order_total += $order->delivery_charge; ?>
         <?php $gross_total += $order->delivery_charge; ?>
-        <tr><td>Delivery Charge</td><td></td><td><b>&#8369; {{ $order->delivery_charge }}</b></td></tr>
+        <tr><td class="borderless"></td><td class="borderless type-subdued">Delivery Charge</td><td class="borderless">&#8369; {{ $order->delivery_charge }}</td></tr>
         @endif
         @endif
-
-        @if($order->billing()->first()->points_discount > 0)
-        <tr>
-          <td>Points Discount</td>
-          <td></td>
-          <?php $order_total -= $order->billing()->first()->points_discount; ?>
-          <td><b>&#8369; {{ $order->billing()->first()->points_discount }}</b></td>
-        </tr>
-        @endif
-
-        @if($order->billing()->first()->coupon_discount > 0)
-        <tr>
-          <td>Coupon Discount</td>
-          <td></td>
-          <?php $order_total -= $order->billing()->first()->coupon_discount; ?>
-          <td><b>&#8369; {{ $order->billing()->first()->coupon_discount }}</b></td>
-        </tr>
-        @endif
-
-        <tr><td class="borderless">&nbsp;</td class="borderless"><td class="borderless">&nbsp;</td><td class="borderless">&nbsp;</td></tr>
-        <tr><td class="borderless"></td><td class="borderless type-subdued">Subtotal</td><td class="borderless">&#8369; {{ $gross_total }}</td></tr>
         <!-- <tr><td class="borderless"></td><td class="borderless type-subdued">Vatable Sales (12%)</td><td class="borderless">&#8369; {{ $order_total - ($order_total * .12) }}</td></tr> -->
-        <tr><td class="borderless"></td><td class="borderless next-heading">Total</td><td class="borderless next-heading">&#8369; {{ $order_total }}</td></tr>
-        <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order_total }}</td></tr>
+        <tr><td class="borderless"></td><td class="borderless next-heading">Total</td><td class="borderless next-heading">&#8369; {{ $order->billing()->first()->total }}</td></tr>
+        <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order->billing()->first()->total}}</td></tr>
 
         @if($order->billing()->first()->payment_status == "paid")
         <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> Payment has been accepted.</h2></td><td></td><td></td></tr>

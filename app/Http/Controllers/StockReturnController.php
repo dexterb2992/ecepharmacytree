@@ -42,10 +42,19 @@ class StockReturnController extends Controller
         $stock_return->all_product_is_returned = $input['all_product_is_returned'];
         $stock_return->amount_refunded = $input['amount_refunded'];
 
+        // dd($stock_return);
+
         $order = Order::find($input["order_id"]);
         if( $order->billing->payment_status != 'paid' ){
             return Redirect::back()->withInput()->withFlash_message([
                 'msg' => "Sorry, but order #$order->id is not yet paid. You can't return an unpaid order.",
+                'type' => 'error'
+            ]);
+        }
+
+        if( count($order->lot_numbers) < 1 ){
+            return Redirect::back()->withInput()->withFlash_message([
+                'msg' => "Sorry, but it seems Order #$order->id has not fulfill any item from its details yet.",
                 'type' => 'error'
             ]);
         }
@@ -57,12 +66,6 @@ class StockReturnController extends Controller
 
         foreach ($order->lot_numbers as $lot_number) {
             $lot_number->load('inventory');
-            // if( $input['all_product_is_returned'] == 1 ){
-            //     $activity_log[] = "$lot_number->quantity ".str_auto_plural($lot_number->inventory->product->packing,$lot_number->quantity)
-            //         ." to<a href='".route('Inventory::index')."?q={$lot_number->inventory->lot_number}' 
-            //         target='_blank'>Lot# {$lot_number->inventory->lot_number} </a> ";
-
-            // }
         }
 
         $arr_lot_numbers = $order->lot_numbers->toArray();
@@ -75,8 +78,6 @@ class StockReturnController extends Controller
                     // $lesser_lot_number = $arr_lot_numbers[$x-1];
                     $arr_lot_numbers[$x] = $arr_lot_numbers[$x-1];
                     $arr_lot_numbers[$x-1] = $temp;
-                }else{
-                    // $lesser_lot_number = $arr_lot_numbers[$x];
                 }
             }
         }
@@ -111,10 +112,6 @@ class StockReturnController extends Controller
         // continue returning items to inventory
         if( isset($input["products_return_qtys"]) ){
             foreach($input['products_return_qtys'] as $key_product_id => $input_value){
-                // $sr_detail = new ProductStockReturn;
-                // $sr_detail->product_id = $key_product_id;
-                // $sr_detail->stock_return_id = $stock_return->id;
-                // $sr_detail->quantity = $input_value;
                 
                 $product = Product::findOrFail($key_product_id);
 
@@ -160,6 +157,8 @@ class StockReturnController extends Controller
                             $sr_detail->quantity = $input_value;
 
                             $sr_detail->inventory_id = $inventory->id;
+                            // set default value for replacement
+                            $sr_detail->replacement = json_encode( array("inventory_id" => 0, "quantity" => 0) );
 
                             $activity_log[] ="$input_value ".str_auto_plural($inventory->product->packing, $input_value)
                                         ." to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
@@ -170,13 +169,6 @@ class StockReturnController extends Controller
                         //  proceed
                         $order_detail->save();
                         $inventory->save();
-
-                        /*// save the inventory ID
-                        $sr_detail->inventory_id = $inventory->id;
-
-                        $activity_log[] ="$input_value ".str_auto_plural($inventory->product->packing, $input_value)
-                                    ." to <a href='".route('Inventory::index')."?q=$inventory->lot_number' 
-                                    target='_blank'>Lot# $inventory->lot_number </a> ";*/
 
                     }
                 }
@@ -221,7 +213,7 @@ class StockReturnController extends Controller
             ]);
 
             return redirect('inventory/all')->withFlash_message([
-                'type' => 'success', 'msg' => 'A stock has been successfully returned.'
+                'type' => 'info', 'msg' => 'A stock has been successfully returned.'
             ]);
         }
 
@@ -246,6 +238,7 @@ class StockReturnController extends Controller
         $products_returned = $stock_return->product_stock_returns;
         foreach ($products_returned as $pr) {
             $pr->load('product');
+            $pr->replacement = json_decode( $pr->replacement );
         }
         return $products_returned;
     }
@@ -284,4 +277,61 @@ class StockReturnController extends Controller
         return json_encode(["status" => 500, "error" => "Sorry. we can't process your request right now."]);
     }
 
+
+    public function replace(){
+        $input = Input::all();
+        $ProductStockReturn = ProductStockReturn::find($input['product_stock_return_id']);
+
+        $max_replaceable = $ProductStockReturn->quantity;
+
+        $inventories = [];
+        $remaining_replaceable = $max_replaceable;
+
+        if( is_array($input["inventory_ids"]) ){
+            foreach ($input["inventory_ids"] as $key => $value) {
+                $inventory = Inventory::find($value);
+                $inventories[] = $inventory;
+            }
+            // dd($inventories);
+            usort($inventories, "cmp_available_quantity"); // this will sort the array to ascending
+            // dd($inventories);
+        }
+
+        foreach ($inventories as $inventory) {
+            // $qty = $inventory
+            $qty_replaced = 0;
+            if( $remaining_replaceable > 0 ){
+                if( $inventory->available_quantity <= $max_replaceable ){
+                    $remaining_replaceable-= $inventory->available_quantity;
+                    $qty_replaced = $inventory->available_quantity;
+
+                    $inventory->available_quantity = 0;
+
+                }else{
+                    $inventory->available_quantity = $inventory->available_quantity - $remaining_replaceable;
+                    $qty_replaced = $remaining_replaceable;
+                }
+
+                if( $inventory->save() ){
+                    $log = "Replaced $qty_replaced "
+                            .str_auto_plural($ProductStockReturn->product->packing, $qty_replaced)
+                            ." of {$ProductStockReturn->product->name} from <a href='".route('Inventory::index')."?q=$inventory->lot_number'>
+                                Lot# $inventory->lot_number </a> 
+                            Reference <a href='".route('orders')."?q=#{$ProductStockReturn->stock_return->order->id}'>
+                                Order# {$ProductStockReturn->stock_return->order->id}
+                            </a>";
+                            
+
+                    Log::create([
+                        'user_id' => Auth::user()->id,
+                        'action'  => $log,
+                        'table' => 'inventories',
+                        'branch_id' => session()->get('selected_branch')
+                    ]);
+                }
+            }
+            
+        }
+        
+    }
 }

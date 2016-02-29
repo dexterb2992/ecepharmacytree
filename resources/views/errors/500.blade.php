@@ -9,11 +9,11 @@
         We will work on fixing that right away.
         Meanwhile, you may <a href="{{url('/')}}">return to dashboard</a> or try using the search form.
       </p>
-      <form class="search-form">
+      <form class="search-form" action="{{ route('product_search') }}">
         <div class="input-group">
-          <input type="text" name="search" class="form-control" placeholder="Search" />
+          <input type="text" name="q" class="form-control" placeholder="Search for products" />
           <div class="input-group-btn">
-            <button type="submit" name="submit" class="btn btn-danger btn-flat"><i class="fa fa-search"></i></button>
+            <button type="submit" name="submit" class="btn btn-warning btn-flat"><i class="fa fa-search"></i></button>
           </div>
         </div><!-- /.input-group -->
       </form>

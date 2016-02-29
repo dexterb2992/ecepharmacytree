@@ -26,7 +26,7 @@ class ClinicController extends Controller
      */
     public function index()
     {
-        $clinics = Clinic::all();
+        $clinics = Clinic::paginate(100);
         $regions = Region::all();
         return view('admin.clinics')->withClinics($clinics)
             ->withRegions($regions);
