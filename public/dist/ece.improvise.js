@@ -23,7 +23,11 @@ var cache_products = function (callback){
 
 var cache_list_of_products = function (){
 	// for caching list of products to improve performance
-	if( typeof(localStorage.products) ===  'undefined' && typeof(localStorage.select2_all_products) === 'undefined'){
+    if( typeof(localStorage.select2_all_products) === 'undefined' ){
+        cache_products();
+    }
+
+	if( typeof(localStorage.products) ===  'undefined' || (typeof(localStorage.select2_all_products) === 'undefined' ) ){
 		cache_products();
 	}else{
 		window.products = JSON.parse(localStorage.products);

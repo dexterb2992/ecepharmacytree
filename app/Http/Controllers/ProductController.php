@@ -27,7 +27,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::whereRaw("deleted_at is null")->paginate(100);
+        $a = Input::get('startfrom');
+        $startfrom = isset($a) ? $a : '';
+        $products = Product::whereRaw("deleted_at is null")
+            ->where('name', 'like', "$startfrom%")
+            ->paginate(100);
+
+        $products->setPath(route('Products::index'));
 
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();
@@ -36,9 +42,13 @@ class ProductController extends Controller
             $category_names[$category->id] = $category->name;
         }
 
-        return view('admin.products')->withProducts($products)
-            ->withCategories($categories)->withSubcategories($subcategories)
-            ->withCategory_names($category_names)->withTitle('Products');
+        return view('admin.products')
+            ->withProducts($products)
+            ->withCategories($categories)
+            ->withSubcategories($subcategories)
+            ->withCategory_names($category_names)
+            ->withStartfrom($startfrom)
+            ->withTitle('Products');
     }
 
     public function search(){

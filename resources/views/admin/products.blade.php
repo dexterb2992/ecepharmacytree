@@ -33,11 +33,11 @@
                         <div class="box-body">
                             @if( Route::is('Products::all') )
                                 <small class="">
-                                    <a href="{{ route('Products::index') }}">Hide Deleted Products</a>
+                                    <!-- <a href="{{ route('Products::index') }}">Hide Deleted Products</a> -->
                                 </small>
                             @else
                                 <small class="">
-                                    <a href="{{ route('Products::all') }}">Show Deleted Products</a>
+                                    <!-- <a href="{{ route('Products::all') }}">Show Deleted Products</a> -->
                                 </small>
                             @endif
                             
@@ -87,10 +87,10 @@
                                             <td>
                                                 <div class="btn-group pull-right">
                                                     @if(is_null($product->deleted_at))
-                                                        <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
+                                                        <!-- <span class="btn btn-danger btn-xs action-icon remove-product" data-action="remove" data-title="product" 
                                                         data-urlmain="/products/" data-id="{{ $product->id }}" data-toggle="tooltip" data-original-title="Remove">
                                                             <i class="fa fa-trash-o"></i>
-                                                        </span>
+                                                        </span> -->
 
                                                         <span class="btn btn-warning btn-xs add-edit-btn" data-action="edit"
                                                          data-modal-target="#modal-add-edit-product" data-title="product info" data-target="#form_edit_product" 
@@ -110,8 +110,20 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {!! render_pagination($products, array('startfrom' => $startfrom)) !!}
+
+                            <div class="row align-center">
+                                <div class="col-md-12">
+                                    <ul class="pagination">
+                                        @foreach(range('A', 'Z') as $i)
+                                            <li class="{!! $startfrom == $i ? 'active' : '' !!}">
+                                                <a href="/products?startfrom={{ $i }}">{{ $i }}</a>
+                                            </li>
+                                        @endforeach        
+                                    </ul>
+                                </div>
+                            </div>
                             
-                            {!! render_pagination($products) !!}
 
                             @if( isset($source) )
                             <a href="{{ url(route('Products::index')) }}">Go back</a>
@@ -319,7 +331,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa-tag fa"></i>
                                     </div>
-                                    <input type="text" class="form-control" name="sku" minlength="6" required/>
+                                    <input type="text" class="form-control" name="sku" data-form-id="form_edit_product" minlength="6" required/>
                                     <div class="input-group-btn">
                                         <span class="btn btn-default btn-flat btn-gensku">
                                             <i class="fa-random fa"></i> Generate SKU
