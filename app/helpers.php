@@ -74,7 +74,7 @@ function generate_referral_id() {
 
 function generate_lot_number() {
 	$inventory = ECEPharmacyTree\Inventory::orderBy('lot_number', 'desc')
-		->withTrashed()->first();
+	->withTrashed()->first();
 
 	if (!isset($inventory->lot_number)) {
 		$new_lot_number = 1000;
@@ -82,9 +82,9 @@ function generate_lot_number() {
 		$new_lot_number = $inventory->lot_number == 0 ? $inventory->lot_number + 1001 : $inventory->lot_number + 1;
 	}
 
-	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)
-		->withTrashed()->first();
-	if ( $check === null )
+	$check = ECEPharmacyTree\Inventory::where('lot_number', '=', $new_lot_number)->withTrashed()->first();
+	if( $check === null )
+
 		return $new_lot_number;
 
 	generate_lot_number();
@@ -114,6 +114,7 @@ function get_person_fullname($person, $reversed = false) {
 	$mname = !empty($person->mname) && strlen($person->mname) > 1 ? substr(ucfirst($person->mname), 0, 1).". " : ' ';
 	$fname = !empty($person->fname) ? ucfirst($person->fname)." " : '';
 	$lname = !empty($person->lname) ? ucfirst($person->lname) : '';
+
     if ( $reversed )
         return $lname.", ".$fname.$mname;
     return $fname."".$mname." ".$lname;
@@ -319,7 +320,6 @@ function decode_utf8($arrays = array()) {
 
 
 function combine_additional_address(array $addresses) {
-
     foreach ($addresses as $key => $value) {
     	if ( trim($value) == "" ) {
     		unset($addresses[$key]);
@@ -382,6 +382,33 @@ function extract_downlines($downlines = array()) {
 	return $res;
 }
 
+function simple_downlines($referral_id, $fucking_array = array(), $counter = 1) //1
+{
+	$wtf_array = $fucking_array;
+	$referral_id = trim($referral_id);
+	$patients = ECEPharmacyTree\Patient::where('referred_byUser', '=', $referral_id)->get();
+	
+	if(count($patients) > 1) 
+		$counter = $counter;
+	else 
+		$counter += 1;
+	
+	foreach($patients as $patient) {
+
+		if(count($wtf_array) == 0)
+			$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => 1);
+		else 
+			$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $counter);
+
+		array_push($wtf_array, $json);
+
+		$json_arr = simple_downlines($patient['referral_id'], $wtf_array, $counter); //cnb801
+		$wtf_array = $json_arr;
+	}
+
+	return $wtf_array;
+}
+
 global $x, $uplines;
 $x = 0;
 $uplines = array();
@@ -425,7 +452,7 @@ function get_uplines($referral_id, $is_one = false, $generate_clickable_html = f
 				$prefix = isset($uplines[0]->sub_specialty_id) ? "<i class='fa fa-user-md'></i>" : '';
 				$id_prefix = isset($uplines[0]->sub_specialty_id) ? "d" : 'p';
 				$html = "<a href='javascript:void(0);' data-id='$id_prefix{$uplines[0]->id}' class='show-downlines'>$prefix "
-					.get_person_fullname($uplines[0]).
+				.get_person_fullname($uplines[0]).
 				"</a>";
 				return $html;
 				

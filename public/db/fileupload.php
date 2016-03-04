@@ -3,6 +3,7 @@ header("Access-Control-Allow-Origin: *");
 require_once __DIR__ . '/db_connect.php';
 
 $db = new DB_CONNECT();
+$conn = $db->connect();
 
 // // Path to move uploaded files
 // if( isset($_POST) ){
@@ -77,9 +78,9 @@ if (isset($_FILES['image']['name'])) {
 
 		if($purpose == "profile_upload_update") {
 
-			$patient_data = mysql_query("SELECT * FROM patients WHERE id =".$id) or returnError(mysql_error());
-			if(mysql_num_rows($patient_data) > 0) {
-				while ($row = mysql_fetch_assoc($patient_data)) {
+			$patient_data = mysqli_query($conn, "SELECT * FROM patients WHERE id =".$id) or returnError(mysqli_error($conn));
+			if($patient_data->num_rows > 0) {
+				while ($row = mysqli_fetch_assoc($conn, $patient_data)) {
 					if($row['photo'] != "") {
 						if(unlink(getcwd().'/uploads/user_'.$id.'/'.$row['photo'])){
 							$response['deletedoldpicture'] = "deleted old";
@@ -91,7 +92,7 @@ if (isset($_FILES['image']['name'])) {
 			}
 
 			$sql = "UPDATE patients SET photo = '".$filename."', updated_at = '".$datenow."' WHERE id = ".$id;
-			if( mysql_query($sql) ){
+			if( mysqli_query($conn, $sql) ){
 				$response['message'] = 'File uploaded successfully!';
 				$response['error'] = false;
 				$response['file_path'] = $file_upload_url . $filename;
@@ -111,7 +112,7 @@ if (isset($_FILES['image']['name'])) {
 			$response['file_name'] = $filename;
 		} else if($purpose == "senior_citizen_upload") {
 				$sql = "UPDATE patients SET isSenior = 1, senior_citizen_id_number = '".$_POST['senior_citizen_id_number']."', senior_id_picture='".$filename."' where id = ".$_POST['patient_id'];
-			if(mysql_query($sql)){
+			if(mysqli_query($conn, $sql)){
 				$response['message'] = 'File uploaded successfully!';
 				$response['error'] = false;
 				$response['file_path'] = $file_upload_url . $filename;
@@ -125,12 +126,12 @@ if (isset($_FILES['image']['name'])) {
 		} else {
         // File successfully uploaded
 			$sql = "INSERT INTO patient_prescriptions (patient_id, filename) VALUES('$id', '$filename')";
-			if( mysql_query($sql) ){
+			if( mysqli_query($conn, $sql) ){
 				$response['message'] = 'File uploaded successfully!';
 				$response['error'] = false;
 				$response['file_path'] = $file_upload_url . $filename;
 				$response['file_url'] = $file_upload_url;
-				$response['server_id'] = mysql_insert_id();
+				$response['server_id'] = mysqli_insert_id($conn);
 				$response['file_name'] = $filename;
 			}else{
 				$response['error'] = true;
