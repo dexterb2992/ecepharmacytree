@@ -240,3 +240,8 @@ function getArrayIndexForKey(arr, key, val){
     }
     return -1;
 }
+
+// add a javascript equivalent of php 'ucfirst' function 
+String.prototype.ucfirst = function(){
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}

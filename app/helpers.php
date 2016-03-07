@@ -537,3 +537,10 @@ function _get_flash_message($type = "success", $request = "", $message = ""){
 function generate_product_link($product_name){
 	return link_to_route('product_search', $product_name, ['q' => $product_name], ['target' => '_blank']);
 }
+
+function str_excape($subject){
+	$search = array("\\", "\x00", "\n", "\r", "'", '"', "\x1a");
+	$replace = array("\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z");
+
+	return str_replace($search, $replace, $subject);
+}

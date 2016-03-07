@@ -14,7 +14,7 @@
           @foreach($order_details as $order_detail)
           <?php $product_total = $order_detail->price * $order_detail->quantity; ?>
           <tr>
-            <td>{{ $order_detail->pname }}</td>
+            <td>{!! generate_product_link($order_detail->pname) !!}</td>
             <td>&#8369; {{ $order_detail->price.' x '.$order_detail->quantity }}</td>
             <td>
               @if($order_detail->promo_id > 0)
@@ -65,17 +65,17 @@
         <tr><td class="borderless"></td><td class="great_border type-subdued">Paid by customer</td><td class="great_border">&#8369; {{ $order->billing()->first()->total}}</td></tr>
 
         @if($order->billing()->first()->payment_status == "paid")
-        <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> Payment has been accepted.</h2></td><td></td><td></td></tr>
+        <tr><td><h2 class="next-heading text-green"><i class="fa fa-check">&nbsp;</i> Payment has been accepted.</h2></td><td></td><td></td></tr>
         @else
-        <tr><td><h2 class="next-heading"><span class="fa fa-thumbs-o-up">&nbsp;</span>Accept Payment</h2></td><td></td><td>
+        <tr><td><h2 class="next-heading text-blue"><span class="fa fa-thumbs-o-up">&nbsp;</span>Accept Payment</h2></td><td></td><td>
           <button class="btn btn-primary margin-top-10 no-margin-left add-edit-btn" data-action="mark_as_paid" data-modal-target="#modal-mark-payment" data-action="fulfill_items">Mark as paid</button></td></tr>
           @endif
           @if(check_if_not_fulfilled($order))
-          <tr><td><h2 class="next-heading"><span class="fa fa-truck">&nbsp;</span>Fulfill items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
+          <tr><td><h2 class="next-heading text-red"><span class="fa fa-truck">&nbsp;</span>Fulfill items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
           @elseif(check_if_partially_fulfilled($order))
-          <tr><td><h2 class="next-heading"><span class="fa fa-truck">&nbsp;</span>Fulfill remaining items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
+          <tr><td><h2 class="next-heading text-red"><span class="fa fa-truck">&nbsp;</span>Fulfill remaining items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
           @else
-          <tr><td><h2 class="next-heading"><i class="fa fa-check">&nbsp;</i> All items have been fulfilled.</h2></td><td></td><td></td></tr>
+          <tr><td><h2 class="next-heading text-orange"><i class="fa fa-check">&nbsp;</i> All items have been fulfilled.</h2></td><td></td><td></td></tr>
           @endif
 
         </table>

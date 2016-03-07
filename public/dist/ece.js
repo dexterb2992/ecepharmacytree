@@ -169,8 +169,8 @@ $(document).ready(function (){
 
         form.show(); // make sure form is not hidden
         $('.modal-backdrop').remove();
-        if( action == "edit" ){
-            title = "Edit "+dataTitle;
+        if( action == "edit" || action == "view"){
+            title = action.ucfirst()+" "+dataTitle;
             url = $this.data("url");
             $.ajax({
                 url : mainurl+id,
@@ -1907,7 +1907,11 @@ $("#add_gallery").click(function (){
                                     url: '/replace-returned-product',
                                     type: 'post',
                                     dataType: 'json',
-                                    data: { 'inventory_ids': lot_num, 'product_stock_return_id': product_stock_return_id, _token: $('input[name="_token"]').val() }
+                                    data: { 
+                                        'inventory_ids': lot_num, 
+                                        'product_stock_return_id': product_stock_return_id, 
+                                        _token: $('input[name="_token"]').val() 
+                                    }
                                 }).done(function (data){
                                     console.log(data);
                                     if( !data.error && data.status == 200 ){
@@ -1916,9 +1920,11 @@ $("#add_gallery").click(function (){
                                         if( data.max_replaceable == data.replaceable_qty ){
                                             $this.fadeOut().prev("input").fadeOut().replaceWith('<span>'+data.msg_status+'</span>');
                                         }else{
-                                            $this.fadeOut().prev("input").next('span').replaceWith('<span>'+data.msg_status+'</span>');
+                                            $this.prev("input").next('span').replaceWith('<span>'+data.msg_status+'</span>');
+                                            $this.removeClass('disabled').removeAttr("disabled");
                                         }
-                                        $this.fadeOut().prev("input").attr("data-max", data.max_replaceable).val(data.max_replaceable);
+
+                                        $this.prev("input").attr("data-max", data.max_replaceable).val(data.max_replaceable);
 
                                     }else{
                                         alert("Sorry, something went wrong. Please refresh the page and try again. If problem persists, please contact your programmer.");

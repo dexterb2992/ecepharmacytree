@@ -54,7 +54,9 @@ class ProductController extends Controller
         $startfrom = Input::has('startfrom') ? Input::get('startfrom') : '';
         $input = Input::all();
         $keyword = isset($input['q']) ? $input['q'] : '';
-        $products = Product::whereRaw("name like '%$keyword%'")->paginate(100);
+        //dd(DB::connection());
+        // dd($input);
+        $products = Product::whereRaw("name like '%".str_excape($keyword)."%'")->paginate(100);
 
         $categories = ProductCategory::orderBy('name')->get();
         $subcategories = ProductSubcategory::orderBy('name')->get();

@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($members as $member)
+                        @foreach($members->items() as $member)
                         <tr data-id="{{ $member->id }}" class="{!! $member->deleted_at != null ? 'warning' : '' !!}">
                             <td>
                                 <span>{{ ucfirst($member->fname) }}</span>
@@ -38,7 +38,7 @@
                             <td>{!! ($member->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">
-                                   <a href="javascript:void(0);" data-toggle="tooltip" data-original-title="View" class="add-edit-btn btn btn-primary btn-xs" data-action="edit" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $member->id }}" title="">
+                                   <a href="javascript:void(0);" data-toggle="tooltip" data-original-title="View" class="add-edit-btn btn btn-primary btn-xs" data-action="view" data-modal-target="#modal-view-member" data-title="Member Info" data-target="#form_view_member" data-id="{{ $member->id }}" title="">
                                     <i class="fa fa-eye"></i>
                                     </a>
                                     @if($member->deleted_at != null )
@@ -56,6 +56,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {!! render_pagination($members) !!}
             </div><!-- /.box-body -->
         </div><!-- /.box -->
 
@@ -160,7 +161,7 @@
 
                                 <div class="form-group">
                                     <label for="address_street">Full Address</label>
-                                    <input type="text" class="form-control whitenbg" id="full_address" placeholder="Street" name="full_address"  readonly="">
+                                    <textarea class="form-control whitenbg" id="full_address" placeholder="Street" name="full_address"  readonly=""></textarea>
                                 </div>
                                 <!-- <div class="form-group">
                                     <label for="address_barangay">Barangay<i>*</i></label>
@@ -186,6 +187,9 @@
                         </div>
                     </div>
                 </form><!-- /form --> 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" aria-label="Close">Close</button>
+                </div>
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
