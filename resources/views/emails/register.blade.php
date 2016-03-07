@@ -67,9 +67,14 @@
 								    user-select: none;
 								    background-image: none;
 								    border: 1px solid transparent;
-								    border-radius: 4px;
+								    border-radius: 0;
+								    -webkit-box-shadow: none;
+								    -moz-box-shadow: none;
+								    box-shadow: none;
+								    border-width: 1px;
 								    color: #fff;
-								    text-decoration: none;" href="{{ url('profile') }}">Login now</a>
+								    text-decoration: none;" href="{{ url('profile') }}"
+								    onmouseover="this.style.backgroundColor='#008d4c'" onmouseout="this.style.backgroundColor='#449d44'">Login now</a>
 							</div>
 							<br/>
 							<b style="font-size: 13px;color: black;">Note: It is strictly recommended that you change your password after your first login.</b>

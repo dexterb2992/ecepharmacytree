@@ -110,7 +110,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            {!! render_pagination($products, array('startfrom' => $startfrom)) !!}
+                            {!! render_pagination($products, ['startfrom' => $startfrom]) !!}
 
                             <div class="row align-center">
                                 <div class="col-md-12">
@@ -388,7 +388,7 @@
                                 <label for="per_transaction_has_free_gifts">
                                     <input type="checkbox" name="is_freebie" id="is_freebie" value="0" 
                                     data-check-value="1" data-uncheck-value="0" class="form-control icheck" />
-                                    Is Freebie? <i>(If checked, this product won't show on the customer's product products)</i>
+                                    Is Freebie? <i>(If checked, this product won't show on the customer's product listing)</i>
                                 </label>
                             </div>
                         <div class="modal-footer">

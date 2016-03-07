@@ -27,8 +27,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $a = Input::get('startfrom');
-        $startfrom = isset($a) ? $a : '';
+        $startfrom = Input::has('startfrom') ? Input::get('startfrom') : '';
         $products = Product::whereRaw("deleted_at is null")
             ->where('name', 'like', "$startfrom%")
             ->paginate(100);
@@ -52,6 +51,7 @@ class ProductController extends Controller
     }
 
     public function search(){
+        $startfrom = Input::has('startfrom') ? Input::get('startfrom') : '';
         $input = Input::all();
         $keyword = isset($input['q']) ? $input['q'] : '';
         $products = Product::whereRaw("name like '%$keyword%'")->paginate(100);
@@ -63,9 +63,14 @@ class ProductController extends Controller
             $category_names[$category->id] = $category->name;
         }
 
-        return view('admin.products')->withProducts($products)
-            ->withCategories($categories)->withSubcategories($subcategories)
-            ->withCategory_names($category_names)->withTitle('Products')->withSource("search");
+        return view('admin.products')
+        ->withProducts($products)
+            ->withCategories($categories)
+            ->withSubcategories($subcategories)
+            ->withCategory_names($category_names)
+            ->withStartfrom($startfrom)
+            ->withTitle('Products')
+            ->withSource("search");
     }
 
     public function get_json(){

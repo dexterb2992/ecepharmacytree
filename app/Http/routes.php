@@ -317,7 +317,7 @@ Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 Route::post('stock-return-codes/all', 'StockReturnController@stock_return_codes');
 Route::post('stock-return', 'StockReturnController@store');
 Route::post('get-stock-returns/{id}', 'StockReturnController@show_all_returned_products');
-Route::post('update-defective-stocks', 'StockReturnController@udate_defective_stocks');
+Route::post('update-defective-stocks', 'StockReturnController@update_defective_stocks');
 
 Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
 
@@ -342,5 +342,5 @@ Route::post('get-product-lotnumbers', 'InventoryController@get_product_lot_numbe
 Route::post('replace-returned-product', 'StockReturnController@replace');
 
 Route::get('try', function (){
-	
+	echo(link_to("orders/1", "Order 1", ["target" => '_blank']));	
 });

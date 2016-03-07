@@ -496,7 +496,7 @@ function get_earner_from_referral_points_logs(ReferralCommissionActivityLog $log
 function render_pagination($pagination, $extra_params = null) {
 	$html = '<hr/>';
     if ( $pagination->total() > 0 && $pagination->total() > 100 ) {
-    	$rendered = $extra_params != null ? $pagination->appends($extra_params)->render() : '';
+    	$rendered = $pagination->appends($extra_params)->render();
     	$html.= '
 	    	<div class="row align-center">
 		        <div class="col-md-4">

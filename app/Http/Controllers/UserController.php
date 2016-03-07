@@ -97,7 +97,7 @@ class UserController extends Controller
 
             return redirect(route('employees'))->withFlash_message([
                 'msg' => 'An email has been sent to '.$email.'. Please tell this person to check his/her email.',
-                'type' => 'success'
+                'type' => 'info'
             ]);
         } catch (\Exception $e) {
            
