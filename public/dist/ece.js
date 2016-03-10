@@ -1868,7 +1868,7 @@ $("#add_gallery").click(function (){
                                         
                                         var html_output = '<span class="msg-status">'+data.msg_status+'</span>';
 
-                                        if( data.returned_qty == data.replaceable_qty ){
+                                        if( data.max_replaceable == 0 ){
                                             /*if( $this.prev("input").next('span').length ){
                                                 $this.prev("input").next('span').replaceWith(html_output);
                                                 $this.fadeOut();
