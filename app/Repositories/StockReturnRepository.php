@@ -37,6 +37,9 @@ class StockReturnRepository {
         // get total replacement
         $total_replacements = 0;
         $old_replacements = json_decode($ProductStockReturn->replacement);
+
+        dd($old_replacements);
+
         if( is_object($old_replacements) ){
             $old_replacements = array_values(get_object_vars($old_replacements));
         }
