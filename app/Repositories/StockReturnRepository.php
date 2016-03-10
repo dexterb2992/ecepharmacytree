@@ -117,17 +117,17 @@ class StockReturnRepository {
         // filter for duplicates
         foreach ($old_replacements as $i => $o) {
             $_old_r = 0;
-            if( is_array($o) ){
+            if( is_object($o) ){
                 $_old_r = $o->inventory_id;
-            }else if( is_object($o) ){
+            }else if( is_array($o) ){
                 $_old_r = $o['inventory_id'];
             }
 
             foreach ($replacements as $j => $r) {
                 $__r = 0;
-                if( is_array($r) ){
+                if( is_object($r) ){
                     $__r = $r->inventory_id;
-                }else if( is_object($o) ){
+                }else if( is_array($o) ){
                     $__r = $r['inventory_id'];
                 }
                 if( $_old_r == $__r ){
