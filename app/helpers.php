@@ -160,9 +160,10 @@ function check_if_partially_fulfilled($order) {
 
 function check_stock_availability($product) {
 	$settings = ECEPharmacyTree\Setting::first();
-	$critical_stock = isset($product->critical_stock) ? $product->critical_stock : 5;
+	$critical_stock = isset($product->critical_stock)  && !is_null($product->critical_stock)? $product->critical_stock : 5;
 
-	$total_available_stock = ECEPharmacyTree\Inventory::where('product_id', $product->id)->sum('available_quantity')	;
+	$total_available_stock = ECEPharmacyTree\Inventory::where('product_id', $product->id)->sum('available_quantity');
+	// dd("pID: $product->id :total_available_stock: $total_available_stock");
 	if ( $total_available_stock < 1 ):
 		return 'out_of_stock';
 	elseif ( $total_available_stock <= $critical_stock ):

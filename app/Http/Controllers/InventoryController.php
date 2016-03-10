@@ -229,7 +229,8 @@ class InventoryController extends Controller
                     and products.deleted_at is null and products.id='$product_id' and inventories.available_quantity > 0")
                 ->select('products.name as product_name', 'inventories.id', 'inventories.product_id', 
                     'inventories.lot_number', 'inventories.expiration_date', 'inventories.available_quantity')->get();
-
+            if( count($lot_numbers) < 1)
+                return json_encode( array("status" => 404, "data" => [], "msg" => "Sorry, but you currently don't have any available stock for this product.") );
             return json_encode( array("status" => 200, "data" => $lot_numbers) );
         }
 

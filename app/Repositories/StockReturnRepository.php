@@ -168,6 +168,29 @@ class StockReturnRepository {
                     'table' => 'inventories',
                     'branch_id' => session()->get('selected_branch')
                 ]);
+
+                $total_replacements = 0;
+                foreach (json_decode($psr->replacement) as $key => $replacement) {
+                    $increment = 0;
+                    if( is_object($replacement) ) 
+                        $increment = $replacement->quantity;
+                    else if( is_array($replacement) ) 
+                        $increment = $replacement['quantity'];
+                    $total_replacements+= $increment;
+                }
+                
+                $max_replaceable = $psr->quantity - $total_replacements;
+                $p_packing = $inventory->product->packing;
+                $msg_status = "($psr->quantity "
+                    .str_auto_plural($p_packing, $psr->quantity)
+                    ." returned, $total_replacements "
+                    .str_auto_plural($p_packing, $total_replacements)." replaced, $psr->defective_quantity "
+                    .str_auto_plural($p_packing, $psr->defective_quantity)." marked as defective)";
+
+                $psr->msg_status = $msg_status;
+                $psr->max_replaceable = $max_replaceable;
+                $psr->max_removable = $psr->quantity - $psr->defective_quantity;
+
                 return json_encode( ['status' => 200, 'msg' => "Success", "data" => $psr] );
             }
             
@@ -185,7 +208,29 @@ class StockReturnRepository {
         $products_returned = $stock_return->product_stock_returns;
         foreach ($products_returned as $pr) {
             $pr->load('product');
-            $pr->replacement = json_decode( $pr->replacement );
+            $pr->replacement = array_values(json_decode( $pr->replacement ));
+
+            $inventory = Inventory::find($pr->inventory->id);
+            $p_packing = $inventory->product->packing;
+
+            $total_replacements = 0;
+            foreach ($pr->replacement as $key => $replacement) {
+                $increment = 0;
+                if( is_object($replacement) ) 
+                    $increment = $replacement->quantity;
+                else if( is_array($replacement) ) 
+                    $increment = $replacement['quantity'];
+                $total_replacements+= $increment;
+            }
+            $msg_status = "($pr->quantity "
+                .str_auto_plural($p_packing, $pr->quantity)
+                ." returned, $total_replacements "
+                .str_auto_plural($p_packing, $total_replacements)." replaced, $pr->defective_quantity "
+                .str_auto_plural($p_packing, $pr->defective_quantity)." marked as defective)";
+
+            $pr->total_replacement = $total_replacements;
+            $pr->msg_status = $msg_status;
+            $pr->max_replaceable = $pr->quantity - $total_replacements;
         }
         return $products_returned;
     }

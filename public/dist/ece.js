@@ -1675,19 +1675,20 @@ $("#add_gallery").click(function (){
                                     '<a href="javascript:void(0);" class="btn-xxs btn-danger btn btn-flat btn-defective-qty" data-id="'+row.id+'">Mark as defective</a> ';
                         }
                             
-                        if( row.defective_quantity > 0 ){
+                        /*if( row.defective_quantity > 0 ){
                             status += '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
                                 row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
                                 ' marked as defective)</span> ';
-                        }
+                        }*/
                         
 
-                        var total_replacement = 0;
-                        $.each(row.replacement, function (c, r){
-                            total_replacement+= r.quantity;
-                        });
+                        var total_replacement = row.total_replacement;
+                        // $.each(row.replacement, function (c, r){
+                        //     total_replacement+= r.quantity;
+                        // });
 
-                        var max_replaceable = row.quantity - total_replacement;
+                        // var max_replaceable = row.quantity - total_replacement;
+                        var max_replaceable = row.max_replaceable;
 
                         if( row.quantity > total_replacement || total_replacement == 0 ){
                             option+= '<br/><input type="text" class="number returned-item-qty" readonly value="'+max_replaceable+'" data-max="'+max_replaceable+'" data-min="1" placeholder="Replaced quantity" name="replaced_qty">'+
@@ -1695,11 +1696,16 @@ $("#add_gallery").click(function (){
 
                         }
 
-                        if( total_replacement > 0 ){
+                        /*if( total_replacement > 0 ){
                             status += ' <br/><span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+
                                 ' returned, '+
                                 total_replacement+' '+str_auto_plural(row.product.packing, total_replacement)+
                                 ' replaced)</span>';
+                        }*/
+                        if( row.defective_quantity > 0 || total_replacement > 0 ){
+                            status = ' <span class="msg-status">'+row.msg_status+'</span>';
+                        }else{
+                            status = ' <span class="msg-status"></span>';
                         }
 
                         html+= '<li>'+
@@ -1728,65 +1734,6 @@ $("#add_gallery").click(function (){
 
         });
 
-    });
-
-    $(document).on("click", ".btn-defective-qty", function (){
-        var $this = $(this), txtbox = $this.prev("input"), qty = txtbox.val();
-        $.ajax({
-            url: "/update-defective-stocks",
-            type: "post",
-            dataType: "json",
-            data: {
-                _token: $("input[name='_token']").val(),
-                id: $this.attr("data-id"),
-                defective_quantity: qty
-            },
-            beforeSend: function (){
-                $this.addClass("disabled").html("Loading..");
-            }
-        }).done(function (data){
-            $this.removeClass("disabled").html("Mark as defective");
-            var alertMsg = '';
-            if( data.status == 200 ){
-                var option = "", row = data.data;
-
-                alertMsg = '<span class="label label-success">Successfully removed '+qty+' '+
-                        str_auto_plural(row.product.packing, qty)+' of '+row.product.name+' from the inventory</span><br/>';
-                   
-                $("#returned_stocks_lists_request_status").append(alertMsg);
-                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
-                    $(this).prev('br').remove();
-                    $(this).remove();
-                });
-
-                if( row.defective_quantity == row.quantity ){
-                    txtbox.fadeOut();
-                    $this.fadeOut(function (){
-                        option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
-                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
-                                ' marked as defective)</span>';
-                        if( txtbox.next('span').length > 0 ){
-                            txtbox.next('span').remove().after(option);
-                        }else{
-                            txtbox.after(option);
-                        }
-                    });
-                }else{
-                    var max_removable = row.quantity - row.defective_quantity;
-                    txtbox.attr("data-max", max_removable).val(max_removable);
-                    option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
-                                qty+' '+str_auto_plural(row.product.packing, qty)+
-                                ' marked as defective)</span>';
-                }
-            }else if(data.error){
-                alertMsg = '<br/><span class="label label-danger">'+data.error+'</span>';
-                console.log(alertMsg);
-                $("#returned_stocks_lists_request_status").append(alertMsg);
-                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
-                    $(this).remove();
-                });
-            }
-        });
     });
 
     $(document).on('click', '.refresh-inventory-logs', function (){
@@ -1852,7 +1799,9 @@ $("#add_gallery").click(function (){
             dataType: 'json'
         }).done(function (data){
             console.log(data);
-            if( !data.error && data.data.length > 0 ){
+            if( !data.error && data.data.length < 1 ){
+                showAlert("Heads up!", data.msg, "danger", "notify")
+            }else if( !data.error && data.data.length > 0 ){
                 var product_name = data.data[0].product_name;
                 var parentRow = $this.parent("div").parent("div.row");
 
@@ -1916,18 +1865,44 @@ $("#add_gallery").click(function (){
                                     console.log(data);
                                     if( !data.error && data.status == 200 ){
                                         parentRow.next(".replacement-form").fadeOut().html("");
-                                        // Continue tomorrow March 2, 16 
+                                        
+                                        var html_output = '<span class="msg-status">'+data.msg_status+'</span>';
+
                                         if( data.max_replaceable == data.replaceable_qty ){
-                                            $this.fadeOut().prev("input").fadeOut().replaceWith('<span>'+data.msg_status+'</span>');
+                                            /*if( $this.prev("input").next('span').length ){
+                                                $this.prev("input").next('span').replaceWith(html_output);
+                                                $this.fadeOut();
+                                            }else{
+                                                $this.fadeOut().prev("input").fadeOut().replaceWith(html_output);
+                                            }*/
+                                            if( parentRow.find('span.msg-status').length ){
+                                                parentRow.find('span.msg-status').html(data.msg_status);
+                                                $this.fadeOut();
+                                            }else{
+                                                $this.fadeOut().prev("input").fadeOut().after(html_output);
+                                            }
+                                            
                                         }else{
-                                            $this.prev("input").next('span').replaceWith('<span>'+data.msg_status+'</span>');
+
+                                            /*if( $this.prev("input").next('span').length ){
+                                                $this.prev("input").next('span').replaceWith(html_output);
+                                            }else{
+                                                $this.prev("input").after(html_output)
+                                            }*/
+                                            if( parentRow.find('span.msg-status').length ){
+                                                parentRow.find('span.msg-status').html(data.msg_status);
+                                            }else{
+                                                $this.prev("input").after(html_output);
+                                            }
                                             $this.removeClass('disabled').removeAttr("disabled");
                                         }
+
+                                        
 
                                         $this.prev("input").attr("data-max", data.max_replaceable).val(data.max_replaceable);
 
                                     }else{
-                                        alert("Sorry, something went wrong. Please refresh the page and try again. If problem persists, please contact your programmer.");
+                                        showAlert("Opps! Something's not good.", "Sorry, something went wrong. Please refresh the page and try again. If problem persists, please contact your programmer.", "danger", "notify");
                                     }
                                 });
                             }
@@ -2024,4 +1999,90 @@ $("#add_gallery").click(function (){
             }
         });
     });
+
+    $(document).on("click", ".btn-defective-qty", function (){
+        var $this = $(this), txtbox = $this.prev("input"), qty = txtbox.val();
+        $.ajax({
+            url: "/update-defective-stocks",
+            type: "post",
+            dataType: "json",
+            data: {
+                _token: $("input[name='_token']").val(),
+                id: $this.attr("data-id"),
+                defective_quantity: qty
+            },
+            beforeSend: function (){
+                $this.addClass("disabled").html("Loading..");
+            }
+        }).done(function (data){
+            $this.removeClass("disabled").html("Mark as defective");
+            var alertMsg = '';
+            if( data.status == 200 ){
+                var option = "", row = data.data;
+
+                alertMsg = '<span class="label label-success">Successfully removed '+qty+' '+
+                        str_auto_plural(row.product.packing, qty)+' of '+row.product.name+' from the inventory</span><br/>';
+                   
+                $("#returned_stocks_lists_request_status").append(alertMsg);
+                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
+                    $(this).prev('br').remove();
+                    $(this).remove();
+                });
+
+                /*if( row.defective_quantity == row.quantity ){
+                    txtbox.fadeOut();
+                    $this.fadeOut(function (){
+                        option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
+                                ' marked as defective)</span>';
+                        if( txtbox.next('span').length > 0 ){
+                            txtbox.next('span').remove().after(option);
+                        }else{
+                            txtbox.after(option);
+                        }
+                    });
+                }else{
+                    var max_removable = row.quantity - row.defective_quantity;
+                    txtbox.attr("data-max", max_removable).val(max_removable);
+                    option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                qty+' '+str_auto_plural(row.product.packing, qty)+
+                                ' marked as defective)</span>';
+                }*/
+                var parentRow = $this.parent("div").parent("div.row");
+
+                parentRow.next(".replacement-form").fadeOut().html("");
+                    
+                var html_output = '<span class="msg-status">'+row.msg_status+'</span>';
+
+                if( row.defective_quantity == row.quantity ){
+                    if( parentRow.find('span.msg-status').length ){
+                        parentRow.find('span.msg-status').html(row.msg_status);
+                        $this.prev("input").fadeOut();
+                        $this.fadeOut();
+                    }else{
+                        $this.fadeOut().prev("input").fadeOut().after(html_output);
+                    }
+                }else{
+                    // var max_removable = row.quantity - row.defective_quantity;
+                    txtbox.attr("data-max", row.max_removable).val(row.max_removable);
+
+                    if( parentRow.find('span.msg-status').length ){
+                        parentRow.find('span.msg-status').html(row.msg_status);
+                    }else{
+                        $this.prev("input").after(html_output);
+                    }
+
+                    $this.removeClass('disabled').removeAttr("disabled");
+                }
+
+                txtbox.attr("data-max", row.max_removable).val(row.max_removable);
+                
+            }else if(data.error){
+                
+                showAlert("Opps! Something's not good.", data.error, "danger", "notify");
+
+            }
+        });
+    });
+
 });
