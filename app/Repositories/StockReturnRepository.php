@@ -38,7 +38,7 @@ class StockReturnRepository {
         $total_replacements = 0;
         $old_replacements = json_decode($ProductStockReturn->replacement);
 
-        dd($old_replacements);
+        // dd($old_replacements);
 
         if( is_object($old_replacements) ){
             $old_replacements = array_values(get_object_vars($old_replacements));
@@ -52,7 +52,7 @@ class StockReturnRepository {
                 $__q = $r['quantity'];
             }
 
-            $total_replacements+=  $r['quantity'];
+            $total_replacements+=  $__q;
         }
 
         $inventories = [];
