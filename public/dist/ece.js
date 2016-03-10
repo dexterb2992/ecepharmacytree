@@ -1879,7 +1879,9 @@ $("#add_gallery").click(function (){
                                                 parentRow.find('span.msg-status').html(data.msg_status);
                                                 $this.fadeOut();
                                             }else{
-                                                $this.fadeOut().prev("input").fadeOut().after(html_output);
+                                                $this.prev("input").after(html_output);
+                                                $this.prev('input').fadeOut();
+                                                $this.fadeOut();
                                             }
                                             
                                         }else{
