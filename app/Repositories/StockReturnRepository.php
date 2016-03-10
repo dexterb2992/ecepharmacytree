@@ -45,7 +45,7 @@ class StockReturnRepository {
             }else if( is_array($r) ){
                 $__q = $r['quantity'];
             }
-            
+
             $total_replacements+=  $__q;
         }
 
@@ -113,8 +113,21 @@ class StockReturnRepository {
                 
         // filter for duplicates
         foreach ($old_replacements as $i => $o) {
+            $_old_r = 0;
+            if( is_array($o) ){
+                $_old_r = $o->inventory_id;
+            }else if( is_object($o) ){
+                $_old_r = $o['inventory_id'];
+            }
+
             foreach ($replacements as $j => $r) {
-                if( $o->inventory_id == $r["inventory_id"] ){
+                $__r = 0;
+                if( is_array($r) ){
+                    $__r = $r->inventory_id;
+                }else if( is_object($o) ){
+                    $__r = $r['inventory_id'];
+                }
+                if( $_old_r == $__r ){
                     // remove duplicate & update the quantity
                     $replacements[$j]["quantity"] = $o->quantity + $r["quantity"];
                     unset($old_replacements->$i);
