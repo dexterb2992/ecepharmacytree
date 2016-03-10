@@ -42,12 +42,12 @@ class StockReturnRepository {
         }
         // dd($old_replacements);
         foreach ($old_replacements as $r) {
-            /*$__q = 0;
+            $__q = 0;
             if( is_object($r) ){
                 $__q = $r->quantity;
             }else if( is_array($r) ){
                 $__q = $r['quantity'];
-            }*/
+            }
 
             $total_replacements+=  $r['quantity'];
         }
