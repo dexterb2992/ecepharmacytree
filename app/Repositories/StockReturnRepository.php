@@ -208,7 +208,14 @@ class StockReturnRepository {
         $products_returned = $stock_return->product_stock_returns;
         foreach ($products_returned as $pr) {
             $pr->load('product');
-            $pr->replacement = array_values(json_decode( $pr->replacement ));
+
+            $__r = json_decode( $pr->replacement );
+            if(  is_object( $__r ) ){
+                $pr->replacement = array_values( get_object_vars( $__r ) );
+            }else if( is_array( $__r ) ){
+                $pr->replacement = array_values($__r);
+            }
+            
 
             $inventory = Inventory::find($pr->inventory->id);
             $p_packing = $inventory->product->packing;
