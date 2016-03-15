@@ -2086,5 +2086,77 @@ $("#add_gallery").click(function (){
             }
         });
     });
+    
 
+    // For Doctor - Clinic Tagging
+    $(".edit-clinic-doctors").click(function (){
+        var $this = $(this);
+
+        $("#btn_doctor_clinic_save_changes").attr("data-c-id", $this.attr("data-id"));
+
+        $.ajax({
+            url: '/clinic-doctor',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                action: 'get_doctors',
+                doctor_ids: $('#doctor_ids').val(),
+                clinic_id: $this.attr("data-id"),
+                _token: $('input[name="_token"]').val()
+            }
+        }).done(function (data){
+            console.log(data);
+            if( data.length > 0 ){
+                var selectedDoctors = [];
+                $.each(data, function (i, row){
+                    selectedDoctors.push(row.id);
+                });
+
+                $("#doctor_ids").val(selectedDoctors.join(","));
+
+                $("#modal_tag_clinic_doctor").modal('show');
+                init_select2_items($("#doctor_ids"), window.select2_all_doctors);
+            }
+        });
+    });
+
+    $("#btn_doctor_clinic_save_changes").click(function (){
+        $this = $(this);
+        clinicId = $this.attr("data-c-id");
+        $.ajax({
+            url: "/clinic-doctor",
+            type: 'post',
+            dataType: 'json',
+            data: {
+                action: 'apply_changes',
+                clinic_id: clinicId,
+                doctor_ids: $("#doctor_ids").val(),
+                _token: $('input[name="_token"]').val()
+            },
+            beforeSend: function (){
+                $this.addClass("disabled").html('<i class="fa fa-refresh fa-spin"></i> Please wait...');
+            }
+        }).done(function (data){
+            console.log(data);
+            if( data.status != 'failed' ){
+                /*
+                <span class="badge bg-yellow" data-toggle="tooltip" data-original-title="{{ count($clinic->doctors) }} total doctors">{{ count($clinic->doctors) }}</span>
+                @foreach ( limit($clinic->doctors, 3) as $doctor)
+                    <span class="badge bg-aqua">{{ get_person_fullname($doctor) }}</span>
+                @endforeach
+                */
+                span1 = '<span class="badge bg-yellow" data-toggle="tooltip" data-original-title="'+data.count+' total doctors">'+data.count+'</span> ';
+                span2 = '';
+                for (var i = 0; i < data.doctors.length; i++) {
+                    if( i < 3 ){
+                        span2+= '<span class="badge bg-aqua">'+data.doctors[i].lname+', '+data.doctors[i].fname+'</span>';
+                    }
+                }
+
+                $('.clinic-doctors-div[data-id="'+clinicId+'"]').html(span1+span2);
+            }
+
+            $this.removeClass("disabled").html('Apply changes');
+        });
+    });
 });

@@ -397,9 +397,9 @@ function simple_downlines($referral_id, $fucking_array = array(), $counter = 1) 
 	foreach($patients as $patient) {
 
 		if(count($wtf_array) == 0)
-			$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => 1);
+			$json = array("fname" => $patient->fname, "referral_id" => $patient->referral_id, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => 1);
 		else 
-			$json = array("fname" => $patient->fname, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $counter);
+			$json = array("fname" => $patient->fname, "referral_id" => $patient->referral_id, "lname" => $patient->lname, "created_at" => $patient->created_at->format('Y-m-d H:i:s'), "level" => $counter);
 
 		array_push($wtf_array, $json);
 
@@ -544,4 +544,14 @@ function str_excape($subject){
 	$replace = array("\\\\", "\\0", "\\n", "\\r", "\'", '\"', "\\Z");
 
 	return str_replace($search, $replace, $subject);
+}
+
+## This is to allow putting a limit to a 'foreach' loop
+#  Usage: foreach( limit($array, $limit) as $key => $value )
+##
+function limit($iterable, $limit) {
+    foreach ($iterable as $key => $value) {
+        if (!$limit--) break;
+        yield $key => $value;
+    }
 }

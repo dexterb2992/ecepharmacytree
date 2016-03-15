@@ -51,48 +51,34 @@ Route::get('home', function(){
 });
 
 Route::post('flush_user_basket_promos', 'BasketController@flush_user_basket_promos');
-
 Route::get('upload_sc_id', 'SeniorCitizenController@store');
-
 Route::post('saveBranchPreference', 'BranchController@saveBranchPreference');
-
 Route::get('check_basket', 'BasketController@check_basket');
-
 Route::get('compute-referral-points/{referral_id}', 'PointsController@store');
-
-
 Route::get('compute_basket_points', 'BasketController@compute_basket_points');
-
 Route::get('get_clinic_records', 'ApiController@getClinicRecords');
 
-Route::get("get-selected-branch", 'BranchController@show_selected_branch');
+
+## Routes used in user /profile
+	Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
+	Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
+	Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@show']);
+	Route::post('profile', ['as' => 'update_photo', 'middleware' => 'auth', 'uses' => 'UserController@update_photo']);
+	Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
+
+## EMPLOYEES
+	Route::get('employees', ['as' => 'employees', 'uses' => 'UserController@index']);
+	Route::post('employees', ['as' => 'employees', 'uses' => 'UserController@create']);
+	Route::post('employees/deactivate', ['as' => 'deactivate_employee', 'middleware' => 'admin',
+		'uses' => 'UserController@destroy']);
+	Route::post('employees/reactivate', ['as' => 'reactivate_employee', 'middleware' => 'admin',
+		'uses' => 'UserController@reactivate']);
+	Route::post('employee/change/branch', ['as'=> 'update_employee_branch', 'middleware' => 'admin',
+		'uses' => 'UserController@update_branch']);
 
 
-Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
-Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin', 'middleware' => 'admin']);
-
-// Routes used for /profile
-Route::post('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
-Route::get('admin/update-password', ['as' => 'update_password', 'middleware' => 'auth', 'uses' => 'UserController@update_password']);
-Route::get('profile', ['as' => 'profile', 'uses' => 'UserController@show']);
-Route::post('profile', ['as' => 'update_photo', 'middleware' => 'auth', 'uses' => 'UserController@update_photo']);
-Route::post('profile/update', ['as' => 'update_profile', 'uses' => 'UserController@update']);
-
-Route::get('employees', ['as' => 'employees', 'uses' => 'UserController@index']);
-Route::post('employees', ['as' => 'employees', 'uses' => 'UserController@create']);
-Route::post('employees/deactivate', ['as' => 'deactivate_employee', 'middleware' => 'admin',
-	'uses' => 'UserController@destroy']);
-Route::post('employees/reactivate', ['as' => 'reactivate_employee', 'middleware' => 'admin',
-	'uses' => 'UserController@reactivate']);
-Route::post('employee/change/branch', ['as'=> 'update_employee_branch', 'middleware' => 'admin',
-	'uses' => 'UserController@update_branch']);
-
-
-
+## Routes for Branches
 Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'auth'], function (){
-	/**
-	 * Routes for Branches
-	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'BranchController@index']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'BranchController@show']);
 	Route::post('create', ['as' => 'create', 'uses' => 'BranchController@store']);
@@ -100,15 +86,15 @@ Route::group(['prefix' => 'branches', 'as' => 'Branches::', 'middleware' => 'aut
 	Route::post('deactivate', ['as' => 'deactivate', 'uses' => 'BranchController@activate_deactivate']);
 	Route::post('delete', ['as' => 'remove', 'uses' => 'BranchController@destroy']);
 });
+	Route::get("get-selected-branch", 'BranchController@show_selected_branch');
+	Route::get('change-branch', ['uses' => 'BranchController@get_which_branch', 'middleware' => 'admin']);
+	Route::post('choose-branch', ['as' => 'choose_branch', 'uses' => 'UserController@setBranchToLogin', 'middleware' => 'admin']);
 
 
-Route::get('products-json', ['as' => 'json', 'uses' => 'ProductController@get_json'] );
-Route::get('search/products', ['as' => 'product_search', 'uses' => 'ProductController@search']);
 
+
+## Routes for Products and Product Categories & SubCategories
 Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products::'], function (){
-	/**
-	 * Routes for Products and Product Categories & SubCategories
-	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'ProductController@index']);
 	Route::get('with-deleted', ['as' => 'all', 'uses' => 'ProductController@all_include_deleted']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'ProductController@show']);
@@ -125,17 +111,18 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 	Route::post('gallery/delete/{id}', ['as' => 'delete_gallery', 'uses' => 'ProductsGalleryController@destroy']);
 	Route::post('gallery/change-primary/{id}', ['as' => 'gallery_change_primary', 'uses' => 'ProductsGalleryController@change_primary']);
 });
+	Route::get('products-json', ['as' => 'json', 'uses' => 'ProductController@get_json'] );
+	Route::get('search/products', ['as' => 'product_search', 'uses' => 'ProductController@search']);
 
-Route::get('product-groups', ['as' => 'groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@index']);
-Route::get('product-groups/{id}', ['as' => 'show_group', 'middleware' => 'auth', 'uses' => 'ProductGroupController@show']);
-Route::post('product-groups', ['as' => 'groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@store']);
-Route::post('product-groups/edit', ['as' => 'edit_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@update']);
-Route::post('product-groups/delete', ['as' => 'delete_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@destroy']);
+## PRODUCT GROUPS
+	Route::get('product-groups', ['as' => 'groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@index']);
+	Route::get('product-groups/{id}', ['as' => 'show_group', 'middleware' => 'auth', 'uses' => 'ProductGroupController@show']);
+	Route::post('product-groups', ['as' => 'groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@store']);
+	Route::post('product-groups/edit', ['as' => 'edit_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@update']);
+	Route::post('product-groups/delete', ['as' => 'delete_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@destroy']);
 
+## Routes for Product Categories & SubCategories
 Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'middleware' => 'auth'], function (){
-	/**
-	 * Routes for Product Categories & SubCategories
-	 */
 	Route::get('/', ['as' => 'index','uses' => 'ProductCategoryController@index']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'ProductCategoryController@show']);
 	Route::get('subcategories/{id}', ['as' => 'product_subcategories', 'uses' => 'ProductSubCategoryController@show']);
@@ -150,11 +137,8 @@ Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'm
 });
 
 
-
+## Routes for Members/parents
 Route::group(['prefix' => 'members', 'as' => 'Members::', 'middleware' => 'auth'], function (){
-	/**
-	 *	Routes for Members/parents
-	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'PatientController@index']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'PatientController@show']);
 	Route::post('deactivate', ['as' => 'delete', 'uses' => 'PatientController@destroy']);
@@ -162,10 +146,8 @@ Route::group(['prefix' => 'members', 'as' => 'Members::', 'middleware' => 'auth'
 });
 
 
+## Routes for Inventories
 Route::group(['prefix' => 'inventory', 'as' => 'Inventory::', 'middleware' => 'auth'], function (){
-	/**
-	 * Routes for inventories
-	 */
 	Route::get('/', ['as' => 'index', 'uses' => 'InventoryController@index']);
 	Route::get('all', ['as' => 'all', 'uses' => 'InventoryController@show_all']);
 	Route::post('adjustment', ['as' => 'adjustment', 'uses' => 'InventoryController@add_adjustments']);
@@ -177,11 +159,8 @@ Route::group(['prefix' => 'inventory', 'as' => 'Inventory::', 'middleware' => 'a
 	Route::post('items', ['as' => 'get_items', 'uses' => 'InventoryController@get_items']);
 });
 
-
+## Routes for Doctors and Doctor Specialties
 Route::group(['prefix' => 'doctor-specialties', 'as' => 'DoctorSpecialty::', 'middleware' => 'admin'], function (){
-	/**
-	 * Routes for Doctors and Doctor Specialties
-	 */
 	Route::get("/", ['as' => 'index', 'uses' => 'SpecialtyController@index']);
 	Route::get("{id}", ['as' => 'get', 'uses' => 'SpecialtyController@show']);
 	Route::get("subspecialties/{id}", ['as' => 'show_subspecialties', 'uses' => 'SubspecialtyController@show']);
@@ -195,24 +174,42 @@ Route::group(['prefix' => 'doctor-specialties', 'as' => 'DoctorSpecialty::', 'mi
 	Route::post('subspecialties/delete', ['as' => 'remove_doctor_subspecialty', 'uses' => 'SubspecialtyController@destroy']);
 });
 
-/** Routes for Doctors and Doctor Specialties
- * 
- */
-Route::get("doctors", ['as' => 'doctors', 'uses' => 'DoctorController@index']);
-Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@show']);
+## Routes for Doctors and Doctor Specialties
+	Route::get("doctors", ['as' => 'doctors', 'uses' => 'DoctorController@index']);
+	Route::get("doctors/{id}", ['as' => 'get_doctor', 'uses' => 'DoctorController@show']);
 
-Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
-Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
-Route::post('doctors/delete', ['as' => 'delete_doctor', 'uses' => 'DoctorController@delete' ]);
+	Route::post("get-all-doctors", ['as' => 'get_all_doctors', 'uses' => 'DoctorController@get_all_doctors']);
+	Route::post('doctors/create', ['as' => 'create_doctor', 'uses' => 'DoctorController@store']);
+	Route::post('doctors/edit', ['as' => 'edit_doctor', 'uses' => 'DoctorController@edit' ]);
+	Route::post('doctors/delete', ['as' => 'delete_doctor', 'uses' => 'DoctorController@delete' ]);
 
-Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
-Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
-Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
+	Route::post('doctor-specialties/create', [ 'as' => 'create_specialties_category', 'uses' => 'SpecialtyController@store'] );
+	Route::post('doctor-specialties/edit', [ 'as' => 'edit_specialties_category', 'uses' => 'SpecialtyController@update'] );
+	Route::post('doctor-specialties/delete', [ 'as' => 'remove_specialties_category', 'uses' => 'SpecialtyController@destroy' ]);
 
-Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'auth'], function (){
+
+## CLINICS
+
+	Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
+	Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
+	
+	Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
+	Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
+	Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
+	Route::post('clinic-doctor', ['as' => 'clinic_doctor', 'uses' => 'ClinicController@clinic_doctor']);
+
+
+## SETTINGS
+Route::group(['prefix' => 'settings', 'as' => 'Settings::', 'middleware' => 'admin'], function (){
 	/**
-	 * Routes for Promo
+	 * Routes for Admin Settings
 	 */
+	Route::get('/', ['as' => 'index', 'uses' => 'SettingsController@index']);
+	Route::post('referral/update', ['as' => 'update', 'uses' => 'SettingsController@update']);
+});
+
+## PROMOS
+Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'auth'], function (){
 	Route::get("/", ["as" => "index", 'uses' => 'PromoController@index']);
 	Route::get("{id}", ['as' => 'get', 'uses' => 'PromoController@show']);
 	Route::get('details/{id}', ['as' => 'details', 'uses' => 'PromoController@details']);
@@ -227,33 +224,14 @@ Route::group(['prefix' => 'promos', 'as' => 'Promo::', 'middleware' => 'auth'], 
 
 
 
-//Routes for Clinics
+## Routes for Prescription Approval
+	Route::get('prescription-approval/', ['as' => 'prescription_approval', 'uses' => 'PrescriptionApprovalController@index']);
 
-Route::get('clinics', ['as' => 'clinics', 'uses' => 'ClinicController@index']);
-Route::get('clinics/{id}', ['as' => 'get_clinic', 'uses' => 'ClinicController@show']);
+	Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-disapprove', 'uses' => 'PrescriptionApprovalController@disapprove']);
 
-Route::post('clinics/create', ['as' => 'create_clinic', 'uses' => 'ClinicController@store']);
+	Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
 
-Route::post('clinics/edit', ['as' => 'edit_clinic', 'uses' => 'ClinicController@update' ]);
-Route::post('clinics/delete', ['as' => 'delete_clinic', 'uses' => 'ClinicController@destroy']);
-
-Route::group(['prefix' => 'settings', 'as' => 'Settings::', 'middleware' => 'admin'], function (){
-	/**
-	 * Routes for Admin Settings
-	 */
-	Route::get('/', ['as' => 'index', 'uses' => 'SettingsController@index']);
-	Route::post('referral/update', ['as' => 'update', 'uses' => 'SettingsController@update']);
-});
-
-
-
-//Routes for Prescription Approval
-Route::get('prescription-approval/', ['as' => 'prescription_approval', 'uses' => 'PrescriptionApprovalController@index']);
-
-Route::post('prescription-approval/disapprove', ['as' => 'prescription-approval-disapprove', 'uses' => 'PrescriptionApprovalController@disapprove']);
-
-Route::post('prescription-approval/approve', ['as' => 'prescription-approval-approve', 'uses' => 'PrescriptionApprovalController@approve']);
-
+## REFERRALS
 Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 'auth'], function (){
 	/**
 	 * Routes for Affiliates
@@ -261,6 +239,7 @@ Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 
 	Route::get("/", ["as" => "index", 'uses' => 'AffiliatesController@index']);
 });
 
+## ORDERS
 Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
 Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
 // Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
@@ -268,22 +247,30 @@ Route::post('mark_as_paid', ['as' => 'mark_order_as_paid', 'uses' => 'BillingCon
 Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);
 Route::post('orders/all', ['as' => 'all_orders', 'uses' => 'OrderController@show_all']);
 
+
+## IMAGES
 Route::get('images/{template}/', function($template){
 	return redirect(url('images/'.$template."/".config('imagecache.default_image_404')));
 });
 
+
+## SALES
 Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
 
+
+## LOCATION
 /**
  * @param string $location = ['provinces', 'municipalities']
  * @param int $id
  *
  * @return json $response
  */
-Route::get('locations/get/regions/', 'LocationController@show');
-Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
-Route::get('locations/search/{get_location}/{location_name}', 'LocationController@search');
+	Route::get('locations/get/regions/', 'LocationController@show');
+	Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
+	Route::get('locations/search/{get_location}/{location_name}', 'LocationController@search');
 
+
+## API
 Route::get('api/{type}/{what}', function ($type, $what){
 	$response = array();
 
@@ -311,15 +298,16 @@ Route::get('api/{type}/{what}', function ($type, $what){
 });
 
 Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPaymentController@verification']);
+Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
 
 Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
-Route::post('stock-return-codes/all', 'StockReturnController@stock_return_codes');
-Route::post('stock-return', 'StockReturnController@store');
-Route::post('get-stock-returns/{id}', 'StockReturnController@show_all_returned_products');
-Route::post('update-defective-stocks', 'StockReturnController@update_defective_stocks');
+## STOCK RETURNS
+	Route::post('stock-return-codes/all', 'StockReturnController@stock_return_codes');
+	Route::post('stock-return', 'StockReturnController@store');
+	Route::post('get-stock-returns/{id}', 'StockReturnController@show_all_returned_products');
+	Route::post('update-defective-stocks', 'StockReturnController@update_defective_stocks');
 
-Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
 
 Route::get('emailtest', function(){
 	return view('emails.sales_invoice');
@@ -335,6 +323,7 @@ Route::get('populate-address/{barangay_id}', ['as' => 'populate_address', 'uses'
 
 Route::post('save_user_token', 'PatientController@save_user_token');
 
+## LOT NUMBERS
 Route::post('lot-numbers', 'InventoryController@get_lot_numbers');
 Route::get('lot-numbers', 'InventoryController@get_lot_numbers');
 Route::post('get-product-lotnumbers', 'InventoryController@get_product_lot_numbers');

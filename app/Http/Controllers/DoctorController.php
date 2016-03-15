@@ -20,11 +20,6 @@ class DoctorController extends Controller
         $this->middleware('admin');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index()
     {
         $doctors = Doctor::paginate(100);
@@ -36,26 +31,15 @@ class DoctorController extends Controller
             $specialty_names[$specialty->id] = $specialty->name;
         }
 
-        return view('admin.doctors')->withDoctors($doctors)->withSpecialties($specialties)->withSubspecialties($subspecialties)
-        ->withSpecialty_names($specialty_names)->withTitle("Doctors");
+        return view('admin.doctors')
+            ->withDoctors($doctors)
+            ->withSpecialties($specialties)
+            ->withSubspecialties($subspecialties)
+            ->withSpecialty_names($specialty_names)
+            ->withTitle("Doctors");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
     public function store(Request $request)
     {
         $input = Input::all();
@@ -74,12 +58,7 @@ class DoctorController extends Controller
         return false;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+
     public function show($id)
     {
         // $specialty = Specialty::find($id);
@@ -88,12 +67,6 @@ class DoctorController extends Controller
         return $doctor->toJson();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function edit()
     {
         $input = Input::all();
@@ -111,29 +84,23 @@ class DoctorController extends Controller
         return false;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  int  $id
-     * @return Response
-     */
+
     public function update()
     {
         $specialty = Specialty::find( Input::get('id') );
         $specialty->name = Input::get('name');
         if( $specialty->save() ){
-         return Redirect::to( route('doctor_specialties') );
-     }
-     return false;
- }
+            return Redirect::to( route('doctor_specialties') );
+        }
+        return false;
+    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+    public function get_all_doctors(){
+        $doctors = Doctor::all();
+        return $doctors;
+    }
+
+
     public function destroy()
     {
         if( Specialty::destroy( Input::get( 'id' ) ) ){

@@ -16,7 +16,7 @@ class Doctor extends Model
     }
 
     public function clinics(){
-    	return $this->belongsToMany('ECEPharmacyTree\Clinic');
+    	return $this->belongsToMany('ECEPharmacyTree\Clinic')->withPivot('doctor_id', 'clinic_id');;
     }
 
 }
