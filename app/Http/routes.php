@@ -16,26 +16,12 @@ if( Schema::hasTable('settings') && Schema::hasTable('branches') ){
 	View::share('branches', ECEPharmacyTree\Branch::all());
 }
 
-Route::get('showschema', function(){
-	$response = array();
-	$final = array();
-	$columns = DB::select("SHOW COLUMNS FROM ". "patients");
-	foreach($columns as $column) {
-		// $new_column = array();
-		$column->Type = strbefore($column->Type,'(');
-			$obj = (object) array('field' => $column->Field, 'type' => $column->Type);
-			array_push($final, $obj);
-		}
-
-		$response['columns'] = $final;
-
-		return json_encode($response);
-	});
+Route::get('showschema', 'ApiController@showschema');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
-	]);
+]);
 
 
 // Route::get('test_num', function(){
@@ -265,42 +251,18 @@ Route::get('sales', ['as' => 'sales', 'uses' => 'SaleController@index']);
  *
  * @return json $response
  */
-	Route::get('locations/get/regions/', 'LocationController@show');
-	Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
-	Route::get('locations/search/{get_location}/{location_name}', 'LocationController@search');
+Route::get('locations/get/regions/', 'LocationController@show');
+Route::get('locations/get/{get_location}/where-{parent_location}/{parent_location_id}', 'LocationController@show');
+Route::get('locations/search/{get_location}/{location_name}', 'LocationController@search');
 
 
 ## API
-Route::get('api/{type}/{what}', function ($type, $what){
-	$response = array();
-
-	if( $type == 'generate' ){
-		if( $what == "sku" )
-			return generate_sku();
-		if( $what == "referral_id" )
-			return generate_referral_id();
-
-		if( $what == "lot_number" )
-			return generate_lot_number();
-	}else if( $type == 'check' ){
-		if( $what == 'sku' )
-			return does_sku_exist(Input::get('sku'), Input::get('product_id')) ? 'true' : 'false';
-	}else if( $type == 'str_singular' ){
-		return str_singular($what);
-	}else if( $type == "get-downlines" ){
-		$response['downlines'] = get_all_downlines($what);
-		$response['success'] = 1;
-		$response['server_timestamp'] = Carbon\Carbon::now()->format('Y-m-d H:i:s');
-		$response['latest_updated_at'] = '';
-		$response['downlines'] = simple_downlines($what);
-		return $response;
-	}
-});
+Route::get('api/{type}/{what}', 'ApiController@check_n_generate');
+Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
 Route::post('verifypayment', ['as' => 'verify_payment', 'uses' => 'VerifyPaymentController@verification']);
 Route::post('verify_cash_payment', ['as' => 'verify_cash_payment', 'uses' => 'VerifyCashPaymentController@verification']);
 
-Route::get('api', ['as' => 'api_control', 'uses' => 'ApiController@process']);
 
 ## STOCK RETURNS
 	Route::post('stock-return-codes/all', 'StockReturnController@stock_return_codes');
