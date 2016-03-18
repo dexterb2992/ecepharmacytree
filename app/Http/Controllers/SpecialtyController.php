@@ -54,7 +54,10 @@ class SpecialtyController extends Controller
         $specialty = new Specialty;
         $specialty->name = Input::get('name');
         if( $specialty->save() ){
-           return Redirect::to( route('DoctorSpecialty::index') );
+            return Redirect::to( route('doctors') )->withFlash_message([
+                'msg' => "{$specialty->name} has been added to Doctor's Specialties.",
+                'type' => "info"
+            ]);
         }
         return false;
     }
@@ -72,17 +75,6 @@ class SpecialtyController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit()
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  Request  $request
@@ -92,9 +84,13 @@ class SpecialtyController extends Controller
     public function update()
     {
         $specialty = Specialty::find( Input::get('id') );
+        $old_name = $specialty->name;
         $specialty->name = Input::get('name');
         if( $specialty->save() ){
-           return Redirect::to( route('DoctorSpecialty::index') );
+           return Redirect::to( route('doctors') )->withFlash_message([
+                'msg' => "Specialty: $old_name has been changed to {$specialty->name} successfully.",
+                'type' => "info"
+            ]);
         }
         return false;
     }
@@ -108,8 +104,15 @@ class SpecialtyController extends Controller
     public function destroy()
     {
         if( Specialty::destroy( Input::get( 'id' ) ) ){
+            session()->flash("flash_message", array("type" => "danger", "msg" => "A specialty has been deleted."));
             return json_encode( array("status" => "success") );
         }
+        session()->flash("flash_message", array(
+            "type" => "danger", 
+            "msg" => "Sorry, we can't process your delete request right now. 
+                        Please try again later or contact your programmer."
+            )
+        );
         return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
     }
 }

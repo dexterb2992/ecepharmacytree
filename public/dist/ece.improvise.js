@@ -5,8 +5,6 @@ var cache_products = function (callback){
         dataType: 'json',
         assync: false
     }).done(function (data){
-        localStorage.clear();
-
         localStorage.products = JSON.stringify(data);
         window.products = data;
         window.select2_all_products = [];
@@ -21,9 +19,38 @@ var cache_products = function (callback){
     });
 };
 
+
+var cache_doctors = function (callback){
+    $.ajax({
+        url: '/get-all-doctors',
+        type: 'post',
+        dataType: 'json',
+        data: {
+            _token: $('input[name="_token"]').val()
+        },
+        assync: false
+    }).done(function (data){
+        localStorage.doctors = JSON.stringify(data);
+        window.doctors = data;
+        window.select2_all_doctors = [];
+        $.each(window.doctors, function (i, row){
+            window.select2_all_doctors.push({id: row.id, text: row.lname+", "+row.fname});
+        });
+        localStorage.select2_all_doctors = JSON.stringify(window.select2_all_doctors);
+
+        if( typeof callback === 'function' && callback() ){
+            callback();
+        }
+    });
+};
+
 var cache_list_of_products = function (){
 	// for caching list of products to improve performance
-	if( typeof(localStorage.products) ===  'undefined' && typeof(localStorage.select2_all_products) === 'undefined'){
+    if( typeof(localStorage.select2_all_products) === 'undefined' ){
+        cache_products();
+    }
+
+	if( typeof(localStorage.products) ===  'undefined' || (typeof(localStorage.select2_all_products) === 'undefined' ) ){
 		cache_products();
 	}else{
 		window.products = JSON.parse(localStorage.products);
@@ -108,22 +135,19 @@ var init_specific_product_list = function ($_element){
         }).join('');
     };
 
-    // For demonstration purposes we first make
-    // a huge array of demo data (20 000 items)
-    // HEADS UP; for the _.map function i use underscore (actually lo-dash) here
 
-    // create demo data
-    var dummyData = window.select2_all_products;    
+    // create  data
+    var productsData = window.select2_all_products;    
 
     // init select 2
     // $('#specific_promo_product_ids').select2({
     $_element.select2({
-        data: dummyData,
+        data: productsData,
         // init selected from elements value
         initSelection: function(element, callback) {
             var initialData = [];
             $(element.val().split(",")).each(function(i, row) {
-                var res = dummyData.filter(function (n){
+                var res = productsData.filter(function (n){
                     return n.id == row;
                 });
                 if( res.length == 1 ){
@@ -183,6 +207,70 @@ var find_product_object_from_cache = function(id){
     }else if( result < 0 ){
         return false;
     }
+};
+
+// THIS FUNCTION INITIALIZES A SELECT2 ELEMENT (Only recommended for large data)
+var init_select2_items = function ($_element, select2_items){
+    // to improve select2 performance when handling large amount of data
+    var shuffle = function(str) {
+        return str.split('').sort(function() {
+            return 0.5 - Math.random();
+        }).join('');
+    }; 
+
+    // init select 2
+    // $('#specific_promo_product_ids').select2({
+    $_element.select2({
+        data: select2_items,
+        // init selected from elements value
+        initSelection: function(element, callback) {
+            var initialData = [];
+            $(element.val().split(",")).each(function(i, row) {
+                var res = select2_items.filter(function (n){
+                    return n.id == row;
+                });
+                if( res.length == 1 ){
+                    initialData.push({
+                        id: res[0].id,
+                        text: res[0].text
+                    });
+                }
+
+            });
+            callback(initialData);
+        },
+        // initSelection: initialData,
+
+        // NOT NEEDED: These are just css for the demo data
+        dropdownCssClass: 'capitalize',
+        containerCssClass: 'capitalize',
+
+        // configure as multiple select
+        multiple: true,
+
+        // NOT NEEDED: text for loading more results
+        formatLoadMore: 'Loading more...',
+
+        // query with pagination
+        query: function(q) {
+            var pageSize,
+                results;
+            pageSize = 20; // or whatever pagesize
+            results = [];
+            if (q.term && q.term !== "") {
+                // HEADS UP; for the _.filter function i use underscore (actually lo-dash) here
+                results = _.filter(this.data, function(e) {
+                    return (e.text.toUpperCase().indexOf(q.term.toUpperCase()) >= 0);
+                });
+            } else if (q.term === "") {
+                results = this.data;
+            }
+            q.callback({
+                results: results.slice((q.page - 1) * pageSize, q.page * pageSize),
+                more: results.length >= q.page * pageSize
+            });
+        }
+    });
 };
 
 
