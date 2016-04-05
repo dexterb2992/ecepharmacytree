@@ -55,6 +55,7 @@ class BasketRepository {
 		$response['server_timestamp'] = date("Y-m-d H:i:s", time());
 		$response['basket_quantity_changed'] = $basket_quantity_changed;
 		$response['basket_promo_removed'] = $basket_promo_removed;
+		$response['has_contents'] = true;
 		return json_encode($response);
 
 	}

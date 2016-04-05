@@ -7,6 +7,7 @@ require_once __DIR__ . '/db_connect.php';
 $db       = new DB_CONNECT();
 $conn = $db->connect();
 $response = array();
+// $_POST = $_GET;
 $request  = $_POST['request'];
 date_default_timezone_set('Asia/Manila');
 $datenow = date("Y-m-d H:i:s", time());
@@ -185,6 +186,8 @@ if ($request == 'register') {
 			exit(0);
 		}
 
+        $response['has_contents'] = true;
+
 		echo json_encode($response);
 		exit(0);
 	}
@@ -211,169 +214,190 @@ if ($request == 'register') {
     	}
     	$cols   = substr($cols, 0, strlen($cols) - 1);
     	$values = substr($values, 0, strlen($values) - 1);
-    	$sql    = "INSERT INTO " . $_POST['table'] . "(created_at," . $cols . ") VALUES('" . $datenow . "'," . $values . ")";
+    	$sql    = "INSERT INTO " . $_POST['table'] . "(updated_at,created_at," . $cols . ") VALUES('" . $datenow . "','" . $datenow . "'," . $values . ")";
     	if (mysqli_query($conn, $sql)) {
     		$response["last_inserted_id"] = mysqli_insert_id($conn);
     		$response["success"]          = 1;
     		$response["created_at"] = $datenow;
-    	} else {
-    		$response["success"] = 0;
-    		$response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
-    	}
-    } else if($action == "multiple_insert") {
-    	$collection = json_decode(stripslashes($_POST['jsobj']));
+            $response["has_contents"] = true;
+        } else {
+          $response["success"] = 0;
+          $response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
+          $response["has_contents"] = false;
+      }
+  } else if($action == "multiple_insert") {
+     $collection = json_decode(stripslashes($_POST['jsobj']));
 
-    	$str_values = "";
+     $str_values = "";
 
-    	foreach($collection->json_treatments as $col)
-    	{
-    		$cols   = "";
-    		$values = "";
-    		foreach($col as $key => $val)
-    		{
+     foreach($collection->json_treatments as $col)
+     {
+      $cols   = "";
+      $values = "";
+      foreach($col as $key => $val)
+      {
     		// echo $key . ': ' . $val;
     		// echo '<br>';
-    			$cols .= $key . ",";
-    			$values .= "'" . $val . "',";
-    		}
-    		$cols = substr($cols, 0, strlen($cols) -1);
-    		$values = substr($values, 0, strlen($values) - 1);
-    		$str_values .= "('".$datenow."',".$values."),";
-    	}
+       $cols .= $key . ",";
+       $values .= "'" . $val . "',";
+   }
+   $cols = substr($cols, 0, strlen($cols) -1);
+   $values = substr($values, 0, strlen($values) - 1);
+   $str_values .= "('".$datenow."','".$datenow."',".$values."),";
+}
 
-    	$sql = "INSERT INTO ".$_POST['table']." (created_at,".$cols.") VALUES ".substr($str_values, 0, strlen($str_values) - 1);
+$sql = "INSERT INTO ".$_POST['table']." (created_at, updated_at, ".$cols.") VALUES ".substr($str_values, 0, strlen($str_values) - 1);
 
-    	if(mysqli_query($conn, $sql)) {
-    		$response['success'] = 1;
-    		$response['message'] = "relax, you're doing fine";
-    		$response['last_inserted_id'] = mysqli_insert_id($conn);
-    		$response['affected_rows'] = mysqli_affected_rows($conn); 
-    	} else {
-    		$response['success'] = 0;
-    		$response['message'] = "error =".mysqli_error($conn);
-    		$response['sql_query'] = $sql;
-    	}
+if(mysqli_query($conn, $sql)) {
+  $response['success'] = 1;
+  $response['message'] = "relax, you're doing fine";
+  $response['last_inserted_id'] = mysqli_insert_id($conn);
+  $response['affected_rows'] = mysqli_affected_rows($conn); 
+  $response["has_contents"] = true;
+} else {
+  $response['success'] = 0;
+  $response['message'] = "error =".mysqli_error($conn);
+  $response['sql_query'] = $sql;
+  $response["has_contents"] = false;
+}
 
-    } else if ($action == "update") {
-    	$settings = "";
-    	foreach ($_POST as $key => $value) {
-    		if ($key != "request" && $key != "table" && $key != "id" && $key != "action") {
-    			$settings .= $key . "='" . $value . "',";
-    		}
-    		$x++;
-    	}
-    	$settings = substr($settings, 0, strlen($settings) - 1);
-    	$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE id=" . $_POST['id'];
-    	if (mysqli_query($conn,  $sql )) {
-    		$response["success"] = 1;
-    	} else {
-    		$response["success"] = 0;
-    		$response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
-    		$response["query"] = $sql;
-    	}
-    } else if ($action == "delete") {
-    	$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
-    	if (mysqli_query($conn, $sql)) {
-    		$response["success"] = 1;
-    	} else {
-    		$response["success"] = 0;
-    		$response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
-    	}
-    } else if ($action == "delete_prescription") {
-    	$result = mysqli_query($conn, "SELECT * from baskets where prescription_id = ".$_POST['id']." union SELECT * from baskets where prescription_id = ".$_POST['id']) or returnError(mysqli_error($conn));
+} else if ($action == "update") {
+ $settings = "";
+ foreach ($_POST as $key => $value) {
+  if ($key != "request" && $key != "table" && $key != "id" && $key != "action") {
+   $settings .= $key . "='" . $value . "',";
+}
+$x++;
+}
+$settings = substr($settings, 0, strlen($settings) - 1);
+$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE id=" . $_POST['id'];
+if (mysqli_query($conn,  $sql )) {
+  $response["success"] = 1;
+  $response["has_contents"] = true;
+} else {
+    $response["has_contents"] = false;
+    $response["success"] = 0;
+    $response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
+    $response["query"] = $sql;
+}
+} else if ($action == "delete") {
+ $sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
+ if (mysqli_query($conn, $sql)) {
+  $response["success"] = 1;
+  $response["has_contents"] = true;
+} else {
+    $response["has_contents"] = false;
+    $response["success"] = 0;
+    $response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
+}
+} else if ($action == "delete_prescription") {
+ $result = mysqli_query($conn, "SELECT * from baskets where prescription_id = ".$_POST['id']." union SELECT * from baskets where prescription_id = ".$_POST['id']) or returnError(mysqli_error($conn));
 
-    	if($result->num_rows < 1) {
-    		$sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
+ if($result->num_rows < 1) {
+  $sql = "DELETE FROM " . $_POST['table'] . " WHERE id=" . $_POST['id'];
 
-    		if (mysqli_query($conn, $sql)) {
-    			unlink($_POST['url']);
-    			$response["success"] = 1;
-    		} else {
-    			$response["success"] = 0;
-    			$response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
-    		}	
-    	} else {
-    		$response["success"] = 2;
-    		$response["message"] = "Cannot delete a prescription that is submitted for an order." . mysqli_error($conn);
-    	}
+  if (mysqli_query($conn, $sql)) {
+   unlink($_POST['url']);
+   $response["success"] = 1;
+   $response["has_contents"] = true;
+} else {
+    $response["has_contents"] = false;
+    $response["success"] = 0;
+    $response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
+}	
+} else {
+    $response["has_contents"] = false;
+    $response["success"] = 2;
+    $response["message"] = "Cannot delete a prescription that is submitted for an order." . mysqli_error($conn);
+}
 
-    } else if ($action == 'multiple_delete') {
-    	$sql = "DELETE FROM ".$_POST['table']." WHERE id IN (".$_POST['serverID'].")";
+} else if ($action == 'multiple_delete') {
+ $sql = "DELETE FROM ".$_POST['table']." WHERE id IN (".$_POST['serverID'].")";
 
-    	if(mysqli_query($conn, $sql)) {
-    		$response["success"] = 1;
-    	} else {
-    		$response["success"] = 0;
-    		$response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
-    	}
-    } else if ($action == 'multiple_update_for_basket') {
+ if(mysqli_query($conn, $sql)) {
+  $response["success"] = 1;
+  $response["has_contents"] = true;
+} else {
+    $response["has_contents"] = false;
+    $response["success"] = 0;
+    $response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
+}
+} else if ($action == 'multiple_update_for_basket') {
 
-    	$collection = json_decode(stripslashes($_POST['jsobj']));
+ $collection = json_decode(stripslashes($_POST['jsobj']));
 
-    	$whens = "";
-    	$ids = "";
+ $whens = "";
+ $ids = "";
 
-    	foreach ($collection->jsobj as $col) {
-    		$whens = $whens." when id = ".$col->id." then ".$col->quantity;
-    		$ids = $ids.$col->id.","; 
+ foreach ($collection->jsobj as $col) {
+  $whens = $whens." when id = ".$col->id." then ".$col->quantity;
+  $ids = $ids.$col->id.","; 
             //if promo_id has value then initialize BasketPromo and fuck the shit up oh. -> save the promo_id and promo_type and discount_promo_value or id
             // if($col->promo_type != ""){
-            $sql_remove_bp = "DELETE FROM basket_promos where basket_id = ".$col->id;
-            mysqli_query($conn, $sql_remove_bp);
+  $sql_remove_bp = "DELETE FROM basket_promos where basket_id = ".$col->id;
+  mysqli_query($conn, $sql_remove_bp);
 
-                $sql = "INSERT INTO basket_promos(basket_id, promo_id, promo_type, ".$col->promo_type.", promo_free_product_qty) VALUES (".$col->id.",".$col->promo_id.",'".$col->promo_type."',".$col->promo_value.", ".$col->promo_free_product_qty.") ON DUPLICATE KEY UPDATE promo_id=".$col->promo_id.", promo_type='".$col->promo_type."', ".$col->promo_type."=".$col->promo_value.", promo_free_product_qty=".$col->promo_free_product_qty;
-                if(mysqli_query($conn, $sql))
-                    $response["promo_message"] = 'promo_saved';
-                else
-                    $response["promo_message"] = 'promo_not_saved';
+  $sql = "INSERT INTO basket_promos(basket_id, promo_id, promo_type, ".$col->promo_type.", promo_free_product_qty) VALUES (".$col->id.",".$col->promo_id.",'".$col->promo_type."',".$col->promo_value.", ".$col->promo_free_product_qty.") ON DUPLICATE KEY UPDATE promo_id=".$col->promo_id.", promo_type='".$col->promo_type."', ".$col->promo_type."=".$col->promo_value.", promo_free_product_qty=".$col->promo_free_product_qty;
+  if(mysqli_query($conn, $sql)){
+    $response["has_contents"] = true;
+    $response["promo_message"] = 'promo_saved';
+} else {
+    $response["has_contents"] = false;
+    $response["promo_message"] = 'promo_not_saved';
+}
 
-                $response['queryaf'] = $sql;
+$response['queryaf'] = $sql;
             // } 
-    	}
+}
 
-    	$ids = substr($ids, 0, strlen($ids) -1);
-    	$sql = "update baskets set quantity = ( case".$whens." end ) where id in (".$ids.")";
+$ids = substr($ids, 0, strlen($ids) -1);
+$sql = "update baskets set quantity = ( case".$whens." end ) where id in (".$ids.")";
 
-    	if (mysqli_query($conn, $sql)) {
-    		$response["success"] = 1;
-    		$response["message"] = "rows updated";
-    		$response["query"] = $sql;
-    	} else {
-    		$response["success"] = 0;
-    		$response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
-    	}
+if (mysqli_query($conn, $sql)) {
+  $response["success"] = 1;
+  $response["message"] = "rows updated";
+  $response["query"] = $sql;
+  $response["has_contents"] = true;
+} else {
+    $response["has_contents"] = false;
+    $response["success"] = 0;
+    $response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
+}
 
-    } else if ($action == "update_with_custom_where_clause") {
-    	$settings = "";
-    	foreach ($_POST as $key => $value) {
-    		if ($key != "request" && $key != "table" && $key != "id" && $key != "action" && $key != "custom_where_clause") {
-    			$settings .= $key . "='" . $value . "',";
-    		}
-    		$x++;
-    	}
-    	$settings = substr($settings, 0, strlen($settings) - 1);
-    	$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE ".$_POST['custom_where_clause'];
+} else if ($action == "update_with_custom_where_clause") {
+ $settings = "";
+ foreach ($_POST as $key => $value) {
+  if ($key != "request" && $key != "table" && $key != "id" && $key != "action" && $key != "custom_where_clause") {
+   $settings .= $key . "='" . $value . "',";
+}
+$x++;
+}
+$settings = substr($settings, 0, strlen($settings) - 1);
+$sql      = "UPDATE " . $_POST['table'] . " SET " . $settings . ", updated_at='" . $datenow . "' WHERE ".$_POST['custom_where_clause'];
 
-    	if(mysqli_query($conn, $sql)) {
-    		if(mysqli_affected_rows($conn) > 0){
-    			$response["success"] = 1;
-    			$response['server_id'] = mysqli_affected_rows($conn);
-    		} else {
-    			$response["success"] = 0;
-    			$response["message"] = "No record is updated or deleted";
-    		}
-    	} else {
-    		$response["success"] = 0;
-    		$response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
-    	}
+if(mysqli_query($conn, $sql)) {
+  if(mysqli_affected_rows($conn) > 0){
+   $response["success"] = 1;
+   $response['server_id'] = mysqli_affected_rows($conn);
+   $response["has_contents"] = true;
+} else {
+    $response["has_contents"] = false;
+    $response["success"] = 0;
+    $response["message"] = "No record is updated or deleted";
+}
+} else {
+    $response['has_contents'] = false;
+    $response["success"] = 0;
+    $response["message"] = "Sorry, we can't process your request right now. " . mysqli_error($conn);
+}
 
-    } else {
-    	echo json_encode($response);
-    	exit(0);
-    }
+} else {
+ echo json_encode($response);
+ exit(0);
+}
 
-    echo json_encode($response);
-    exit(0);
+echo json_encode($response);
+exit(0);
 }
 
 function pre($str)

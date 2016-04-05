@@ -125,7 +125,7 @@ if (isset($_FILES['image']['name'])) {
 			}
 		} else {
         // File successfully uploaded
-			$sql = "INSERT INTO patient_prescriptions (patient_id, filename) VALUES('$id', '$filename')";
+			$sql = "INSERT INTO patient_prescriptions (patient_id, filename) VALUES($id, '$filename')";
 			if( mysqli_query($conn, $sql) ){
 				$response['message'] = 'File uploaded successfully!';
 				$response['error'] = false;
