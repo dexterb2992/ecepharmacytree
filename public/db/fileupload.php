@@ -17,8 +17,8 @@ $new_name = "user_".$id; // this is the new folder you'll create
 $target_path .= $new_name . '/';
 
 if (!file_exists($target_path)) {  // to make sure the path doesn't exist yet
-mkdir($target_path);
-chmod($target_path, 0777);
+	mkdir($target_path);
+	chmod($target_path, 0777);
 }
 
 
@@ -80,7 +80,7 @@ if (isset($_FILES['image']['name'])) {
 
 			$patient_data = mysqli_query($conn, "SELECT * FROM patients WHERE id =".$id) or returnError(mysqli_error($conn));
 			if($patient_data->num_rows > 0) {
-				while ($row = mysqli_fetch_assoc($conn, $patient_data)) {
+				while ($row = mysqli_fetch_assoc( $patient_data)) {
 					if($row['photo'] != "") {
 						if(unlink(getcwd().'/uploads/user_'.$id.'/'.$row['photo'])){
 							$response['deletedoldpicture'] = "deleted old";

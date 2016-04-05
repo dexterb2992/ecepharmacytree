@@ -24,7 +24,7 @@ class DB_CONNECT {
         // import database connection variables
 
         // Connecting to mysql database
-        $con = mysqli_connect("localhost","homestead","secret","ece_pharmacy_tree");
+        $con = mysqli_connect("localhost","root","","ece_pharmacy_tree");
         
         //Check connection
         if (mysqli_connect_errno()) {
