@@ -23,8 +23,12 @@ class DB_CONNECT {
     function connect() {
         // import database connection variables
 
-        // Connecting to mysql database
-        $con = mysqli_connect("localhost","homestead","secret","ece_pharmacy_tree");
+
+        // Connecting to mysql database on localsetup
+        // $con = mysqli_connect("localhost","homestead","secret","ece_pharmacy_tree");
+
+        // Connecting to mysql database on production
+        $con = mysqli_connect("localhost","root","01gwapoko01","ece_pharmacy_tree");
         
         //Check connection
         if (mysqli_connect_errno()) {

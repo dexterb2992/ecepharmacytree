@@ -42,7 +42,7 @@ trait ResetsPasswords
             case Password::RESET_LINK_SENT:
 
                 return redirect()->back()->with('status', trans($response))->withFlash_message([
-                    'type' => 'info', 'msg' => "A password reset link has been successfully sent. Please check your email."
+                    'type' => 'important', 'msg' => "A password reset link has been successfully sent. Please check your email."
                 ]);
 
 

@@ -63,7 +63,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $members = Patient::withTrashed()->get();
+        $members = Patient::withTrashed()->paginate(100);
         $regions = Region::all();
 
         return view('admin.members')->withMembers($members)->withRegions($regions)->withTitle("Members");

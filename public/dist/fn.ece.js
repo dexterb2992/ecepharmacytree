@@ -15,13 +15,6 @@ function randomString(length){
  	return text;
 }
 
-$.fn.hasParent = function(a) {
-    return this.filter(function() {
-        return !!$(this).closest(a).length;
-    });
-};
-
-
 /**
  * type = info, success, warning, danger (modal's background color varies depending on the value of this parameter)
  * alertType = prompt, confirm, alert, notify (some buttons will show depending on this parameter)
@@ -96,46 +89,8 @@ $.fn.hasParent = function(a) {
     }catch(Exception){
         console.log("Error on updateInventoryProductQty: "+Exception);
     }
- }
-
-
- function allowNumericOnly(element){
- 	element.keydown(function (e) {
-
-	    // Allow: backspace, delete, tab, escape, enter and .
-	    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-	         // Allow: Ctrl+A, Command+A
-	         (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
-	         // Allow: home, end, left, right, down, up
-	         (e.keyCode >= 35 && e.keyCode <= 40)) {
-	             // let it happen, don't do anything
-	         return;
-	    }
-        
-	    // Ensure that it is a number and stop the keypress
-	    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-	    	e.preventDefault();
-	    }
-	});
-
-    element.change(function (e){
-        var val = parseFloat($(this).val());
-        var max = $(this).attr("data-max");
-        var min = $(this).attr("data-min");
-
-        if( typeof max !== 'undefined' ){
-            if( val >  parseFloat(max) ){
-                $(this).val(max);
-            }
-        }
-
-        if( typeof min !== 'undefined' ){
-            if( val <  parseFloat(min) || $(this).val() == "" ){
-                $(this).val(min);
-            }
-        }
-    });
 }
+
 
 function readURL(input, target) {
     if (input.files && input.files[0]) {
@@ -201,17 +156,6 @@ Object.size = function(obj) {
     }
     return size;
 };
-
-function limitStr(filename, max){
-	if( filename.length <= max )
-		return filename;
-	return filename.substring(0, 35)+"...";
-}
-
-function getActiveSidebarMenu(){
-	// $(".sidebar-menu li").removeClass("active");
-	// $(".sidebar-menu li a[href='"+window.location.href+"']").parent("li").addClass("active");
-}
 
 function refreshProductPrimaryPhoto(id){
     var filename = "";
@@ -355,22 +299,7 @@ function getOriginalCarouselItems(){
     '</a>';
 }
 
-// Note that we have a static variables for promo's offer type
-// @param int type 
-function get_promo_offer_type(type){
-    switch(type){
-        case 0: 
-            return "Percentage base discount";
-        case 1: 
-            return "Peso value discount";
-        case 2: 
-            return "Free Gift";
-        case 3: 
-            return "Free Delivery";
-    }
-}
 
-//
 function generate_gift_qty_form(productId, productName, quantity, inputname){
     console.log("i am generating gift div now");
     quantity = (typeof quantity === 'undefined') ? 1 : quantity;
@@ -407,14 +336,6 @@ function dataShowTarget(element, showWhen){
             $(showTarget).fadeIn();
         }
     }
-}
-
-function getArrayIndexForKey(arr, key, val){
-    for(var i = 0; i < arr.length; i++){
-        if(arr[i][key] == val)
-            return i;
-    }
-    return -1;
 }
 
 var _token = $('input[name="_token"]').val();

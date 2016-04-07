@@ -13,41 +13,33 @@ use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Clinic;
 use ECEPharmacyTree\Region;
 
+use ECEPharmacyTree\Repositories\ClinicRepository;
+
 class ClinicController extends Controller
 {
-    function __construct() {
+    private $clinic;
+    function __construct(ClinicRepository $clinic) {
+        $this->clinic = $clinic;
         $this->middleware('admin');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
+
     public function index()
     {
-        $clinics = Clinic::paginate(100);
-        $regions = Region::all();
-        return view('admin.clinics')->withClinics($clinics)
-            ->withRegions($regions);
+        $result = $this->clinic->index();
+
+        return view('admin.clinics')->withClinics($result['clinics'])
+            ->withRegions($result['regions']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
+
     public function store(Request $request)
     {
         $input = Input::all();
-        $clinic = new Clinic();
-        $clinic->name = ucfirst( $input['name'] );
-        $clinic->contact_no = ucfirst( $input['contact_no'] );
-        $clinic->additional_address = ucfirst( $input['additional_address'] );
-        $clinic->barangay_id = $input['barangay_id'];
 
-        if( $clinic->save() )
+        $response = $this->clinic->store($input);
+
+        if( $response )
             session()->flash('flash_message', ["msg" => "New Clinic has been added successfully.", "type" => "success"]);
             return Redirect::to( route('clinics') );
         
@@ -56,12 +48,7 @@ class ClinicController extends Controller
         return false;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+
     public function show($id)
     {
         $clinic = Clinic::findOrFail($id);
@@ -69,44 +56,55 @@ class ClinicController extends Controller
             return $clinic->toJson();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  int  $id
-     * @return Response
-     */
     public function update()
     {
         $input = Input::all();
-        $clinic = Clinic::findOrFail($input['id']);
-        $clinic->name = ucfirst( $input['name'] );
-        $clinic->contact_no = ucfirst( $input['contact_no'] );
-        $clinic->additional_address = ucfirst( $input['additional_address'] );
-        $clinic->barangay_id = $input['barangay_id'];
+        
+        $response = $this->clinic->update($input);
 
-        if( $clinic->save() )
+        if( $response )
             session()->flash("flash_message", ["msg" => "Clinic information has been updated.", "type" => "info"]);
             return Redirect::to( route('clinics') );
         session()->flash('flash_message', ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"]);
         return false;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+    public function clinic_doctor(){
+        $input = Input::all();
+
+        if( $input['action'] == "get_doctors" ){
+            $response = $this->clinic->get_doctors($input['clinic_id']);
+
+            if( $response != false )
+                return $response;
+
+            return json_encode([
+                "status" => "failed", 
+                "msg" => "Sorry, we can't process your request right now. Please try again later."
+            ]);
+        }else if( $input['action'] == "apply_changes" ){
+            $response = $this->clinic->clinic_doctor($input);
+
+            return $response;
+        }
+
+       
+    }
+
+
     public function destroy()
     {
-      $clinic = Clinic::findOrFail(Input::get("id"));
-      if( $clinic->delete() ){
-        session()->flash("flash_message", ["msg" => "Clinic has deleted successfully.", "type" => "warning"]);
-        return json_encode( array("status" => "success") );
-    }
+        $clinic = Clinic::findOrFail(Input::get("id"));
+        if( $clinic->delete() ){
+            session()->flash("flash_message", ["msg" => "Clinic has been deleted successfully.", "type" => "warning"]);
+            return json_encode(["status" => "success"]);
+        }
         
-    session()->flash('flash_message', ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"]);
-    return json_encode( array("status" => "failed", "msg" => "Sorry, we can't process your request right now. Please try again later.") );
-}
+        session()->flash('flash_message', ["msg" => "Sorry, we can't process your request right now. Please try again later.", "type" => "danger"]);
+
+        return json_encode([
+            "status" => "failed", 
+            "msg" => "Sorry, we can't process your request right now. Please try again later."
+        ]);
+    }
 }

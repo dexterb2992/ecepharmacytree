@@ -1,6 +1,7 @@
+/*! ece.js | (c) 2015 ECE Marketing */
+
 $(document).ready(function (){
     var old_photo_src = $('#user_photo').attr('src');
-    getActiveSidebarMenu();
     window.global_free_gift_product_ids = [];
     window.global_free_gift_quantities = []; // quantities from database
 
@@ -59,6 +60,7 @@ $(document).ready(function (){
     });
 
     $('.datatable').DataTable({
+        "responsive": true,
         "paging": true,
         "lengthChange": false,
         "searching": true,
@@ -68,16 +70,19 @@ $(document).ready(function (){
     });
 
     $('.table-orders').DataTable({
+        "responsive": true,
         "iDisplayLength": -1,
         "aaSorting": [[ 0, "desc" ]]
     });
 
     $('.table-referrals, #tbl_stock_returns').DataTable({
+        "responsive": true,
         "iDisplayLength": -1,
         "aaSorting": [[ 2, "desc" ]]
     });
 
     $('.table-points-log, #tbl_inventory_logs').DataTable({
+        "responsive": true,
         "aaSorting": [[ 0, "desc" ]]
     });
 
@@ -146,20 +151,26 @@ $(document).ready(function (){
             target = $this.attr("data-target");
         var form = $(target), 
             id = $this.attr('data-id'), 
-            modal = $this.data('modal-target');
+            modal = $this.attr('data-modal-target');
         var title = "", 
-            action = $this.data("action"), 
+            action = $this.attr("data-action"), 
             url = "", 
             mainurl = form.attr('data-urlmain'), 
-            dataTitle = $this.data('title');
+            dataTitle = $this.attr('data-title'),
+            rawdata = [];
 
         console.log('target: '+target+" id: "+target+" mainurl: "+mainurl);
         _clear_form_data(form);
         url = mainurl+action;
         window.hasAdditionalAddress = false;
         window.responseBarangayId = 0;
-        if( action == "edit" ){
-            title = "Edit "+dataTitle;
+        form.attr("data-mode", action);
+        form.attr("action", mainurl+action);
+
+        form.show(); // make sure form is not hidden
+        $('.modal-backdrop').remove();
+        if( action == "edit" || action == "view"){
+            title = action.ucfirst()+" "+dataTitle;
             url = $this.data("url");
             $.ajax({
                 url : mainurl+id,
@@ -167,6 +178,7 @@ $(document).ready(function (){
                 dataType : 'json'
             }).done(function (data){
                 console.log(data);
+                rawdata = data;
 
                 try{
                     if( form.find("input[name='id']").length < 1 ){
@@ -262,14 +274,15 @@ $(document).ready(function (){
 
                     form.find("input#date_range").val(start_date+" - "  +end_date);
 
-                    form.find('select').find('option:selected').removeAttr("selected");
+                    // form.find('select').find('option:selected').removeAttr("selected");
                     $.each(form.find('select'), function (i, row){
                         var name = $(row).attr("name");
 
                         $.each(data, function (i, col){
                             if( i == name ){
-                                $(row).find('option[value="'+col+'"]').attr("selected", "selected");
-
+                                // $(row).find('option[value="'+col+'"]').attr("selected", "selected");
+                                $(row).val(col); // works only with non-multiple select
+                                console.log("yeayeayea");
                                 dataShowTarget(row, col);
                             }
                         });
@@ -393,8 +406,9 @@ $(document).ready(function (){
                          init_specific_product_list( $("#product_groups_products_involved") );
                     }
 
-
+                    $(modal).modal('show');
             });
+        
         } else if(action == "preview_image"){
             var img_source = $(this).children('img').attr('src');
             $('#image_holder').attr('src', img_source);               
@@ -415,26 +429,27 @@ $(document).ready(function (){
             _clear_form_data(form);
             form.find('#inventories_product_id, #inventory_quantity').removeAttr("disabled").trigger("change");
             updateInventoryProductQty();
+
+            $(modal).modal('show');
         }
-
-        form.attr("data-mode", action);
-        form.attr("action", mainurl+action);
-
+        
         form.find(".modal-title").html(title);
-        
-        $(modal).modal('show');
-        
-
         $("select.select2").select2();
        
         $('.data-show').trigger('change click');
-
-        console.log("checking if hasAdditionalAddress ");
+        
         setTimeout(function(){
+            console.log("checking if hasAdditionalAddress ");
+
             if( window.hasAdditionalAddress == true && $("#map").length > 0){
                 console.log("hasAdditionalAddress: yes");
                 initMap();
             }
+
+            if( rawdata.hasOwnProperty('lot_number') && action == "edit" ){
+                $("#inventory_lot_number").trigger('change');
+            }
+
         },1000);
         
 
@@ -1055,7 +1070,15 @@ $("#add_gallery").click(function (){
 
     $('input[name="sku"]').bind("change keyup", function (){
         // check if sku exists
-        var $this = $(this), sku = $this.val();
+        var $this = $(this), 
+            sku = $this.val(),
+            form = $this.attr("data-form_edit_product");
+
+        var product_id = form.find('input[name="id"]').val();
+        if( typeof(product_id) == 'undefined' ){
+            product_id = 0;
+        }
+
         if( sku.length < 6 ){
             _error($this, "SKU should be atleast 6 characters long.");
         }else{
@@ -1064,7 +1087,7 @@ $("#add_gallery").click(function (){
                 url: '/api/check/sku/',
                 type: 'get',
                 dataType: 'text',
-                data: {sku: sku}
+                data: {sku: sku, product_id: product_id}
             }).done(function (data){
                 if( data == 'true' ){
                     _error($this, "Opps...that SKU already exists.");
@@ -1646,23 +1669,43 @@ $("#add_gallery").click(function (){
                     $.each(data, function (i, row){
                         var option = "", max_removable = 0;
                         max_removable = row.quantity - row.defective_quantity;
+                        var status = "";
                         if( row.quantity > row.defective_quantity ){
                             option = '<input type="text" class="number returned-item-qty" value="'+max_removable+'" data-max="'+max_removable+'" data-min="1" placeholder="Defective quantity" name="damaged_qty">'+
                                     '<a href="javascript:void(0);" class="btn-xxs btn-danger btn btn-flat btn-defective-qty" data-id="'+row.id+'">Mark as defective</a> ';
-                        }else{
-                            option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                        }
+                            
+                        /*if( row.defective_quantity > 0 ){
+                            status += '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
                                 row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
                                 ' marked as defective)</span> ';
+                        }*/
+                        
+
+                        var total_replacement = row.total_replacement;
+                        // $.each(row.replacement, function (c, r){
+                        //     total_replacement+= r.quantity;
+                        // });
+
+                        // var max_replaceable = row.quantity - total_replacement;
+                        var max_replaceable = row.max_replaceable;
+
+                        if( row.quantity > total_replacement || total_replacement == 0 ){
+                            option+= '<br/><input type="text" class="number returned-item-qty" readonly value="'+max_replaceable+'" data-max="'+max_replaceable+'" data-min="1" placeholder="Replaced quantity" name="replaced_qty">'+
+                                    '<a href="javascript:void(0);" data-max-replaceable="'+max_replaceable+'" class="btn-xxs btn-primary btn btn-flat btn-replace-qty" data-product-id="'+row.product.id+'" data-id="'+row.id+'">Replace</a><br/>';
+
                         }
 
-                        if( row.quantity > row.replacement.quantity ){
-                            option+= ' <a href="javascript:void(0);" data-max-replaceable="'+row.quantity+'" class="btn-xxs btn-primary btn btn-flat btn-replace-qty" data-product-id="'+row.product.id+'" data-id="'+row.id+'">Replace</a>';
-
-                        }else{
-                            option = ' <span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+
+                        /*if( total_replacement > 0 ){
+                            status += ' <br/><span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+
                                 ' returned, '+
-                                row.replacement.quantity+' '+str_auto_plural(row.product.packing, row.replacement.quantity)+
+                                total_replacement+' '+str_auto_plural(row.product.packing, total_replacement)+
                                 ' replaced)</span>';
+                        }*/
+                        if( row.defective_quantity > 0 || total_replacement > 0 ){
+                            status = ' <span class="msg-status">'+row.msg_status+'</span>';
+                        }else{
+                            status = ' <span class="msg-status"></span>';
                         }
 
                         html+= '<li>'+
@@ -1673,7 +1716,7 @@ $("#add_gallery").click(function (){
                                         '</span>'+
                                         '<span class="product-list-items" title="'+row.product.name+'">'+row.product.name+'</span>'+
                                     '</div>'+
-                                    '<div class="col-md-6">'+option+'</div>'+
+                                    '<div class="col-md-6">'+option+'<br/>'+status+'</div>'+
                                 '</div>'+
                             '</li>';
                     });
@@ -1693,62 +1736,51 @@ $("#add_gallery").click(function (){
 
     });
 
-    $(document).on("click", ".btn-defective-qty", function (){
-        var $this = $(this), txtbox = $this.prev("input"), qty = txtbox.val();
+    $(document).on('click', '.refresh-inventory-logs', function (){
+        var $this = $(this);
+        $this.children('i').addClass("fa-spin");
+
         $.ajax({
-            url: "/update-defective-stocks",
-            type: "post",
-            dataType: "json",
-            data: {
-                _token: $("input[name='_token']").val(),
-                id: $this.attr("data-id"),
-                defective_quantity: qty
-            },
-            beforeSend: function (){
-                $this.addClass("disabled").html("Loading..");
-            }
+            url: '/inventory/logs',
+            type: 'post',
+            data: { _token: $('input[name="_token"]').val() }
         }).done(function (data){
-            $this.removeClass("disabled").html("Mark as defective");
-            var alert = '';
-            if( data.status == 200 ){
-                var option = "", row = data.data;
+            $this.parent("div").parent("div.box-body").html(data);
+            $("#tbl_inventory_logs").DataTable({
+                "responsive": true,
+                "aaSorting": [[ 0, "desc" ]]
+            });
+            $('[data-toggle="tooltip"]').tooltip();
 
-                alert = '<br/><span class="label label-success">Successfully removed '+qty+' '+
-                        str_auto_plural(row.product.packing, qty)+' of '+row.product.name+' from the inventory</span>';
-                   
-                $("#returned_stocks_lists_request_status").append(alert);
-                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
-                    $(this).prev('br').remove();
-                    $(this).remove();
-                });
+            $this.children('i').removeClass("fa-spin");
+        });
+    });
 
-                if( row.defective_quantity == row.quantity ){
-                    txtbox.fadeOut();
-                    $this.fadeOut(function (){
-                        option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
-                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
-                                ' marked as defective)</span>';
-                        if( txtbox.next('span').length > 0 ){
-                            txtbox.next('span').remove().after(option);
-                        }else{
-                            txtbox.after(option);
-                        }
-                    });
-                }else{
-                    var max_removable = row.quantity - row.defective_quantity;
-                    txtbox.attr("data-max", max_removable).val(max_removable);
-                    option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
-                                qty+' '+str_auto_plural(row.product.packing, qty)+
-                                ' marked as defective)</span>';
-                }
-            }else if(data.error){
-                alert = '<br/><span class="label label-danger">'+data.error+'</span>';
-                console.log(alert);
-                $("#returned_stocks_lists_request_status").append(alert);
-                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
-                    $(this).remove();
-                });
-            }
+    $(document).on('click', '.refresh-inventory-items', function (){
+        var $this = $(this);
+        $this.children('i').addClass("fa-spin");
+
+        var prevHtmls = '';
+        
+
+        $.ajax({
+            url: '/inventory/items',
+            type: 'post',
+            data: { _token: $('input[name="_token"]').val() }
+        }).done(function (data){
+            $this.children('i').removeClass("fa-spin");
+
+            prevHtmls+= '<small>'+$this.parent("div").prev('small').html()+'</small>';
+            prevHtmls+= '<div style="margin-bottom: 20px;">'+$this.parent('div').html()+'</div>';
+
+            $this.parent("div").parent("div.box-body").html(prevHtmls+data);
+            $("#tbl_inventory_items").DataTable({
+                "responsive": true,
+                "aaSorting": [[ 0, "desc" ]]
+            });
+            $('[data-toggle="tooltip"]').tooltip();
+
+            
         });
     });
 
@@ -1767,15 +1799,18 @@ $("#add_gallery").click(function (){
             dataType: 'json'
         }).done(function (data){
             console.log(data);
-            if( !data.error && data.data.length > 0 ){
+            if( !data.error && data.data.length < 1 ){
+                showAlert("Heads up!", data.msg, "danger", "notify")
+            }else if( !data.error && data.data.length > 0 ){
                 var product_name = data.data[0].product_name;
                 var parentRow = $this.parent("div").parent("div.row");
 
-                $this.fadeOut();
+                // $this.fadeOut();
+                $this.addClass("disabled");
 
                 if( parentRow.next(".replacement-form").length < 1 ){
                     // create a new element, we use $(document.createElement('element')) for fastest performance
-                    // refer here http://jsperf.com/jquery-vs-createelement to prove to yourself
+                    // refer here http://jsperf.com/jquery-vs-createelement
 
                     var options = [];
                     var lotnumbers = [];
@@ -1790,18 +1825,115 @@ $("#add_gallery").click(function (){
                         lotnumbers[row.id] = row.available_quantity;
                     });
 
-                    var select = $(document.createElement('select')).attr("multiple", "multiple").attr("id", 's_'+product_stock_return_id+"_p_"+product_id)
-                                    .addClass("stock-return-replacement").attr("data-id", product_stock_return_id).append(options);               
+                    var select = $(document.createElement('select')).attr("multiple", "multiple")
+                                    .attr("id", 's_'+product_stock_return_id+"_p_"+product_id)
+                                    .addClass("stock-return-replacement").attr("data-id", product_stock_return_id)
+                                    .append(options);               
                     var newRow = $(document.createElement('span')).addClass("replacement-form").addClass("row");
+                    
+                    var column1 = $(document.createElement('span')).addClass("col-md-10 replacement-lotnumber-div"),
+                        column2 = $(document.createElement('span')).addClass("col-md-2 replacement-submit-div"),
+                        label = $(document.createElement("label")).text("Select Lot number for the replacement"),
+                        small = $(document.createElement("small")).text("Note: These lot numbers are exclusive for "+product_name+" only. If selected lot numbers are more than 1, the system will prioritize the lot number with lesser available quantity."),
+                        btn_submit = $(document.createElement("button")).text("Submit").attr("data-target", '#s_'+product_stock_return_id+"_p_"+product_id)
+                                .addClass("btn btn-xxs btn-flat btn-success submit-replacement").attr("data-id", product_stock_return_id),
+                        btn_cancel =  $(document.createElement("button")).text("Cancel ")
+                                .addClass("btn btn-xxs btn-flat btn-warning submit-replacement").attr("data-id", product_stock_return_id),
+                        hr = $(document.createElement("hr")),
+                        br = $(document.createElement("br"));
+
+                        btn_cancel.click(function (){
+                            parentRow.next(".replacement-form").fadeOut(function(){
+                                // $this.fadeIn();
+                                $this.removeClass("disabled");
+                            });
+                        });
+
+                        btn_submit.click(function (){
+                            var lot_num = select.val();
+                            if( lot_num != "" && lot_num != null ){
+                                $.ajax({
+                                    url: '/replace-returned-product',
+                                    type: 'post',
+                                    dataType: 'json',
+                                    data: { 
+                                        'inventory_ids': lot_num, 
+                                        'product_stock_return_id': product_stock_return_id, 
+                                        _token: $('input[name="_token"]').val() 
+                                    }
+                                }).done(function (data){
+                                    console.log(data);
+                                    if( !data.error && data.status == 200 ){
+                                        parentRow.next(".replacement-form").fadeOut().html("");
+                                        
+                                        var html_output = '<span class="msg-status">'+data.msg_status+'</span>';
+
+                                        if( data.max_replaceable == 0 ){
+                                            /*if( $this.prev("input").next('span').length ){
+                                                $this.prev("input").next('span').replaceWith(html_output);
+                                                $this.fadeOut();
+                                            }else{
+                                                $this.fadeOut().prev("input").fadeOut().replaceWith(html_output);
+                                            }*/
+                                            if( parentRow.find('span.msg-status').length ){
+                                                parentRow.find('span.msg-status').html(data.msg_status);
+                                                $this.fadeOut();
+                                            }else{
+                                                $this.prev("input").after(html_output);
+                                                $this.prev('input').fadeOut();
+                                                $this.fadeOut();
+                                            }
+                                            
+                                        }else{
+
+                                            /*if( $this.prev("input").next('span').length ){
+                                                $this.prev("input").next('span').replaceWith(html_output);
+                                            }else{
+                                                $this.prev("input").after(html_output)
+                                            }*/
+                                            if( parentRow.find('span.msg-status').length ){
+                                                parentRow.find('span.msg-status').html(data.msg_status);
+                                            }else{
+                                                $this.prev("input").after(html_output);
+                                            }
+                                            $this.removeClass('disabled').removeAttr("disabled");
+                                        }
+
+                                        
+
+                                        $this.prev("input").attr("data-max", data.max_replaceable).val(data.max_replaceable);
+
+                                    }else{
+                                        showAlert("Opps! Something's not good.", "Sorry, something went wrong. Please refresh the page and try again. If problem persists, please contact your programmer.", "danger", "notify");
+                                    }
+                                });
+                            }
+                        });
+
+                    column1.append(label,br,small,select);
+                    column2.append(btn_submit, btn_cancel)
+                    newRow.append(column1, column2);
+                    parentRow.after(newRow,hr);
+                    select.select2();
+
 
                     select.on("change", function (){
                         // console.log($(this).val());
                         if( $(this).val() != null ){
-                            $.each($(this).val(), function (i, row){
+                            var total_max = 0,
+                                selectVals = [];
+                            if( is_array( $(this).val() ) ){
+                                selectVals = $(this).val();
+                            }else{
+                                selectVals.push( $(this).val() );
+                            }
+
+                            $.each( selectVals, function (i, row){
                                 console.log(row);
                                 // var max = select.children("option[value='"+row+"']").attr("data-max-replaceable");
-                                var max = lotnumbers[row];
-                                console.log("max: "+max);
+                                var max = lotnumbers[row]; // available quantity of this lot number
+                                
+                                console.log("max: "+max+"\nreplaceable_qty: "+replaceable_qty);
 
                                 if( replaceable_qty <=  max){
                                     // prevent selecting another option
@@ -1809,7 +1941,9 @@ $("#add_gallery").click(function (){
 
                                     if (typeof attr !== typeof undefined && attr !== false) {
                                        
-                                        select.select2('destroy');                                      
+                                        select.select2('destroy');   
+                                        select.children('option').removeAttr("selected");
+                                        select.children('option[value="'+row+'"]').attr("selected", "selected");                                   
                                         select.removeAttr("multiple").select2();
                                     }
                                     console.log("yes");
@@ -1817,58 +1951,212 @@ $("#add_gallery").click(function (){
                                 }else{
                                     console.log("no");
 
-                                    var attr = select.attr('multiple');
+                                    if( total_max > replaceable_qty ){
+                                        // return false;
+                                        console.log("opps! too much!");
+                                        select.select2('destroy').children('option[value="'+row+'"]').removeAttr("selected");   
+                                        select.select2();
+                                    }else{
+                                        total_max+= max;
 
-                                    if (typeof attr !== typeof undefined && attr !== false) {
-                                        // do nothing
-                                    }else{                                        
-                                        select.select2('destroy');
-                                        select.attr("multiple", "multiple").select2();
+                                        console.log("addmore..\ntotal_max: "+total_max);
+
+                                        var attr = select.attr('multiple');
+                                       
+
+                                        if (typeof attr !== typeof undefined && attr !== false) {
+                                            // do nothing
+                                        }else{                                        
+                                            select.select2('destroy');
+                                            select.attr("multiple", "multiple").select2();
+                                        }
                                     }
+
                                     
                                 }
                             });
+
+                            if( total_max >= replaceable_qty ){
+                                console.log("yeah, weve reach the max");
+                                select.select2("destroy");
+                                $.each(select.children('option'), function (i, row){
+                                    var rowVal = $(row).val();
+                                    if( !$.inArray( selectVals, rowVal ) ){
+                                        select.children('option[value="'+rowVal+'"]').attr("disabled", "disabled");
+                                    }
+                                });
+
+                                select.select2();
+                            }else{
+                                console.log("go on, we need more");
+                                select.select2("destroy");
+                                select.children('option').removeAttr("disabled");
+                                select.select2();
+                            }
                         }
                     });
-                    
-                    var column1 = $(document.createElement('span')).addClass("col-md-10"),
-                        column2 = $(document.createElement('span')).addClass("col-md-2"),
-                        label = $(document.createElement("label")).text("Select Lot number for the replacement"),
-                        small = $(document.createElement("small")).text("Note: These lot numbers are exclusive for "+product_name+" only."),
-                        btn = $(document.createElement("button")).text("Submit").attr("data-target", '#s_'+product_stock_return_id+"_p_"+product_id)
-                                .addClass("btn btn-xxs btn-flat btn-success submit-replacement").attr("data-id", product_stock_return_id),
-                        btn_cancel =  $(document.createElement("button")).text("Cancel")
-                                .addClass("btn btn-xxs btn-flat btn-warning submit-replacement").attr("data-id", product_stock_return_id),
-                        hr = $(document.createElement("hr")),
-                        br = $(document.createElement("br"));
-
-                        btn_cancel.click(function (){
-                            parentRow.next(".replacement-form").fadeOut(function(){
-                                $this.fadeIn();
-                            });
-                        });
-
-                        btn.click(function (){
-                            var lot_num = select.val();
-                            $.ajax({
-                                url: '/replace-returned-product',
-                                type: 'post',
-                                dataType: 'json',
-                                data: { 'inventory_ids': lot_num, 'product_stock_return_id': product_stock_return_id, _token: $('input[name="_token"]').val() }
-                            }).done(function (data){
-                                console.log(data);
-                            });
-                        });
-
-                    column1.append(label,br,small,select);
-                    column2.append(btn, btn_cancel)
-                    newRow.append(column1, column2);
-                    parentRow.after(newRow,hr);
-                    select.select2();
                 }else{
                     parentRow.next(".replacement-form").fadeIn();
                 }
             }
+        });
+    });
+
+    $(document).on("click", ".btn-defective-qty", function (){
+        var $this = $(this), txtbox = $this.prev("input"), qty = txtbox.val();
+        $.ajax({
+            url: "/update-defective-stocks",
+            type: "post",
+            dataType: "json",
+            data: {
+                _token: $("input[name='_token']").val(),
+                id: $this.attr("data-id"),
+                defective_quantity: qty
+            },
+            beforeSend: function (){
+                $this.addClass("disabled").html("Loading..");
+            }
+        }).done(function (data){
+            $this.removeClass("disabled").html("Mark as defective");
+            var alertMsg = '';
+            if( data.status == 200 ){
+                var option = "", row = data.data;
+
+                alertMsg = '<span class="label label-success">Successfully removed '+qty+' '+
+                        str_auto_plural(row.product.packing, qty)+' of '+row.product.name+' from the inventory</span><br/>';
+                   
+                $("#returned_stocks_lists_request_status").append(alertMsg);
+                $("#returned_stocks_lists_request_status span.label").fadeIn().delay(4000).fadeOut(function(){
+                    $(this).prev('br').remove();
+                    $(this).remove();
+                });
+
+                /*if( row.defective_quantity == row.quantity ){
+                    txtbox.fadeOut();
+                    $this.fadeOut(function (){
+                        option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                row.defective_quantity+' '+str_auto_plural(row.product.packing, row.defective_quantity)+
+                                ' marked as defective)</span>';
+                        if( txtbox.next('span').length > 0 ){
+                            txtbox.next('span').remove().after(option);
+                        }else{
+                            txtbox.after(option);
+                        }
+                    });
+                }else{
+                    var max_removable = row.quantity - row.defective_quantity;
+                    txtbox.attr("data-max", max_removable).val(max_removable);
+                    option = '<span class="">('+row.quantity+' '+str_auto_plural(row.product.packing, row.quantity)+' returned, '+
+                                qty+' '+str_auto_plural(row.product.packing, qty)+
+                                ' marked as defective)</span>';
+                }*/
+                var parentRow = $this.parent("div").parent("div.row");
+
+                parentRow.next(".replacement-form").fadeOut().html("");
+                    
+                var html_output = '<span class="msg-status">'+row.msg_status+'</span>';
+
+                if( row.defective_quantity == row.quantity ){
+                    if( parentRow.find('span.msg-status').length ){
+                        parentRow.find('span.msg-status').html(row.msg_status);
+                        $this.prev("input").fadeOut();
+                        $this.fadeOut();
+                    }else{
+                        $this.fadeOut().prev("input").fadeOut().after(html_output);
+                    }
+                }else{
+                    // var max_removable = row.quantity - row.defective_quantity;
+                    txtbox.attr("data-max", row.max_removable).val(row.max_removable);
+
+                    if( parentRow.find('span.msg-status').length ){
+                        parentRow.find('span.msg-status').html(row.msg_status);
+                    }else{
+                        $this.prev("input").after(html_output);
+                    }
+
+                    $this.removeClass('disabled').removeAttr("disabled");
+                }
+
+                txtbox.attr("data-max", row.max_removable).val(row.max_removable);
+                
+            }else if(data.error){
+                
+                showAlert("Opps! Something's not good.", data.error, "danger", "notify");
+
+            }
+        });
+    });
+    
+
+    // For Doctor - Clinic Tagging
+    $(".edit-clinic-doctors").click(function (){
+        var $this = $(this);
+
+        $("#btn_doctor_clinic_save_changes").attr("data-c-id", $this.attr("data-id"));
+
+        $.ajax({
+            url: '/clinic-doctor',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                action: 'get_doctors',
+                doctor_ids: $('#doctor_ids').val(),
+                clinic_id: $this.attr("data-id"),
+                _token: $('input[name="_token"]').val()
+            }
+        }).done(function (data){
+            console.log(data);
+            if( data.length > 0 ){
+                var selectedDoctors = [];
+                $.each(data, function (i, row){
+                    selectedDoctors.push(row.id);
+                });
+
+                $("#doctor_ids").val(selectedDoctors.join(","));
+
+                $("#modal_tag_clinic_doctor").modal('show');
+                init_select2_items($("#doctor_ids"), window.select2_all_doctors);
+            }
+        });
+    });
+
+    $("#btn_doctor_clinic_save_changes").click(function (){
+        $this = $(this);
+        clinicId = $this.attr("data-c-id");
+        $.ajax({
+            url: "/clinic-doctor",
+            type: 'post',
+            dataType: 'json',
+            data: {
+                action: 'apply_changes',
+                clinic_id: clinicId,
+                doctor_ids: $("#doctor_ids").val(),
+                _token: $('input[name="_token"]').val()
+            },
+            beforeSend: function (){
+                $this.addClass("disabled").html('<i class="fa fa-refresh fa-spin"></i> Please wait...');
+            }
+        }).done(function (data){
+            console.log(data);
+            if( data.status != 'failed' ){
+                /*
+                <span class="badge bg-yellow" data-toggle="tooltip" data-original-title="{{ count($clinic->doctors) }} total doctors">{{ count($clinic->doctors) }}</span>
+                @foreach ( limit($clinic->doctors, 3) as $doctor)
+                    <span class="badge bg-aqua">{{ get_person_fullname($doctor) }}</span>
+                @endforeach
+                */
+                span1 = '<span class="badge bg-yellow" data-toggle="tooltip" data-original-title="'+data.count+' total doctors">'+data.count+'</span> ';
+                span2 = '';
+                for (var i = 0; i < data.doctors.length; i++) {
+                    if( i < 3 ){
+                        span2+= '<span class="badge bg-aqua">'+data.doctors[i].lname+', '+data.doctors[i].fname+'</span>';
+                    }
+                }
+
+                $('.clinic-doctors-div[data-id="'+clinicId+'"]').html(span1+span2);
+            }
+
+            $this.removeClass("disabled").html('Apply changes');
         });
     });
 });

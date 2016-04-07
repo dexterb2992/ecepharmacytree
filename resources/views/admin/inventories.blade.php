@@ -31,7 +31,7 @@
 
 								<div class="pull-right">
 					                <button class="btn-info btn add-edit-btn glow" data-toggle="modal" data-modal-target="#modal-add-edit-inventory" 
-					                	data-action="create" data-title="inventory">
+					                	data-action="create" data-title="inventory" data-target="#form_edit_inventory">
 					                	<i class="fa-plus fa"></i> Add New
 					                </button>
 					                <button class="btn-success btn  btn-stock-return glow" data-target="#modal-stock-return" data-toggle="modal">
@@ -50,7 +50,12 @@
 	                                    <a href="{{ route('Inventory::all') }}">Show Out-of-Stock Inventories</a>
 	                                </small>
 	                            @endif
-								<table class="table table-bordered table-hover datatable">
+	                            <div style="margin-bottom: 20px;">
+								    <a href="javascript:void(0);" class="refresh-inventory-items">
+								    	<i class="fa fa-refresh"></i> Refresh
+								    </a>
+								</div>
+								<table class="table table-bordered table-hover datatable" id="tbl_inventory_items">
 									<thead>
 										<tr>
 											<th>ID</th>
@@ -89,7 +94,7 @@
 													</a>
 												</td>
 												<td>
-													{{ $inventory->quantity }}
+													{{ "$inventory->quantity ".str_auto_plural($inventory->product->packing, $inventory->quantity) }}
 												</td>
 												<td>
 													<?php 
@@ -100,11 +105,21 @@
 												
 												</td>
 												<td>
-													<?php $expiration = Carbon::parse($inventory->expiration_date); ?>
-													<span class="label label-success" data-toggle="tooltip" data-original-title="{{ $expiration->formatLocalized('%A %d %B %Y') }}">
-														<i class="fa-clock-o fa"></i> 
-														{{ $expiration->diffForHumans() }}
-													</span>
+													<?php 
+														if( is_null($inventory->expiration_date) ){
+															?>
+															<span class="label label-info" data-toggle="tooltip" data-original-title="No expiration">No Expiration</span>
+															<?php
+														}else{
+															$expiration = Carbon::parse($inventory->expiration_date); 
+															?>
+															<span class="label label-success" data-toggle="tooltip" data-original-title="{{ $expiration->formatLocalized('%A %d %B %Y') }}">
+																<i class="fa-clock-o fa"></i> 
+																{{ $expiration->diffForHumans() }}
+															</span>
+															<?php
+														}
+													?>
 												</td>
 												<td>
 													<?php 
@@ -212,6 +227,11 @@
 								<h4>Stocks Activity Logs</h4> <br/>
 							</div>
 							<div class="box-body">
+								<div style="margin-bottom: 20px;">
+								    <a href="javascript:void(0);" class="refresh-inventory-logs">
+								    	<i class="fa fa-refresh"></i> Refresh
+								    </a>
+								</div>
 								<table class="table table-bordered table-hover" id="tbl_inventory_logs">
 									<thead>
 										<tr>
@@ -427,6 +447,7 @@
 			        		</div>
 			        		
 			        		<div class="modal-footer">
+				        		<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
 			        			<button type="submit" class="btn btn-primary btn-flat glow" name="submit">Return to Stocks</button>
 			        		</div>
 			        	{!! Form::close() !!}
@@ -440,7 +461,7 @@
 	        		<div class="modal-content">
 	        			<div class="modal-header">
 	        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        			<h4 class="alert alert-warning align-center" style="margin-top: -2px;margin-right: -4px;">
+		        			<h4 class="alert replace-remove-header align-center">
 		        				Replace/Remove the newly returned items from inventory
 		        			</h4>
 	        			</div>
@@ -448,7 +469,9 @@
 	        				<span id="returned_stocks_lists_request_status"></span>
 	        				<ul class="todo-list" id="returned_stocks_lists"></ul>
 	        			</div>
-	        			<div class="modal-footer"></div>
+	        			<div class="modal-footer">
+	        				<button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+	        			</div>
 	        		</div>
 	        	</div>
 	        </div>

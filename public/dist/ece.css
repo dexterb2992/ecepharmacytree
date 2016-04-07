@@ -462,6 +462,7 @@ label[for="product_applicability"], label[for="discount_type"], label[for="has_f
     line-height: 1.5;
     padding-top: 2px;
     margin-bottom: 2px;
+    min-width: 48.5px;
 }
 
 table#tbl_stock_returns>tbody>tr>td, table#tbl_stock_returns>thead>tr>th {
@@ -477,4 +478,27 @@ table#tbl_stock_returns>tbody>tr>td, table#tbl_stock_returns>thead>tr>th {
     to {
         text-shadow: -1px 1px 8px currentColor, 1px -1px 8px #fff;
     }
+}
+
+
+ul#returned_stocks_lists>li {
+    border-left: 2px solid #4CAF50;
+}
+
+.replace-remove-header{
+    margin-top: -2px;margin-right: -4px; border-bottom: 1px solid orange;
+}
+
+.replacement-lotnumber-div{
+    border-top: 1px solid #FFC107;
+    padding-top: 8px;
+}
+.replacement-submit-div{
+    border-top: 1px solid #00BCD4;
+    padding-top: 8px;
+    border-right: 1px solid #8BC34A;
+}
+
+.referral-chart-row div.box-body {
+    overflow-x: scroll;
 }
