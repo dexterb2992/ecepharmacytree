@@ -17,6 +17,7 @@ $(document).ready(function (){
             assync: false,
             dataType: 'json'
         }).done(function (data){
+            console.log(data);
             var area = new Morris.Area({
                 element: 'revenue-chart',
                 resize: true,
@@ -32,10 +33,10 @@ $(document).ready(function (){
                     {y: '2013 Q1', item1: 10687, item2: 4460},
                     {y: '2013 Q2', item1: 8432, item2: 5713}
                 ],*/
-                data: data.data,
+                data: data[""],
                 xkey: 'y',
-                ykeys: ['item1', 'item2'],
-                labels: ['Item 1', 'Item 2'],
+                ykeys: ['Sales'],
+                labels: ['Sales'],
                 lineColors: ['#a0d0e0', '#3c8dbc'],
                 hideHover: 'auto'
             });
