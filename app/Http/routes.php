@@ -293,5 +293,5 @@ Route::post('get-product-lotnumbers', 'InventoryController@get_product_lot_numbe
 Route::post('replace-returned-product', 'StockReturnController@replace');
 
 Route::get('try', function (){
-	echo ge_new_orders();
+	pre(get_total_sales());
 });

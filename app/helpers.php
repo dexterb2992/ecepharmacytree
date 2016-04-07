@@ -6,6 +6,7 @@ use ECEPharmacyTree\Order;
 use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Product;
 use ECEPharmacyTree\Doctor;
+use ECEPharmacyTree\Billing;
 
 function pre($str) {
 	echo '<pre>';
@@ -585,6 +586,6 @@ function get_all_doctors(){
 }
 
 function get_total_sales(){
-	$total = Billing::where('payment_status', '=', 'paid')->sum('total')->groupBy(DB::raw('YEAR(created_at)'))->get();
-	return number_format($total, 2);
+	$total = Billing::where('payment_status', '=', 'paid')->groupBy(DB::raw('YEAR(created_at)'))->get();
+	return $total;
 }
