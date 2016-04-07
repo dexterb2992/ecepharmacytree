@@ -13,7 +13,7 @@ $(document).ready(function (){
     try{
         $.ajax({
             url: '/get-sales',
-            type: 'post',
+            type: 'get',
             assync: false,
             dataType: 'json'
         }).done(function (data){

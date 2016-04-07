@@ -296,6 +296,6 @@ Route::get('try', function (){
 	dd(get_total_sales());
 });
 
-Route::post('get-sales', function (){
+Route::get('get-sales', function (){
 	echo get_total_sales(); 
 });
