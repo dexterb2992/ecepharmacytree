@@ -18,6 +18,8 @@ $(document).ready(function (){
             dataType: 'json'
         }).done(function (data){
             console.log(data);
+            var a = data;
+            console.log(a[""]);
             var area = new Morris.Area({
                 element: 'revenue-chart',
                 resize: true,
@@ -33,7 +35,7 @@ $(document).ready(function (){
                     {y: '2013 Q1', item1: 10687, item2: 4460},
                     {y: '2013 Q2', item1: 8432, item2: 5713}
                 ],*/
-                data: data[""],
+                data: a[""],
                 xkey: 'y',
                 ykeys: ['Sales'],
                 labels: ['Sales'],
