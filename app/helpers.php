@@ -583,3 +583,8 @@ function get_all_doctors(){
 	$doctors = Doctor::all()->count();
 	return number_format($doctors);
 }
+
+function get_total_sales(){
+	$total = Billing::where('payment_status', '=', 'paid')->sum('total')->groupBy(DB::raw('YEAR(created_at)'))->get();
+	return number_format($total, 2);
+}
