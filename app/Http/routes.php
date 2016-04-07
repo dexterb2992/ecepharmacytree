@@ -295,3 +295,7 @@ Route::post('replace-returned-product', 'StockReturnController@replace');
 Route::get('try', function (){
 	dd(get_total_sales());
 });
+
+Route::post('get-sales', function (){
+	echo get_total_sales(); 
+});
