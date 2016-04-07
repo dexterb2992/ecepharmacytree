@@ -588,5 +588,5 @@ function get_all_doctors(){
 function get_total_sales(){
 	$total = Billing::select('total')
 				->where('payment_status', '=', 'paid')->get();
-	return $total->groupBy('created_at');
+	return $total->groupBy('created_at')->toJson();
 }
