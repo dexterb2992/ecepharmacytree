@@ -586,7 +586,8 @@ function get_all_doctors(){
 }
 
 function get_total_sales(){
-	$total = Billing::select('total', DB::raw("DATE_FORMAT(created_at, '%Y') as year"))
+	$total = Billing::select('total', DB::raw("DATE_FORMAT(created_at, '%Y') as y"))
 				->where('payment_status', '=', 'paid')->get();
-	return $total->groupBy('created_at')->toJson();
+	return $total->groupBy('created_at')->toArray();
+
 }
