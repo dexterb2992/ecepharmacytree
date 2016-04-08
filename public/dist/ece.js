@@ -146,6 +146,15 @@ $(document).ready(function (){
       
       P.S. Add your own codes below to achieve the results you wanted
     */
+    // $(document).on("click", ".just-show-the-modal-no-ajax", function(){
+    //     alert('fuck you');
+    //         // $this.attr('#modal-fulfill-items').modal('show');
+    // });
+
+    $('.just-show-the-modal-no-ajax').click(function(){
+        var modal = $(this).attr('data-modal-target');
+            $(modal).modal('show');
+        });
     $(document).on("click", ".add-edit-btn", function (){
     	var $this = $(this), 
             target = $this.attr("data-target");

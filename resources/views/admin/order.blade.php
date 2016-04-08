@@ -71,13 +71,13 @@
           <button class="btn btn-primary margin-top-10 no-margin-left add-edit-btn" data-action="mark_as_paid" data-modal-target="#modal-mark-payment" data-action="fulfill_items">Mark as paid</button></td></tr>
           @endif
           @if(check_if_not_fulfilled($order))
-          <tr><td><h2 class="next-heading text-red"><span class="fa fa-truck">&nbsp;</span>Fulfill items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
+          <tr><td><h2 class="next-heading text-red"><span class="fa fa-truck">&nbsp;</span>Fulfill items</h2></td><td></td><td><button class="btn btn-primary margin-top-10  just-show-the-modal-no-ajax" data-modal-target="#modal-fulfill-items">Fulfill Items</button></td></tr>
           @elseif(check_if_partially_fulfilled($order))
-          <tr><td><h2 class="next-heading text-red"><span class="fa fa-truck">&nbsp;</span>Fulfill remaining items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 add-edit-btn" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
+          <tr><td><h2 class="next-heading text-red"><span class="fa fa-truck">&nbsp;</span>Fulfill remaining items</h2></td><td></td><td><button class="btn btn-primary margin-top-10 just-show-the-modal-no-ajax" data-modal-target="#modal-fulfill-items" data-action="fulfill_items">Fulfill Items</button></td></tr>
           @else
           <tr><td><h2 class="next-heading text-orange"><i class="fa fa-check">&nbsp;</i> All items have been fulfilled.</h2></td><td></td><td></td></tr>
           @endif
-
+          <tr><td><h2 class="next-heading text-red"><span class="fa fa-truck">&nbsp;</span>Mark as Ready</h2></td><td></td><td><button class="btn btn-primary margin-top-10  just-show-the-modal-no-ajax" data-modal-target="#modal-fulfill-items">Mark as Ready</button></td></tr>
         </table>
       </div><!-- /.box-body -->
     </div><!-- /.box -->
