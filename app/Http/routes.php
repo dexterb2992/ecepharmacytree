@@ -123,7 +123,7 @@ Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'm
 });
 
 
-## Routes for Members/parents
+## Routes for Members/patients
 Route::group(['prefix' => 'members', 'as' => 'Members::', 'middleware' => 'auth'], function (){
 	Route::get('/', ['as' => 'index', 'uses' => 'PatientController@index']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'PatientController@show']);
@@ -293,5 +293,9 @@ Route::post('get-product-lotnumbers', 'InventoryController@get_product_lot_numbe
 Route::post('replace-returned-product', 'StockReturnController@replace');
 
 Route::get('try', function (){
-	echo(link_to("orders/1", "Order 1", ["target" => '_blank']));	
+	dd(get_total_sales());
+});
+
+Route::get('get-sales', function (){
+	echo get_total_sales(); 
 });

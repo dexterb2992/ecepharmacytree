@@ -56,6 +56,7 @@ class SettingsController extends Controller
         $setting->delivery_minimum = _clean_number($input["delivery_minimum"]);
         $setting->nearest_location_distance = $input["nearest_location_distance"] != "" ? $input["nearest_location_distance"] : 1;
         $setting->weeks_to_suggest_promo = $input['weeks_to_suggest_promo'];
+        $setting->senior_citizen_discount = $input['senior_citizen_discount'];
         
         if( $setting->save() )
             return Redirect::to( route('Settings::index') )->withFlash_message([

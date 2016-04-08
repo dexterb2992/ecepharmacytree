@@ -17,7 +17,8 @@ class SettingTableSeeder extends Seeder
             "referral_commission" => 50, // 50%
             "commission_variation" => 50, // 50%
             "delivery_charge" => 25,
-            "delivery_minimum" => 200
+            "delivery_minimum" => 200,
+            "senior_citizen_discount" => 20
         ]);
     }
 }

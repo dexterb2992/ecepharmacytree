@@ -23,6 +23,7 @@ class CreateSettingsTable extends Migration
             $table->double('delivery_minimum');
             $table->double('weeks_to_suggest_promo');
             $table->double('nearest_location_distance');
+            $table->double('senior_citizen_discount');
             $table->timestamps();
             $table->softDeletes();
         });

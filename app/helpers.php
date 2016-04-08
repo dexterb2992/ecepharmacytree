@@ -2,6 +2,11 @@
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use ECEPharmacyTree\ReferralCommissionActivityLog;
+use ECEPharmacyTree\Order;
+use ECEPharmacyTree\Patient;
+use ECEPharmacyTree\Product;
+use ECEPharmacyTree\Doctor;
+use ECEPharmacyTree\Billing;
 
 function pre($str) {
 	echo '<pre>';
@@ -554,4 +559,35 @@ function limit($iterable, $limit) {
         if (!$limit--) break;
         yield $key => $value;
     }
+}
+
+
+#
+function get_new_orders(){
+	$branch_id = session()->get('selected_branch');
+
+	$orders = Order::where('status', '=', 'pending')->where('branch_id', '=', $branch_id)->count();
+	return number_format($orders);
+}
+
+function get_all_users(){
+	$users = Patient::all()->count();
+	return number_format($users);
+}
+
+function get_all_products(){
+	$products = Product::all()->count();
+	return number_format($products);
+}
+
+function get_all_doctors(){
+	$doctors = Doctor::all()->count();
+	return number_format($doctors);
+}
+
+function get_total_sales(){
+	$total = Billing::select('total', DB::raw("DATE_FORMAT(created_at, '%Y') as y"))
+				->where('payment_status', '=', 'paid')->get();
+	return $total->groupBy('created_at')->toJson();
+
 }

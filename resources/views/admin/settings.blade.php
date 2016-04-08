@@ -98,6 +98,18 @@
 							</div>
 						</div>
 
+						<div class="box-header with-border">
+							<h3 class="box-title" style="margin-left: -10px;">Discount</h3>
+						</div>
+
+						<div class="form-group">
+							<label>Default Senior Citizen Discount</label>
+							<div class="input-group">
+								<input type="text" name="senior_citizen_discount" class="number form-control" value="{{ to_money($settings->senior_citizen_discount, 2) }}">
+								<span class="input-group-addon">%</span>
+							</div>
+						</div>
+
 						<div class="form-group">
 							<button class="btn btn-flat btn-primary pull-right" type="submit">Save Changes</button>
 						</div>
