@@ -466,6 +466,24 @@ $(document).ready(function (){
 
     });
 
+    $(document).on("click", ".notify_customer", function () {
+        console.log('i am here');
+        var mainurl = $(this).data('mainurl');
+        var id = $(this).data('orderid');
+        console.log(mainurl);
+        console.log(id);
+
+        $.ajax({
+                url : "/notify_customer",
+                type : 'get',
+                dataType : 'json',
+                data : { id : id }
+            }).done(function (data){
+                console.log(data);
+                alert('Customer Notified');
+            });
+    });
+
     /**
      * For alert/confirmation dialogs
      * usage: add class 'action-icon' to any element with a data attributes of

@@ -77,7 +77,7 @@
 
                                 <tr class="total" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;">
                                   <td colspan="2" class="alignright" width="75%" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-top: 2px solid #333;font-weight: 700;">Gross Total</td>
-                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-top: 2px solid #333;font-weight: 700;">₱ {{ money_format_($order->billing()->first()->gross_total) }}</td>
+                                  <td class="alignright" style="margin: 0;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;box-sizing: border-box;font-size: 14px;vertical-align: top;text-align: right;border-top: 2px solid #333;font-weight: 700;">₱ {{ money_format_($gross_total) }}</td>
                                 </tr>
 
                                 @if($order->modeOfDelivery == 'delivery')

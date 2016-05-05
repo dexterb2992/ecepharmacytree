@@ -23,6 +23,7 @@ Route::controllers([
 	'password' => 'Auth\PasswordController'
 ]);
 
+Route::post('notify_customer', ['as' => 'notify_customer', 'uses' => 'ApiController@sendOrderNotification']);
 
 // Route::get('test_num', function(){
 // 	$value = 100;

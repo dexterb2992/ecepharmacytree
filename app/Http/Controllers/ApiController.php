@@ -11,7 +11,7 @@ use DB;
 use Carbon\Carbon;
 use Response;
 use Illuminate\Mail\Mailer;
-
+use Redirect;
 
 $datenow = Carbon::now('Asia/Manila');
 // die($datenow);
@@ -41,6 +41,21 @@ class ApiController extends Controller
 				$m->subject('Pharmacy Tree Email');
 				$m->to($email);
 			});
+	}
+
+	function sendOrderNotification(){
+		// return 'test';
+		$order_id = Input::get('order_id');
+		$email = Input::get('email_address');
+		$res = $this->mailer->send( 'emails.notification', 
+            compact('email', 'order_id'), function ($m) use ($email) {
+                $m->subject('Order Notification');
+                $m->to($email);
+            });
+
+		return Redirect::to('orders/'.$order_id)->withFlash_message([
+                'type' => 'success', 'msg' => "Customer Notified!"
+            ]);
 	}
 
 	function getClinicRecords(){

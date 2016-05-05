@@ -77,7 +77,10 @@
           @else
           <tr><td><h2 class="next-heading text-orange"><i class="fa fa-check">&nbsp;</i> All items have been fulfilled.</h2></td><td></td><td></td></tr>
           @endif
-          <tr><td><h2 class="next-heading text-red"><span class="fa fa-truck">&nbsp;</span>Mark as Ready</h2></td><td></td><td><button class="btn btn-primary margin-top-10  just-show-the-modal-no-ajax" data-modal-target="#modal-fulfill-items">Mark as Ready</button></td></tr>
+          <!-- Deliver or Notify for pickup -->
+          <tr><td><h2 class="next-heading text-red"><span class="fa fa-check">&nbsp;</span>Deliver</h2></td><td></td><td>
+      <button class="btn btn-primary margin-top-10 no-margin-left just-show-the-modal-no-ajax" data-action="notify_customer" data-modal-target="#modal-notify-customer">Notify Customer</button>
+          <!-- <button class="btn btn-primary margin-top-10 notify_customer" data-mainurl="{{ URL::route('notify_customer') }}" data-orderid="{{ $order->id }}"><i class="fa fa-check">&nbsp;</i>Deliver</button> --></td></tr>
         </table>
       </div><!-- /.box-body -->
     </div><!-- /.box -->
@@ -161,6 +164,26 @@
           Processed by <b>{{ $order->billing()->first()->payment_method }}</b>
           <input type="text" name="or_txn_number" class="form-control" required>
           <button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Accept Payment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form method="post" name="notify_customer" action="{{ URL::route('notify_customer') }}">
+  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="order_id" value="{{ $order->id }}">
+  <input type="hidden" name="email_address" value="{{ $order->patient()->first()->email_address }}">
+  <div class="modal" id="modal-notify-customer">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title next-heading">Notify Customer</h4>
+        </div>
+        <div class="modal-body">
+          This will send a notification to customer of <b>Order #{{ $order->id }}</b>
+          <button class="btn btn-primary margin-top-10 add-edit-btn" type="submit">Send Notification</button>
         </div>
       </div>
     </div>
