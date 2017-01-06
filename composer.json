@@ -7,12 +7,13 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "illuminate/html": "5.*",
         "guzzlehttp/guzzle": "4.0",
         "intervention/image": "^2.3",
         "intervention/imagecache": "^2.3",
         "vinkla/pusher": "^2.2",
-        "paypal/rest-api-sdk-php": "*"
+        "paypal/rest-api-sdk-php": "*",
+        "phpmailer/phpmailer": "dev-master",
+        "illuminate/html": "5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

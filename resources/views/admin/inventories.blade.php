@@ -94,14 +94,15 @@
 													</a>
 												</td>
 												<td>
-													{{ "$inventory->quantity ".str_auto_plural($inventory->product->packing, $inventory->quantity) }}
+													{{ "$inventory->quantity ".str_auto_plural($inventory->product->unit, $inventory->quantity) }}
 												</td>
 												<td>
 													<?php 
 														$total = $inventory->available_quantity * $inventory->product->qty_per_packing; 
 													?>
-													{!! '<b>'.$inventory->available_quantity." ".str_auto_plural($inventory->product->packing, $inventory->available_quantity)."</b> "
-														."(".$total." ".str_auto_plural($inventory->product->unit, $total).")" !!}
+													{!! '<b>'.$inventory->available_quantity." ".str_auto_plural($inventory->product->unit, $inventory->available_quantity)."</b> "
+														!!}
+
 												
 												</td>
 												<td>
@@ -290,7 +291,7 @@
 	                            	<input class="form-control autocomplete" type="text" id="inventory_lot_number_setter" autocomplete="off" style="display:none;">
 	                            </div>
 	                            <div class="form-group">
-	                            	<label for="quantity" title="Add quantity by product's packing">Quantity Received 
+	                            	<label for="quantity" title="Add quantity by product's unit">Quantity Received 
 	                            		<small>(<i>per <span id="outer_packing"> - </span></i>)</small>
 	                            	</label>
 	                            	<div class="input-group">
@@ -299,7 +300,7 @@
 		                            		<span class="add-on-product-packing" name="packing"> - </span>
 		                            	</div>
 	                            	</div>
-	                            	<span id="total_quantity_in_unit"></span>
+	                            	<span id="total_quantity_in_unit" style="display:none;"></span>
 	                            </div>
 	                            <div class="form-group">
 	                            	<label for="expiration">Expiration Date <small><i>(Leave empty if this product doesn't have an expiration)</i></small></label>

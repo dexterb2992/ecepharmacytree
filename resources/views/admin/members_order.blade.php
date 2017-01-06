@@ -25,10 +25,10 @@
                         @foreach($orders->items() as $order )
                         <?php $carbon_date = Carbon\Carbon::parse($order->created_at); ?>
                         <tr data-id="{{ $order->id }}">
-                            <td><a href="{{ 'orders/'.$order->id }}">{{ '#'.$order->id }}</a></td>
+                            <td><a href="{{ url('orders/'.$order->id) }}">{{ '#'.$order->id }}</a></td>
                             <td>{{ ($carbon_date->isToday() ) ? $carbon_date->diffForHumans() : ($carbon_date->isYesterday() ? $carbon_date->format('\Y\e\s\t\e\r\d\a\y \a\t h:i a') : $carbon_date->toDayDateTimeString()) }}</td>
                             <td>
-                                <span> <a href="{{ 'orders/member/'.$order->patient_id }}">{{ get_person_fullname( $order->patient()->first() ) }}</a></span>
+                                <span> {{ get_person_fullname( $order->patient()->first() ) }}</span>
                             </td>
                             <td>{{ ucFirst($order->billing()->first()->payment_status) }}</td>
                             <td>{{ ((check_if_not_fulfilled($order)) ? 'Not Fulfilled' : ((check_if_partially_fulfilled($order)) ? 'Partially Fulfilled' : 'Fulfilled')) }}</td>

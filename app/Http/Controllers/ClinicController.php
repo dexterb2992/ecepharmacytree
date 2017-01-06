@@ -36,6 +36,7 @@ class ClinicController extends Controller
     public function store(Request $request)
     {
         $input = Input::all();
+        $input['cliniccode']=$input['barangay_id'].date("Ymdhis");
 
         $response = $this->clinic->store($input);
 

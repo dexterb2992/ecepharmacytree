@@ -9,6 +9,7 @@ use ECEPharmacyTree\Http\Requests;
 use ECEPharmacyTree\Http\Controllers\Controller;
 use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Region;
+use ECEPharmacyTree\Beneficiaries;
 use ECEPharmacyTree\Province;
 use ECEPharmacyTree\Municipality;
 use ECEPharmacyTree\Barangay;
@@ -54,8 +55,6 @@ class PatientController extends Controller
 
         return json_encode($response);
     }
-
-
     /**
      * Display a listing of the resource.
      *
@@ -85,7 +84,48 @@ class PatientController extends Controller
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return Response
+     */
 
+    public function update()
+    {
+        $response = array();
+        $id = Input::get('id');
+
+        $member= Patient::find( Input::get('id') );
+        $member->isSenior = Input::get('status');
+        if($member->save()){
+            $response['success']='1';
+        }else{
+            $response['success']='0';
+        }
+        return json_encode($response);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function edit()
+    {
+        $response = array();
+        $id = Input::get('id');
+        $member= Beneficiaries::find( Input::get('id') );
+        $member->isSenior = Input::get('status');
+        if($member->save()){
+            $response['success']='1';
+        }else{
+            $response['success']='0';
+        }
+        return json_encode($response);
+    }
     /**
      * Remove the specified resource from storage.
      *

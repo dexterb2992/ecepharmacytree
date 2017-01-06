@@ -61,6 +61,17 @@ class OrderController extends Controller
         return view('admin.order')->withOrder($order)->withOrderDetails($order_details)->withOrderDetailsWithPrescriptions($order_details_with_prescriptions);
     }
 
+    public function show_memberOrder($id)
+    {
+
+        $orders = Order::where('patient_id',$id)->orderBy('id', 'DESC')->paginate(100);
+
+
+        // $this->firstOrderFirstServeSort($orders);
+
+        return view('admin.members_order')->withOrders($orders);
+    }
+
 
     public function show_all(){
         // $orders = Order::all();
@@ -92,7 +103,6 @@ class OrderController extends Controller
 
         return $orders;
     }
-
      /**
      * Fulfill Orders
      *
@@ -159,7 +169,7 @@ class OrderController extends Controller
     }
 
     function deductInventory($product_id, $quantity, $branch_id, $order_id) {
-        $inventories = Inventory::where('product_id', $product_id)->where('branch_id', $branch_id)->orderBy('expiration_date', 'ASC')->get();
+        /*$inventories = Inventory::where('product_id', $product_id)->where('branch_id', $branch_id)->orderBy('expiration_date', 'ASC')->get();
 
         $_quantity = $quantity;
         $remains = 0;
@@ -189,7 +199,7 @@ class OrderController extends Controller
                 }
                 break;
             }
-        }
+        }*/
     }
 
     function logAdjustment($inventory, $old_qty, $new_qty, $order_id){

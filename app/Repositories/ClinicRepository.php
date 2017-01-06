@@ -30,7 +30,7 @@ class ClinicRepository{
         $clinic->contact_no = ucfirst( $input['contact_no'] );
         $clinic->additional_address = ucfirst( $input['additional_address'] );
         $clinic->barangay_id = $input['barangay_id'];
-
+        $clinic->cliniccode=$input['cliniccode'];
         if( $clinic->save() )
         	return true;
         return false;

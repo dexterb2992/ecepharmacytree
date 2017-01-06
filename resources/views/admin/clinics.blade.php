@@ -42,7 +42,7 @@
                                 <td>
                                     <div class="tools">
                                         <a href="javascript:void(0);" class="add-edit-btn btn btn-primary btn-xs"
-                                            data-action="edit" data-modal-target="#modal-add-edit-clinic" data-title="product info" 
+                                            data-action="edit" data-modal-target="#modal-add-edit-clinic" data-title="clinic info" 
                                             data-target="#form_add_edit_clinic" data-id="{{ $clinic->id }}" data-toggle="tooltip" 
                                             data-orignial-title="Edit">
                                             <i class="fa fa-edit"></i>

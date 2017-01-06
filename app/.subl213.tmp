@@ -7,6 +7,7 @@ use ECEPharmacyTree\Patient;
 use ECEPharmacyTree\Product;
 use ECEPharmacyTree\Doctor;
 use ECEPharmacyTree\Billing;
+use Carbon\Carbon;
 
 function pre($str) {
 	echo '<pre>';
@@ -121,102 +122,12 @@ function get_person_fullname($person, $reversed = false) {
 	$lname = !empty($person->lname) ? ucfirst($person->lname) : '';
 
     if ( $reversed )
-        return $lname.", ".$fname;
-    return $fname." ".$lname;
-}
-
-function get_person_number($person) {
-	$mobile_no = !empty($person->mobile_no) ? ucfirst($person->mobile_no)." " : '';
-	$tel_no = !empty($person->tel_no) ? ucfirst($person->tel_no) : '';
-
-    return $mobile_no.",".$tel_no;
+        return $lname.", ".$fname.$mname;
+    return $fname."".$mname." ".$lname;
 }
 
 
-function get_senior_age($person) {
-	$dob = !empty($person->birthdate) ? ucfirst($person->birthdate)." " : '';
-	$time = strtotime($dob);
-	$current_time = time();
-	$newformat = date('Y-m-d',$time);
-	$age_years = date('Y',$current_time) - date('Y',$time);
-	$senior_citizen_id_number = !empty($person->senior_citizen_id_number) ? ucfirst($person->senior_citizen_id_number)." " : '';
-	$senior_id_picture = !empty($person->senior_id_picture) ? ucfirst($person->senior_id_picture) : '';
 
-    return $age_years;
-}
-
-function get_senior_Id_number($person) {
-	$senior_citizen_id_number = !empty($person->senior_citizen_id_number) ? ucfirst($person->senior_citizen_id_number)." " : '';
-
-
-    return $senior_citizen_id_number;
-}
-
-function get_senior_Id($person) {
-	$senior_citizen_id_number = !empty($person->senior_citizen_id_number) ? ucfirst($person->senior_citizen_id_number)." " : '';
-	$senior_id_picture = !empty($person->senior_id_picture) ? ucfirst($person->senior_id_picture) : '';
-
-    return $senior_id_picture;
-}
-
-function get_IsSenior_Status($person, $reversed = false) {
-	$IsSenior_Status = !empty($person->isSenior) ? ucfirst($person->isSenior)." " : '';
-
-    return $IsSenior_Status;
-}
-
-
-function get_beneficiary_senior_Id($person) {
-	$beneficiary_id;
-	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
-	$sql = "SELECT * FROM beneficiaries where id ='$person' ";
-	$res = mysqli_query($con, $sql) or die(mysqli_error($con));
-	if ( mysqli_num_rows($res) > 0 ) {
-		$row = mysqli_fetch_object($res);
-
-		$senior_id_picture = $row->senior_id_picture;
-		return $senior_id_picture;
-	}
-}
-
-function get_beneficiary_senior_Id_number($person) {
-	$beneficiary_id;
-	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
-	$sql = "SELECT * FROM beneficiaries where id ='$person' ";
-	$res = mysqli_query($con, $sql) or die(mysqli_error($con));
-	if ( mysqli_num_rows($res) > 0 ) {
-		$row = mysqli_fetch_object($res);
-
-		$senior_citizen_id_number = $row->senior_citizen_id_number;
-		return $senior_citizen_id_number;
-	}
-}
-
-function get_beneficiary_senior_Id_Contactnumber($person) {
-	$beneficiary_id;
-	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
-	$sql = "SELECT * FROM beneficiaries where id ='$person' ";
-	$res = mysqli_query($con, $sql) or die(mysqli_error($con));
-	if ( mysqli_num_rows($res) > 0 ) {
-		$row = mysqli_fetch_object($res);
-
-		$senior_citizen_id_number = $row->mobile_no;
-		return $senior_citizen_id_number;
-	}
-}
-
-function get_beneficiary_Status($person) {
-	$beneficiary_id;
-	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
-	$sql = "SELECT * FROM beneficiaries where id ='$person' ";
-	$res = mysqli_query($con, $sql) or die(mysqli_error($con));
-	if ( mysqli_num_rows($res) > 0 ) {
-		$row = mysqli_fetch_object($res);
-
-		$status = $row->isSenior;
-		return $status;
-	}
-}
 
 
 function get_patient_referrals($patient) {
@@ -249,20 +160,6 @@ function get_recent_settings() {
 }
 
 
-function get_patient_beneficiariesAge($person) {
-	
-	$beneficiary_id;
-	$con = mysqli_connect(getenv('DB_HOST'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), getenv('DB_DATABASE'));
-	$sql = "SELECT TIMESTAMPDIFF( YEAR, birthdate, CURDATE( ) ) AS age FROM beneficiaries where id ='$person' ";
-	$res = mysqli_query($con, $sql) or die(mysqli_error($con));
-	if ( mysqli_num_rows($res) > 0 ) {
-		$row = mysqli_fetch_object($res);
-
-		$age = $row->age;
-		return $age;
-	}
-	/*return $patient_id;*/
-}
 function check_if_not_fulfilled($order) {
 	if ($order->order_details()->count() == $order->order_details()->whereRaw('qty_fulfilled = 0')->count())
 		return true;

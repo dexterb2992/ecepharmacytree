@@ -84,6 +84,20 @@ use ECEPharmacyTree\Branch;
                                 <label for="name">Branch Name <red>*</red></label>
                                 <input type="text" class="form-control" id="name" placeholder="Branch name" name="name" required>
                             </div>
+
+                            <div class="form-group">
+                                <label for="name">Telephone Number <red>*</red></label>
+                                <input type="text" class="form-control" id="telephone_numbers" placeholder="Telephone Number" name="telephone_numbers" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Telefax Number <red>*</red></label>
+                                <input type="text" class="form-control" id="telefax" placeholder="Telefax Number" name="telefax" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Mobile Number <red>*</red></label>
+                                <input type="text" class="form-control" id="mobile_numbers" placeholder="Mobile Number" name="mobile_numbers" required>
+                            </div>
+
                             <div class="form-group">
                                 <label for="address_province">Region<red>*</red></label>
                                 <select class="select2" name="region_id" id="address_region">

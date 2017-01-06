@@ -84,8 +84,8 @@ function randomString(length){
      	packing = str_auto_plural( selectedOption.attr("data-packing"),  qty);
 
      	$("#total_quantity_in_unit").html( totalQty+" "+unit+" ( "+qty+" "+packing+" )" );
-     	$(".add-on-product-packing").html(packing);
-     	$("#outer_packing").html(packing);
+     	$(".add-on-product-packing").html(unit);
+     	$("#outer_packing").html(unit);
     }catch(Exception){
         console.log("Error on updateInventoryProductQty: "+Exception);
     }

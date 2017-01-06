@@ -40,13 +40,14 @@ class PointsRepository {
     }
 
     function process_points($referral_id) {
+        //get Patient
         $user = Patient::where('referral_id', '=', $referral_id)->first();
         $settings = get_recent_settings();
 
-
+        //If Not Patient
         if( empty($user) ) 
             $user = Doctor::where('referral_id', '=', $referral_id)->first();
-
+        //If not Patient or Doctor
         if( empty($user) )
             return json_encode(array('msg' => "Sorry, but we can't find a user with Referral ID of $referral_id.", 'status' => 500));
 
@@ -88,7 +89,7 @@ class PointsRepository {
 
             foreach ($billing->order->order_details as $order_detail) {
                 $points_per_one_hundred = (double)$settings->points;
-                $amount = (double)($order_detail->price * $order_detail->quantity);
+                $amount = (double)(($order_detail->price * $order_detail->quantity)-$order_detail->percentage_discount-$order_detail->peso_discount);
                 $points_earned_for_this_order_detail = $amount * ( $points_per_one_hundred/100);
 
                 if( $order_detail->product->product_group_id > 0 ){
@@ -104,7 +105,7 @@ class PointsRepository {
 
                 }
 
-                $notes.= "Order#$order->id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
+                $notes.= "Order#$billing->order_id: $points_earned_for_this_order_detail ".str_auto_plural("point", $points_earned_for_this_order_detail)
                     ." earned from ".$order_detail->product->name." ("
                     .peso()."$order_detail->price x $order_detail->quantity). \n Note: You earn $points_per_one_hundred "
                     .str_auto_plural("point", $points_per_one_hundred)." for every ".peso()."100.00 purchase of this product. \n\n";

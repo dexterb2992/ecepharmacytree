@@ -4,3 +4,5 @@ Homestead.yaml
 .env
 /public/db/uploads
 /public/db/libs/
+/public/images
+/public/db/econsulta

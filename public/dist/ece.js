@@ -584,6 +584,81 @@ $(document).on("click", ".btn-custom-alert[data-value='true']", function (){
     }
 });
 
+
+
+$(document).on("click", "#disapprove_seniorId", function(){
+   var $this = $(this);
+   var redirectUrl = $this.data("redirect"), id = $this.data("id"), status = $this.data("status");
+   console.log("redirectUrl: "+redirectUrl+" id: "+id+" status: "+status);
+   if( redirectUrl !== "" ){
+        $.ajax({
+            url : '/members/edit',
+            type : 'post',
+            dataType : 'json',
+            data : { id : id, status :  status, _token : _token}
+        }).done(function (data){
+            console.log(data);
+            location.reload(true);
+            $('#modal-view-seniorID').modal('toggle');
+        });
+    }
+});
+
+$(document).on("click", "#approve_Beneficiary_seniorId", function(){
+   var $this = $(this);
+   var redirectUrl = $this.data("redirect"), id = $this.data("id"), status = $this.data("status");
+   console.log("redirectUrl: "+redirectUrl+" id: "+id+" status: "+status);
+   if( redirectUrl !== "" ){
+        $.ajax({
+            url : redirectUrl,
+            type : 'post',
+            dataType : 'json',
+            data : { id : id, status :  status, _token : _token}
+        }).done(function (data){
+            console.log(data);
+            location.reload(true);
+            $('#modal-view-seniorID').modal('toggle');
+        });
+    }
+});
+
+$(document).on("click", "#disapprove_Beneficiary_seniorId", function(){
+   var $this = $(this);
+   var redirectUrl = $this.data("redirect"), id = $this.data("id"), status = $this.data("status");
+   console.log("redirectUrl: "+redirectUrl+" id: "+id+" status: "+status);
+   if( redirectUrl !== "" ){
+        $.ajax({
+            url : redirectUrl,
+            type : 'post',
+            dataType : 'json',
+            data : { id : id, status :  status, _token : _token}
+        }).done(function (data){
+            console.log(data);
+            location.reload(true);
+            $('#modal-view-seniorID').modal('toggle');
+        });
+    }
+});
+
+$(document).on("click", "#approve_seniorId", function(){
+   var $this = $(this);
+   var redirectUrl = $this.data("redirect"), id = $this.data("id"), status = $this.data("status");
+   console.log("redirectUrl: "+redirectUrl+" id: "+id+" status: "+status);
+   if( redirectUrl !== "" ){
+        $.ajax({
+            url : '/members/edit',
+            type : 'post',
+            dataType : 'json',
+            data : { id : id, status :  status, _token : _token}
+        }).done(function (data){
+            console.log(data);
+            location.reload(true);
+            $('#modal-view-seniorID').modal('toggle');
+        });
+    }
+});
+
+
 $("#inventories_product_id").on("change", function (){
     var $this = $(this);
     console.log("change is triggered "+$this.val());
@@ -633,6 +708,8 @@ $(document).on("click", ".show-downlines", function(){
     });
     $(".scroll-to-top").fadeIn();
 });
+
+
 
 $(".scroll-to-top").click(function (){
     $('html, body').animate({
@@ -826,8 +903,8 @@ $("#additional_address").on('input', function(){
     else
         $('#map').text("Please fill up the address first");     
 });
-
-$(".products-gallery-toggler").click(function (){
+ 
+$(document).on("click",".products-gallery-toggler",function (){
     var productId = $(this).parent("td").parent("tr").data("id");
     var targetModal = $(this).data("target");
     $("#droppable_div").attr("data-id", productId);
@@ -2129,7 +2206,7 @@ $("#add_gallery").click(function (){
             }
         }).done(function (data){
             console.log(data);
-            if( data.length > 0 ){
+            if( data.length >= 0 ){
                 var selectedDoctors = [];
                 $.each(data, function (i, row){
                     selectedDoctors.push(row.id);

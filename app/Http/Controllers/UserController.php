@@ -99,7 +99,7 @@ class UserController extends Controller
                 'msg' => 'An email has been sent to '.$email.'. Please tell this person to check his/her email.',
                 'type' => 'info'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
            
             $errorCode = isset($e->errorInfo[1]) ? $e->errorInfo[1] : 500;
             if($errorCode == 1062){

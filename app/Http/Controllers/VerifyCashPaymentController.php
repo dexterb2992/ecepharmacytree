@@ -36,6 +36,7 @@ class VerifyCashPaymentController extends Controller
 
 		$user_id = $input['user_id'];         
 		$branch_server_id = $input['branch_server_id'];
+		//$beneficiary_id = $input['beneficiary_id'];
 		$recipient_name = $input['recipient_name'];
 		$recipient_address = $input['recipient_address'];
 		$recipient_contactNumber = $input['recipient_contactNumber'];
@@ -99,6 +100,7 @@ class VerifyCashPaymentController extends Controller
 			if($counter == 1) {
 				$order = new Order;
 				$order->patient_id = $user_id;
+				//$order->beneficiary_id = $beneficiary_id;
 				$order->recipient_name = $recipient_name;
 				$order->recipient_address = $recipient_address;
 				$order->recipient_contactNumber = $recipient_contactNumber;
@@ -151,7 +153,7 @@ class VerifyCashPaymentController extends Controller
 
 
 			if(count($results) == $counter) {
-				$gross_total = $undiscounted_total + $delivery_charge;
+				$gross_total = $totalAmount; //$undiscounted_total + $delivery_charge;
 				$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount - $senior_discount + $delivery_charge;
 
 				$billing = new Billing;
@@ -183,7 +185,7 @@ class VerifyCashPaymentController extends Controller
 				$order = Order::findOrFail($order_id);
 				$order_details = DB::select("SELECT od.id, od.promo_id, od.promo_type, od.peso_discount, od.percentage_discount, od.free_gift, od.promo_free_product_qty, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
 				$order_date = Carbon::parse($order_date)->toFormattedDateString();
-				$this->emailtestingservice($email, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status, $order);				
+				//$this->emailtestingservice($email, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status, $order);				
 			}
 		}
 

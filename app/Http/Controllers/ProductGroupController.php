@@ -47,7 +47,8 @@ class ProductGroupController extends Controller
                 if( isset($input['products_involved']) && count($input['products_involved']) > 0 ){
                     $products_involved = explode(',', $input['products_involved']);
                     // foreach ($input['products_involved'] as $key => $value) {
-                    foreach ($input['products_involved'] as $key => $value) {
+
+                    foreach ((array)$products_involved as $key => $value) {
                         $product = Product::find($value);
                         $product->product_group_id = $group->id;
                         $product->save();
@@ -122,6 +123,7 @@ class ProductGroupController extends Controller
 
             if( $group->save() )
                 if( isset($input['products_involved']) && count($input['products_involved']) > 0 ){
+                    $products_involved = explode(',', $input['products_involved']);
                     // make sure to remove the products which are removed from this group
                     $o_prods = $group->products;
 
@@ -129,7 +131,7 @@ class ProductGroupController extends Controller
                        Product::where('product_group_id', $prod->product_group_id)->update(['product_group_id' => 0]);
                     }
 
-                    foreach ($input['products_involved'] as $key => $value) {
+                    foreach ((array)$products_involved as $key => $value) {
                         $product = Product::find($value);
                         $product->product_group_id = $group->id;
                         $product->save();

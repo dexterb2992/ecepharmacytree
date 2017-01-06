@@ -7,10 +7,11 @@ class GCMRepository {
 	function sendGoogleCloudMessage( $data, $id ){
         // Insert real GCM API key from Google APIs Console
 	    // https://code.google.com/apis/console/        
-			$apiKey = 'AIzaSyBBZnU4T90rSnbSnqFdV_IyFDEDbATUZz4';
-
+		//$apiKey = 'AIzaSyBBZnU4T90rSnbSnqFdV_IyFDEDbATUZz4';
+			$apiKey='AAAA5TinH-g:APA91bHvreYU25gdAJze5BAiS_TiGv4dc6Of9QrXB8KsOXxJPv82chhmeMUyy2qSU7GK2RNWU-5-IDCokSRIGiIPZ8ZmCRSWJiKX9-BkCiaXRgPgKrp_G18FnDNtdt2_i8yR13DA0B9um2ckmvDeX_6Cm2VYuh2_9w';
 	    // Define URL to GCM endpoint
-			$url = 'https://gcm-http.googleapis.com/gcm/send';
+			//$url = 'https://gcm-http.googleapis.com/gcm/send';
+			$url = 'https://fcm.googleapis.com/fcm/send';
 
 	    // Set GCM post variables (device IDs and push payload)     
 			$post = array(

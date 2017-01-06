@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'mailgun'),
+    'driver' =>'smtp',
 
     /*
     |--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+    'host' => 'mail.thepharmacytree.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -41,7 +41,7 @@ return [
     |
     */
 
-    'port' => env('MAIL_PORT', 587),
+    'port' =>25,
 
     /*
     |--------------------------------------------------------------------------
@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    'encryption' => 'tls',
 
     /*
     |--------------------------------------------------------------------------
@@ -79,8 +79,12 @@ return [
     | connection. You may also set the "password" value below this one.
     |
     */
-
-    'username' => env('MAIL_USERNAME', 'postmaster@sandbox8cb0fea402984f3ba7c9174b5cfd67b5.mailgun.org'),
+    /**
+    **Royette December 13, 2016
+    **/
+    //'username' => env('MAIL_USERNAME', 'postmaster@sandbox1a698871994341728643aceacb1d340e.mailgun.org'),
+    //'username' => env('MAIL_USERNAME', 'postmaster@sandbox8cb0fea402984f3ba7c9174b5cfd67b5.mailgun.org'),
+    'username' => 'sales@thepharmacytree.com',
     // 'username'  => 'postmaster@irishbusiness.ie',
 
     /*
@@ -93,8 +97,11 @@ return [
     | connection so that the application will be able to send messages.
     |
     */
-
-    'password' => env('MAIL_PASSWORD', 'b54417d7ba5b15f12be7335d23c9811b'),
+    /**
+    **Royette December 13, 2016
+    **/
+    //'password' => env('MAIL_PASSWORD', '18ecb81293b4385ffb33a1e5f91e0e74'),
+    'password' =>'theph@rm@cy3',
     // 'password' => '167-c6nvwb33',
 
     /*

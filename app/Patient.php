@@ -33,6 +33,10 @@ class Patient extends Model
         return $this->hasMany('ECEPharmacyTree\Order');
     }
 
+    public function beneficiaries(){
+        return $this->hasMany('ECEPharmacyTree\Beneficiaries');
+    }
+
     public function barangay(){
         return $this->belongsTo('ECEPharmacyTree\Barangay', 'address_barangay_id');
     }

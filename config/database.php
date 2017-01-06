@@ -54,10 +54,14 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => getenv('DB_HOST'),
+            /*'host'      => getenv('DB_HOST'),
             'database'  => getenv('DB_DATABASE'),
             'username'  => getenv('DB_USERNAME'),
-            'password'  => getenv('DB_PASSWORD'),
+            'password'  => getenv('DB_PASSWORD'),*/
+            'host'      => 'localhost',
+            'database'  => 'ece_pharmacy_tree',
+            'username'  => 'root',
+            'password'  => 'admin',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

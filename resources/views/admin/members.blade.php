@@ -18,6 +18,7 @@
                             <th>Full Address</th>
                             <th>Email Address</th>
                             <th>Mobile Number</th>
+                            <th>Date Registered</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -35,6 +36,7 @@
                             <td>{{ $member->full_address() }}</td>
                             <td>{{ $member->email_address }}</td>
                             <td>{{ $member->mobile_no }}</td>
+                            <td>{{ Carbon\Carbon::parse($member->created_at)->format('M j, Y') }}</td>
                             <td>{!! ($member->deleted_at != null ) ? '<label class="label-danger label">blocked</label>' : '<label class="label-success label">active</label>' !!}</td>
                             <td>
                                 <div class="tools">

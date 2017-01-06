@@ -53,8 +53,20 @@ switch ($request) {
     $tbl = "products";
     break;
 
+    case 'get_doctor_by_doctor_id':
+    $result = mysqli_query($conn, "SELECT d.*, ss.name as sub_specialty, s.name as specialty, cd.clinic_sched, c.name as clinic, c.contact_no as clinic_number, c.additional_address, b.name as barangay, m.name as municipality, 
+    	p.name as province, r.name as region, r.code FROM doctors AS d INNER JOIN sub_specialties AS ss ON d.sub_specialty_id = ss.id INNER JOIN specialties AS s ON ss.specialty_id = s.id 
+    	INNER JOIN clinic_doctor AS cd ON d.id = cd.doctor_id INNER JOIN clinics AS c ON cd.clinic_id = c.id INNER JOIN barangays as b ON c.barangay_id = b.id 
+    	INNER JOIN municipalities as m ON b.municipality_id = m.id INNER JOIN provinces as p ON m.province_id = p.id 
+    	INNER JOIN regions as r ON p.region_id = r.id WHERE d.id = ".$_GET['doctor_id']) or returnError(mysqli_error($conn));
+    $tbl = "doctors";
+    break;
+
     case 'get_doctors':
-    $result = mysqli_query( $conn,"SELECT * FROM doctors WHERE (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysqli_error($conn));
+    $result = mysqli_query( $conn,"SELECT d.*, s.name, s.id as specialty_id, cd.clinic_id, c.name as clinic_name, m.name as municipality FROM doctors as d 
+    	INNER JOIN sub_specialties as ss ON d.sub_specialty_id = ss.id INNER JOIN specialties as s ON ss.specialty_id = s.id INNER JOIN clinic_doctor as cd ON d.id = cd.doctor_id 
+    	INNER JOIN clinics as c ON cd.clinic_id = c.id INNER JOIN barangays as b ON c.barangay_id = b.id 
+    	INNER JOIN municipalities as m ON b.municipality_id = m.id WHERE (d.deleted_at IS NULL OR d.deleted_at = '0000-00-00 00:00:00') ORDER BY d.lname ASC") or returnError(mysqli_error($conn));
     $tbl = "doctors";
     break;
 
@@ -165,7 +177,17 @@ switch ($request) {
     break;
 
     case 'get_patient_records':
-    $result = mysqli_query($conn, "SELECT * FROM patient_records where patient_id = ".$_GET['patient_id']) 
+    $result = mysqli_query($conn, "SELECT * FROM patient_records where patient_id = ".$_GET['patient_id']."
+                                    union 
+                                    Select 0 id,0 clinic_patient_record_id, cpd.patient_id, e.doctorlist_id doctor_id ,a.clinicid clinic_id,
+                                    concat('Dr. ',e.firstname,' ',e.lastname) doctor_name, c.name clinic_name, a.chiefcomplaints complaints, 
+                                    ad.diagnosis findings,DATE(a.dateadmitted) record_date,'doctor' created_by,1 is_new, a.created_at,a.updated_at,
+                                    a.deleted_at from clinics c 
+                                    inner join admissions a on c.id = a.clinicid 
+                                    inner join employees e on e.employeeid = a.attendingphysicianid 
+                                    inner join doctors d on d.id = e.doctorlist_id inner join admissiondiagnosis ad on a.admissionid = ad.admissionid 
+                                    inner join clinic_patient_doctor cpd on cpd.clinic_patients_id = a.patientid inner join patients p on p.id = cpd.patient_id 
+                                    where p.id =".$_GET['patient_id']) 
     or returnError(mysqli_error($conn));
     $tbl = "patient_records";
     break;
@@ -194,6 +216,11 @@ switch ($request) {
     $result = mysqli_query($conn, "SELECT * FROM order_preference where patient_id = ".$_GET['patient_id']) or returnError(mysqli_error($conn));
     $tbl = "order_preference";
     break;
+
+    case 'get_beneficiaries':
+    $result = mysqli_query($conn, "SELECT * FROM beneficiaries where patient_id = ".$_GET['patient_id']." AND (deleted_at IS NULL OR deleted_at = '0000-00-00 00:00:00')") or returnError(mysqli_error($conn));
+    $tbl = "beneficiaries";
+    break;
     // case 'get_notifications' :
     // $result = mysqli_query($conn, "SELECT * FROM notifications WHERE patient_id = ".$_GET['patient_ID']) or returnError(mysqli_error($conn));
     // $tbl = "notifications";
@@ -205,7 +232,8 @@ switch ($request) {
     break;
 
     case 'get_consultations':
-    $result = mysqli_query($conn, "SELECT * FROM consultations WHERE patient_id = ".$_GET['patient_id']." and is_deleted != 1") or returnError(mysqli_error($conn));
+    $result = mysqli_query($conn, "SELECT c.*, cc.name as clinic_name, d.lname, d.fname, d.mname FROM consultations as c INNER JOIN clinics as cc ON c.clinic_id = cc.id 
+    	INNER JOIN doctors as d ON c.doctor_id = d.id WHERE patient_id = ".$_GET['patient_id']." and is_deleted != 1 ") or returnError(mysqli_error($conn));
     $tbl = "consultations";
     break;
 
@@ -318,8 +346,8 @@ switch ($request) {
     break;
 
     case 'google_distance_matrix':
-    $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&destinations=";
-    $reverse_geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
+        $tmp_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&destinations=";
+        $reverse_geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$_GET['mylocation_lat'].",".$_GET['mylocation_long']."&key=AIzaSyBXE6V66ClCmX0M4bOIy823XKuu3c1Z0xQ";
         $json_reverse_geocode = file_get_contents($reverse_geocode_url); // this WILL do an http request for you
         $data_reverse_geocode = json_decode($json_reverse_geocode);
         $address_region_reverse_geocode = $data_reverse_geocode->results[count($data_reverse_geocode->results)-2]->formatted_address;
@@ -345,7 +373,7 @@ switch ($request) {
         }
 
         $str = substr($str, 0, strlen($str) - 1);
-        $tmp_url = $tmp_url.$str."&key=AIzaSyB1RD66hs2KpuH1tHf5MDxScCTCBVM9uk8";
+        $tmp_url = $tmp_url.$str."&key=AIzaSyAwFytTGZLdxW72cIL-9mIfqfASMh3mpU8";
         $response['url_for_distance'] = $tmp_url;
         $json = file_get_contents($tmp_url); // this WILL do an http request for you
         $data = json_decode($json);

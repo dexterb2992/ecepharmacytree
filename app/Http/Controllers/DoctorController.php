@@ -12,6 +12,7 @@ use Input;
 use ECEPharmacyTree\Specialty;
 use ECEPharmacyTree\SubSpecialty;
 use ECEPharmacyTree\Doctor;
+use ECEPharmacyTree\Employee;
 
 
 class DoctorController extends Controller
@@ -52,8 +53,19 @@ class DoctorController extends Controller
         $doctor->affiliation = $input['affiliation'];
         $doctor->email = $input['email'];
         $doctor->referral_id = generate_referral_id();
-
         if( $doctor->save() )
+            $employee=new Employee();
+            $employee->employeeno='00000';
+            $employee->doctorlist_id=$doctor->id;
+            $employee->lastname=$doctor->lname;
+            $employee->firstname=$doctor->fname;
+            $employee->middlename=$doctor->mname;
+            $employee->licenceno=$doctor->prc_no;
+            $employee->sub_specialtyid=$doctor->sub_specialty_id;
+            $employee->email=$doctor->email;
+            $employee->officecode='037';
+            $employee->employeetypeid='111';
+            $employee->save();
             return Redirect::to( route('doctors') );
         return false;
     }

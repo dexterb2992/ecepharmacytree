@@ -1,8 +1,6 @@
 <?php use Illuminate\Support\Str; ?>
 @extends('admin.layouts.template')
 
-@section('title', 'Dexter Gwapo')
-
 @section('content')
 
 	<!-- Small boxes (Stat box) -->
@@ -56,7 +54,7 @@
           <div class="icon">
             <i class="fa fa-user-md"></i>
           </div>
-          <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('doctors') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div><!-- ./col -->
     </div><!-- /.row -->

@@ -19,6 +19,7 @@ use ECEPharmacyTree\Basket;
 use ECEPharmacyTree\Inventory;
 use ECEPharmacyTree\Setting;
 use ECEPharmacyTree\Patient;
+use ECEPharmacyTree\BasketPromo;
 use ECEPharmacyTree\Payment as InServerPayment;
 use Illuminate\Mail\Mailer;
 
@@ -26,22 +27,18 @@ use Illuminate\Mail\Mailer;
 class VerifyPaymentController extends Controller
 {
 
-
 	function __construct(Mailer $mailer) {
 		$this->mailer = $mailer;
 	}
-
 	// private $order_id;
 	function verification() {
-
 		$apiContext = new ApiContext(
 			new OAuthTokenCredential(
-                        'AcCQ4PKc6AtjThCsPPkGSH01nPPe7yJKB1oRT39hpgpUGrFkORy9gmuY5_OF4loXc45RaNrUq4h94PP1', // ClientID
-                        'EH7LOgghxkz-pebLoT1dXSuDo0GiyPI3s1kKaMkp7fKQ25ezZovq5PGQqwVfAAjUpPFcPrAZYA33DcTC'      // ClientSecret
+                        'ASwYbh_BDLIbNLiQXNXrtQvCvl8OrUpjpM9Uup0oEOMrqWp4BUK-gBkFduSigVE27vtuUFm_tCkpkN2h', // ClientID
+                        'EA3Zqz_ly0v0wcTsmUiVd-yg1DYVoGwziZsbcdPHonoYxo2FZBahRNguy9FSD0j4Yc8Mw2qujbY9Nvyf'      // ClientSecret
                         )
 			);
 		$input = Input::all();
-
 		try {
 			$paymentId = $input['paymentId'];
 			$payment_client = json_decode($input['paymentClientJson'], true);
@@ -57,13 +54,12 @@ class VerifyPaymentController extends Controller
 			$status = $input['status'];
 			$coupon_discount = $input['coupon_discount'];
 			$points_discount = $input['points_discount'];
+			$senior_discount = $input['senior_discount'];
 			$promo_id = $input['promo_id'];
 			$promo_type = $input['promo_type'];
 			$email = $input['email'];
-
                 // Gettin payment details by making call to paypal rest api
 			$_payment = Payment::get($paymentId, $apiContext);
-
                 // Verifying the state approved
 			if ($_payment->getState() != 'approved') {
 				$response["error"] = true;
@@ -193,7 +189,7 @@ class VerifyPaymentController extends Controller
 
 				if(count($results) == $counter) {
 					$gross_total = $totalAmount;
-					$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount;
+					$totalAmount_final  = $totalAmount - $coupon_discount - $points_discount - $senior_discount + $delivery_charge;
 
 					$billing = new Billing;
 					$billing->order_id = $order_id;
@@ -203,6 +199,7 @@ class VerifyPaymentController extends Controller
 					$billing->payment_method = $payment_method;
 					$billing->points_discount = $points_discount;
 					$billing->coupon_discount = $coupon_discount;
+					$billing->senior_discount = $senior_discount;
 
 					if($billing->save()) {
 						$billing_id = $billing->id;
@@ -234,7 +231,7 @@ class VerifyPaymentController extends Controller
 					//send email invoice here
 					$order_details = DB::select("SELECT od.id, p.name as product_name, od.price, od.quantity, o.created_at as ordered_on, o.status,  p.packing, p.qty_per_packing, p.unit from order_details as od inner join orders as o on od.order_id = o.id inner join products as p on od.product_id = p.id inner join branches as br on o.branch_id = br.id where od.order_id =  ".$order_id." order by od.created_at DESC");
 
-					$this->emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status);
+					//$this->emailtestingservice($email, $order_details, $recipient_name, $recipient_address, $recipient_contactNumber, $payment_method, $modeOfDelivery, $coupon_discount, $points_discount, $totalAmount_final, $gross_total, $order_id, $order_details, $order_date, $status);
 
 				}
 			}

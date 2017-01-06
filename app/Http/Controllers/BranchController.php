@@ -186,7 +186,7 @@ class BranchController extends Controller
     }
 
     public function get_which_branch(){
-        $branches = Branch::all();
+        $branches = Branch::where('status', '<>', '0')->get();
         return view('auth.choosebranch')->withBranches($branches);
     }
 

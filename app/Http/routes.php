@@ -104,7 +104,7 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth', 'as' => 'Products:
 ## PRODUCT GROUPS
 	Route::get('product-groups', ['as' => 'groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@index']);
 	Route::get('product-groups/{id}', ['as' => 'show_group', 'middleware' => 'auth', 'uses' => 'ProductGroupController@show']);
-	Route::post('product-groups', ['as' => 'groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@store']);
+	Route::post('product-groups/create', ['as' => 'create_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@store']);
 	Route::post('product-groups/edit', ['as' => 'edit_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@update']);
 	Route::post('product-groups/delete', ['as' => 'delete_groups', 'middleware' => 'auth', 'uses' => 'ProductGroupController@destroy']);
 
@@ -128,6 +128,8 @@ Route::group(['prefix' => 'products-categories', 'as' => 'ProductCategory::', 'm
 Route::group(['prefix' => 'members', 'as' => 'Members::', 'middleware' => 'auth'], function (){
 	Route::get('/', ['as' => 'index', 'uses' => 'PatientController@index']);
 	Route::get('{id}', ['as' => 'get', 'uses' => 'PatientController@show']);
+	Route::post('edit', ['as' => 'edit', 'uses' => 'PatientController@update']);
+	Route::post('edit_beneficiary', ['as' => 'edit_beneficiary', 'uses' => 'PatientController@edit']);
 	Route::post('deactivate', ['as' => 'delete', 'uses' => 'PatientController@destroy']);
 	Route::post('unblock', ['as' => 'unblock', 'uses' => 'PatientController@unblock']);
 });
@@ -229,6 +231,7 @@ Route::group(['prefix' => 'affiliates', 'as' => 'Affiliates::', 'middleware' => 
 ## ORDERS
 Route::get('orders', ['as' => 'orders', 'uses' => 'OrderController@index']);
 Route::get('orders/{id}', ['as' => 'get_order', 'uses' => 'OrderController@show']);
+Route::get('orders/member/{patient_id}', ['as' => 'get_members_order', 'uses' => 'OrderController@show_memberOrder']);
 // Route::post('orders/mark_as_paid/{id}', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
 Route::post('mark_as_paid', ['as' => 'mark_order_as_paid', 'uses' => 'BillingController@mark_order_as_paid']);
 Route::post('fulfill_orders', ['as' => 'fulfill_orders', 'uses' => 'OrderController@fulfill_orders']);

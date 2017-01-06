@@ -33,7 +33,9 @@ class ProductsGalleryController extends Controller
 
             // save original image
             $original_imagepath = $path.$filename; 
-            Image::make($image->getRealPath())->save($original_imagepath);
+            //Image::make($image->getRealPath())->save($original_imagepath);
+
+            Image::make($image->getRealPath())->resize('200','200')->save($original_imagepath);
 
             $gallery = new ProductsGallery;
             $gallery->filename = $filename;
